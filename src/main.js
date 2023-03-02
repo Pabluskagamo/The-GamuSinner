@@ -5,19 +5,19 @@ import MainScene from './MainScene'
 const config = {
 	type: Phaser.AUTO,
 	parent: 'app',
-	width: 768,
-	height: 768,
+	width: 1176,
+	height: 672,
 
 	scale: {
 		autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
 		mode: Phaser.Scale.FIT,
 		min: {
-            width: 328,
-            height: 328
+            width: 784,
+            height: 448
         },
 		max: {
-            width: 768,
-            height: 768
+            width: 1568,
+            height: 896
         },
 		zoom: 1
 	},
