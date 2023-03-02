@@ -1,0 +1,19 @@
+body{
+    background-image: url(/img/fondo_pixelart2.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+/* HEADER */
+
+#header{
+    background-color: #856127;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 2px -2px rgb(0, 0, 0);
+}
+
+#app{
+    border: solid #856127 2px;
+    border-radius: 5px;
+}
