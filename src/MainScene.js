@@ -8,6 +8,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 	preload() {
 		this.load.image('background', '/img/fondo_pixelart3.png')
 		this.load.image('game_title', '/img/titulo.png')
+		// this.load.spritesheet('game_start', '/img/start_sprite.png', 750 , 355, 3);
 		this.load.image('game_start', '/img/start_blanco.png')
 	}
 
