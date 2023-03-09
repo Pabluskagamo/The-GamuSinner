@@ -33,6 +33,11 @@ export default class HelloWorldScene extends Phaser.Scene {
 		start.on('pointerout', () => {
 			start.playReverse('hover');
 		});	
+
+		start.on('pointerup', ()=>{
+			console.log('CLICKED')
+			this.scene.start('level');
+		})
 		
 	}
 }
