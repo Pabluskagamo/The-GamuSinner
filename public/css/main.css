@@ -23,7 +23,7 @@ body {
 
 #content {
     overflow-y: auto;
-    height: 88.5%;
+    height: 85%;
 }
 
 #content::-webkit-scrollbar-track {
