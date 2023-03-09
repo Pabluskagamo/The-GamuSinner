@@ -16,3 +16,16 @@ body{
     border: solid #856127 2px;
     border-radius: 5px;
 }
+
+#descripcion{
+    text-align: center;
+    color:#856127;
+    margin-right: 170px;
+    margin-left: 170px;
+}
+#controles{
+    text-align: center;
+    color:#856127;
+    margin-right: 170px;
+    margin-left: 170px;
+}
