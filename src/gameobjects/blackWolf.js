@@ -29,7 +29,7 @@ export default class BlackWolf extends Phaser.GameObjects.Sprite{
         this.scene.anims.create({
 			key: 'static_blackWolf',
             frames: this.scene.anims.generateFrameNumbers('blackWolf', {start: 36, end: 37}),
-            frameRate: 5,
+            frameRate: 1.5,
             repeat: 0
 		})
 
