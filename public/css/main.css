@@ -23,7 +23,7 @@ body {
 
 #content {
     overflow-y: auto;
-    height: 85%;
+    height: 88%;
 }
 
 #content::-webkit-scrollbar-track {
@@ -114,7 +114,19 @@ body {
     color: white;
 }
 
-#titleMovement > h1{
+.titleMovement > h1{
     color: white;
     font-size: 40px;
+}
+
+.g{
+    margin-left: 130px;
+}
+
+/* RESIZING */
+
+@media screen and (max-width: 1600px){
+    #content {
+        height: 85%;
+    }
 }
