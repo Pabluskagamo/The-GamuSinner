@@ -1,8 +1,9 @@
-export default class Character extends Phaser.GameObjects.Sprite{
+export default class Character extends Phaser.Physics.Arcade.Sprite{
 
     constructor(scene, x, y, speed){
         super(scene, x, y, 'character', 20);
         this.scene.add.existing(this);
+        //this.scene.physics.add.existing(this);
 
         this.scene.anims.create({
 			key: 'mainChar_abajo',
@@ -35,21 +36,21 @@ export default class Character extends Phaser.GameObjects.Sprite{
         this.scene.anims.create({
 			key: 'mainChar_shootarriba',
             frames: this.scene.anims.generateFrameNumbers('character', {start: 52, end: 59}),
-            frameRate: 10,
+            frameRate: 15,
             repeat: 0
 		})
 
         this.scene.anims.create({
 			key: 'mainChar_shootabajo',
             frames: this.scene.anims.generateFrameNumbers('character', {start: 78, end: 85}),
-            frameRate: 10,
+            frameRate: 15,
             repeat: 0
 		})
 
         this.scene.anims.create({
 			key: 'mainChar_shootlado',
             frames: this.scene.anims.generateFrameNumbers('character', {start: 65, end: 72}),
-            frameRate: 10,
+            frameRate: 15,
             repeat: 0
 		})
 
