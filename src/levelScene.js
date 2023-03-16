@@ -15,7 +15,7 @@ export default class LevelScene extends Phaser.Scene {
 
 	create() {
 		this.add.image(this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 'level_background').setScale(2);
-        new Character(this, this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 20);
+        this.player = new Character(this, this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 200);
 		// let rnd = Phaser.Math.RND;
 		// let valueX = rnd.between(1,2);
 		// let valueY = rnd.between(1,2);
