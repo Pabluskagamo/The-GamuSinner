@@ -1,7 +1,9 @@
-export default class Character extends Phaser.Physics.Arcade.Sprite {
+import MovableObject from "./movableObject";
+
+export default class Character extends MovableObject {
 
     constructor(scene, x, y, speed) {
-        super(scene, x, y, 'character', 20);
+        super(scene, x, y, 'character', speed, 20);
         this.speed = speed;
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
@@ -85,50 +87,42 @@ export default class Character extends Phaser.Physics.Arcade.Sprite {
         if (this.a.isDown) {
             this.play('mainChar_lado', true);
             this.flipX = false;
-            this.setVelocityX(-this.speed);
+            this.moveLeft()
         } else if (this.d.isDown) {
             this.play('mainChar_lado', true);
             this.flipX = true;
-            this.setVelocityX(this.speed);
+            this.moveRight();
         }
         
         if (this.s.isDown) {
             this.play('mainChar_abajo', true);
             if(this.a.isDown){
-                let vel = new Phaser.Math.Vector2(-this.speed,this.speed);
-                vel = vel.normalize();
-                this.setVelocity(this.speed*vel.x, this.speed*vel.y);
+                this.moveLeftDown()
             }else if(this.d.isDown){
-                let vel = new Phaser.Math.Vector2(this.speed,this.speed);
-                vel = vel.normalize();
-                this.setVelocity(this.speed*vel.x, this.speed*vel.y);
+                this.moveRightDown();
             }
             else{
-                this.setVelocityY(this.speed);
+                this.moveDown();
             }
         } else if (this.w.isDown) {
             this.play('mainChar_arriba', true);
 
             if(this.a.isDown){
-                let vel = new Phaser.Math.Vector2(-this.speed,-this.speed);
-                vel = vel.normalize();
-                this.setVelocity(this.speed*vel.x, this.speed*vel.y);
+                this.moveLeftUp();
             }else if(this.d.isDown){
-                let vel = new Phaser.Math.Vector2(this.speed,-this.speed);
-                vel = vel.normalize();
-                this.setVelocity(this.speed*vel.x, this.speed*vel.y);
+                this.moveRightUp();
             }
             else{
-                this.setVelocityY(-this.speed);
+                this.moveUp();
             }
         } 
 
         if(Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)){
-			this.setVelocityX(0);
+			this.stopHorizontal()
 		}
 
         if(Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)){
-			this.setVelocityY(0);
+			this.stopVertical();
 		}
 
         if(this.spacebar.isDown){
