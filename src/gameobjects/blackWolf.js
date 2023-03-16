@@ -5,7 +5,7 @@ export default class BlackWolf extends Phaser.Physics.Arcade.Sprite {
         this.scene.add.existing(this);
         this.setScale(1.5);
 
-        this.speed = 200;
+        this.speed = speed;
 
         this.scene.physics.add.existing(this);
 
@@ -77,15 +77,38 @@ export default class BlackWolf extends Phaser.Physics.Arcade.Sprite {
             this.play('lado_blackWolf', true);
             this.flipX = true;
             this.setVelocityX(this.speed);
-        } else if (this.cursor.down.isDown) {
+        }
+        
+        if (this.cursor.down.isDown) {
             this.play('abajo_blackWolf', true);
-            this.setVelocityY(this.speed);
+            if(this.cursor.left.isDown){
+                let vel = new Phaser.Math.Vector2(-this.speed,this.speed);
+                vel = vel.normalize();
+                this.setVelocity(this.speed*vel.x, this.speed*vel.y);
+            }else if(this.cursor.right.isDown){
+                let vel = new Phaser.Math.Vector2(this.speed,this.speed);
+                vel = vel.normalize();
+                this.setVelocity(this.speed*vel.x, this.speed*vel.y);
+            }
+            else{
+                this.setVelocityY(this.speed);
+            }
         } else if (this.cursor.up.isDown) {
             this.play('arriba_blackWolf', true);
-            this.setVelocityY(-this.speed);
-        } else if (this.f.isDown) {
-            this.play('died_blackWolf', true);
-        }
+
+            if(this.cursor.left.isDown){
+                let vel = new Phaser.Math.Vector2(-this.speed,-this.speed);
+                vel = vel.normalize();
+                this.setVelocity(this.speed*vel.x, this.speed*vel.y);
+            }else if(this.cursor.right.isDown){
+                let vel = new Phaser.Math.Vector2(this.speed,-this.speed);
+                vel = vel.normalize();
+                this.setVelocity(this.speed*vel.x, this.speed*vel.y);
+            }
+            else{
+                this.setVelocityY(-this.speed);
+            }
+        } 
 
         if (Phaser.Input.Keyboard.JustUp(this.cursor.left) || Phaser.Input.Keyboard.JustUp(this.cursor.right)) {
             this.setVelocityX(0);
