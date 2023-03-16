@@ -18,10 +18,14 @@ export default class LevelScene extends Phaser.Scene {
 	create() {
 		this.add.image(this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 'level_background').setScale(2);
         this.player = new Character(this, this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 200);
-		// let rnd = Phaser.Math.RND;
-		// let valueX = rnd.between(1,2);
-		// let valueY = rnd.between(1,2);
-       	new BlackWolf(this, this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 20);
-		new Goblin(this, this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 20);
+
+		const randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
+		const randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
+
+		console.log(randX, randY);
+
+       	this.wolf = new BlackWolf(this, randX, randY, 20);
+		this.gob = new Goblin(this, this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 20);
+		this.physics.add.collider(this.player, this.wolf);
     }
 }
