@@ -99,7 +99,7 @@ export default class Character extends MovableObject {
         if (this.s.isDown) {
             this.play('mainChar_abajo', true);
             if (this.a.isDown) {
-                this.moveLeftDown()
+                this.moveLeftDown();
             } else if (this.d.isDown) {
                 this.moveRightDown();
             }
@@ -120,7 +120,7 @@ export default class Character extends MovableObject {
         }
 
         if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
-            this.stopHorizontal()
+            this.stopHorizontal();
         }
 
         if (Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)) {
