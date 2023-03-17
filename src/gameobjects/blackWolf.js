@@ -16,7 +16,7 @@ export default class BlackWolf extends Phaser.Physics.Arcade.Sprite {
 
         // this.body.height = this.height/ 1.3;
         let f = this.frame;
-        this.setSize(f.realWidth/2, f.realHeight, true);
+        this.setSize(f.realWidth / 2, f.realHeight, true);
         // this.setOffset(this.bodyOffset, 0);
 
         this.scene.anims.create({
@@ -78,37 +78,37 @@ export default class BlackWolf extends Phaser.Physics.Arcade.Sprite {
             this.flipX = true;
             this.setVelocityX(this.speed);
         }
-        
+
         if (this.cursor.down.isDown) {
             this.play('abajo_blackWolf', true);
-            if(this.cursor.left.isDown){
-                let vel = new Phaser.Math.Vector2(-this.speed,this.speed);
+            if (this.cursor.left.isDown) {
+                let vel = new Phaser.Math.Vector2(-this.speed, this.speed);
                 vel = vel.normalize();
-                this.setVelocity(this.speed*vel.x, this.speed*vel.y);
-            }else if(this.cursor.right.isDown){
-                let vel = new Phaser.Math.Vector2(this.speed,this.speed);
+                this.setVelocity(this.speed * vel.x, this.speed * vel.y);
+            } else if (this.cursor.right.isDown) {
+                let vel = new Phaser.Math.Vector2(this.speed, this.speed);
                 vel = vel.normalize();
-                this.setVelocity(this.speed*vel.x, this.speed*vel.y);
+                this.setVelocity(this.speed * vel.x, this.speed * vel.y);
             }
-            else{
+            else {
                 this.setVelocityY(this.speed);
             }
         } else if (this.cursor.up.isDown) {
             this.play('arriba_blackWolf', true);
 
-            if(this.cursor.left.isDown){
-                let vel = new Phaser.Math.Vector2(-this.speed,-this.speed);
+            if (this.cursor.left.isDown) {
+                let vel = new Phaser.Math.Vector2(-this.speed, -this.speed);
                 vel = vel.normalize();
-                this.setVelocity(this.speed*vel.x, this.speed*vel.y);
-            }else if(this.cursor.right.isDown){
-                let vel = new Phaser.Math.Vector2(this.speed,-this.speed);
+                this.setVelocity(this.speed * vel.x, this.speed * vel.y);
+            } else if (this.cursor.right.isDown) {
+                let vel = new Phaser.Math.Vector2(this.speed, -this.speed);
                 vel = vel.normalize();
-                this.setVelocity(this.speed*vel.x, this.speed*vel.y);
+                this.setVelocity(this.speed * vel.x, this.speed * vel.y);
             }
-            else{
+            else {
                 this.setVelocityY(-this.speed);
             }
-        } 
+        }
 
         if (Phaser.Input.Keyboard.JustUp(this.cursor.left) || Phaser.Input.Keyboard.JustUp(this.cursor.right)) {
             this.setVelocityX(0);

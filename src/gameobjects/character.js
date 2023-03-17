@@ -8,6 +8,8 @@ export default class Character extends MovableObject {
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.setCollideWorldBounds();
+        let f = this.frame;
+        this.setSize(f.realWidth / 2, f.realHeight, true);
 
         this.scene.anims.create({
             key: 'mainChar_abajo',
@@ -93,39 +95,39 @@ export default class Character extends MovableObject {
             this.flipX = true;
             this.moveRight();
         }
-        
+
         if (this.s.isDown) {
             this.play('mainChar_abajo', true);
-            if(this.a.isDown){
+            if (this.a.isDown) {
                 this.moveLeftDown()
-            }else if(this.d.isDown){
+            } else if (this.d.isDown) {
                 this.moveRightDown();
             }
-            else{
+            else {
                 this.moveDown();
             }
         } else if (this.w.isDown) {
             this.play('mainChar_arriba', true);
 
-            if(this.a.isDown){
+            if (this.a.isDown) {
                 this.moveLeftUp();
-            }else if(this.d.isDown){
+            } else if (this.d.isDown) {
                 this.moveRightUp();
             }
-            else{
+            else {
                 this.moveUp();
             }
-        } 
+        }
 
-        if(Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)){
-			this.stopHorizontal()
-		}
+        if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
+            this.stopHorizontal()
+        }
 
-        if(Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)){
-			this.stopVertical();
-		}
+        if (Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)) {
+            this.stopVertical();
+        }
 
-        if(this.spacebar.isDown){
+        if (this.spacebar.isDown) {
             this.attack();
         }
 

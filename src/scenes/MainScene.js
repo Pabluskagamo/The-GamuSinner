@@ -16,7 +16,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 	create() {
 
 		this.anims.create({
-			key: 'hover',
+			key: 'hoverStart',
 			frames: this.anims.generateFrameNumbers('game_start', {start: 0, end: 2}),
 			frameRate: 10,
 			repeat: 0
@@ -27,16 +27,15 @@ export default class HelloWorldScene extends Phaser.Scene {
 		const start = this.add.sprite(this.sys.game.canvas.width/2, 365, 'game_start').setScale(0.35);
 		start.setInteractive({cursor: 'pointer'});
 		start.on('pointerover', () => {
-			start.play('hover');
+			start.play('hoverStart');
 		});
 	
 		start.on('pointerout', () => {
-			start.playReverse('hover');
+			start.playReverse('hoverStart');
 		});	
 
 		start.on('pointerup', ()=>{
-			console.log('CLICKED')
-			this.scene.start('level');
+			this.scene.start('instructions');
 		})
 		
 	}

@@ -1,11 +1,10 @@
-import BlackWolf from "./gameobjects/blackWolf"
-import Character from "./gameobjects/character"
-import Goblin from "./gameobjects/Goblin"
+import BlackWolf from "../gameobjects/blackWolf"
+import Character from "../gameobjects/character"
+import Goblin from "../gameobjects/Goblin"
 
 export default class LevelScene extends Phaser.Scene {
 	constructor() {
 		super('level')
-		console.log('jkdas')
 	}
 
 	preload() {

@@ -1,7 +1,8 @@
 import Phaser from 'phaser'
 
-import MainScene from './MainScene'
-import LevelScene from './levelScene'
+import MainScene from './scenes/MainScene'
+import InstructionScene from './scenes/instructionScene'
+import LevelScene from './scenes/levelScene'
 
 const config = {
 	type: Phaser.AUTO,
@@ -29,7 +30,7 @@ const config = {
 			debug: true
 		},
 	},
-	scene: [MainScene, LevelScene],
+	scene: [MainScene, InstructionScene, LevelScene],
 }
 
 export default new Phaser.Game(config)
