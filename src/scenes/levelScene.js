@@ -21,9 +21,7 @@ export default class LevelScene extends Phaser.Scene {
 		let randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		let randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		console.log(randX, randY);
-
-		this.wolf = new BlackWolf(this, randX, randY, 200);
+		this.wolf = new BlackWolf(this, randX, randY, 100, this.player);
 
 		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);

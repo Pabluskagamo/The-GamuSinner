@@ -2,12 +2,13 @@ import MovableObject from "./movableObject";
 
 export default class BlackWolf extends MovableObject {
 
-    constructor(scene, x, y, speed) {
+    constructor(scene, x, y, speed, player) {
         super(scene, x, y, 'blackWolf', 20);
         this.scene.add.existing(this);
         this.setScale(1.5);
 
         this.speed = speed;
+        this.player = player;
 
         this.scene.physics.add.existing(this);
 
@@ -63,53 +64,42 @@ export default class BlackWolf extends MovableObject {
         })
 
         this.play('static_blackWolf');
+        console.log(this.body)
 
-        this.f = this.scene.input.keyboard.addKey('F')
-        this.cursor = this.scene.input.keyboard.createCursorKeys();
     }
 
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
 
-        if (this.cursor.left.isDown) {
+        this.scene.physics.moveToObject(this, this.player, this.speed);
+        console.log(this.body.velocity);
+        if (this.body.velocity.x !== 0 && this.body.velocity.y < 5) {
+            // Movimiento hacia los lados
             this.play('lado_blackWolf', true);
-            this.flipX = false;
-            this.moveLeft();
-        } else if (this.cursor.right.isDown) {
-            this.play('lado_blackWolf', true);
-            this.flipX = true;
-            this.moveRight();
-        }
-
-        if (this.cursor.down.isDown) {
+            this.flipX = this.body.velocity.x > 0;
+        } else if (this.body.velocity.x > 0 && this.body.velocity.y > 0) {
+            // Diagonal abajo-derecha
             this.play('abajo_blackWolf', true);
-            if (this.cursor.left.isDown) {
-                this.moveLeftDown();
-            } else if (this.cursor.right.isDown) {
-                this.moveRightDown();
-            }
-            else {
-                this.moveDown();
-            }
-        } else if (this.cursor.up.isDown) {
+        } else if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
+            // Diagonal arriba-derecha
             this.play('arriba_blackWolf', true);
-            if (this.cursor.left.isDown) {
-                this.moveLeftUp();
-            } else if (this.cursor.right.isDown) {
-                this.moveRightUp();
-            }
-            else {
-                this.moveUp();
-            }
-        }
-
-        if (Phaser.Input.Keyboard.JustUp(this.cursor.left) || Phaser.Input.Keyboard.JustUp(this.cursor.right)) {
-            this.stopHorizontal();
-        }
-
-        if (Phaser.Input.Keyboard.JustUp(this.cursor.down) || Phaser.Input.Keyboard.JustUp(this.cursor.up)) {
-            this.stopVertical();
+        } else if (this.body.velocity.x < 0 && this.body.velocity.y > 0) {
+            // Diagonal abajo-izquierda
+            this.play('abajo_blackWolf', true);
+        } else if (this.body.velocity.x < 0 && this.body.velocity.y < 0) {
+            // Diagonal arriba-izquierda
+            this.play('arriba_blackWolf', true);
+        } else if (this.body.velocity.y > 0 && this.body.velocity.x === 0) {
+            // Movimiento hacia abajo
+            this.play('abajo_blackWolf', true);
+        } else if (this.body.velocity.y < 0 && this.body.velocity.x === 0) {
+            // Movimiento hacia arriba
+            this.play('arriba_blackWolf', true);
+        } else {
+            // Reproducir la animación estática si no se está moviendo
+            this.play('static_blackWolf');
         }
 
     }
+
 }
