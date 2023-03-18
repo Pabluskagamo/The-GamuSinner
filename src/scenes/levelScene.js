@@ -42,7 +42,7 @@ export default class LevelScene extends Phaser.Scene {
 			if(gameObject1 === player && enemies.contains(gameObject2)){
 				if(gameObject1.isAttackInProcess()){
 					gameObject2.dieMe();
-					enemies.add(new BlackWolf(scene, randX, randY, 100, player));
+					//enemies.add(new BlackWolf(scene, randX, randY, 100, player));
 				}	
 			}
 		});	
