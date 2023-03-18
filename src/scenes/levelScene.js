@@ -16,7 +16,10 @@ export default class LevelScene extends Phaser.Scene {
 
 	create() {
 		this.add.image(this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 'level_background').setScale(2);
-		this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 200);
+		let player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 200);
+		player.body.onCollide = true;
+
+		let enemies = this.physics.add.group({collideWorldBounds: true });
 
 		let randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		let randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
@@ -24,12 +27,23 @@ export default class LevelScene extends Phaser.Scene {
 		console.log(randX, randY);
 
 		this.wolf = new BlackWolf(this, randX, randY, 200);
+		enemies.add(this.wolf);
 
 		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
 		this.gob = new Goblin(this, randX, randY, 250);
-		this.physics.add.collider(this.player, this.wolf);
-		this.physics.add.collider(this.player, this.gob);
+		enemies.add(this.gob);
+		this.physics.add.collider(player, enemies);
+
+		this.physics.world.on('collide', function(gameObject1, gameObject2, body1, body2) {
+
+			if(gameObject1 === player && enemies.contains(gameObject2)){
+				if(gameObject1.isAttackInProcess()){
+					gameObject2.dieMe();
+				}	
+			}
+		});	
+
 	}
 }

@@ -112,4 +112,8 @@ export default class BlackWolf extends MovableObject {
         }
 
     }
+
+    dieMe(){
+		this.play('died_blackWolf');
+	}
 }

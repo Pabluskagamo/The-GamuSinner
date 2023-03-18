@@ -4,12 +4,17 @@ export default class Character extends MovableObject {
 
     constructor(scene, x, y, speed) {
         super(scene, x, y, 'character', speed, 20);
+        
         this.speed = speed;
+        this.isAttacking = false;
+        let f = this.frame;
+        this.hp = 5
+
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.setCollideWorldBounds();
-        let f = this.frame;
         this.setSize(f.realWidth / 2, f.realHeight, true);
+
 
         this.scene.anims.create({
             key: 'mainChar_abajo',
@@ -68,10 +73,12 @@ export default class Character extends MovableObject {
         })
 
 
-        // this.on('animationcomplete',() => {
-        //     console.log("FINALIZA ANIMACION")
-        //     this.play('mainChar_static');
-        // })
+        this.on('animationcomplete', end => {
+			if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)){
+				this.stopAttack()
+                console.log('Acabo de atacar')
+			}
+		})
 
         this.play('mainChar_static');
 
@@ -134,6 +141,7 @@ export default class Character extends MovableObject {
     }
 
     attack() {
+        this.isAttacking = true;
         const lastAnim = this.anims.currentAnim.key;
 
         if (lastAnim == 'mainChar_lado') {
@@ -146,4 +154,12 @@ export default class Character extends MovableObject {
             this.play(lastAnim);
         }
     }
+
+    stopAttack(){
+		this.isAttacking = false;
+	}
+
+    isAttackInProcess(){
+		return this.isAttacking;
+	}
 }
