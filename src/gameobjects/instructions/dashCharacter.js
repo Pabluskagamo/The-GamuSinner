@@ -8,13 +8,13 @@ export default class dashCharacter extends MovableObject {
         this.scene.add.existing(this);
 
         this.scene.anims.create({
-            key: 'mainChar_static',
+            key: 'mainChar_controls_static',
             frames: this.scene.anims.generateFrameNumbers('character', { start: 182, end: 187 }),
             frameRate: 5,
             repeat: 1
         })
 
-        this.play('mainChar_static');
+        this.play('mainChar_controls_static');
 
 
     }
