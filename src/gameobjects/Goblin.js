@@ -1,9 +1,13 @@
-export default class Goblin extends Phaser.GameObjects.Sprite{
+import MovableObject from "./movableObject";
+export default class Goblin extends MovableObject{
 
     constructor(scene, x, y, speed){
-        super(scene, x, y, 'goblin', 20);
+        super(scene, x, y, 'goblin', speed, 20);
         this.scene.add.existing(this);
         this.setScale(1.5);
+        this.scene.physics.add.existing(this);
+        this.setCollideWorldBounds();
+        this.speed = speed;
 
         this.scene.anims.create({
 			key: 'abajo_goblin',
@@ -56,27 +60,48 @@ export default class Goblin extends Phaser.GameObjects.Sprite{
         this.cursor = this.scene.input.keyboard.createCursorKeys();
 	}
 
-    preUpdate(t, dt){
+    preUpdate(t, dt) {
         super.preUpdate(t, dt)
 
-        if(this.j.isDown){
+        if (this.j.isDown) {
             this.play('lado_goblin', true);
             this.flipX = false;
-            this.x -= dt/5; 
-        }else if(this.l.isDown){
+            this.moveLeft();
+        } else if (this.l.isDown) {
             this.play('lado_goblin', true);
             this.flipX = true;
-            this.x += dt/5;
-        }else if(this.k.isDown){
-            this.play('abajo_goblin', true);
-            this.y += dt/5;  
-        }else if(this.i.isDown){
-            this.play('arriba_goblin', true);
-            this.y -= dt/5;  
+            this.moveRight();
         }
-        /*else if(this.f.isDown){
-            this.play('died_goblin', true);
-        }*/
+
+        if (this.k.isDown) {
+            this.play('abajo_goblin', true);
+            if (this.j.isDown) {
+                this.moveLeftDown();
+            } else if (this.l.isDown) {
+                this.moveRightDown();
+            }
+            else {
+                this.moveDown();
+            }
+        } else if (this.i.isDown) {
+            this.play('arriba_goblin', true);
+            if (this.j.isDown) {
+                this.moveLeftUp();
+            } else if (this.l.isDown) {
+                this.moveRightUp();
+            }
+            else {
+                this.moveUp();
+            }
+        }
+
+        if (Phaser.Input.Keyboard.JustUp(this.j) || Phaser.Input.Keyboard.JustUp(this.l)) {
+            this.stopHorizontal();
+        }
+
+        if (Phaser.Input.Keyboard.JustUp(this.k) || Phaser.Input.Keyboard.JustUp(this.i)) {
+            this.stopVertical();
+        }
 
     }
 }

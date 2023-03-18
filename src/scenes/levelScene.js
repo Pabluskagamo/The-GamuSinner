@@ -28,7 +28,8 @@ export default class LevelScene extends Phaser.Scene {
 		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		this.gob = new Goblin(this, randX, randY, 300);
+		this.gob = new Goblin(this, randX, randY, 250);
 		this.physics.add.collider(this.player, this.wolf);
+		this.physics.add.collider(this.player, this.gob);
 	}
 }
