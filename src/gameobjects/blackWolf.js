@@ -9,6 +9,7 @@ export default class BlackWolf extends MovableObject {
 
         this.speed = speed;
         this.player = player;
+        this.hp = 1;
 
         this.scene.physics.add.existing(this);
 
@@ -60,49 +61,60 @@ export default class BlackWolf extends MovableObject {
         this.on('animationcomplete', () => {
             if (this.anims.currentAnim.key !== 'died_blackWolf') {
                 this.play('static_blackWolf');
+            } else {
+                this.toDestroy = true;
             }
         })
 
         this.play('static_blackWolf');
-        console.log(this.body)
-
     }
 
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
 
-        this.scene.physics.moveToObject(this, this.player, this.speed);
-        console.log(this.body.velocity);
-        if (this.body.velocity.x !== 0 && this.body.velocity.y < 5) {
-            // Movimiento hacia los lados
-            this.play('lado_blackWolf', true);
-            this.flipX = this.body.velocity.x > 0;
-        } else if (this.body.velocity.x > 0 && this.body.velocity.y > 0) {
-            // Diagonal abajo-derecha
-            this.play('abajo_blackWolf', true);
-        } else if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
-            // Diagonal arriba-derecha
-            this.play('arriba_blackWolf', true);
-        } else if (this.body.velocity.x < 0 && this.body.velocity.y > 0) {
-            // Diagonal abajo-izquierda
-            this.play('abajo_blackWolf', true);
-        } else if (this.body.velocity.x < 0 && this.body.velocity.y < 0) {
-            // Diagonal arriba-izquierda
-            this.play('arriba_blackWolf', true);
-        } else if (this.body.velocity.y > 0 && this.body.velocity.x === 0) {
-            // Movimiento hacia abajo
-            this.play('abajo_blackWolf', true);
-        } else if (this.body.velocity.y < 0 && this.body.velocity.x === 0) {
-            // Movimiento hacia arriba
-            this.play('arriba_blackWolf', true);
-        } else {
-            // Reproducir la animación estática si no se está moviendo
-            this.play('static_blackWolf');
+        if (this.hp > 0) {
+            this.scene.physics.moveToObject(this, this.player, this.speed);
+            //console.log(this.body.velocity);
+            if (this.body.velocity.x !== 0 && this.body.velocity.y < 5) {
+                // Movimiento hacia los lados
+                this.play('lado_blackWolf', true);
+                this.flipX = this.body.velocity.x > 0;
+            } else if (this.body.velocity.x > 0 && this.body.velocity.y > 0) {
+                // Diagonal abajo-derecha
+                this.play('abajo_blackWolf', true);
+            } else if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
+                // Diagonal arriba-derecha
+                this.play('arriba_blackWolf', true);
+            } else if (this.body.velocity.x < 0 && this.body.velocity.y > 0) {
+                // Diagonal abajo-izquierda
+                this.play('abajo_blackWolf', true);
+            } else if (this.body.velocity.x < 0 && this.body.velocity.y < 0) {
+                // Diagonal arriba-izquierda
+                this.play('arriba_blackWolf', true);
+            } else if (this.body.velocity.y > 0 && this.body.velocity.x === 0) {
+                // Movimiento hacia abajo
+                this.play('abajo_blackWolf', true);
+            } else if (this.body.velocity.y < 0 && this.body.velocity.x === 0) {
+                // Movimiento hacia arriba
+                this.play('arriba_blackWolf', true);
+            } else {
+                // Reproducir la animación estática si no se está moviendo
+                this.play('static_blackWolf');
+            }
+        }else{
+            this.stopVertical();
+            this.stopHorizontal();
+        }
+
+        // Si es necesario, la caja la destruimos al final del update para evitar errores
+        if (this.toDestroy) {
+            this.destroy();
         }
 
     }
 
-    dieMe(){
-		this.play('died_blackWolf');
-	}
+    dieMe() {
+        this.hp = 0;
+        this.play('died_blackWolf')
+    }
 }

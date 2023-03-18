@@ -24,7 +24,7 @@ export default class LevelScene extends Phaser.Scene {
 		let randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		let randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		this.wolf = new BlackWolf(this, randX, randY, 100, this.player);
+		this.wolf = new BlackWolf(this, randX, randY, 100, player);
 		enemies.add(this.wolf);
 
 		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
@@ -34,11 +34,14 @@ export default class LevelScene extends Phaser.Scene {
 		enemies.add(this.gob);
 		this.physics.add.collider(player, enemies);
 
+		let scene = this;
+
 		this.physics.world.on('collide', function(gameObject1, gameObject2, body1, body2) {
 
 			if(gameObject1 === player && enemies.contains(gameObject2)){
 				if(gameObject1.isAttackInProcess()){
 					gameObject2.dieMe();
+					enemies.add(new BlackWolf(scene, randX, randY, 100, player));
 				}	
 			}
 		});	
