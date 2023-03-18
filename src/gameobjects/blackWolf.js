@@ -9,7 +9,6 @@ export default class BlackWolf extends EnemyObject {
 
         this.speed = speed;
         this.player = player;
-        this.hp = 1;
 
         this.scene.physics.add.existing(this);
 
@@ -85,10 +84,5 @@ export default class BlackWolf extends EnemyObject {
             this.destroy();
         }
 
-    }
-
-    dieMe() {
-        this.hp = 0;
-        this.play('died_blackWolf')
     }
 }
