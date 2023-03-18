@@ -1,6 +1,6 @@
-import MovableObject from "./movableObject";
+import EnemyObject from "./enemyObject";
 
-export default class BlackWolf extends MovableObject {
+export default class BlackWolf extends EnemyObject {
 
     constructor(scene, x, y, speed, player) {
         super(scene, x, y, 'blackWolf', 20);
@@ -24,21 +24,21 @@ export default class BlackWolf extends MovableObject {
         // this.setOffset(this.bodyOffset, 0);
 
         this.scene.anims.create({
-            key: 'abajo_blackWolf',
+            key: 'down_blackWolf',
             frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 180, end: 188 }),
             frameRate: 5,
             repeat: 0
         })
 
         this.scene.anims.create({
-            key: 'arriba_blackWolf',
+            key: 'up_blackWolf',
             frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 144, end: 152 }),
             frameRate: 5,
             repeat: 0
         })
 
         this.scene.anims.create({
-            key: 'lado_blackWolf',
+            key: 'side_blackWolf',
             frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 162, end: 170 }),
             frameRate: 10,
             repeat: 0
@@ -74,33 +74,7 @@ export default class BlackWolf extends MovableObject {
 
         if (this.hp > 0) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
-            //console.log(this.body.velocity);
-            if (this.body.velocity.x !== 0 && this.body.velocity.y < 5) {
-                // Movimiento hacia los lados
-                this.play('lado_blackWolf', true);
-                this.flipX = this.body.velocity.x > 0;
-            } else if (this.body.velocity.x > 0 && this.body.velocity.y > 0) {
-                // Diagonal abajo-derecha
-                this.play('abajo_blackWolf', true);
-            } else if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
-                // Diagonal arriba-derecha
-                this.play('arriba_blackWolf', true);
-            } else if (this.body.velocity.x < 0 && this.body.velocity.y > 0) {
-                // Diagonal abajo-izquierda
-                this.play('abajo_blackWolf', true);
-            } else if (this.body.velocity.x < 0 && this.body.velocity.y < 0) {
-                // Diagonal arriba-izquierda
-                this.play('arriba_blackWolf', true);
-            } else if (this.body.velocity.y > 0 && this.body.velocity.x === 0) {
-                // Movimiento hacia abajo
-                this.play('abajo_blackWolf', true);
-            } else if (this.body.velocity.y < 0 && this.body.velocity.x === 0) {
-                // Movimiento hacia arriba
-                this.play('arriba_blackWolf', true);
-            } else {
-                // Reproducir la animación estática si no se está moviendo
-                this.play('static_blackWolf');
-            }
+            this.follow();
         }else{
             this.stopVertical();
             this.stopHorizontal();
