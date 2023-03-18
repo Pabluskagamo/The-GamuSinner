@@ -1,19 +1,24 @@
-import MovableObject from "./movableObject";
-export default class Goblin extends MovableObject{
+import EnemyObject from "./enemyObject";
 
-    constructor(scene, x, y, speed){
+export default class Goblin extends EnemyObject{
+
+    constructor(scene, x, y, speed, player){
         super(scene, x, y, 'goblin', speed, 20);
         this.scene.add.existing(this);
         this.setScale(1.5);
         this.scene.physics.add.existing(this);
+        this.player = player;
         this.setCollideWorldBounds();
         this.speed = speed;
-
+        let f = this.frame;
+        this.setSize(24, 48);
+        
         this.scene.anims.create({
 			key: 'abajo_goblin',
             frames: this.scene.anims.generateFrameNumbers('goblin', {start: 6, end: 8}),
             frameRate: 5,
             repeat: 0
+
 		})
 
         this.scene.anims.create({
@@ -37,22 +42,24 @@ export default class Goblin extends MovableObject{
             repeat: 0
 		})
 
-      /*  this.scene.anims.create({
+        this.scene.anims.create({
 			key: 'died_goblin',
-            frames: this.scene.anims.generateFrameNumbers('goblin', {start: 44, end: 48}),
+            frames: this.scene.anims.generateFrameNumbers('muerte', {start: 7, end: 0}),
             frameRate: 5,
             repeat: 0
-		})*/
+		})
 
-       /* this.on('animationcomplete',() => {
-            if(this.anims.currentAnim.key !== 'died_goblin'){
+        this.on('animationcomplete', () => {
+            if (this.anims.currentAnim.key !== 'died_goblin') {
                 this.play('goblin_static');
+            } else {
+                this.toDestroy = true;
             }
-        })*/
+        })
 
         this.play('goblin_static');
         
-        this.f = this.scene.input.keyboard.addKey('G')
+        this.g = this.scene.input.keyboard.addKey('G');
         this.j = this.scene.input.keyboard.addKey('J');
         this.k = this.scene.input.keyboard.addKey('K');
         this.l = this.scene.input.keyboard.addKey('L');
@@ -62,45 +69,21 @@ export default class Goblin extends MovableObject{
 
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
-
-        if (this.j.isDown) {
-            this.play('lado_goblin', true);
+        if (this.g.isDown) {
+            this.play('died_goblin', true);
             this.flipX = false;
-            this.moveLeft();
-        } else if (this.l.isDown) {
-            this.play('lado_goblin', true);
-            this.flipX = true;
-            this.moveRight();
         }
-
-        if (this.k.isDown) {
-            this.play('abajo_goblin', true);
-            if (this.j.isDown) {
-                this.moveLeftDown();
-            } else if (this.l.isDown) {
-                this.moveRightDown();
-            }
-            else {
-                this.moveDown();
-            }
-        } else if (this.i.isDown) {
-            this.play('arriba_goblin', true);
-            if (this.j.isDown) {
-                this.moveLeftUp();
-            } else if (this.l.isDown) {
-                this.moveRightUp();
-            }
-            else {
-                this.moveUp();
-            }
-        }
-
-        if (Phaser.Input.Keyboard.JustUp(this.j) || Phaser.Input.Keyboard.JustUp(this.l)) {
+        if (this.hp > 0) {
+            this.scene.physics.moveToObject(this, this.player, this.speed);
+            this.follow();
+        }else{
+            this.stopVertical();
             this.stopHorizontal();
         }
 
-        if (Phaser.Input.Keyboard.JustUp(this.k) || Phaser.Input.Keyboard.JustUp(this.i)) {
-            this.stopVertical();
+        // Si es necesario, la caja la destruimos al final del update para evitar errores
+        if (this.toDestroy) {
+            this.destroy();
         }
 
     }

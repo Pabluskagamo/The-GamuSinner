@@ -12,6 +12,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('character', '/assets/charac.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('blackWolf', '/assets/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('goblin', '/assets/goblins.png', { frameWidth: 48, frameHeight: 48 })
+		this.load.spritesheet('muerte', '/assets/explosion.png', { frameWidth: 32, frameHeight: 32 })
 	}
 
 	create() {
@@ -30,7 +31,7 @@ export default class LevelScene extends Phaser.Scene {
 		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		this.gob = new Goblin(this, randX, randY, 250);
+		this.gob = new Goblin(this, randX, randY, 120, player);
 		enemies.add(this.gob);
 		this.physics.add.collider(player, enemies);
 
