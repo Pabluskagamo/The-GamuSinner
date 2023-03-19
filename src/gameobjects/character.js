@@ -76,7 +76,6 @@ export default class Character extends MovableObject {
         this.on('animationcomplete', end => {
 			if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)){
 				this.stopAttack()
-                console.log('Acabo de atacar')
 			}
 		})
 
@@ -134,14 +133,13 @@ export default class Character extends MovableObject {
             this.stopVertical();
         }
 
-        if (this.spacebar.isDown) {
+        if (Phaser.Input.Keyboard.JustUp(this.spacebar)) {
             this.attack();
         }
 
     }
 
     attack() {
-        this.isAttacking = true;
         const lastAnim = this.anims.currentAnim.key;
 
         if (lastAnim == 'mainChar_lado') {
@@ -153,10 +151,13 @@ export default class Character extends MovableObject {
         } else {
             this.play(lastAnim);
         }
+
+        let bullet = this.scene.bulletPool.spawn(this.x, this.y);
+        bullet.setDireccion(this.dir);
     }
 
     stopAttack(){
-		this.isAttacking = false;
+		//this.isAttacking = false;
 	}
 
     isAttackInProcess(){

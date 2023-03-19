@@ -1,4 +1,6 @@
 import BlackWolf from "../gameobjects/blackWolf"
+import Bullet from "../gameobjects/bullet"
+import BulletPool from "../gameobjects/bulletPool"
 import Character from "../gameobjects/character"
 import Goblin from "../gameobjects/Goblin"
 
@@ -13,6 +15,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('blackWolf', '/assets/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('goblin', '/assets/goblins.png', { frameWidth: 48, frameHeight: 48 })
 		this.load.spritesheet('muerte', '/assets/explosion.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('bullet', '/assets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 	}
 
 	create() {
@@ -25,27 +28,31 @@ export default class LevelScene extends Phaser.Scene {
 		let randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		let randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		this.wolf = new BlackWolf(this, randX, randY, 100, player);
-		enemies.add(this.wolf);
+		//this.wolf = new BlackWolf(this, randX, randY, 100, player);
+		//enemies.add(this.wolf);
 
 		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		this.gob = new Goblin(this, randX, randY, 120, player);
-		enemies.add(this.gob);
+		//this.gob = new Goblin(this, randX, randY, 120, player);
+		//enemies.add(this.gob);
 		this.physics.add.collider(player, enemies);
 
 		let scene = this;
 
+		let bullets = [];
+		for (let i = 0; i < 100; i++) {
+			bullets.push(new Bullet(this, 0,0, 300));
+		}
+
+		this.bulletPool = new BulletPool(this, bullets)
+
+
 		this.physics.world.on('collide', function(gameObject1, gameObject2, body1, body2) {
 
-			if(gameObject1 === player && enemies.contains(gameObject2)){
-				if(gameObject1.isAttackInProcess()){
-					gameObject2.dieMe();
-					//enemies.add(new BlackWolf(scene, randX, randY, 100, player));
-				}	
+			if(bullets.includes(gameObject1) && enemies.contains(gameObject2)){
+				gameObject2.dieMe();	
 			}
-		});	
-
+		});
 	}
 }
