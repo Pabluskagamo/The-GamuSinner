@@ -23,20 +23,20 @@ export default class LevelScene extends Phaser.Scene {
 		let player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 200);
 		player.body.onCollide = true;
 
-		let enemies = this.physics.add.group({collideWorldBounds: true });
+		this.enemies = this.physics.add.group({collideWorldBounds: true });
 
 		let randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		let randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		//this.wolf = new BlackWolf(this, randX, randY, 100, player);
-		//enemies.add(this.wolf);
+		this.wolf = new BlackWolf(this, randX, randY, 100, player);
+		this.enemies.add(this.wolf);
 
 		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		//this.gob = new Goblin(this, randX, randY, 120, player);
-		//enemies.add(this.gob);
-		this.physics.add.collider(player, enemies);
+		this.gob = new Goblin(this, randX, randY, 120, player);
+		this.enemies.add(this.gob);
+		this.physics.add.collider(player, this.enemies);
 
 		let scene = this;
 
@@ -48,11 +48,15 @@ export default class LevelScene extends Phaser.Scene {
 		this.bulletPool = new BulletPool(this, bullets)
 
 
-		this.physics.world.on('collide', function(gameObject1, gameObject2, body1, body2) {
-
-			if(bullets.includes(gameObject1) && enemies.contains(gameObject2)){
-				gameObject2.dieMe();	
-			}
+		this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) =>{
+			obj1.hit()
+			obj2.dieMe();
 		});
 	}
+
+
+	update(){
+		console.log(this.gob)
+	}
+
 }

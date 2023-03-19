@@ -59,4 +59,8 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite{
         this.setVelocityY(dir.y*this.speed)
     }
 
+    hit(){
+        this.scene.bulletPool.release(this);
+    }
+
 }
