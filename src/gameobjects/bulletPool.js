@@ -17,6 +17,7 @@ export default class BulletPool {
         if (entity) {
           entity.x = x;
           entity.y = y;
+          entity.justHit = false
           entity.setActive(true);
           entity.setVisible(true);
         }

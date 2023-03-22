@@ -9,6 +9,7 @@ export default class BlackWolf extends EnemyObject {
 
         this.speed = speed;
         this.player = player;
+        this.attacking = false;
 
         this.scene.physics.add.existing(this);
 
@@ -57,6 +58,27 @@ export default class BlackWolf extends EnemyObject {
             repeat: 0
         })
 
+        this.scene.anims.create({
+            key: 'up_attack_blackWolf',
+            frames: this.scene.anims.generateFrameNumbers('blackWolf', {frames: [397, 400, 403, 406, 409, 412]}),
+            frameRate: 10,
+            repeat: -1
+        })
+
+        this.scene.anims.create({
+            key: 'side_attack_blackWolf',
+            frames: this.scene.anims.generateFrameNumbers('blackWolf', {frames: [451, 454, 457, 460, 463, 466]}),
+            frameRate: 10,
+            repeat: -1
+        })
+
+        this.scene.anims.create({
+            key: 'down_attack_blackWolf',
+            frames: this.scene.anims.generateFrameNumbers('blackWolf', {frames: [505, 508, 511, 514, 517, 520]}),
+            frameRate: 10,
+            repeat: -1
+        })
+
         this.on('animationcomplete', () => {
             if (this.anims.currentAnim.key !== 'died_blackWolf') {
                 this.play('static_blackWolf');
@@ -71,7 +93,7 @@ export default class BlackWolf extends EnemyObject {
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
 
-        if (this.hp > 0) {
+        if (this.hp > 0 && !this.attacking) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
             this.follow();
         }else{
@@ -79,14 +101,15 @@ export default class BlackWolf extends EnemyObject {
             this.stopHorizontal();
         }
 
-        // Si es necesario, la caja la destruimos al final del update para evitar errores
         if (this.toDestroy) {
             this.destroy();
         }
-
     }
 
     attack(){
+        this.play('down_attack_blackWolf')
+        this.attacking = true;
 
+        return this.dmg;
     }
 }

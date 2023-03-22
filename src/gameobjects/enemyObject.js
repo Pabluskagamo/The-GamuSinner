@@ -56,8 +56,16 @@ export default class enemyObject extends MovableObject {
     }
     
     attack(){
-        // AQUI IRIA LA ANIMACION
-        return this.dmg;
+        // if (this.body.velocity.y > 0 && this.body.velocity.x === 0) {
+        //     // Movimiento hacia abajo
+        //     this.play('down_attack' + this.key, true);
+        // } else if (this.body.velocity.y < 0 && this.body.velocity.x === 0) {
+        //     // Movimiento hacia arriba
+        //     this.play('up_attack' + this.key, true);
+        // } else {
+        //     // Reproducir la animación estática si no se está moviendo
+        //     this.play('static_' + this.key);
+        // }
     }
 
     isDead(){

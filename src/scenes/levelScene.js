@@ -31,13 +31,13 @@ export default class LevelScene extends Phaser.Scene {
 		let randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		let randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		this.wolf = new BlackWolf(this, randX, randY, 100, player);
+		this.wolf = new BlackWolf(this, randX, randY, 60, player);
 		this.enemies.add(this.wolf);
 
 		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		this.gob = new Goblin(this, randX, randY, 120, player);
+		this.gob = new Goblin(this, randX, randY, 80, player);
 		this.enemies.add(this.gob);
 		this.physics.add.collider(player, this.enemies);
 
@@ -54,18 +54,14 @@ export default class LevelScene extends Phaser.Scene {
 		new HealthPoint(this, 890, 50), new HealthPoint(this, 920, 50), new HealthPoint(this, 950, 50)]
 
 		this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) => {
-			obj1.hit()
-			obj2.hitEnemy(obj1.dmg);
+			obj1.hit(obj2)
 		},(obj1, obj2) => !obj2.isDead());
 
-		// this.physics.add.collider(this.enemies, player, (obj1, obj2) => {
-		// 	let damage = obj1.attack();
-		// 	obj2.setHp(obj2.getHp() - damage);
-		// 	console.log(obj2.getHp())
-		// 	if(obj2.getHp() <= 0){
-		// 		obj2.dieMe();
-		// 	}
-		// });
+
+		this.physics.add.collider(player, this.enemies, (obj1, obj2) => {
+			obj2.attack(obj1);
+		});
+		
 	}
 
 
