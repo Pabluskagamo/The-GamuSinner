@@ -18,10 +18,21 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('muerte', '/assets/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', '/assets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('healthbar', '/assets/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
+		this.load.image('terreno', '/assets/tileset/top-down-forest-tileset.png')
+		this.load.tilemapTiledJSON('tilemap', '/assets/tilemap/mapa.json')
 	}
 
 	create() {
-		this.add.image(this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 'level_background').setScale(2);
+		this.map = this.make.tilemap({
+			key: 'tilemap'
+		});
+	
+		const mapa = this.map.addTilesetImage('mapa', 'terreno');
+		this.groundLayer = this.map.createLayer('Suelo', mapa);
+		this.foregroundLayer = this.map.createLayer('Bordes y Objetos', mapa);
+
+		// this.add.image(this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 'level_background').setScale(2);
+
 		let player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 200);
 		this.player = player
 		player.body.onCollide = true;
@@ -45,7 +56,7 @@ export default class LevelScene extends Phaser.Scene {
 
 		let bullets = [];
 		for (let i = 0; i < 10; i++) {
-			bullets.push(new Bullet(this, 0,0, 300, 20));
+			bullets.push(new Bullet(this, 0, 0, 300, 20));
 		}
 
 		this.bulletPool = new BulletPool(this, bullets, 10)
@@ -56,7 +67,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) => {
 			obj1.hit()
 			obj2.hitEnemy(obj1.dmg);
-		},(obj1, obj2) => !obj2.isDead());
+		}, (obj1, obj2) => !obj2.isDead());
 
 		// this.physics.add.collider(this.enemies, player, (obj1, obj2) => {
 		// 	let damage = obj1.attack();
@@ -66,6 +77,7 @@ export default class LevelScene extends Phaser.Scene {
 		// 		obj2.dieMe();
 		// 	}
 		// });
+
 	}
 
 
@@ -74,16 +86,16 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 
-	updateHealthUi(hp){
+	updateHealthUi(hp) {
 		//setscrollfactor(0, 0) para que cuando se 
 		//mueva la camara no se mueva el HUD
 
 
-		for (let i = 1; i <= 5; i++){
-			if(i<= hp){
-				this.uiLive[i-1].full()
-			}else{
-				this.uiLive[i-1].empty()
+		for (let i = 1; i <= 5; i++) {
+			if (i <= hp) {
+				this.uiLive[i - 1].full()
+			} else {
+				this.uiLive[i - 1].empty()
 			}
 		}
 	}
