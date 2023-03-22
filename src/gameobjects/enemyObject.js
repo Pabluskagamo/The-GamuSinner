@@ -6,7 +6,7 @@ export default class enemyObject extends MovableObject {
     constructor(scene, x, y, key, speed, firstFrame) {
         super(scene, x, y, key, speed, firstFrame);
         this.key = key;
-        this.hp = 1;
+        this.hp = 50;
     }
 
     follow(){
@@ -41,6 +41,16 @@ export default class enemyObject extends MovableObject {
     dieMe(){
         this.hp = 0;
         this.play('died_' + this.key);
+    }
+
+    hitEnemy(dmg){
+        this.hp -= dmg;
+
+        console.log(this.hp)
+
+        if(this.hp <= 0){
+            this.dieMe();
+        }
     }
 
 

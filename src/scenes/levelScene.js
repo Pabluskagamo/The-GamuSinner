@@ -3,6 +3,7 @@ import Bullet from "../gameobjects/bullet"
 import BulletPool from "../gameobjects/bulletPool"
 import Character from "../gameobjects/character"
 import Goblin from "../gameobjects/Goblin"
+import HealthPoint from "../ui/healthpoint"
 
 export default class LevelScene extends Phaser.Scene {
 	constructor() {
@@ -16,11 +17,13 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('goblin', '/assets/goblins.png', { frameWidth: 48, frameHeight: 48 })
 		this.load.spritesheet('muerte', '/assets/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', '/assets/bullets.png', { frameWidth: 16, frameHeight: 16 })
+		this.load.spritesheet('healthbar', '/assets/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
 	}
 
 	create() {
 		this.add.image(this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 'level_background').setScale(2);
 		let player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 200);
+		this.player = player
 		player.body.onCollide = true;
 
 		this.enemies = this.physics.add.group({collideWorldBounds: true });
@@ -42,21 +45,35 @@ export default class LevelScene extends Phaser.Scene {
 
 		let bullets = [];
 		for (let i = 0; i < 100; i++) {
-			bullets.push(new Bullet(this, 0,0, 300));
+			bullets.push(new Bullet(this, 0,0, 300, 20));
 		}
 
 		this.bulletPool = new BulletPool(this, bullets)
 
+		this.uiLive = [new HealthPoint(this, 830, 50), new HealthPoint(this, 860, 50), 
+			new HealthPoint(this, 890, 50), new HealthPoint(this, 920, 50), new HealthPoint(this, 950, 50)]
 
 		this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) =>{
 			obj1.hit()
-			obj2.dieMe();
+			obj2.hitEnemy(obj1.dmg);
 		});
 	}
 
 
 	update(){
-		console.log(this.gob)
+		this.updateHealthUi(this.player.hp)
 	}
+
+
+	updateHealthUi(hp){
+		for (let i = 1; i <= 5; i++){
+			if(i<= hp){
+				this.uiLive[i-1].full()
+			}else{
+				this.uiLive[i-1].empty()
+			}
+		}
+	}
+
 
 }

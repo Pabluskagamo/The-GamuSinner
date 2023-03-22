@@ -1,8 +1,9 @@
 export default class Bullet extends Phaser.Physics.Arcade.Sprite{
 
-    constructor(scene, x, y, speed){
+    constructor(scene, x, y, speed, dmg){
         super(scene, x, y, 'bullet', 0);
         this.speed = speed
+        this.dmg = dmg
         this.setScale(1.5)
 
 

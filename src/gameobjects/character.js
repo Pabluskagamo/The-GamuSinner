@@ -9,6 +9,7 @@ export default class Character extends MovableObject {
         this.isAttacking = false;
         let f = this.frame;
         this.hp = 5
+        this.lastFired = 0;
 
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
@@ -133,8 +134,9 @@ export default class Character extends MovableObject {
             this.stopVertical();
         }
 
-        if (Phaser.Input.Keyboard.JustUp(this.spacebar)) {
+        if (this.spacebar.isDown && t > this.lastFired) {
             this.attack();
+            this.lastFired = t + 300;
         }
 
     }
@@ -151,6 +153,8 @@ export default class Character extends MovableObject {
         } else {
             this.play(lastAnim);
         }
+
+        this.hp--
 
         let bullet = this.scene.bulletPool.spawn(this.x, this.y);
         bullet.setDireccion(this.dir);
