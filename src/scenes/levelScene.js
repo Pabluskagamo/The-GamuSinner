@@ -26,7 +26,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.player = player
 		player.body.onCollide = true;
 
-		this.enemies = this.physics.add.group({collideWorldBounds: true });
+		this.enemies = this.physics.add.group({ collideWorldBounds: true });
 
 		let randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		let randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
@@ -50,10 +50,10 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.bulletPool = new BulletPool(this, bullets, 10)
 
-		this.uiLive = [new HealthPoint(this, 830, 50), new HealthPoint(this, 860, 50), 
-			new HealthPoint(this, 890, 50), new HealthPoint(this, 920, 50), new HealthPoint(this, 950, 50)]
+		this.uiLive = [new HealthPoint(this, 830, 50), new HealthPoint(this, 860, 50),
+		new HealthPoint(this, 890, 50), new HealthPoint(this, 920, 50), new HealthPoint(this, 950, 50)]
 
-		this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) =>{
+		this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) => {
 			obj1.hit()
 			obj2.hitEnemy(obj1.dmg);
 		},(obj1, obj2) => !obj2.isDead());
@@ -69,7 +69,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 
-	update(){
+	update() {
 		this.updateHealthUi(this.player.hp)
 	}
 
