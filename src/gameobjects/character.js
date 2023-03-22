@@ -154,8 +154,6 @@ export default class Character extends MovableObject {
             this.play(lastAnim);
         }
 
-        this.hp--
-
         //Comprobar si hay balas.
         if(this.scene.bulletPool.hasBullets()){
             let bullet = this.scene.bulletPool.spawn(this.x, this.y);
@@ -182,5 +180,9 @@ export default class Character extends MovableObject {
 
     setHp(health){
         this.hp = health;
+    }
+
+    getHit(dmg){
+        this.hp -= dmg;
     }
 }

@@ -11,11 +11,7 @@ export default class enemyObject extends MovableObject {
     }
 
     follow(){
-        if (this.body.velocity.x !== 0 && this.body.velocity.y < 5) {
-            // Movimiento hacia los lados
-            this.play('side_' + this.key, true);
-            this.flipX = this.body.velocity.x > 0;
-        } else if (this.body.velocity.x > 0 && this.body.velocity.y > 0) {
+        if (this.body.velocity.x > 0 && this.body.velocity.y > 0) {
             // Diagonal abajo-derecha
             this.play('down_' + this.key, true);
         } else if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
@@ -33,6 +29,10 @@ export default class enemyObject extends MovableObject {
         } else if (this.body.velocity.y < 0 && this.body.velocity.x === 0) {
             // Movimiento hacia arriba
             this.play('up_' + this.key, true);
+        }else if (this.body.velocity.x !== 0 && this.body.velocity.y < 5) {
+            // Movimiento hacia los lados
+            this.play('side_' + this.key, true);
+            this.flipX = this.body.velocity.x > 0;
         } else {
             // Reproducir la animación estática si no se está moviendo
             this.play('static_' + this.key);
@@ -56,16 +56,16 @@ export default class enemyObject extends MovableObject {
     }
     
     attack(){
-        // if (this.body.velocity.y > 0 && this.body.velocity.x === 0) {
-        //     // Movimiento hacia abajo
-        //     this.play('down_attack' + this.key, true);
-        // } else if (this.body.velocity.y < 0 && this.body.velocity.x === 0) {
-        //     // Movimiento hacia arriba
-        //     this.play('up_attack' + this.key, true);
-        // } else {
-        //     // Reproducir la animación estática si no se está moviendo
-        //     this.play('static_' + this.key);
-        // }
+        if (this.anims.currentAnim.key === 'down_' + this.key) {
+            // ataque hacia abajo
+            this.play('down_attack_' + this.key, true);
+        } else if (this.anims.currentAnim.key === 'up_' + this.key) {
+            // ataque hacia arriba
+            this.play('up_attack_' + this.key, true);
+        } else {
+            this.flipX = this.body.velocity.x > 0;
+            this.play('side_attack_' + this.key);
+        }
     }
 
     isDead(){
