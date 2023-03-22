@@ -167,4 +167,16 @@ export default class Character extends MovableObject {
     isAttackInProcess(){
 		return this.isAttacking;
 	}
+
+    dieMe(){
+        this.play('mainChar_die');
+    }
+
+    getHp(){
+        return this.hp;
+    }
+
+    setHp(health){
+        this.hp = health;
+    }
 }

@@ -3,7 +3,7 @@ import EnemyObject from "./enemyObject";
 export default class BlackWolf extends EnemyObject {
 
     constructor(scene, x, y, speed, player) {
-        super(scene, x, y, 'blackWolf', 20);
+        super(scene, x, y, 'blackWolf', speed, 20, 60, 20);
         this.scene.add.existing(this);
         this.setScale(1.5);
 
@@ -83,6 +83,10 @@ export default class BlackWolf extends EnemyObject {
         if (this.toDestroy) {
             this.destroy();
         }
+
+    }
+
+    attack(){
 
     }
 }
