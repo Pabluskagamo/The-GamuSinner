@@ -18,7 +18,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('muerte', '/assets/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', '/assets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('healthbar', '/assets/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
-		this.load.image('tiles', '/assets/tileset/top-down-forest-tileset.png')
+		this.load.image('tiles', '/assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('map', '/assets/tilemap/mapa.json')
 	}
 
@@ -27,9 +27,10 @@ export default class LevelScene extends Phaser.Scene {
 			key: 'map'
 		});
 	
-		const tiles = mapa.addTilesetImage('Terrain', 'tiles');
+		const tiles = mapa.addTilesetImage('Forest', 'tiles');
 		this.groundLayer = this.map.createLayer('Suelo', tiles);
-        this.foregroundLayer = this.map.createLayer('Bordes y Objetos', tiles);
+		this.objetos = this.map.createLayer('Objetos', tiles);
+        this.foregroundLayer = this.map.createLayer('Bordes', tiles);
 
 		// this.add.image(this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 'level_background').setScale(2);
 
