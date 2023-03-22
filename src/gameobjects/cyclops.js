@@ -18,14 +18,14 @@ export default class Cyclops extends EnemyObject{
 
         this.scene.anims.create({
             key: 'up_cyclops',
-            frames: this.scene.anims.generateFrameNumbers('cyclops', {start: 40, end: 46}),
+            frames: this.scene.anims.generateFrameNumbers('cyclops', {start: 30, end: 36}),
             frameRate: 5,
             repeat: 0
         })
 
         this.scene.anims.create({
             key: 'down_cyclops',
-            frames: this.scene.anims.generateFrameNumbers('cyclops', {start: 40, end: 46}),
+            frames: this.scene.anims.generateFrameNumbers('cyclops', {start: 30, end: 36}),
             frameRate: 5,
             repeat: 0
         })
@@ -33,21 +33,21 @@ export default class Cyclops extends EnemyObject{
         this.scene.anims.create({
             key: 'side_cyclops',
             frames: this.scene.anims.generateFrameNumbers('cyclops', {start: 15, end: 26}),
-            frameRate: 15,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'static_cyclops',
-            frames: this.scene.anims.generateFrameNumbers('cyclops', {start: 0, end: 14}),
             frameRate: 10,
             repeat: 0
         })
 
         this.scene.anims.create({
+            key: 'static_cyclops',
+            frames: this.scene.anims.generateFrameNumbers('cyclops', {frames: [105,106,107,108,108,107,106,105,105,120,121,122,123,124,125,125,124,123,122,121,120,105,105]}),
+            frameRate: 15,
+            repeat: 0
+        })
+
+        this.scene.anims.create({
             key: 'died_cyclops',
-            frames: this.scene.anims.generateFrameNumbers('cyclops', { start: 120, end: 128 }),
-            frameRate: 5,
+            frames: this.scene.anims.generateFrameNumbers('cyclops', { start: 91, end: 97 }),
+            frameRate: 10,
             repeat: 0
         })
 
