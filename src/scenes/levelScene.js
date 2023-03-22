@@ -3,6 +3,7 @@ import Bullet from "../gameobjects/bullet"
 import BulletPool from "../gameobjects/bulletPool"
 import Character from "../gameobjects/character"
 import Goblin from "../gameobjects/Goblin"
+import Cyclops from "../gameobjects/cyclops"
 import HealthPoint from "../ui/healthpoint"
 
 export default class LevelScene extends Phaser.Scene {
@@ -14,6 +15,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.image('level_background', '/img/top-down-forest.png')
 		this.load.spritesheet('character', '/assets/charac.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('blackWolf', '/assets/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
+		this.load.spritesheet('cyclops', '/assets/cyclops.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('goblin', '/assets/goblins.png', { frameWidth: 48, frameHeight: 48 })
 		this.load.spritesheet('muerte', '/assets/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', '/assets/bullets.png', { frameWidth: 16, frameHeight: 16 })
@@ -45,6 +47,12 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.wolf = new BlackWolf(this, randX, randY, 60, player);
 		this.enemies.add(this.wolf);
+
+		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
+		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
+
+		this.cyclops = new Cyclops(this, randX, randY, 45, player);
+		this.enemies.add(this.cyclops);
 
 		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
