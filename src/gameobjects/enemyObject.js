@@ -3,10 +3,11 @@ import MovableObject from "./movableObject";
 export default class enemyObject extends MovableObject {
     
     
-    constructor(scene, x, y, key, speed, firstFrame) {
+    constructor(scene, x, y, key, speed, firstFrame, hp, dmg) {
         super(scene, x, y, key, speed, firstFrame);
         this.key = key;
-        this.hp = 1;
+        this.hp = hp;
+        this.dmg = dmg;
     }
 
     follow(){
@@ -41,6 +42,11 @@ export default class enemyObject extends MovableObject {
     dieMe(){
         this.hp = 0;
         this.play('died_' + this.key);
+    }
+
+    attack(){
+        // AQUI IRIA LA ANIMACION
+        return this.dmg;
     }
 
 
