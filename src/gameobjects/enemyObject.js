@@ -60,5 +60,9 @@ export default class enemyObject extends MovableObject {
         return this.dmg;
     }
 
+    isDead(){
+        return this.hp === 0;
+    }
+
 
 }

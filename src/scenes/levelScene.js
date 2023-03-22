@@ -44,11 +44,11 @@ export default class LevelScene extends Phaser.Scene {
 		let scene = this;
 
 		let bullets = [];
-		for (let i = 0; i < 100; i++) {
+		for (let i = 0; i < 10; i++) {
 			bullets.push(new Bullet(this, 0,0, 300, 20));
 		}
 
-		this.bulletPool = new BulletPool(this, bullets)
+		this.bulletPool = new BulletPool(this, bullets, 10)
 
 		this.uiLive = [new HealthPoint(this, 830, 50), new HealthPoint(this, 860, 50), 
 			new HealthPoint(this, 890, 50), new HealthPoint(this, 920, 50), new HealthPoint(this, 950, 50)]
@@ -56,7 +56,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) =>{
 			obj1.hit()
 			obj2.hitEnemy(obj1.dmg);
-		});
+		},(obj1, obj2) => !obj2.isDead());
 
 		// this.physics.add.collider(this.enemies, player, (obj1, obj2) => {
 		// 	let damage = obj1.attack();
@@ -75,6 +75,10 @@ export default class LevelScene extends Phaser.Scene {
 
 
 	updateHealthUi(hp){
+		//setscrollfactor(0, 0) para que cuando se 
+		//mueva la camara no se mueva el HUD
+
+
 		for (let i = 1; i <= 5; i++){
 			if(i<= hp){
 				this.uiLive[i-1].full()

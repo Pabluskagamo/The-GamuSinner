@@ -156,8 +156,12 @@ export default class Character extends MovableObject {
 
         this.hp--
 
-        let bullet = this.scene.bulletPool.spawn(this.x, this.y);
-        bullet.setDireccion(this.dir);
+        //Comprobar si hay balas.
+        if(this.scene.bulletPool.hasBullets()){
+            let bullet = this.scene.bulletPool.spawn(this.x, this.y);
+            bullet.setDireccion(this.dir);
+        }
+        
     }
 
     stopAttack(){

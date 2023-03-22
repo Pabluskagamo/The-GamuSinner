@@ -1,8 +1,10 @@
 export default class BulletPool {
 
 
-    constructor (scene, entities) {
+    constructor (scene, entities, max) {
         this._group = scene.add.group();
+        this.max = max;
+
         this._group.addMultiple(entities);
         this._group.children.iterate(c => {
              c.setActive(false);
@@ -21,6 +23,10 @@ export default class BulletPool {
         return entity;
     }
 
+
+    hasBullets(){
+        return this._group.countActive() < this.max;
+    }
     
     release (entity) {
         this._group.killAndHide(entity);
