@@ -47,16 +47,14 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.bulletPool = new BulletPool(this, bullets)
 
-
-		this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) =>{
-			obj1.hit()
-			obj2.dieMe();
+		this.physics.add.collider(this.enemies, player, (obj1, obj2) => {
+			let damage = obj1.attack();
+			obj2.setHp(obj2.getHp() - damage);
+			console.log(obj2.getHp())
+			if(obj2.getHp() <= 0){
+				obj2.dieMe();
+			}
 		});
-	}
-
-
-	update(){
-		console.log(this.gob)
 	}
 
 }
