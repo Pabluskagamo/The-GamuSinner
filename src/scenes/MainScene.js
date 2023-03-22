@@ -36,7 +36,13 @@ export default class HelloWorldScene extends Phaser.Scene {
 
 		start.on('pointerup', ()=>{
 			this.scene.start('instructions');
-		})
+		});
+
+		this.input.keyboard.on('keydown', (event) => {
+            if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
+                this.scene.start('instructions');
+            }
+        });
 		
 	}
 }

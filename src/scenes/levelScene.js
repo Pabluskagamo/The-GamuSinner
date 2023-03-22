@@ -26,7 +26,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.player = player
 		player.body.onCollide = true;
 
-		this.enemies = this.physics.add.group({collideWorldBounds: true });
+		this.enemies = this.physics.add.group({ collideWorldBounds: true });
 
 		let randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		let randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
@@ -45,41 +45,41 @@ export default class LevelScene extends Phaser.Scene {
 
 		let bullets = [];
 		for (let i = 0; i < 100; i++) {
-			bullets.push(new Bullet(this, 0,0, 300, 20));
+			bullets.push(new Bullet(this, 0, 0, 300, 20));
 		}
 
 		this.bulletPool = new BulletPool(this, bullets)
 
-		this.uiLive = [new HealthPoint(this, 830, 50), new HealthPoint(this, 860, 50), 
-			new HealthPoint(this, 890, 50), new HealthPoint(this, 920, 50), new HealthPoint(this, 950, 50)]
+		this.uiLive = [new HealthPoint(this, 830, 50), new HealthPoint(this, 860, 50),
+		new HealthPoint(this, 890, 50), new HealthPoint(this, 920, 50), new HealthPoint(this, 950, 50)]
 
-		this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) =>{
+		this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) => {
 			obj1.hit()
 			obj2.hitEnemy(obj1.dmg);
 		});
-
-		// this.physics.add.collider(this.enemies, player, (obj1, obj2) => {
-		// 	let damage = obj1.attack();
-		// 	obj2.setHp(obj2.getHp() - damage);
-		// 	console.log(obj2.getHp())
-		// 	if(obj2.getHp() <= 0){
-		// 		obj2.dieMe();
-		// 	}
-		// });
+		/*
+		this.physics.add.collider(this.enemies, player, (obj1, obj2) => {
+			let damage = obj1.attack();
+			obj2.setHp(obj2.getHp() - damage);
+			console.log(obj2.getHp())
+			if (obj2.getHp() <= 0) {
+				obj2.dieMe();
+			}
+		});*/
 	}
 
 
-	update(){
+	update() {
 		this.updateHealthUi(this.player.hp)
 	}
 
 
-	updateHealthUi(hp){
-		for (let i = 1; i <= 5; i++){
-			if(i<= hp){
-				this.uiLive[i-1].full()
-			}else{
-				this.uiLive[i-1].empty()
+	updateHealthUi(hp) {
+		for (let i = 1; i <= 5; i++) {
+			if (i <= hp) {
+				this.uiLive[i - 1].full()
+			} else {
+				this.uiLive[i - 1].empty()
 			}
 		}
 	}
