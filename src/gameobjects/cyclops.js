@@ -32,7 +32,7 @@ export default class Cyclops extends EnemyObject{
 
         this.scene.anims.create({
             key: 'side_cyclops',
-            frames: this.scene.anims.generateFrameNumbers('cyclops', {start: 15, end: 26}),
+            frames: this.scene.anims.generateFrameNumbers('cyclops', {start: 165, end: 176}),
             frameRate: 10,
             repeat: 0
         })
