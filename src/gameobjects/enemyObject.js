@@ -7,7 +7,12 @@ export default class enemyObject extends MovableObject {
         super(scene, x, y, key, speed, firstFrame);
         this.key = key;
         this.hp = hp;
+        this.initialHp = this.hp;
         this.dmg = dmg;
+    }
+
+    restoreEnemy(){
+       this.hp = this.initialHp;
     }
 
     follow(){
