@@ -134,7 +134,7 @@ export default class Character extends MovableObject {
             this.stopVertical();
         }
 
-        if (this.cursors && t > this.lastFired) {
+        if ((this.cursors.up.isDown || this.cursors.down.isDown|| this.cursors.left.isDown||this.cursors.right.isDown) && t > this.lastFired) {
             this.attack();
             this.lastFired = t + 300;
         }
