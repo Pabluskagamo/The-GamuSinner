@@ -30,7 +30,7 @@ const config = {
 			debug: true
 		},
 	},
-	scene: [MainScene, InstructionScene, LevelScene],
+	scene: [/*MainScene,InstructionScene,*/ LevelScene],
 }
 
 export default new Phaser.Game(config)

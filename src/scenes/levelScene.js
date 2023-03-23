@@ -61,20 +61,28 @@ export default class LevelScene extends Phaser.Scene {
 		let enemies = [];
 		for (let i = 0; i < 10; i++) {
 			enemies.push(new Goblin(this, randX, randY, 80, player));
-			enemies.push(new BlackWolf(this, randX, randY, 60, player));
+			//enemies.push(new BlackWolf(this, randX, randY, 60, player));
 		}
 
 		this.v = this.input.keyboard.addKey('v');
 
-		this.enemyPool = new EnemyPool(this, 20);
+		this.enemyPool = new EnemyPool(this, 10);
 		this.enemyPool.addMultipleEntity(enemies);
 		
 
 		this.uiLive = [new HealthPoint(this, 830, 50), new HealthPoint(this, 860, 50),
 		new HealthPoint(this, 890, 50), new HealthPoint(this, 920, 50), new HealthPoint(this, 950, 50)]
 
+		let poolenemigos = this.enemyPool;
+
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
 			obj1.hit(obj2)
+
+			if(obj2.isDead()){
+				poolenemigos.release(obj2)
+				console.log('devuelvos')
+			}
+
 		},(obj1, obj2) => !obj2.isDead());
 
 

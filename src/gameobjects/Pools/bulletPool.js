@@ -14,6 +14,7 @@ export default class BulletPool {
 
     spawn (x, y) {
         let entity = this._group.getFirstDead();
+
         if (entity) {
           entity.x = x;
           entity.y = y;

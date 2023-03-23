@@ -21,16 +21,23 @@ export default class EnemyPool {
 	}
 	
 	spawn (x, y) {
-        let entity = this._group.getFirstDead();
-        if (entity) {
-          entity.x = x;
-          entity.y = y;
-          entity.justHit = false
-          entity.setActive(true);
-          entity.setVisible(true);
-		  entity.body.checkCollision.none = false;
-        }
-        return entity;
+
+		if(!this.emptyPool()){
+			let entity = this._group.getFirstDead();
+			console.log(entity)
+			if (entity) {
+				entity.x = x;
+				entity.y = y;
+				entity.justHit = false
+				entity.setActive(true);
+				entity.setVisible(true);
+				entity.body.checkCollision.none = false;
+				entity.restoreEnemy()
+			}
+			return entity;
+		}
+
+		return null;
     }
 	
 	/**
@@ -46,4 +53,8 @@ export default class EnemyPool {
 	getPhaserGroup(){
 		return this._group;
 	}
+
+	emptyPool(){
+        return this._group.countActive() === this.max;
+    }
 }
