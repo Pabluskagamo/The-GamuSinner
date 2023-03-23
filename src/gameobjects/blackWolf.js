@@ -5,13 +5,15 @@ export default class BlackWolf extends EnemyObject {
     constructor(scene, x, y, speed, player) {
         super(scene, x, y, 'blackWolf', speed, 20, 60, 20);
         this.scene.add.existing(this);
-        this.setScale(1.5);
+        
+        //this.setScale(1.5);
 
         this.speed = speed;
         this.player = player;
         this.attacking = false;
 
         this.scene.physics.add.existing(this);
+        this.body.setImmovable(true)
 
         this.setCollideWorldBounds();
 
@@ -20,7 +22,7 @@ export default class BlackWolf extends EnemyObject {
 
         // this.body.height = this.height/ 1.3;
         let f = this.frame;
-        this.setSize(f.realWidth / 2, f.realHeight, true);
+        //this.setSize(f.realWidth / 2, f.realHeight, true);
         // this.setOffset(this.bodyOffset, 0);
 
         this.scene.anims.create({

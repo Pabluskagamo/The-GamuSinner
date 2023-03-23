@@ -38,7 +38,7 @@ export default class LevelScene extends Phaser.Scene {
 
 		let player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 200);
 		this.player = player
-		player.body.onCollide = true;
+		//player.body.onCollide = true;
 
 		this.enemies = this.physics.add.group({ collideWorldBounds: true });
 
@@ -59,7 +59,6 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.gob = new Goblin(this, randX, randY, 80, player);
 		this.enemies.add(this.gob);
-		this.physics.add.collider(player, this.enemies);
 
 		let scene = this;
 
@@ -78,8 +77,9 @@ export default class LevelScene extends Phaser.Scene {
 		},(obj1, obj2) => !obj2.isDead());
 
 
-		this.physics.add.collider(this.enemies, this.player, (obj1, obj2) => {
-			obj2.attack(obj1);
+		this.physics.add.collider(this.enemies, player, (obj1, obj2) => {
+			console.log('COl')
+			//obj2.attack(obj1);
 		});
 		
 	}

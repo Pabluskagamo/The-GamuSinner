@@ -14,7 +14,7 @@ export default class Character extends MovableObject {
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.setCollideWorldBounds();
-        this.setSize(f.realWidth / 2, f.realHeight, true);
+        //this.setSize(f.realWidth / 2, f.realHeight, true);
 
 
         this.scene.anims.create({
