@@ -12,8 +12,14 @@ export default class Goblin extends EnemyObject {
         this.speed = speed;
 
         this.setCollideWorldBounds();
-        let f = this.frame;
-        this.setSize(24, 48);
+        this.bodyOffsetWidth = this.body.width / 5.4;
+        this.bodyOffsetHeight = this.body.height / 2.3;
+        this.bodyWidth = this.body.width / 2.5;
+        this.bodyHeight = this.body.height / 3;
+
+        this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
+        this.body.width = this.bodyWidth;
+        this.body.height = this.bodyHeight;
 
         this.scene.anims.create({
             key: 'down_goblin',

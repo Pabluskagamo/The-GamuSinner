@@ -28,13 +28,16 @@ export default class LevelScene extends Phaser.Scene {
 		const mapa = this.map = this.make.tilemap({
 			key: 'map'
 		});
-	
+
 		const tiles = mapa.addTilesetImage('Forest', 'tiles');
 		this.groundLayer = this.map.createLayer('Suelo', tiles);
 		this.objetos = this.map.createLayer('Objetos', tiles);
-        this.foregroundLayer = this.map.createLayer('Bordes', tiles);
+		this.foregroundLayer = this.map.createLayer('Bordes', tiles);
 
-		// this.add.image(this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 'level_background').setScale(2);
+		this.foregroundLayer.setCollisionBetween(0, 999);
+		
+		const bounds = new Phaser.Geom.Rectangle(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+		this.physics.world.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
 
 		let player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 200);
 		this.player = player
@@ -59,7 +62,10 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.gob = new Goblin(this, randX, randY, 80, player);
 		this.enemies.add(this.gob);
+
 		this.physics.add.collider(player, this.enemies);
+		this.physics.add.collider(this.enemies, this.foregroundLayer);
+		this.physics.add.collider(this.player, this.foregroundLayer);
 
 		let scene = this;
 
@@ -75,13 +81,13 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) => {
 			obj1.hit(obj2)
-		},(obj1, obj2) => !obj2.isDead());
+		}, (obj1, obj2) => !obj2.isDead());
 
 
 		this.physics.add.collider(this.enemies, this.player, (obj1, obj2) => {
 			obj2.attack(obj1);
 		});
-		
+
 	}
 
 

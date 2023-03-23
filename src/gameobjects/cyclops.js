@@ -5,16 +5,23 @@ export default class Cyclops extends EnemyObject{
     constructor(scene, x, y, speed, player){
         super(scene, x, y, 'cyclops', 20, 100, 15);
         this.scene.add.existing(this);
+        this.setScale(1.5);
         this.scene.physics.add.existing(this);
         this.setCollideWorldBounds();
-        this.setScale(1.5);
 
         this.speed = speed;
         this.player = player;
         this.attacking = false;
 
-        let f = this.frame;
-        this.setSize(f.realWidth / 2, f.realHeight, true);
+        
+        this.bodyOffsetWidth = this.body.width/5;
+        this.bodyOffsetHeight = this.body.height/2.7;
+        this.bodyWidth = this.body.width/2.9;
+        this.bodyHeight = this.body.height/2.3;
+
+        this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
+        this.body.width = this.bodyWidth;
+        this.body.height = this.bodyHeight;
 
         this.scene.anims.create({
             key: 'up_cyclops',

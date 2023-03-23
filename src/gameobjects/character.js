@@ -4,7 +4,7 @@ export default class Character extends MovableObject {
 
     constructor(scene, x, y, speed) {
         super(scene, x, y, 'character', speed, 20);
-        
+
         this.speed = speed;
         this.isAttacking = false;
         let f = this.frame;
@@ -14,7 +14,15 @@ export default class Character extends MovableObject {
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.setCollideWorldBounds();
-        this.setSize(f.realWidth / 2, f.realHeight, true);
+
+        this.bodyOffsetWidth = this.body.width / 3;
+        this.bodyOffsetHeight = this.body.height / 1.8;
+        this.bodyWidth = this.body.width / 2.7;
+        this.bodyHeight = this.body.height / 2.5;
+
+        this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
+        this.body.width = this.bodyWidth;
+        this.body.height = this.bodyHeight;
 
 
         this.scene.anims.create({
@@ -75,10 +83,10 @@ export default class Character extends MovableObject {
 
 
         this.on('animationcomplete', end => {
-			if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)){
-				this.stopAttack()
-			}
-		})
+            if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)) {
+                this.stopAttack()
+            }
+        })
 
         this.play('mainChar_static');
 
@@ -155,34 +163,34 @@ export default class Character extends MovableObject {
         }
 
         //Comprobar si hay balas.
-        if(this.scene.bulletPool.hasBullets()){
+        if (this.scene.bulletPool.hasBullets()) {
             let bullet = this.scene.bulletPool.spawn(this.x, this.y);
             bullet.setDireccion(this.dir);
         }
-        
+
     }
 
-    stopAttack(){
-		//this.isAttacking = false;
-	}
+    stopAttack() {
+        //this.isAttacking = false;
+    }
 
-    isAttackInProcess(){
-		return this.isAttacking;
-	}
+    isAttackInProcess() {
+        return this.isAttacking;
+    }
 
-    dieMe(){
+    dieMe() {
         this.play('mainChar_die');
     }
 
-    getHp(){
+    getHp() {
         return this.hp;
     }
 
-    setHp(health){
+    setHp(health) {
         this.hp = health;
     }
 
-    getHit(dmg){
+    getHit(dmg) {
         this.hp -= dmg;
     }
 }

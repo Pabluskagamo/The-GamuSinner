@@ -15,13 +15,14 @@ export default class BlackWolf extends EnemyObject {
 
         this.setCollideWorldBounds();
 
-        // this.bodyOffset = this.width / 4;
-        // this.body.width = this.width/ 1.3;
+        this.bodyOffsetWidth = this.body.width / 4.7;
+        this.bodyOffsetHeight = this.body.height / 2.7;
+        this.bodyWidth = this.body.width / 2.5;
+        this.bodyHeight = this.body.height / 1.8;
 
-        // this.body.height = this.height/ 1.3;
-        let f = this.frame;
-        this.setSize(f.realWidth / 2, f.realHeight, true);
-        // this.setOffset(this.bodyOffset, 0);
+        this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
+        this.body.width = this.bodyWidth;
+        this.body.height = this.bodyHeight;
 
         this.scene.anims.create({
             key: 'down_blackWolf',
