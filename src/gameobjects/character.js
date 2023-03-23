@@ -162,32 +162,45 @@ export default class Character extends MovableObject {
             this.play(lastAnim);
         }
         let dir = new Phaser.Math.Vector2(0,1);
+
+        this.flipX = false;
         
         if (this.cursors.down.isDown && this.cursors.right.isDown) {
             // Diagonal abajo-derecha
+            this.flipX = true;
+            this.play('mainChar_shootlado');
             dir = new Phaser.Math.Vector2(1, 1).normalize();
         } else if (this.cursors.up.isDown && this.cursors.right.isDown) {
             // Diagonal arriba-derecha
+            this.flipX = true;
+            this.play('mainChar_shootlado');
             dir = new Phaser.Math.Vector2(1, -1).normalize();
         } else if (this.cursors.down.isDown && this.cursors.left.isDown) {
             // Diagonal abajo-izquierda
+            this.play('mainChar_shootlado');
             dir = new Phaser.Math.Vector2(-1, 1).normalize();
         } else if (this.cursors.up.isDown && this.cursors.left.isDown) {
             // Diagonal arriba-izquierda
+            this.play('mainChar_shootlado');
             dir = new Phaser.Math.Vector2(-1, -1).normalize();
         } else if (this.cursors.down.isDown) {
             // Movimiento hacia abajo
+            this.play('mainChar_shootabajo');
             dir.x = 0;
             dir.y = 1;
         } else if (this.cursors.up.isDown) {
             // Movimiento hacia arriba
+            this.play('mainChar_shootarriba');
             dir.x = 0;
             dir.y = -1;
         }else if (this.cursors.left.isDown) {
             // Movimiento hacia izq
+            this.play('mainChar_shootlado');
             dir.x = -1
             dir.y = 0
         } else if(this.cursors.right.isDown){
+            this.flipX = true;
+            this.play('mainChar_shootlado');
             dir.x = 1
             dir.y = 0
         }
