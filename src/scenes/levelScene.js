@@ -1,6 +1,7 @@
 import BlackWolf from "../gameobjects/blackWolf"
 import Bullet from "../gameobjects/bullet"
-import BulletPool from "../gameobjects/bulletPool"
+import BulletPool from "../gameobjects/Pools/bulletPool"
+import EnemyPool from "../gameobjects/Pools/EnemyPool"
 import Character from "../gameobjects/character"
 import Goblin from "../gameobjects/Goblin"
 import Cyclops from "../gameobjects/cyclops"
@@ -40,26 +41,25 @@ export default class LevelScene extends Phaser.Scene {
 		this.player = player
 		player.body.onCollide = true;
 
-		this.enemies = this.physics.add.group({ collideWorldBounds: true });
 
 		let randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		let randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		this.wolf = new BlackWolf(this, randX, randY, 60, player);
-		this.enemies.add(this.wolf);
+		//this.wolf = new BlackWolf(this, randX, randY, 60, player);
+		//this.enemies.add(this.wolf);
 
 		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		this.cyclops = new Cyclops(this, randX, randY, 45, player);
-		this.enemies.add(this.cyclops);
+		//this.cyclops = new Cyclops(this, randX, randY, 45, player);
+		//this.enemies.add(this.cyclops);
 
 		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		this.gob = new Goblin(this, randX, randY, 80, player);
-		this.enemies.add(this.gob);
-		this.physics.add.collider(player, this.enemies);
+		//this.gob = new Goblin(this, randX, randY, 80, player);
+		//this.enemies.add(this.gob);
+		//this.physics.add.collider(player, this.enemies);
 
 		let scene = this;
 
@@ -70,10 +70,22 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.bulletPool = new BulletPool(this, bullets, 10)
 
+		let enemies = [];
+		for (let i = 0; i < 10; i++) {
+			enemies.push(new Goblin(this, randX, randY, 80, player));
+			enemies.push(new BlackWolf(this, randX, randY, 60, player));
+		}
+
+		this.enemyPool = new EnemyPool(this, 20);
+		this.enemyPool.addMultipleEntity(enemies);
+		for (let i = 0; i < 20; i++) {
+			this.enemyPool.spawn(randX, randY);
+		}
+
 		this.uiLive = [new HealthPoint(this, 830, 50), new HealthPoint(this, 860, 50),
 		new HealthPoint(this, 890, 50), new HealthPoint(this, 920, 50), new HealthPoint(this, 950, 50)]
 
-		this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) => {
+		/*this.physics.add.collider(this.bulletPool._group, this.enemies, (obj1, obj2) => {
 			obj1.hit(obj2)
 		},(obj1, obj2) => !obj2.isDead());
 
@@ -81,7 +93,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.physics.add.collider(this.enemies, this.player, (obj1, obj2) => {
 			obj2.attack(obj1);
 		});
-		
+		*/
 	}
 
 
