@@ -58,7 +58,7 @@ export default class LevelScene extends Phaser.Scene {
 		
 		let bullets = [];
 		for (let i = 0; i < 10; i++) {
-			bullets.push(new Bullet(this, 0, 0, 300, 20));
+			bullets.push(new Bullet(this, -100, -100, 300, 20));
 		}
 		
 		this.bulletPool = new BulletPool(this, bullets, 10)
@@ -83,26 +83,33 @@ export default class LevelScene extends Phaser.Scene {
 
 		let poolenemigos = this.enemyPool;
 
+		this.lastSpawned = 0;
+
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
 			obj1.hit(obj2)
 
 			if(obj2.isDead()){
 				poolenemigos.release(obj2)
-				console.log('devuelvos')
 			}
 
 		},(obj1, obj2) => !obj2.isDead());
 
 
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
-			console.log('COl')
 			obj1.attack(obj2);
+		});
+
+		let timer = this.time.addEvent( {
+			delay: 5000, 
+			callback: ()=>{this.enemyPool.spawn(0,0);},
+			callbackScope: this,
+			loop: true
 		});
 
 	}
 
 
-	update() {
+	update(t) {
 		this.updateHealthUi(this.player.hp)
 
 		if(Phaser.Input.Keyboard.JustUp(this.v)){

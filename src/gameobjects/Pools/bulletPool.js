@@ -9,6 +9,7 @@ export default class BulletPool {
         this._group.children.iterate(c => {
              c.setActive(false);
              c.setVisible(false);
+             c.body.checkCollision.none = true;
         });
     }
 
@@ -21,6 +22,7 @@ export default class BulletPool {
           entity.justHit = false
           entity.setActive(true);
           entity.setVisible(true);
+          entity.body.checkCollision.none = false;
         }
         return entity;
     }

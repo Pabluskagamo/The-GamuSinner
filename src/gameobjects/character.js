@@ -101,37 +101,42 @@ export default class Character extends MovableObject {
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
 
-        if (this.a.isDown) {
+        this.flipX = false;
+
+        if (this.s.isDown && this.d.isDown) {
+            // Diagonal abajo-derecha
             this.play('mainChar_lado', true);
-            this.flipX = false;
-            this.moveLeft()
-        } else if (this.d.isDown) {
+            this.flipX = true;
+            this.moveRightDown();
+        } else if (this.w.isDown && this.d.isDown) {
+            // Diagonal arriba-derecha
+            this.play('mainChar_lado', true);
+            this.flipX = true;
+            this.moveRightUp();
+        } else if (this.s.isDown && this.a.isDown) {
+            // Diagonal abajo-izquierda
+            this.play('mainChar_lado', true);
+            this.moveLeftDown();
+        } else if (this.w.isDown && this.a.isDown) {
+            // Diagonal arriba-izquierda
+            this.play('mainChar_lado', true);
+            this.moveLeftUp();
+        } else if (this.s.isDown) {
+            // Movimiento hacia abajo
+            this.play('mainChar_abajo', true);
+           this.moveDown();
+        } else if (this.w.isDown) {
+            // Movimiento hacia arriba
+            this.play('mainChar_arriba', true);
+            this.moveUp();
+        }else if (this.a.isDown) {
+            // Movimiento hacia izq
+            this.play('mainChar_lado', true);
+            this.moveLeft();
+        } else if(this.d.isDown){
             this.play('mainChar_lado', true);
             this.flipX = true;
             this.moveRight();
-        }
-
-        if (this.s.isDown) {
-            this.play('mainChar_abajo', true);
-            if (this.a.isDown) {
-                this.moveLeftDown();
-            } else if (this.d.isDown) {
-                this.moveRightDown();
-            }
-            else {
-                this.moveDown();
-            }
-        } else if (this.w.isDown) {
-            this.play('mainChar_arriba', true);
-
-            if (this.a.isDown) {
-                this.moveLeftUp();
-            } else if (this.d.isDown) {
-                this.moveRightUp();
-            }
-            else {
-                this.moveUp();
-            }
         }
 
         if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {

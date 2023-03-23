@@ -24,7 +24,7 @@ export default class EnemyPool {
 
 		if(!this.emptyPool()){
 			let entity = this._group.getFirstDead();
-			console.log(entity)
+			
 			if (entity) {
 				entity.x = x;
 				entity.y = y;
