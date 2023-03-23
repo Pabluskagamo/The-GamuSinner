@@ -90,7 +90,7 @@ export default class Character extends MovableObject {
 
         this.play('mainChar_static');
 
-
+        this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.a = this.scene.input.keyboard.addKey('A');
         this.s = this.scene.input.keyboard.addKey('S');
         this.d = this.scene.input.keyboard.addKey('D');
@@ -142,7 +142,7 @@ export default class Character extends MovableObject {
             this.stopVertical();
         }
 
-        if (this.spacebar.isDown && t > this.lastFired) {
+        if ((this.cursors.up.isDown || this.cursors.down.isDown|| this.cursors.left.isDown||this.cursors.right.isDown) && t > this.lastFired) {
             this.attack();
             this.lastFired = t + 300;
         }
@@ -161,11 +161,40 @@ export default class Character extends MovableObject {
         } else {
             this.play(lastAnim);
         }
-
+        let dir = new Phaser.Math.Vector2(0,1);
+        
+        if (this.cursors.down.isDown && this.cursors.right.isDown) {
+            // Diagonal abajo-derecha
+            dir = new Phaser.Math.Vector2(1, 1).normalize();
+        } else if (this.cursors.up.isDown && this.cursors.right.isDown) {
+            // Diagonal arriba-derecha
+            dir = new Phaser.Math.Vector2(1, -1).normalize();
+        } else if (this.cursors.down.isDown && this.cursors.left.isDown) {
+            // Diagonal abajo-izquierda
+            dir = new Phaser.Math.Vector2(-1, 1).normalize();
+        } else if (this.cursors.up.isDown && this.cursors.left.isDown) {
+            // Diagonal arriba-izquierda
+            dir = new Phaser.Math.Vector2(-1, -1).normalize();
+        } else if (this.cursors.down.isDown) {
+            // Movimiento hacia abajo
+            dir.x = 0;
+            dir.y = 1;
+        } else if (this.cursors.up.isDown) {
+            // Movimiento hacia arriba
+            dir.x = 0;
+            dir.y = -1;
+        }else if (this.cursors.left.isDown) {
+            // Movimiento hacia izq
+            dir.x = -1
+            dir.y = 0
+        } else if(this.cursors.right.isDown){
+            dir.x = 1
+            dir.y = 0
+        }
         //Comprobar si hay balas.
         if (this.scene.bulletPool.hasBullets()) {
             let bullet = this.scene.bulletPool.spawn(this.x, this.y);
-            bullet.setDireccion(this.dir);
+            bullet.setDireccion(dir);
         }
 
     }
