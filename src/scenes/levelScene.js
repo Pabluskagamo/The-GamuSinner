@@ -68,12 +68,15 @@ export default class LevelScene extends Phaser.Scene {
 		let enemies = [];
 		for (let i = 0; i < 10; i++) {
 			enemies.push(new Goblin(this, randX, randY, 80, player));
-			//enemies.push(new BlackWolf(this, randX, randY, 60, player));
+		}
+
+		for (let i = 0; i < 5; i++) {
+			enemies.push(new BlackWolf(this, randX, randY, 60, player));
 		}
 
 		this.v = this.input.keyboard.addKey('v');
 
-		this.enemyPool = new EnemyPool(this, 10);
+		this.enemyPool = new EnemyPool(this, 15);
 		this.enemyPool.addMultipleEntity(enemies);
 
 		this.physics.add.collider(player, this.enemyPool._group);
@@ -81,10 +84,6 @@ export default class LevelScene extends Phaser.Scene {
 		this.physics.add.collider(player, this.foregroundLayer);
 		this.physics.add.collider(this.enemyPool._group, this.river);
 		this.physics.add.collider(player, this.river);
-
-
-		this.uiLive = [new HealthPoint(this, 960, 90), new HealthPoint(this, 990, 90),
-		new HealthPoint(this, 1020, 90), new HealthPoint(this, 1050, 90), new HealthPoint(this, 1080, 90)]
 
 		player.setDepth(2);
 		this.enemyPool._group.setDepth(2);
@@ -107,6 +106,7 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
 			obj1.attack(obj2);
+			this.events.emit('addScore', obj2.getHp());
 		});
 
 		let timer = this.time.addEvent({
@@ -120,26 +120,8 @@ export default class LevelScene extends Phaser.Scene {
 
 
 	update(t) {
-		this.updateHealthUi(this.player.hp)
-
 		if (Phaser.Input.Keyboard.JustUp(this.v)) {
-			console.log('HOLA')
 			this.enemyPool.spawn(0, 0)
-		}
-	}
-
-
-	updateHealthUi(hp) {
-		//setscrollfactor(0, 0) para que cuando se 
-		//mueva la camara no se mueva el HUD
-
-
-		for (let i = 1; i <= 5; i++) {
-			if (i <= hp) {
-				this.uiLive[i - 1].full()
-			} else {
-				this.uiLive[i - 1].empty()
-			}
 		}
 	}
 
