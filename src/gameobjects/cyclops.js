@@ -83,19 +83,5 @@ export default class Cyclops extends EnemyObject{
         if (this.toDestroy) {
             this.destroy();
         }
-        // if(this.spacebar.isDown){
-        //     const lastAnim = this.anims.currentAnim.key;
-
-        //     if(lastAnim == 'cyclops_side'){
-        //         this.play('mainChar_shootlado');
-        //     }else if(lastAnim == 'cyclops_down'){
-        //         this.play('mainChar_shootabajo');
-        //     }else if(lastAnim == 'cyclops_up'){
-        //         this.play('mainChar_shootarriba');
-        //     }else{
-        //         this.play(lastAnim);
-        //     }
-        // }
-
     }
 }
