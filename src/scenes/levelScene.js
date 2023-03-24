@@ -32,13 +32,15 @@ export default class LevelScene extends Phaser.Scene {
 
 		const tiles = mapa.addTilesetImage('Forest', 'tiles');
 		this.groundLayer = this.map.createLayer('Suelo', tiles);
-		this.objetos = this.map.createLayer('Objetos', tiles);
 		this.foregroundLayer = this.map.createLayer('Bordes', tiles);
+		this.river = this.map.createLayer('Rio', tiles);
+		this.borderRiver = this.map.createLayer('MargenRio', tiles);
+		this.objetos = this.map.createLayer('Objetos', tiles);
+		this.borderTrees = this.map.createLayer('bordeArboles', tiles);
 
+		this.river.setCollisionBetween(0, 999);
 		this.foregroundLayer.setCollisionBetween(0, 999);
-		
-		const bounds = new Phaser.Geom.Rectangle(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-		this.physics.world.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+
 
 		let player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 200);
 		this.player = player
@@ -53,33 +55,41 @@ export default class LevelScene extends Phaser.Scene {
 		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
 		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
 
-		
+
 		let scene = this;
-		
+
 		let bullets = [];
 		for (let i = 0; i < 10; i++) {
 			bullets.push(new Bullet(this, -100, -100, 300, 20));
 		}
-		
+
 		this.bulletPool = new BulletPool(this, bullets, 10)
-		
+
 		let enemies = [];
 		for (let i = 0; i < 10; i++) {
 			enemies.push(new Goblin(this, randX, randY, 80, player));
 			//enemies.push(new BlackWolf(this, randX, randY, 60, player));
 		}
-		
+
 		this.v = this.input.keyboard.addKey('v');
-		
+
 		this.enemyPool = new EnemyPool(this, 10);
 		this.enemyPool.addMultipleEntity(enemies);
-		
+
 		this.physics.add.collider(player, this.enemyPool._group);
 		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
-		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
+		this.physics.add.collider(player, this.foregroundLayer);
+		this.physics.add.collider(this.enemyPool._group, this.river);
+		this.physics.add.collider(player, this.river);
 
-		this.uiLive = [new HealthPoint(this, 830, 50), new HealthPoint(this, 860, 50),
-		new HealthPoint(this, 890, 50), new HealthPoint(this, 920, 50), new HealthPoint(this, 950, 50)]
+
+		this.uiLive = [new HealthPoint(this, 960, 90), new HealthPoint(this, 990, 90),
+		new HealthPoint(this, 1020, 90), new HealthPoint(this, 1050, 90), new HealthPoint(this, 1080, 90)]
+
+		player.setDepth(2);
+		this.enemyPool._group.setDepth(2);
+		this.borderTrees.setDepth(3);
+		this.foregroundLayer.setDepth(3);
 
 		let poolenemigos = this.enemyPool;
 
@@ -88,20 +98,20 @@ export default class LevelScene extends Phaser.Scene {
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
 			obj1.hit(obj2)
 
-			if(obj2.isDead()){
+			if (obj2.isDead()) {
 				poolenemigos.release(obj2)
 			}
 
-		},(obj1, obj2) => !obj2.isDead());
+		}, (obj1, obj2) => !obj2.isDead());
 
 
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
 			obj1.attack(obj2);
 		});
 
-		let timer = this.time.addEvent( {
-			delay: 5000, 
-			callback: ()=>{this.enemyPool.spawn(0,0);},
+		let timer = this.time.addEvent({
+			delay: 5000,
+			callback: () => { this.enemyPool.spawn(0, 0); },
 			callbackScope: this,
 			loop: true
 		});
@@ -112,9 +122,9 @@ export default class LevelScene extends Phaser.Scene {
 	update(t) {
 		this.updateHealthUi(this.player.hp)
 
-		if(Phaser.Input.Keyboard.JustUp(this.v)){
+		if (Phaser.Input.Keyboard.JustUp(this.v)) {
 			console.log('HOLA')
-			this.enemyPool.spawn(0,0)
+			this.enemyPool.spawn(0, 0)
 		}
 	}
 
