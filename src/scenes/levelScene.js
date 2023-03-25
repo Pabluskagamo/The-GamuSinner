@@ -39,7 +39,7 @@ export default class LevelScene extends Phaser.Scene {
 
 
 	update(t) {
-		if (Phaser.Input.Keyboard.JustUp(this.v)) {
+		if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
 			this.enemyPool.spawn(0, 0)
 		}
 		if (this.player.getHp() === 0) {
