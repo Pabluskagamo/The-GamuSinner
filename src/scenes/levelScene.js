@@ -75,7 +75,7 @@ export default class LevelScene extends Phaser.Scene {
 		}
 
 		for (let i = 0; i < 10; i++) {
-			enemies.push(new Goblin(this, randX, randY, 80, player));
+			enemies.push(new Goblin(this, randX, randY, 80, player, this.enemyPool));
 		}
 
 		this.v = this.input.keyboard.addKey('v');
