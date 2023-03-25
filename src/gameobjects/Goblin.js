@@ -2,8 +2,8 @@ import EnemyObject from "./enemyObject";
 
 export default class Goblin extends EnemyObject {
 
-    constructor(scene, x, y, speed, player) {
-        super(scene, x, y, 'goblin', speed, 20, 20, 10);
+    constructor(scene, x, y, speed, player, enemypool) {
+        super(scene, x, y, 'goblin', speed, 20, enemypool, 20, 10);
         this.scene.add.existing(this);
         this.setScale(2);
         this.scene.physics.add.existing(this);

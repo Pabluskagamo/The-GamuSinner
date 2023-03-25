@@ -3,12 +3,13 @@ import MovableObject from "./movableObject";
 export default class enemyObject extends MovableObject {
     
     
-    constructor(scene, x, y, key, speed, firstFrame, hp, dmg) {
+    constructor(scene, x, y, key, speed, firstFrame, enemypool, hp, dmg) {
         super(scene, x, y, key, speed, firstFrame);
         this.key = key;
         this.hp = hp;
         this.initialHp = this.hp;
         this.dmg = dmg;
+        this.pool = enemypool;
     }
 
     restoreEnemy(){
@@ -62,7 +63,6 @@ export default class enemyObject extends MovableObject {
         console.log(this.hp)
 
         if(this.hp <= 0){
-            console.log("Entro")
             this.dieMe();
         }
 
