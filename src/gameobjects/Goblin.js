@@ -52,7 +52,7 @@ export default class Goblin extends EnemyObject {
 
         this.scene.anims.create({
             key: 'died_goblin',
-            frames: this.scene.anims.generateFrameNumbers('goblin', { start: 32, end: 37 }),
+            frames: this.scene.anims.generateFrameNumbers('goblin', { start: 80, end: 85 }),
             frameRate: 10,
             repeat: 0
         })
