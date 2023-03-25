@@ -7,6 +7,10 @@ export default class LevelScene extends Phaser.Scene {
         super('instructions')
     }
 
+    init() {
+        this.cameras.main.fadeIn(500);
+    }
+
     preload() {
         this.load.image('background_instructions', '/img/pergamino.png')
         this.load.image('controls', '/assets/controls.png');
@@ -86,12 +90,19 @@ export default class LevelScene extends Phaser.Scene {
         });
 
         skip.on('pointerup', () => {
-            this.scene.start('level');
+            this.cameras.main.fadeOut(500);
+            this.cameras.main.once("camerafadeoutcomplete", function () {
+                this.scene.start('level');
+            }, this);
         });
+
 
         this.input.keyboard.on('keydown', (event) => {
             if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
-                this.scene.start('level');
+                this.cameras.main.fadeOut(500);
+                this.cameras.main.once("camerafadeoutcomplete", function () {
+                    this.scene.start('level');
+                }, this);
             }
         });
     }

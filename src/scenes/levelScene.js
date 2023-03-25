@@ -12,6 +12,10 @@ export default class LevelScene extends Phaser.Scene {
 		super('level')
 	}
 
+	init() {
+		this.cameras.main.fadeIn(500);
+	}
+
 	preload() {
 		this.load.image('level_background', '/img/top-down-forest.png')
 		this.load.spritesheet('character', '/assets/character.png', { frameWidth: 64, frameHeight: 32 })
@@ -30,7 +34,6 @@ export default class LevelScene extends Phaser.Scene {
 		const mapa = this.map = this.make.tilemap({
 			key: 'map'
 		});
-
 		const tiles = mapa.addTilesetImage('Forest', 'tiles');
 		this.groundLayer = this.map.createLayer('Suelo', tiles);
 		this.foregroundLayer = this.map.createLayer('Bordes', tiles);
@@ -71,7 +74,7 @@ export default class LevelScene extends Phaser.Scene {
 		let enemies = [];
 
 		for (let i = 0; i < 10; i++) {
-			enemies.push(new Goblin(this, randX, randY, 80, player));
+			enemies.push(new Goblin(this, randX, randY, 80, player, this.enemyPool));
 		}
 
 		for (let i = 0; i < 5; i++) {
@@ -132,7 +135,15 @@ export default class LevelScene extends Phaser.Scene {
 			this.enemyPool.spawn(0, 0)
 		}
 		if (this.player.getHp() === 0) {
-			this.scene.start('game_overr');
+			this.player.dieMe();
+			this.player.on('animationcomplete', () => {
+				if (this.player.anims.currentAnim.key === 'mainChar_die') {
+					this.cameras.main.fadeOut(500);
+					this.cameras.main.once("camerafadeoutcomplete", function () {
+						this.scene.start('game_over');
+					}, this);
+				}
+			})
 		}
 	}
 

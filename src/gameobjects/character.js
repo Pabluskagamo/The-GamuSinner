@@ -150,7 +150,7 @@ export default class Character extends MovableObject {
 
         let dir = new Phaser.Math.Vector2(0, 1);
 
-        
+        this.flipX = false;
 
         if (this.cursors.down.isDown && this.cursors.right.isDown) {
             // Diagonal abajo-derecha
@@ -182,7 +182,7 @@ export default class Character extends MovableObject {
             dir.y = -1;
         } else if (this.cursors.left.isDown) {
             // Movimiento hacia izq
-            console.log('IZQUIERDAA')
+            console.log('IZQUIERDAA');
             this.play('mainChar_shootlado', true);
             this.flipX = true;
             dir.x = -1

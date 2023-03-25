@@ -2,7 +2,11 @@ import Phaser from 'phaser'
 
 export default class GameOverScene extends Phaser.Scene {
 	constructor() {
-		super('game_overr');
+		super('game_over');
+	}
+
+	init() {
+		this.cameras.main.fadeIn(500);
 	}
 
 	preload() {
