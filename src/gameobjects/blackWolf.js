@@ -2,8 +2,8 @@ import EnemyObject from "./enemyObject";
 
 export default class BlackWolf extends EnemyObject {
 
-    constructor(scene, x, y, speed, player) {
-        super(scene, x, y, 'blackWolf', speed, 20, 60, 20);
+    constructor(scene, x, y, speed, player, enemypool) {
+        super(scene, x, y, 'blackWolf', speed, 20, enemypool, 60, 20);
         this.scene.add.existing(this);
         
         //this.setScale(1.5);
@@ -85,8 +85,7 @@ export default class BlackWolf extends EnemyObject {
 
         this.on('animationcomplete', () => {
             if (this.anims.currentAnim.key === 'died_blackWolf') {
-                console.log("Lo destruyo")
-                this.toDestroy = true;
+                this.pool.release(this);
             } 
 
             if (/attack/.test(this.anims.currentAnim.key)){
@@ -106,10 +105,6 @@ export default class BlackWolf extends EnemyObject {
         }else{
             this.stopVertical();
             this.stopHorizontal();
-        }
-
-        if (this.toDestroy) {
-            this.destroy();
         }
     }
 

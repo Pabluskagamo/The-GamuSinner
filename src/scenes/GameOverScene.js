@@ -7,8 +7,8 @@ export default class GameOverScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image('background', '/img/fondo_pixelart3.png')
-		this.load.image('game_over', '/img/game_over')
+		this.load.image('background_g', '/img/fondo_pixelart3.png')
+		// this.load.image('game_over', '/img/game_over')
 		//this.load.spritesheet('game_start', '/assets/start_sprite.png', {frameWidth: 750 , frameHeight: 355});
 		//this.load.image('game_start', '/img/start_blanco.png')
 	}
@@ -22,8 +22,8 @@ export default class GameOverScene extends Phaser.Scene {
 			repeat: 0
 		})*/                          
 
-		this.add.image(0, 0, 'background').setOrigin(0, 0).setScale(0.75);
-		const title = this.add.image(this.sys.game.canvas.width/2, 230, 'game_over').setScale(0.65);
+		this.add.image(0, 0, 'background_g');
+		// const title = this.add.image(this.sys.game.canvas.width/2, 230, 'game_over').setScale(0.65);
 		/*const start = this.add.sprite(this.sys.game.canvas.width/2, 365, 'game_start').setScale(0.35);
 		start.setInteractive({cursor: 'pointer'});
 		start.on('pointerover', () => {
