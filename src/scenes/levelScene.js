@@ -70,13 +70,13 @@ export default class LevelScene extends Phaser.Scene {
 
 		let enemies = [];
 
-		// for (let i = 0; i < 10; i++) {
-		// 	enemies.push(new Goblin(this, randX, randY, 80, player));
-		// }
+		for (let i = 0; i < 10; i++) {
+			enemies.push(new Goblin(this, randX, randY, 80, player));
+		}
 
-		// for (let i = 0; i < 5; i++) {
-		// 	enemies.push(new BlackWolf(this, randX, randY, 60, player, this.enemyPool));
-		// }
+		for (let i = 0; i < 5; i++) {
+			enemies.push(new BlackWolf(this, randX, randY, 60, player, this.enemyPool));
+		}
 
 		for (let i = 0; i < 3; i++) {
 			enemies.push(new Cyclops(this, randX, randY, 45, player, this.enemyPool));
@@ -116,13 +116,13 @@ export default class LevelScene extends Phaser.Scene {
 			this.events.emit('addScore', obj2.getHp());
 		});
 
-		let timer = this.time.addEvent({
+		// let timer = this.time.addEvent({
 
-			delay: 3000,
-			callback: () => { this.spawnInBounds(); },
-			callbackScope: this,
-			loop: true
-		});
+		// 	delay: 3000,
+		// 	callback: () => { this.spawnInBounds(); },
+		// 	callbackScope: this,
+		// 	loop: true
+		// });
 
 	}
 

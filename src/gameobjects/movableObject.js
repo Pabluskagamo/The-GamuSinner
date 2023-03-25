@@ -85,4 +85,8 @@ export default class MovableObject extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
+    isStatic(){
+        return this.body.velocity.x === 0 && this.body.velocity.y === 0;
+    }
+
 }

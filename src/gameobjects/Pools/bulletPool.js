@@ -33,6 +33,7 @@ export default class BulletPool {
     }
     
     release (entity) {
+        entity.body.checkCollision.none = true;
         this._group.killAndHide(entity);
     }
 }

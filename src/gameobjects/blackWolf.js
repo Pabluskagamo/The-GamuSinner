@@ -95,7 +95,7 @@ export default class BlackWolf extends EnemyObject {
     }
 
     preUpdate(t, dt) {
-        super.preUpdate(    t, dt)
+        super.preUpdate(t, dt)
 
         if (this.hp > 0 && !this.attacking) {
             this.scene.physics.moveToObject(this, this.player, this.speed);

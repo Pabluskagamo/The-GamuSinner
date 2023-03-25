@@ -29,7 +29,7 @@ export default class Character extends MovableObject {
             key: 'mainChar_static',
             frames: this.scene.anims.generateFrameNumbers('character', { start: 0, end: 7 }),
             frameRate: 5,
-            repeat: 0
+            repeat: -1
         })
         
         this.scene.anims.create({
@@ -135,15 +135,22 @@ export default class Character extends MovableObject {
         }
 
         if ((this.cursors.up.isDown || this.cursors.down.isDown || this.cursors.left.isDown || this.cursors.right.isDown) && t > this.lastFired) {
+            this.flipX = true;
             this.attack();
             this.lastFired = t + 400;
         }
+        
+        // if(this.isStatic()){
+        //     this.play('mainChar_static', true);
+        // }
 
     }
 
     attack() {
 
         let dir = new Phaser.Math.Vector2(0, 1);
+
+        
 
         if (this.cursors.down.isDown && this.cursors.right.isDown) {
             // Diagonal abajo-derecha
@@ -156,12 +163,12 @@ export default class Character extends MovableObject {
         } else if (this.cursors.down.isDown && this.cursors.left.isDown) {
             // Diagonal abajo-izquierda
             this.play('mainChar_shootlado', true);
-            this.flipX = true;
+            // this.flipX = true;
             dir = new Phaser.Math.Vector2(-1, 1).normalize();
         } else if (this.cursors.up.isDown && this.cursors.left.isDown) {
             // Diagonal arriba-izquierda
             this.play('mainChar_shootlado', true);
-            this.flipX = true;
+            // this.flipX = true;
             dir = new Phaser.Math.Vector2(-1, -1).normalize();
         } else if (this.cursors.down.isDown) {
             // Movimiento hacia abajo
@@ -175,6 +182,7 @@ export default class Character extends MovableObject {
             dir.y = -1;
         } else if (this.cursors.left.isDown) {
             // Movimiento hacia izq
+            console.log('IZQUIERDAA')
             this.play('mainChar_shootlado', true);
             this.flipX = true;
             dir.x = -1
