@@ -66,10 +66,12 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.bulletPool = new BulletPool(this, bullets, 10)
 
-		let enemies = [];
+		this.enemyPool = new EnemyPool(this, 15);
 
+		let enemies = [];
+		
 		for (let i = 0; i < 5; i++) {
-			enemies.push(new BlackWolf(this, randX, randY, 60, player));
+			enemies.push(new BlackWolf(this, randX, randY, 60, player, this.enemyPool));
 		}
 
 		for (let i = 0; i < 10; i++) {
@@ -78,10 +80,8 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.v = this.input.keyboard.addKey('v');
 
-		this.enemyPool = new EnemyPool(this, 15);
 		this.enemyPool.addMultipleEntity(enemies);
 
-		this.physics.add.collider(player, this.enemyPool._group);
 		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
 		this.physics.add.collider(player, this.foregroundLayer);
 		this.physics.add.collider(this.enemyPool._group, this.river);
@@ -104,11 +104,6 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
 			obj1.hit(obj2)
-
-			if (obj2.isDead()) {
-				poolenemigos.release(obj2)
-			}
-
 		}, (obj1, obj2) => !obj2.isDead());
 
 
