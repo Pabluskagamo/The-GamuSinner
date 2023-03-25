@@ -113,9 +113,10 @@ export default class BlackWolf extends EnemyObject {
     }
 
     attack(enemie){
-        super.attack()
-        this.attacking = true;
-
-        enemie.getHit(1)
+        if(!this.attacking){
+            this.attacking = true;
+            super.attack()
+            enemie.getHit(1)
+        }
     }
 }

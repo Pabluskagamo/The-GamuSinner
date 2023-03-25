@@ -137,6 +137,8 @@ export default class Character extends MovableObject {
             this.play('mainChar_lado', true);
             this.flipX = true;
             this.moveRight();
+        }else{
+            this.frictionEffect();
         }
 
         if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
@@ -149,23 +151,23 @@ export default class Character extends MovableObject {
 
         if ((this.cursors.up.isDown || this.cursors.down.isDown|| this.cursors.left.isDown||this.cursors.right.isDown) && t > this.lastFired) {
             this.attack();
-            this.lastFired = t + 300;
+            this.lastFired = t + 400;
         }
 
     }
 
     attack() {
-        const lastAnim = this.anims.currentAnim.key;
+        // const lastAnim = this.anims.currentAnim.key;
 
-        if (lastAnim == 'mainChar_lado') {
-            this.play('mainChar_shootlado');
-        } else if (lastAnim == 'mainChar_abajo') {
-            this.play('mainChar_shootabajo');
-        } else if (lastAnim == 'mainChar_arriba') {
-            this.play('mainChar_shootarriba');
-        } else {
-            this.play(lastAnim);
-        }
+        // if (lastAnim == 'mainChar_lado') {
+        //     this.play('mainChar_shootlado');
+        // } else if (lastAnim == 'mainChar_abajo') {
+        //     this.play('mainChar_shootabajo');
+        // } else if (lastAnim == 'mainChar_arriba') {
+        //     this.play('mainChar_shootarriba');
+        // } else {
+        //     this.play(lastAnim);
+        // }
         let dir = new Phaser.Math.Vector2(0,1);
 
         this.flipX = false;

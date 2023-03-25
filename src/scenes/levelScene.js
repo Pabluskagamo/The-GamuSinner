@@ -20,7 +20,6 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('goblin', '/assets/goblins.png', { frameWidth: 48, frameHeight: 48 })
 		this.load.spritesheet('muerte', '/assets/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', '/assets/bullets.png', { frameWidth: 16, frameHeight: 16 })
-		this.load.spritesheet('healthbar', '/assets/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
 		this.load.image('tiles', '/assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('map', '/assets/tilemap/mapa.json')
 	}
@@ -66,12 +65,13 @@ export default class LevelScene extends Phaser.Scene {
 		this.bulletPool = new BulletPool(this, bullets, 10)
 
 		let enemies = [];
-		for (let i = 0; i < 10; i++) {
-			enemies.push(new Goblin(this, randX, randY, 80, player));
-		}
 
 		for (let i = 0; i < 5; i++) {
 			enemies.push(new BlackWolf(this, randX, randY, 60, player));
+		}
+
+		for (let i = 0; i < 10; i++) {
+			enemies.push(new Goblin(this, randX, randY, 80, player));
 		}
 
 		this.v = this.input.keyboard.addKey('v');
@@ -79,7 +79,6 @@ export default class LevelScene extends Phaser.Scene {
 		this.enemyPool = new EnemyPool(this, 15);
 		this.enemyPool.addMultipleEntity(enemies);
 
-		this.physics.add.collider(player, this.enemyPool._group);
 		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
 		this.physics.add.collider(player, this.foregroundLayer);
 		this.physics.add.collider(this.enemyPool._group, this.river);
@@ -110,8 +109,8 @@ export default class LevelScene extends Phaser.Scene {
 		});
 
 		let timer = this.time.addEvent({
-			delay: 5000,
-			callback: () => { this.enemyPool.spawn(0, 0); },
+			delay: 3000,
+			callback: () => { this.spawnInBounds();},
 			callbackScope: this,
 			loop: true
 		});
@@ -123,6 +122,16 @@ export default class LevelScene extends Phaser.Scene {
 		if (Phaser.Input.Keyboard.JustUp(this.v)) {
 			this.enemyPool.spawn(0, 0)
 		}
+	}
+
+	spawnInBounds(){
+		const xPos = [0, this.sys.game.canvas.width]
+		const yPos = [0, this.sys.game.canvas.height]
+
+		const randX = Phaser.Math.RND.between(0, 1);
+		const randY = Phaser.Math.RND.between(0, 1);
+
+		this.enemyPool.spawn(xPos[randX], xPos[randY]);
 	}
 
 }

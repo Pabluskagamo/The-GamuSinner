@@ -63,4 +63,26 @@ export default class MovableObject extends Phaser.Physics.Arcade.Sprite {
         this.setVelocityY(0);
     }
 
+    frictionEffect(){
+        if(this.body.velocity.x > 5){
+            this.body.velocity.x -= 1;
+        } else if(this.body.velocity.x < -5){
+            this.body.velocity.x += 1;
+        }
+
+        if(this.body.velocity.x <= 5 && this.body.velocity.x > 0 || this.body.velocity.x >= -5 && this.body.velocity.x < 0){
+             this.body.velocity.x = 0;
+        }
+
+        if(this.body.velocity.y > 5){
+            this.body.velocity.y -= 1;
+        } else if(this.body.velocity.y < -5){
+            this.body.velocity.y += 1;
+        }
+
+        if(this.body.velocity.y <= 5 && this.body.velocity.y > 0 || this.body.velocity.y >= -5 && this.body.velocity.y < 0){
+             this.body.velocity.y = 0;
+        }
+    }
+
 }

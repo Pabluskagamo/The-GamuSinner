@@ -8,12 +8,12 @@ export default class Hud extends Phaser.Scene{
 
     preload() {
 		this.load.spritesheet('healthbar', '/assets/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
-        this.load.image('hud_hp', '/assets/ui/hud.png');
+        //this.load.image('hud_hp', '/assets/ui/hud.png');
 	}
 
     create ()
     {   
-        this.add.image(1022, 87, 'hud_hp');
+        //this.add.image(1022, 87, 'hud_hp');
         this.uiLive = [new HealthPoint(this, 960, 90), new HealthPoint(this, 990, 90),
             new HealthPoint(this, 1020, 90), new HealthPoint(this, 1050, 90), new HealthPoint(this, 1080, 90)]
 
