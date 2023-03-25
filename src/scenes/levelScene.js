@@ -111,13 +111,13 @@ export default class LevelScene extends Phaser.Scene {
 			this.events.emit('addScore', obj2.getHp());
 		});
 
-		let timer = this.time.addEvent({
+		// let timer = this.time.addEvent({
 
-			delay: 3000,
-			callback: () => { this.spawnInBounds(); },
-			callbackScope: this,
-			loop: true
-		});
+		// 	delay: 3000,
+		// 	callback: () => { this.spawnInBounds(); },
+		// 	callbackScope: this,
+		// 	loop: true
+		// });
 
 	}
 

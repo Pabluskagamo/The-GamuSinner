@@ -57,11 +57,21 @@ export default class Goblin extends EnemyObject {
             repeat: 0
         })
 
+        this.scene.anims.create({
+            key: 'side_attack_goblin',
+            frames: this.scene.anims.generateFrameNumbers('goblin', { start: 64, end: 69 }),
+            frameRate: 10,
+            repeat: 0
+        })
+
         this.on('animationcomplete', () => {
-            if (this.anims.currentAnim.key !== 'died_goblin') {
-                this.play('static_goblin');
-            } else {
-                this.toDestroy = true;
+            if (this.anims.currentAnim.key === 'died_goblin') {
+                this.pool.release(this);
+            } 
+
+            console.log(this.anims.currentAnim.key)
+            if (/attack/.test(this.anims.currentAnim.key)){
+                this.attacking = false;
             }
         })
 
@@ -70,18 +80,22 @@ export default class Goblin extends EnemyObject {
 
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
-        if (this.hp > 0) {
+        // console.log(this.hp, this.attacking, this.hp > 0 && !this.attacking)
+
+        if (this.hp > 0 && !this.attacking) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
             this.follow();
         } else {
             this.stopVertical();
             this.stopHorizontal();
         }
+    }
 
-        // Si es necesario, la caja la destruimos al final del update para evitar errores
-        if (this.toDestroy) {
-            this.destroy();
+    attack(enemie){
+        if(!this.attacking){
+            this.attacking = true;
+            this.play('side_attack_goblin');
+            enemie.getHit(1)
         }
-
     }
 }
