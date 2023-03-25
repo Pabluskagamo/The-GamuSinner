@@ -13,8 +13,6 @@ export default class BlackWolf extends EnemyObject {
         this.attacking = false;
 
         this.scene.physics.add.existing(this);
-        this.body.setImmovable(true)
-
         this.setCollideWorldBounds();
 
         this.bodyOffsetWidth = this.body.width / 4.7;

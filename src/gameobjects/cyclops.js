@@ -2,8 +2,8 @@ import EnemyObject from "./enemyObject";
 
 export default class Cyclops extends EnemyObject{
 
-    constructor(scene, x, y, speed, player){
-        super(scene, x, y, 'cyclops', 20, 100, 15);
+    constructor(scene, x, y, speed, player, enemypool){
+        super(scene, x, y, 'cyclops', speed, 20, enemypool, 100, 15);
         this.scene.add.existing(this);
         this.setScale(1.5);
         this.scene.physics.add.existing(this);
@@ -12,12 +12,11 @@ export default class Cyclops extends EnemyObject{
         this.speed = speed;
         this.player = player;
         this.attacking = false;
-
         
         this.bodyOffsetWidth = this.body.width/5;
-        this.bodyOffsetHeight = this.body.height/2.7;
+        this.bodyOffsetHeight = this.body.height/3.8;
         this.bodyWidth = this.body.width/2.9;
-        this.bodyHeight = this.body.height/2.3;
+        this.bodyHeight = this.body.height/1.8;
 
         this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
         this.body.width = this.bodyWidth;
@@ -58,15 +57,26 @@ export default class Cyclops extends EnemyObject{
             repeat: 0
         })
 
+        this.scene.anims.create({
+            key: 'side_attack_cyclops',
+            frames: this.scene.anims.generateFrameNumbers('cyclops', {start: 195, end: 207}),
+            frameRate: 15,
+            repeat: 0
+        })
+        
+
         this.on('animationcomplete',() => {
-            if (this.anims.currentAnim.key === 'died_cyclops') 
-                this.toDestroy = true;
-            
+            if (this.anims.currentAnim.key === 'died_cyclops') {
+                this.pool.release(this);
+            } 
+
+            if (/attack/.test(this.anims.currentAnim.key)){
+                this.attacking = false;
+            }
         })
 
-        this.play('cyclops_static');
+        this.play('static_cyclops');
         
-        this.spacebar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     preUpdate(t, dt){
@@ -82,6 +92,14 @@ export default class Cyclops extends EnemyObject{
 
         if (this.toDestroy) {
             this.destroy();
+        }
+    }
+
+    attack(enemie){
+        if(!this.attacking){
+            this.attacking = true;
+            super.attack()
+            enemie.getHit(1)
         }
     }
 }
