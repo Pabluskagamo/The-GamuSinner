@@ -31,7 +31,7 @@ const config = {
 			debug: true
 		},
 	},
-	scene: [/*MainScene,InstructionScene,*/ LevelScene, Hud],
+	scene: [/*MainScene,*/InstructionScene, LevelScene, Hud],
 }
 
 export default new Phaser.Game(config)

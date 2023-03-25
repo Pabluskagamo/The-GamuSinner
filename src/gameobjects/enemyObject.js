@@ -41,7 +41,6 @@ export default class enemyObject extends MovableObject {
         }else if (this.body.velocity.x !== 0 && this.body.velocity.y < 5) {
             // Movimiento hacia los lados
             this.play('side_' + this.key, true);
-            console.log("aaaaa");
             this.flipX = this.body.velocity.x < 0;
         } else {
             // Reproducir la animación estática si no se está moviendo
@@ -51,7 +50,7 @@ export default class enemyObject extends MovableObject {
 
     dieMe(){
         this.hp = 0;
-        this.play('died_' + this.key);
+        this.play('died_' + this.key, true);
     }
 
     hitEnemy(dmg){
@@ -60,6 +59,7 @@ export default class enemyObject extends MovableObject {
         console.log(this.hp)
 
         if(this.hp <= 0){
+            console.log("Entro")
             this.dieMe();
         }
 

@@ -14,7 +14,7 @@ export default class LevelScene extends Phaser.Scene {
 
 	preload() {
 		this.load.image('level_background', '/img/top-down-forest.png')
-		this.load.spritesheet('character', '/assets/charac.png', { frameWidth: 64, frameHeight: 64 })
+		this.load.spritesheet('character', '/assets/character.png', { frameWidth: 64, frameHeight: 32 })
 		this.load.spritesheet('blackWolf', '/assets/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('cyclops', '/assets/cyclops.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('goblin', '/assets/goblins.png', { frameWidth: 48, frameHeight: 48 })
@@ -92,6 +92,12 @@ export default class LevelScene extends Phaser.Scene {
 		let poolenemigos = this.enemyPool;
 
 		this.lastSpawned = 0;
+
+		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
+
+			this.bulletPool.release(obj1);
+
+		});
 
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
 			obj1.hit(obj2)

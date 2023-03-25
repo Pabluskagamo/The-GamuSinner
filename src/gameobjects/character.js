@@ -10,6 +10,226 @@ export default class Character extends MovableObject {
         let f = this.frame;
         this.hp = 5
         this.lastFired = 0;
+        this.setScale(1.7);
+
+        this.scene.add.existing(this);
+        this.scene.physics.add.existing(this);
+        this.setCollideWorldBounds();
+
+        this.bodyOffsetWidth = this.body.width / 4.6;
+        this.bodyOffsetHeight = this.body.height / 5;
+        this.bodyWidth = this.body.width / 4;
+        this.bodyHeight = this.body.height / 1.5;
+
+        this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
+        this.body.width = this.bodyWidth;
+        this.body.height = this.bodyHeight;
+
+        this.scene.anims.create({
+            key: 'mainChar_static',
+            frames: this.scene.anims.generateFrameNumbers('character', { start: 0, end: 7 }),
+            frameRate: 5,
+            repeat: 0
+        })
+        
+        this.scene.anims.create({
+            key: 'mainChar_lado',
+            frames: this.scene.anims.generateFrameNumbers('character', { start: 8, end: 15 }),
+            frameRate: 10,
+            repeat: 0
+        })
+
+        this.scene.anims.create({
+            key: 'mainChar_dash',
+            frames: this.scene.anims.generateFrameNumbers('character', { start: 16, end: 22 }),
+            frameRate: 10,
+            repeat: 0
+        })
+
+        this.scene.anims.create({
+            key: 'mainChar_shootlado',
+            frames: this.scene.anims.generateFrameNumbers('character', { start: 40, end: 43 }),
+            frameRate: 15,
+            repeat: 0
+        })
+
+        this.scene.anims.create({
+            key: 'mainChar_die',
+            frames: this.scene.anims.generateFrameNumbers('character', { start: 48, end: 52 }),
+            frameRate: 5,
+            repeat: 0
+        })
+
+
+        this.on('animationcomplete', end => {
+            if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)) {
+                this.stopAttack()
+            }
+        })
+
+        this.play('mainChar_static', true);
+
+        this.cursors = this.scene.input.keyboard.createCursorKeys();
+        this.a = this.scene.input.keyboard.addKey('A');
+        this.s = this.scene.input.keyboard.addKey('S');
+        this.d = this.scene.input.keyboard.addKey('D');
+        this.w = this.scene.input.keyboard.addKey('W');
+        this.spacebar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.tab = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+    }
+
+    preUpdate(t, dt) {
+        super.preUpdate(t, dt)
+
+        this.flipX = false;
+
+        if (this.s.isDown && this.d.isDown) {
+            // Diagonal abajo-derecha
+            this.play('mainChar_lado', true);
+            this.moveRightDown();
+        } else if (this.w.isDown && this.d.isDown) {
+            // Diagonal arriba-derecha
+            this.play('mainChar_lado', true);
+            this.moveRightUp();
+        } else if (this.s.isDown && this.a.isDown) {
+            // Diagonal abajo-izquierda
+            this.play('mainChar_lado', true);
+            this.flipX = true;
+            this.moveLeftDown();
+        } else if (this.w.isDown && this.a.isDown) {
+            // Diagonal arriba-izquierda
+            this.play('mainChar_lado', true);
+            this.flipX = true;
+            this.moveLeftUp();
+        } else if (this.s.isDown) {
+            // Movimiento hacia abajo
+            this.play('mainChar_lado', true);
+            this.moveDown();
+        } else if (this.w.isDown) {
+            // Movimiento hacia arriba
+            this.play('mainChar_lado', true);
+            this.moveUp();
+        } else if (this.a.isDown) {
+            // Movimiento hacia izq
+            this.play('mainChar_lado', true);
+            this.flipX = true;
+            this.moveLeft();
+        } else if (this.d.isDown) {
+            this.play('mainChar_lado', true);
+            this.moveRight();
+        } else {
+            this.frictionEffect();
+        }
+
+        // if(this.tab.isDown){
+        //     this.play('mainChar_dash', true);
+        //     this.moveRight();
+        // }
+
+        if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
+            this.stopHorizontal();
+        }
+
+        if (Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)) {
+            this.stopVertical();
+        }
+
+        if ((this.cursors.up.isDown || this.cursors.down.isDown || this.cursors.left.isDown || this.cursors.right.isDown) && t > this.lastFired) {
+            this.attack();
+            this.lastFired = t + 400;
+        }
+
+    }
+
+    attack() {
+
+        let dir = new Phaser.Math.Vector2(0, 1);
+
+        if (this.cursors.down.isDown && this.cursors.right.isDown) {
+            // Diagonal abajo-derecha
+            this.play('mainChar_shootlado', true);
+            dir = new Phaser.Math.Vector2(1, 1).normalize();
+        } else if (this.cursors.up.isDown && this.cursors.right.isDown) {
+            // Diagonal arriba-derecha
+            this.play('mainChar_shootlado', true);
+            dir = new Phaser.Math.Vector2(1, -1).normalize();
+        } else if (this.cursors.down.isDown && this.cursors.left.isDown) {
+            // Diagonal abajo-izquierda
+            this.play('mainChar_shootlado', true);
+            this.flipX = true;
+            dir = new Phaser.Math.Vector2(-1, 1).normalize();
+        } else if (this.cursors.up.isDown && this.cursors.left.isDown) {
+            // Diagonal arriba-izquierda
+            this.play('mainChar_shootlado', true);
+            this.flipX = true;
+            dir = new Phaser.Math.Vector2(-1, -1).normalize();
+        } else if (this.cursors.down.isDown) {
+            // Movimiento hacia abajo
+            this.play('mainChar_shootlado', true);
+            dir.x = 0;
+            dir.y = 1;
+        } else if (this.cursors.up.isDown) {
+            // Movimiento hacia arriba
+            this.play('mainChar_shootlado', true);
+            dir.x = 0;
+            dir.y = -1;
+        } else if (this.cursors.left.isDown) {
+            // Movimiento hacia izq
+            this.play('mainChar_shootlado', true);
+            this.flipX = true;
+            dir.x = -1
+            dir.y = 0
+        } else if (this.cursors.right.isDown) {
+            this.play('mainChar_shootlado', true);
+            dir.x = 1
+            dir.y = 0
+        }
+        //Comprobar si hay balas.
+        if (this.scene.bulletPool.hasBullets()) {
+            let bullet = this.scene.bulletPool.spawn(this.x, this.y);
+            bullet.setDireccion(dir);
+        }
+
+    }
+
+    stopAttack() {
+        //this.isAttacking = false;
+    }
+
+    isAttackInProcess() {
+        return this.isAttacking;
+    }
+
+    dieMe() {
+        this.play('mainChar_die');
+    }
+
+    getHp() {
+        return this.hp;
+    }
+
+    setHp(health) {
+        this.hp = health;
+    }
+
+    getHit(dmg) {
+        this.hp -= dmg;
+    }
+}
+
+
+/*import MovableObject from "./movableObject";
+
+export default class Character extends MovableObject {
+
+    constructor(scene, x, y, speed) {
+        super(scene, x, y, 'character', speed, 20);
+
+        this.speed = speed;
+        this.isAttacking = false;
+        let f = this.frame;
+        this.hp = 5
+        this.lastFired = 0;
 
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
@@ -243,3 +463,4 @@ export default class Character extends MovableObject {
         this.hp -= dmg;
     }
 }
+*/

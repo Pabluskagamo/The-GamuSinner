@@ -8,10 +8,10 @@ export default class dashCharacter extends MovableObject {
         this.scene.add.existing(this);
 
         this.scene.anims.create({
-            key: 'mainChar_controls_static',
-            frames: this.scene.anims.generateFrameNumbers('character', { start: 182, end: 187 }),
+            key: 'mainChar_controls_dash',
+            frames: this.scene.anims.generateFrameNumbers('character', { start: 16, end: 22 }),
             frameRate: 5,
-            repeat: 1
+            repeat: 0
         });
 
         this.scene.anims.create({
@@ -21,12 +21,12 @@ export default class dashCharacter extends MovableObject {
             repeat: 0
         });
 
-        this.play('mainChar_controls_static');
+        this.play('mainChar_controls_dash');
         tab_key.play('TAB_Press');
 
         this.on('animationcomplete', (param1, param2, param3) => {
-            if (this.anims.currentAnim.key == 'mainChar_controls_static') {
-                this.play('mainChar_controls_static');
+            if (this.anims.currentAnim.key == 'mainChar_controls_dash') {
+                this.play('mainChar_controls_dash');
                 tab_key.play('TAB_Press');
             }
         });

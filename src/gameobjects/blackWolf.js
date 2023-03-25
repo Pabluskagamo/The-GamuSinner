@@ -85,6 +85,7 @@ export default class BlackWolf extends EnemyObject {
 
         this.on('animationcomplete', () => {
             if (this.anims.currentAnim.key === 'died_blackWolf') {
+                console.log("Lo destruyo")
                 this.toDestroy = true;
             } 
 
