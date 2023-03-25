@@ -69,12 +69,13 @@ export default class LevelScene extends Phaser.Scene {
 		this.enemyPool = new EnemyPool(this, 15);
 
 		let enemies = [];
-		for (let i = 0; i < 10; i++) {
-			enemies.push(new Goblin(this, randX, randY, 80, player,this.enemyPool));
-		}
-
+		
 		for (let i = 0; i < 5; i++) {
 			enemies.push(new BlackWolf(this, randX, randY, 60, player, this.enemyPool));
+		}
+
+		for (let i = 0; i < 10; i++) {
+			enemies.push(new Goblin(this, randX, randY, 80, player));
 		}
 
 		this.v = this.input.keyboard.addKey('v');
@@ -126,7 +127,6 @@ export default class LevelScene extends Phaser.Scene {
 		if (Phaser.Input.Keyboard.JustUp(this.v)) {
 			this.enemyPool.spawn(0, 0)
 		}
-
 		if (this.player.getHp() === 0) {
 			this.scene.start('game_overr');
 		}
