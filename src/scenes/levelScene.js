@@ -16,9 +16,9 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.image('level_background', '/img/top-down-forest.png')
 		this.load.spritesheet('character', '/assets/character.png', { frameWidth: 64, frameHeight: 32 })
 		this.load.spritesheet('blackWolf', '/assets/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
-		this.load.spritesheet('cyclops', '/assets/cyclops.png', { frameWidth: 64, frameHeight: 64 })
+		this.load.spritesheet('cyclops', '/assets/cyclops.png', { frameWidth: 64, frameHeight: 64.1 })
 		//this.load.spritesheet('goblin', '/assets/goblins.png', { frameWidth: 48, frameHeight: 48 })
-		this.load.spritesheet('goblin', '/assets/redGoblin.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('goblin', '/assets/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
 		this.load.spritesheet('muerte', '/assets/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', '/assets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('healthbar', '/assets/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
@@ -30,22 +30,12 @@ export default class LevelScene extends Phaser.Scene {
 		this.initPlayerAndPools();
 		this.initMap();
 		this.bulletPool.fillPull(10);
-
-		this.v = this.input.keyboard.addKey('v');
-
-		// let timer = this.time.addEvent({
-
-		// 	delay: 3000,
-		// 	callback: () => { this.spawnInBounds(); },
-		// 	callbackScope: this,
-		// 	loop: true
-		// });
-
+		this.initTimers(true);
 	}
 
 
 	update(t) {
-		if (Phaser.Input.Keyboard.JustUp(this.v)) {
+		if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
 			this.enemyPool.spawn(0, 0)
 		}
 		if (this.player.getHp() === 0) {
@@ -115,5 +105,20 @@ export default class LevelScene extends Phaser.Scene {
 		const randY = Phaser.Math.RND.between(0, 1);
 
 		this.enemyPool.spawn(xPos[randX], yPos[randY]);
+	}
+
+	initTimers(debug){
+		if(debug){
+			this.v = this.input.keyboard.addKey('v');
+			this.debugMode = true;
+		}else{
+			let timer = this.time.addEvent({
+
+				delay: 3500,
+				callback: () => { this.spawnInBounds(); },
+				callbackScope: this,
+				loop: true
+			});
+		}
 	}
 }

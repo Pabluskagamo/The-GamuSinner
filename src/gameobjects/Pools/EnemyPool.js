@@ -5,6 +5,7 @@ import Cyclops from "../cyclops"
 
 export default class EnemyPool {
 	constructor (scene, max) {
+		this.scene = scene;
 		this._group = scene.add.group();		
 		this.max = max;
 		//this.scene = scene;
@@ -66,25 +67,26 @@ export default class EnemyPool {
 	fillPull(num, player){
         let enemies = []
 
-		// for (let i = 0; i < 10; i++) {
-		// 	enemies.push(new Goblin(this, -50, -50, 80, player, this))
-		// }
+		for (let i = 0; i < 10; i++) {
+			enemies.push(new Goblin(this.scene, -50, -50, 80, player, this))
+		}
 
 		let randNum = 0;
 
         for (let i = 0; i < num; i++) {
 			randNum = Phaser.Math.RND.between(1, 10);
 
-			if(num < 5){
-				enemies.push(new Goblin(this, -50, -50, 80, player, this))
-			}else if(num >= 5 && num < 9){
-				enemies.push(new BlackWolf(this, -50, -50, 60, player, this));
+			if(randNum < 5){
+				enemies.push(new Goblin(this.scene, -50, -50, 80, player, this))
+			}else if(randNum >= 5 && randNum < 9){
+				enemies.push(new BlackWolf(this.scene, -50, -50, 60, player, this));
 			}else{
-				enemies.push(new Cyclops(this, -50, -50, 45, player, this));
+				enemies.push(new Cyclops(this.scene, -50, -50, 45, player, this));
 			}
 
 		}
 
         this.addMultipleEntity(enemies);
+		this.max = 10 + num;
     }
 }

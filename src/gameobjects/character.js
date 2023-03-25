@@ -8,7 +8,7 @@ export default class Character extends MovableObject {
         this.speed = speed;
         this.isAttacking = false;
         let f = this.frame;
-        this.hp = 5
+        this.hp = 6
         this.lastFired = 0;
         this.setScale(1.7);
 
