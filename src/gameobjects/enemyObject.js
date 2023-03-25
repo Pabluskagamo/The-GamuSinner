@@ -21,17 +21,20 @@ export default class enemyObject extends MovableObject {
             // Diagonal abajo-derecha
             this.play('side_' + this.key, true);
             this.flipX = true;
-            //this.angle += -0.1;
+            //this.angle = -0.1;
         } else if (this.body.velocity.x > 0 && this.body.velocity.y > 0) {
             // Diagonal arriba-derecha
             this.play('side_' + this.key, true);
             this.flipX = true;
+            //this.angle += 0.1;
         } else if (this.body.velocity.x < 0 && this.body.velocity.y < 0) {
             // Diagonal abajo-izquierda
             this.play('side_' + this.key, true);
+            //this.angle += 0.1;
         } else if (this.body.velocity.x < 0 && this.body.velocity.y > 0) {
             // Diagonal arriba-izquierda
             this.play('side_' + this.key, true);
+            //this.angle += -0.1;
         } else if (this.body.velocity.y > 0 && this.body.velocity.x === 0) {
             // Movimiento hacia abajo
             this.play('down_' + this.key, true);
@@ -41,7 +44,6 @@ export default class enemyObject extends MovableObject {
         }else if (this.body.velocity.x !== 0 && this.body.velocity.y < 5) {
             // Movimiento hacia los lados
             this.play('side_' + this.key, true);
-            console.log("aaaaa");
             this.flipX = this.body.velocity.x < 0;
         } else {
             // Reproducir la animación estática si no se está moviendo
