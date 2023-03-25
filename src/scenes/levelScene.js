@@ -31,102 +31,10 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	create() {
-		const mapa = this.map = this.make.tilemap({
-			key: 'map'
-		});
-		const tiles = mapa.addTilesetImage('Forest', 'tiles');
-		this.groundLayer = this.map.createLayer('Suelo', tiles);
-		this.foregroundLayer = this.map.createLayer('Bordes', tiles);
-		this.river = this.map.createLayer('Rio', tiles);
-		this.borderRiver = this.map.createLayer('MargenRio', tiles);
-		this.objetos = this.map.createLayer('Objetos', tiles);
-		this.borderTrees = this.map.createLayer('bordeArboles', tiles);
-
-		this.river.setCollisionBetween(0, 999);
-		this.foregroundLayer.setCollisionBetween(0, 999);
-
-
-		let player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 200);
-		this.player = player
-		this.player.body.onCollide = true;
-
-		let randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
-		let randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
-
-		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
-		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
-
-		randX = Phaser.Math.RND.between(0, this.sys.game.canvas.width);
-		randY = Phaser.Math.RND.between(0, this.sys.game.canvas.height);
-
-
-		let scene = this;
-
-		let bullets = [];
-		for (let i = 0; i < 10; i++) {
-			bullets.push(new Bullet(this, -100, -100, 300, 20));
-		}
-
-		this.bulletPool = new BulletPool(this, bullets, 10)
-
-		this.enemyPool = new EnemyPool(this, 15);
-
-		let enemies = [];
-
-		for (let i = 0; i < 10; i++) {
-			enemies.push(new Goblin(this, randX, randY, 80, player, this.enemyPool));
-		}
-
-		for (let i = 0; i < 5; i++) {
-			enemies.push(new BlackWolf(this, randX, randY, 60, player, this.enemyPool));
-		}
-
-		for (let i = 0; i < 3; i++) {
-			enemies.push(new Cyclops(this, randX, randY, 45, player, this.enemyPool));
-		}
-
-		this.v = this.input.keyboard.addKey('v');
-
-		this.enemyPool.addMultipleEntity(enemies);
-
-		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
-		this.physics.add.collider(player, this.foregroundLayer);
-		this.physics.add.collider(this.enemyPool._group, this.river);
-		this.physics.add.collider(player, this.river);
-
-		player.setDepth(2);
-		this.enemyPool._group.setDepth(2);
-		this.borderTrees.setDepth(3);
-		this.foregroundLayer.setDepth(3);
-
-		let poolenemigos = this.enemyPool;
-
-		this.lastSpawned = 0;
-
-		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
-
-			this.bulletPool.release(obj1);
-
-		});
-
-		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
-			obj1.hit(obj2)
-		}, (obj1, obj2) => !obj2.isDead());
-
-
-		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
-			obj1.attack(obj2);
-			this.events.emit('addScore', obj2.getHp());
-		});
-
-		// let timer = this.time.addEvent({
-
-		// 	delay: 3000,
-		// 	callback: () => { this.spawnInBounds(); },
-		// 	callbackScope: this,
-		// 	loop: true
-		// });
-
+		this.initPlayerAndPools();
+		this.initMap();
+		this.bulletPool.fillPull(10);
+		this.initTimers(true);
 	}
 
 
@@ -147,6 +55,59 @@ export default class LevelScene extends Phaser.Scene {
 		}
 	}
 
+	initMap(){
+		const mapa = this.map = this.make.tilemap({
+			key: 'map'
+		});
+		const tiles = mapa.addTilesetImage('Forest', 'tiles');
+		this.groundLayer = this.map.createLayer('Suelo', tiles);
+		this.foregroundLayer = this.map.createLayer('Bordes', tiles);
+		this.river = this.map.createLayer('Rio', tiles);
+		this.borderRiver = this.map.createLayer('MargenRio', tiles);
+		this.objetos = this.map.createLayer('Objetos', tiles);
+		this.borderTrees = this.map.createLayer('bordeArboles', tiles);
+
+		this.river.setCollisionBetween(0, 999);
+		this.foregroundLayer.setCollisionBetween(0, 999);
+
+		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
+		this.physics.add.collider(this.player, this.foregroundLayer);
+		this.physics.add.collider(this.enemyPool._group, this.river);
+		this.physics.add.collider(this.player, this.river);
+
+		this.player.setDepth(2);
+		this.enemyPool._group.setDepth(2);
+		this.borderTrees.setDepth(3);
+		this.foregroundLayer.setDepth(3);
+	}
+
+	initPlayerAndPools(){
+		this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 200);
+		this.player.body.onCollide = true;
+
+
+		this.bulletPool = new BulletPool(this, 10)
+		this.enemyPool = new EnemyPool(this, 15);
+
+
+		this.enemyPool.fillPull(25, this.player);
+
+		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
+			this.bulletPool.release(obj1);
+		});
+
+		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
+			obj1.hit(obj2)
+		}, (obj1, obj2) => !obj2.isDead());
+
+
+		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
+			obj1.attack(obj2);
+			this.events.emit('addScore', obj2.getHp());
+		});
+
+	}
+
 	spawnInBounds() {
 		const xPos = [0, this.sys.game.canvas.width]
 		const yPos = [0, this.sys.game.canvas.height]
@@ -154,6 +115,21 @@ export default class LevelScene extends Phaser.Scene {
 		const randX = Phaser.Math.RND.between(0, 1);
 		const randY = Phaser.Math.RND.between(0, 1);
 
-		this.enemyPool.spawn(xPos[randX], xPos[randY]);
+		this.enemyPool.spawn(xPos[randX], yPos[randY]);
+	}
+
+	initTimers(debug){
+		if(debug){
+			this.v = this.input.keyboard.addKey('v');
+			this.debugMode = true;
+		}else{
+			let timer = this.time.addEvent({
+
+				delay: 3500,
+				callback: () => { this.spawnInBounds(); },
+				callbackScope: this,
+				loop: true
+			});
+		}
 	}
 }

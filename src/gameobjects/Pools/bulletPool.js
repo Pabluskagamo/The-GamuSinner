@@ -1,17 +1,21 @@
+import Bullet from "../bullet";
+
 export default class BulletPool {
 
 
-    constructor (scene, entities, max) {
+    constructor (scene, max) {
+        this.scene = scene;
         this._group = scene.add.group();
         this.max = max;
-
-        this._group.addMultiple(entities);
-        this._group.children.iterate(c => {
-             c.setActive(false);
-             c.setVisible(false);
-             c.body.checkCollision.none = true;
-        });
     }
+
+    addMultipleEntity(entities) {
+		this._group.addMultiple(entities);
+		this._group.children.iterate(c => {
+			this._group.killAndHide(c);
+			c.body.checkCollision.none = true;
+		});
+	}
 
     spawn (x, y) {
         let entity = this._group.getFirstDead();
@@ -35,5 +39,15 @@ export default class BulletPool {
     release (entity) {
         entity.body.checkCollision.none = true;
         this._group.killAndHide(entity);
+    }
+
+    fillPull(num){
+        let bullets = []
+
+        for (let i = 0; i < num; i++) {
+			bullets.push(new Bullet(this.scene, -100, -100, 300, 20));
+		}
+
+        this.addMultipleEntity(bullets);
     }
 }
