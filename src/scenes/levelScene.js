@@ -35,6 +35,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.initMap();
 		this.bulletPool.fillPull(10);
 		this.initTimers(true);
+		this.scene.launch('UIScene');
 	}
 
 
@@ -49,6 +50,7 @@ export default class LevelScene extends Phaser.Scene {
 					this.cameras.main.fadeOut(500);
 					this.cameras.main.once("camerafadeoutcomplete", function () {
 						this.scene.start('game_over');
+						this.scene.remove('UIScene');
 					}, this);
 				}
 			})

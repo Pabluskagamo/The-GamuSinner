@@ -2,7 +2,7 @@ import HealthPoint from "./healthpoint";
 
 export default class Hud extends Phaser.Scene{
     constructor(){
-        super({ key: 'UIScene', active: true });
+        super('UIScene');
     }
 
 
