@@ -110,11 +110,13 @@ export default class LevelScene extends Phaser.Scene {
 
 		let timer = this.time.addEvent({
 			delay: 3000,
-			callback: () => { this.spawnInBounds();},
+			callback: () => { this.spawnInBounds(); },
 			callbackScope: this,
 			loop: true
 		});
-
+		/*if (obj2.getHp === 0) {
+			this.scene.start('game_overr');
+		}*/
 	}
 
 
@@ -124,7 +126,7 @@ export default class LevelScene extends Phaser.Scene {
 		}
 	}
 
-	spawnInBounds(){
+	spawnInBounds() {
 		const xPos = [0, this.sys.game.canvas.width]
 		const yPos = [0, this.sys.game.canvas.height]
 
