@@ -111,12 +111,15 @@ export default class LevelScene extends Phaser.Scene {
 		});
 
 		let timer = this.time.addEvent({
-			delay: 5000,
-			callback: () => { this.enemyPool.spawn(0, 0); },
+
+			delay: 3000,
+			callback: () => { this.spawnInBounds(); },
 			callbackScope: this,
 			loop: true
 		});
-
+		/*if (obj2.getHp === 0) {
+			this.scene.start('game_overr');
+		}*/
 	}
 
 
@@ -126,4 +129,13 @@ export default class LevelScene extends Phaser.Scene {
 		}
 	}
 
+	spawnInBounds() {
+		const xPos = [0, this.sys.game.canvas.width]
+		const yPos = [0, this.sys.game.canvas.height]
+
+		const randX = Phaser.Math.RND.between(0, 1);
+		const randY = Phaser.Math.RND.between(0, 1);
+
+		this.enemyPool.spawn(xPos[randX], xPos[randY]);
+	}
 }

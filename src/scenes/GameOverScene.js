@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 
 export default class GameOverScene extends Phaser.Scene {
 	constructor() {
-		super('hello-world')
+		super('game_overr')
 
 	}
 

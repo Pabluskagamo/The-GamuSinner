@@ -4,6 +4,7 @@ import MainScene from './scenes/MainScene'
 import InstructionScene from './scenes/instructionScene'
 import LevelScene from './scenes/levelScene'
 import Hud from './ui/hud'
+import GameOverScene from './scenes/GameOverScene'
 
 const config = {
 	type: Phaser.AUTO,
@@ -31,7 +32,7 @@ const config = {
 			debug: true
 		},
 	},
-	scene: [/*MainScene,InstructionScene,*/ LevelScene, Hud],
+	scene: [/*MainScene,InstructionScene,*/ LevelScene, Hud, GameOverScene],
 }
 
 export default new Phaser.Game(config)
