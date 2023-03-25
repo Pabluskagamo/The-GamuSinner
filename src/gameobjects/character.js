@@ -315,6 +315,7 @@ export default class Character extends MovableObject {
         this.s = this.scene.input.keyboard.addKey('S');
         this.d = this.scene.input.keyboard.addKey('D');
         this.w = this.scene.input.keyboard.addKey('W');
+        this.f = this.scene.input.keyboard.addKey('F');
         this.spacebar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
@@ -344,20 +345,22 @@ export default class Character extends MovableObject {
         } else if (this.s.isDown) {
             // Movimiento hacia abajo
             this.play('mainChar_abajo', true);
-           this.moveDown();
+            this.moveDown();
         } else if (this.w.isDown) {
             // Movimiento hacia arriba
             this.play('mainChar_arriba', true);
             this.moveUp();
-        }else if (this.a.isDown) {
+        } else if (this.a.isDown) {
             // Movimiento hacia izq
             this.play('mainChar_lado', true);
             this.moveLeft();
-        } else if(this.d.isDown){
+        } else if (this.d.isDown) {
             this.play('mainChar_lado', true);
             this.flipX = true;
             this.moveRight();
-        }else{
+        } else if (this.f.isDown) {
+            this.dieMe();
+        } else {
             this.frictionEffect();
         }
 
@@ -369,7 +372,7 @@ export default class Character extends MovableObject {
             this.stopVertical();
         }
 
-        if ((this.cursors.up.isDown || this.cursors.down.isDown|| this.cursors.left.isDown||this.cursors.right.isDown) && t > this.lastFired) {
+        if ((this.cursors.up.isDown || this.cursors.down.isDown || this.cursors.left.isDown || this.cursors.right.isDown) && t > this.lastFired) {
             this.attack();
             this.lastFired = t + 400;
         }
@@ -388,10 +391,10 @@ export default class Character extends MovableObject {
         // } else {
         //     this.play(lastAnim);
         // }
-        let dir = new Phaser.Math.Vector2(0,1);
+        let dir = new Phaser.Math.Vector2(0, 1);
 
         this.flipX = false;
-        
+
         if (this.cursors.down.isDown && this.cursors.right.isDown) {
             // Diagonal abajo-derecha
             this.flipX = true;
@@ -420,12 +423,12 @@ export default class Character extends MovableObject {
             this.play('mainChar_shootarriba');
             dir.x = 0;
             dir.y = -1;
-        }else if (this.cursors.left.isDown) {
+        } else if (this.cursors.left.isDown) {
             // Movimiento hacia izq
             this.play('mainChar_shootlado');
             dir.x = -1
             dir.y = 0
-        } else if(this.cursors.right.isDown){
+        } else if (this.cursors.right.isDown) {
             this.flipX = true;
             this.play('mainChar_shootlado');
             dir.x = 1
@@ -448,7 +451,10 @@ export default class Character extends MovableObject {
     }
 
     dieMe() {
-        this.play('mainChar_die');
+        if (this.getHp() === 0) {
+            this.play('mainChar_die');
+        }
+
     }
 
     getHp() {
