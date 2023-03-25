@@ -121,10 +121,10 @@ export default class Character extends MovableObject {
             this.frictionEffect();
         }
 
-        // if(this.tab.isDown){
-        //     this.play('mainChar_dash', true);
-        //     this.moveRight();
-        // }
+        if(this.tab.isDown){
+             this.play('mainChar_dash', true);
+             this.moveRight();
+        }
 
         if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
             this.stopHorizontal();

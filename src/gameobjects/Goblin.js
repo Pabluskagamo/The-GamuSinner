@@ -12,10 +12,10 @@ export default class Goblin extends EnemyObject {
         this.speed = speed;
 
         this.setCollideWorldBounds();
-        this.bodyOffsetWidth = this.body.width / 5.4;
-        this.bodyOffsetHeight = this.body.height / 2.3;
-        this.bodyWidth = this.body.width / 2.5;
-        this.bodyHeight = this.body.height / 3;
+        this.bodyOffsetWidth = this.body.width / 6.6;
+        this.bodyOffsetHeight = this.body.height / 3.3;
+        this.bodyWidth = this.body.width / 2.3;
+        this.bodyHeight = this.body.height / 2.5;
 
         this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
         this.body.width = this.bodyWidth;
@@ -52,7 +52,7 @@ export default class Goblin extends EnemyObject {
 
         this.scene.anims.create({
             key: 'died_goblin',
-            frames: this.scene.anims.generateFrameNumbers('muerte', { start: 7, end: 0 }),
+            frames: this.scene.anims.generateFrameNumbers('goblin', { start: 32, end: 37 }),
             frameRate: 10,
             repeat: 0
         })
