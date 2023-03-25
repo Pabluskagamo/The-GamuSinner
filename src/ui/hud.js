@@ -15,7 +15,7 @@ export default class Hud extends Phaser.Scene{
     {   
         //this.add.image(1022, 87, 'hud_hp');
         this.uiLive = [new HealthPoint(this, 960, 90), new HealthPoint(this, 990, 90),
-            new HealthPoint(this, 1020, 90), new HealthPoint(this, 1050, 90), new HealthPoint(this, 1080, 90)]
+            new HealthPoint(this, 1020, 90), new HealthPoint(this, 1050, 90), new HealthPoint(this, 1080, 90), new HealthPoint(this, 1110, 90)]
 
 
         //  Grab a reference to the Game Scene
@@ -33,7 +33,7 @@ export default class Hud extends Phaser.Scene{
 		//mueva la camara no se mueva el HUD
 
 
-		for (let i = 1; i <= 5; i++) {
+		for (let i = 1; i <= 6; i++) {
 			if (i <= hp) {
 				this.uiLive[i - 1].full()
 			} else {

@@ -122,8 +122,8 @@ export default class Character extends MovableObject {
         }
 
         if(this.tab.isDown){
-            this.play('mainChar_dash', true);
-            this.moveRight();
+             this.play('mainChar_dash', true);
+             this.moveRight();
         }
 
         if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
