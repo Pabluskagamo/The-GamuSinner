@@ -65,6 +65,10 @@ export default class Character extends MovableObject {
             if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)) {
                 this.stopAttack()
             }
+
+            if (this.anims.currentAnim.key === 'mainChar_die') {
+                this.scene.gameOver();
+            }
         })
 
         this.play('mainChar_static', true);
@@ -182,7 +186,6 @@ export default class Character extends MovableObject {
             dir.y = -1;
         } else if (this.cursors.left.isDown) {
             // Movimiento hacia izq
-            console.log('IZQUIERDAA')
             this.play('mainChar_shootlado', true);
             this.flipX = true;
             dir.x = -1
@@ -209,6 +212,7 @@ export default class Character extends MovableObject {
     }
 
     dieMe() {
+        console.log('Animacion de morir Personaje')
         this.play('mainChar_die');
     }
 
@@ -222,6 +226,17 @@ export default class Character extends MovableObject {
 
     getHit(dmg) {
         this.hp -= dmg;
+        
+        console.log('Player HP:', this.hp, 'Is Dead??', this.isDead())
+
+        if(this.hp <= 0){
+            this.hp = 0;
+            this.dieMe();
+        }
+    }
+
+    isDead(){
+        return this.hp === 0;
     }
 }
 

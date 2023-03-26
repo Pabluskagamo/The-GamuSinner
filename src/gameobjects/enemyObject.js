@@ -60,7 +60,7 @@ export default class enemyObject extends MovableObject {
     hitEnemy(dmg){
         this.hp -= dmg;
 
-        console.log(this.hp)
+        console.log(this.key, this.hp, '/', this.initialHp)
 
         if(this.hp <= 0){
             this.dieMe();

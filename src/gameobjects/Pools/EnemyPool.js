@@ -67,18 +67,14 @@ export default class EnemyPool {
 	fillPull(num, player){
         let enemies = []
 
-		for (let i = 0; i < 10; i++) {
-			enemies.push(new Goblin(this.scene, -50, -50, 80, player, this))
-		}
-
 		let randNum = 0;
 
         for (let i = 0; i < num; i++) {
 			randNum = Phaser.Math.RND.between(1, 10);
 
-			if(randNum < 5){
+			if(randNum < 8){
 				enemies.push(new Goblin(this.scene, -50, -50, 80, player, this))
-			}else if(randNum >= 5 && randNum < 9){
+			}else if(randNum >= 7 && randNum < 10){
 				enemies.push(new BlackWolf(this.scene, -50, -50, 60, player, this));
 			}else{
 				enemies.push(new Cyclops(this.scene, -50, -50, 45, player, this));
@@ -86,7 +82,11 @@ export default class EnemyPool {
 
 		}
 
+		// for (let i = 0; i < 10; i++) {
+		// 	enemies.push(new Goblin(this.scene, -50, -50, 80, player, this))
+		// }
+
         this.addMultipleEntity(enemies);
-		this.max = 10 + num;
+		this.max = num;
     }
 }

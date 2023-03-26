@@ -43,18 +43,6 @@ export default class LevelScene extends Phaser.Scene {
 		if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
 			this.enemyPool.spawn(0, 0)
 		}
-		if (this.player.getHp() === 0) {
-			this.player.dieMe();
-			this.player.on('animationcomplete', () => {
-				if (this.player.anims.currentAnim.key === 'mainChar_die') {
-					this.cameras.main.fadeOut(500);
-					this.cameras.main.once("camerafadeoutcomplete", function () {
-						this.scene.start('game_over');
-						this.scene.remove('UIScene');
-					}, this);
-				}
-			})
-		}
 	}
 
 	initMap(){
@@ -77,6 +65,10 @@ export default class LevelScene extends Phaser.Scene {
 		this.physics.add.collider(this.enemyPool._group, this.river);
 		this.physics.add.collider(this.player, this.river);
 
+		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
+			this.bulletPool.release(obj1);
+		});
+
 		this.player.setDepth(2);
 		this.enemyPool._group.setDepth(2);
 		this.borderTrees.setDepth(3);
@@ -93,10 +85,6 @@ export default class LevelScene extends Phaser.Scene {
 
 
 		this.enemyPool.fillPull(25, this.player);
-
-		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
-			this.bulletPool.release(obj1);
-		});
 
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
 			obj1.hit(obj2)
@@ -127,11 +115,39 @@ export default class LevelScene extends Phaser.Scene {
 		}else{
 			let timer = this.time.addEvent({
 
-				delay: 3500,
+				delay: 4000,
 				callback: () => { this.spawnInBounds(); },
 				callbackScope: this,
 				loop: true
 			});
+
+
+			let timer2 = this.time.addEvent({
+
+				delay: 20000,
+				callback: () => { 
+					const currDelay = timer.delay;
+					console.log('cambio de frecuencia de', currDelay, 'a', currDelay-500)
+					if(currDelay > 1000){
+						timer.reset({
+							delay: currDelay-500,
+							callback: () => { this.spawnInBounds(); },
+							callbackScope: this,
+							loop: true
+						})
+					} 
+				},
+				callbackScope: this,
+				loop: true
+			});
 		}
+	}
+
+	gameOver(){
+		this.cameras.main.fadeOut(500);
+		this.cameras.main.once("camerafadeoutcomplete", function () {
+			this.scene.start('game_over');
+			this.scene.remove('UIScene');
+		}, this);
 	}
 }
