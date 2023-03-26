@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import EasyStar from 'easystarjs'
 
 import MainScene from './scenes/MainScene'
 import InstructionScene from './scenes/instructionScene'
