@@ -91,7 +91,7 @@ export default class Goblin extends EnemyObject {
     }
 
     attack(enemie){
-        if(!this.attacking && !this.isDead()){
+        if(!this.attacking && !this.isDead() && !this.player.isDead()){
             this.attacking = true;
             this.play('side_attack_goblin');
             enemie.getHit(1)
