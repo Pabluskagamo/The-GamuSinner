@@ -7,6 +7,7 @@ import Goblin from "../gameobjects/Goblin"
 import Cyclops from "../gameobjects/cyclops"
 import HealthPoint from "../ui/healthpoint"
 import EasyStar from 'easystarjs'
+import Finder from "../finder/finder"
 
 export default class LevelScene extends Phaser.Scene {
 	constructor() {
@@ -28,12 +29,12 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('bullet', '/assets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('healthbar', '/assets/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
 		this.load.image('tiles', '/assets/tileset/forest_tiles.png')
-		this.load.tilemapTiledJSON('map', '/assets/tilemap/mapa.json')
+		this.load.tilemapTiledJSON('map', '/assets/tilemap/mapa1.json')
 	}
 
 	create() {
-		this.initPlayerAndPools();
 		this.initMap();
+		this.initPlayerAndPools();
 		this.bulletPool.fillPull(10);
 		this.initTimers(true);
 		this.scene.launch('UIScene');
@@ -61,25 +62,12 @@ export default class LevelScene extends Phaser.Scene {
 		this.river.setCollisionBetween(0, 999);
 		this.foregroundLayer.setCollisionBetween(0, 999);
 
-		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
-		this.physics.add.collider(this.player, this.foregroundLayer);
-		this.physics.add.collider(this.enemyPool._group, this.river);
-		this.physics.add.collider(this.player, this.river);
-
-		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
-			this.bulletPool.release(obj1);
-		});
-
-		this.player.setDepth(2);
-		this.enemyPool._group.setDepth(2);
 		this.borderTrees.setDepth(3);
 		this.foregroundLayer.setDepth(3);
-
-		this.initFinder();
-
 	}
 
 	initPlayerAndPools(){
+		this.finder = new Finder(this.map, this.tiles, [this.groundLayer, this.foregroundLayer, this.river, this.borderRiver, this.objetos, this.borderTrees]);
 		this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 200);
 		this.player.body.onCollide = true;
 
@@ -99,6 +87,19 @@ export default class LevelScene extends Phaser.Scene {
 			obj1.attack(obj2);
 			this.events.emit('addScore', obj2.getHp());
 		});
+
+		//Colisiones con el entorno
+		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
+		this.physics.add.collider(this.player, this.foregroundLayer);
+		this.physics.add.collider(this.enemyPool._group, this.river);
+		this.physics.add.collider(this.player, this.river);
+
+		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
+			this.bulletPool.release(obj1);
+		});
+
+		this.player.setDepth(2);
+		this.enemyPool._group.setDepth(2);
 
 	}
 
@@ -155,66 +156,5 @@ export default class LevelScene extends Phaser.Scene {
 		}, this);
 	}
 
-	initFinder(){
-		this.finder = new EasyStar.js();
-
-		var grid = [];
-		for(var y = 0; y < this.map.height; y++){
-			var col = [];
-			for(var x = 0; x < this.map.width; x++){
-				// In each cell we store the ID of the tile, which corresponds
-				// to its index in the tileset of the map ("ID" field in Tiled)
-				col.push(this.getTileID(x,y));
-			}
-			grid.push(col);
-		}
-		this.finder.setGrid(grid);
-
-		console.log(grid);
-
-		var tileset = this.map.tilesets[0];
-		var properties = tileset.tileProperties;
-
-		console.log('Propierties', properties);
-
-		var acceptableTiles = [];
-
-		for(var i = tileset.firstgid-1; i < this.tiles.total; i++){ // firstgid and total are fields from Tiled that indicate the range of IDs that the tiles can take in that tileset
-			if(!properties.hasOwnProperty(i)) {
-				// If there is no property indicated at all, it means it's a walkable tile
-				acceptableTiles.push(i+1);
-				continue;
-			}
-			if(!properties[i].collide) acceptableTiles.push(i+1);
-			if(properties[i].cost) this.finder.setTileCost(i+1, properties[i].cost); // If there is a cost attached to the tile, let's register it
-		}
-
-		console.log('Acceptable', acceptableTiles);
-
-		this.finder.setAcceptableTiles(acceptableTiles);
-	}
-
-	calculatePath(){
-		var toX = 10;
-		var toY = 11;
-		var fromX = 0;
-		var fromY = 0;
-		console.log('going from ('+fromX+','+fromY+') to ('+toX+','+toY+')');
-
-		this.finder.findPath(fromX, fromY, toX, toY, function( path ) {
-			if (path === null) {
-				console.warn("Path was not found.");
-			} else {
-				console.log(path);
-			}
-		});
-
-		this.finder.calculate();
-	}
-
-	getTileID(x,y){
-		
-		var tile = this.map.getTileAt(x, y, true);
-    	return tile.index;
-	}
+	
 }

@@ -83,6 +83,7 @@ export default class Goblin extends EnemyObject {
 
         if (this.hp > 0 && !this.attacking && !this.player.isDead()) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
+            this.scene.physics.moveTo
             this.follow();
         } else {
             this.stopVertical();
