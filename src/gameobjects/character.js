@@ -146,8 +146,10 @@ export default class Character extends MovableObject {
 
         if ((this.cursors.up.isDown || this.cursors.down.isDown || this.cursors.left.isDown || this.cursors.right.isDown) && t > this.lastFired) {
             this.flipX = true;
-            this.attack();
-            this.lastFired = t + 400;
+            if(!this.isDead()){
+                this.attack();
+                this.lastFired = t + 400;
+            }
         }
         
         // if(this.isStatic()){
