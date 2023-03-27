@@ -8,12 +8,14 @@ export default class MovableObject extends Phaser.Physics.Arcade.Sprite {
     }
 
     moveDown(){
+        this.setVelocityX(0);
         this.setVelocityY(this.speed);
         this.dir.x = 0
         this.dir.y = 1
     }
 
     moveUp(){
+        this.setVelocityX(0);
         this.setVelocityY(-this.speed);
         this.dir.x = 0
         this.dir.y = -1
@@ -21,12 +23,14 @@ export default class MovableObject extends Phaser.Physics.Arcade.Sprite {
 
     moveLeft(){
         this.setVelocityX(-this.speed);
+        this.setVelocityY(0);
         this.dir.x = -1
         this.dir.y = 0
     }
 
     moveRight(){
         this.setVelocityX(this.speed);
+        this.setVelocityY(0);
         this.dir.x = 1
         this.dir.y = 0
     }
@@ -87,6 +91,10 @@ export default class MovableObject extends Phaser.Physics.Arcade.Sprite {
 
     isStatic(){
         return this.body.velocity.x === 0 && this.body.velocity.y === 0;
+    }
+
+    applyLastDir(){
+        this.setVelocity(this.speed*this.dir.x, this.speed*this.dir.y);
     }
 
 }

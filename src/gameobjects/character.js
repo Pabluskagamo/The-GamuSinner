@@ -7,6 +7,7 @@ export default class Character extends MovableObject {
 
         this.speed = speed;
         this.isAttacking = false;
+        this.isDashing = false;
         let f = this.frame;
         this.hp = 6
         this.lastFired = 0;
@@ -69,6 +70,10 @@ export default class Character extends MovableObject {
             if (this.anims.currentAnim.key === 'mainChar_die') {
                 this.scene.gameOver();
             }
+
+            if (this.anims.currentAnim.key === 'mainChar_dash') {
+                this.isDashing = false;
+            }
         })
 
         this.play('mainChar_static', true);
@@ -87,47 +92,48 @@ export default class Character extends MovableObject {
 
         this.flipX = false;
 
-        if (this.s.isDown && this.d.isDown) {
-            // Diagonal abajo-derecha
-            this.play('mainChar_lado', true);
-            this.moveRightDown();
-        } else if (this.w.isDown && this.d.isDown) {
-            // Diagonal arriba-derecha
-            this.play('mainChar_lado', true);
-            this.moveRightUp();
-        } else if (this.s.isDown && this.a.isDown) {
-            // Diagonal abajo-izquierda
-            this.play('mainChar_lado', true);
-            this.flipX = true;
-            this.moveLeftDown();
-        } else if (this.w.isDown && this.a.isDown) {
-            // Diagonal arriba-izquierda
-            this.play('mainChar_lado', true);
-            this.flipX = true;
-            this.moveLeftUp();
-        } else if (this.s.isDown) {
-            // Movimiento hacia abajo
-            this.play('mainChar_lado', true);
-            this.moveDown();
-        } else if (this.w.isDown) {
-            // Movimiento hacia arriba
-            this.play('mainChar_lado', true);
-            this.moveUp();
-        } else if (this.a.isDown) {
-            // Movimiento hacia izq
-            this.play('mainChar_lado', true);
-            this.flipX = true;
-            this.moveLeft();
-        } else if (this.d.isDown) {
-            this.play('mainChar_lado', true);
-            this.moveRight();
-        } else {
-            this.frictionEffect();
+        if(!this.isDashing){
+            if (this.s.isDown && this.d.isDown) {
+                // Diagonal abajo-derecha
+                this.play('mainChar_lado', true);
+                this.moveRightDown();
+            } else if (this.w.isDown && this.d.isDown) {
+                // Diagonal arriba-derecha
+                this.play('mainChar_lado', true);
+                this.moveRightUp();
+            } else if (this.s.isDown && this.a.isDown) {
+                // Diagonal abajo-izquierda
+                this.play('mainChar_lado', true);
+                this.flipX = true;
+                this.moveLeftDown();
+            } else if (this.w.isDown && this.a.isDown) {
+                // Diagonal arriba-izquierda
+                this.play('mainChar_lado', true);
+                this.flipX = true;
+                this.moveLeftUp();
+            } else if (this.s.isDown) {
+                // Movimiento hacia abajo
+                this.play('mainChar_lado', true);
+                this.moveDown();
+            } else if (this.w.isDown) {
+                // Movimiento hacia arriba
+                this.play('mainChar_lado', true);
+                this.moveUp();
+            } else if (this.a.isDown) {
+                // Movimiento hacia izq
+                this.play('mainChar_lado', true);
+                this.flipX = true;
+                this.moveLeft();
+            } else if (this.d.isDown) {
+                this.play('mainChar_lado', true);
+                this.moveRight();
+            } else {
+                this.frictionEffect();
+            }
         }
 
         if(this.tab.isDown){
-             this.play('mainChar_dash', true);
-             this.moveRight();
+            this.dash();
         }
 
         if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
@@ -237,6 +243,19 @@ export default class Character extends MovableObject {
 
     isDead(){
         return this.hp === 0;
+    }
+
+    dash(){
+        this.flipX = this.body.velocity.x < 0;
+        let speed = this.speed; 
+
+        if(!this.isDead()){
+            this.speed *= 1.3;
+            this.isDashing = true;
+            this.play('mainChar_dash', true);
+            this.applyLastDir();
+            this.speed = speed;
+        }
     }
 }
 

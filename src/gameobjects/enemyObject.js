@@ -85,5 +85,8 @@ export default class enemyObject extends MovableObject {
         return this.hp === 0;
     }
 
+    isVolador(){
+        return false;
+    }
 
 }

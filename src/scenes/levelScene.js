@@ -34,7 +34,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.initPlayerAndPools();
 		this.initMap();
 		this.bulletPool.fillPull(10);
-		this.initTimers(true);
+		this.initTimers(false);
 		this.scene.launch('UIScene');
 	}
 
@@ -62,7 +62,9 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
 		this.physics.add.collider(this.player, this.foregroundLayer);
-		this.physics.add.collider(this.enemyPool._group, this.river);
+		this.physics.add.collider(this.enemyPool._group, this.river, null, (obj1, obj2) => {
+			return !obj1.isVolador();
+		}, null);
 		this.physics.add.collider(this.player, this.river);
 
 		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
@@ -76,7 +78,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initPlayerAndPools(){
-		this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 200);
+		this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 150);
 		this.player.body.onCollide = true;
 
 
