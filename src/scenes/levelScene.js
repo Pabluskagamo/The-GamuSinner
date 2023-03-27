@@ -62,9 +62,7 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
 		this.physics.add.collider(this.player, this.foregroundLayer);
-		this.physics.add.collider(this.enemyPool._group, this.river, null, (obj1, obj2) => {
-			return !obj1.isVolador();
-		}, null);
+		this.physics.add.collider(this.enemyPool._group, this.river);
 		this.physics.add.collider(this.player, this.river);
 
 		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {

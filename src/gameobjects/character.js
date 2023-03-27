@@ -92,7 +92,7 @@ export default class Character extends MovableObject {
 
         this.flipX = false;
 
-        if(!this.isDashing){
+        if(!this.isDashing && !this.isDead()){
             if (this.s.isDown && this.d.isDown) {
                 // Diagonal abajo-derecha
                 this.play('mainChar_lado', true);

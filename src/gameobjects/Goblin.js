@@ -97,8 +97,4 @@ export default class Goblin extends EnemyObject {
             enemie.getHit(1)
         }
     }
-
-    isVolador(){
-        return true;
-    }
 }
