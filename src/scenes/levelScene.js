@@ -1,10 +1,6 @@
-import BlackWolf from "../gameobjects/blackWolf"
-import Bullet from "../gameobjects/bullet"
 import BulletPool from "../gameobjects/Pools/bulletPool"
 import EnemyPool from "../gameobjects/Pools/EnemyPool"
 import Character from "../gameobjects/character"
-import Goblin from "../gameobjects/Goblin"
-import Cyclops from "../gameobjects/cyclops"
 import HealthPoint from "../ui/healthpoint"
 
 export default class LevelScene extends Phaser.Scene {
@@ -21,7 +17,6 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('character', '/assets/character.png', { frameWidth: 64, frameHeight: 32 })
 		this.load.spritesheet('blackWolf', '/assets/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('cyclops', '/assets/cyclops.png', { frameWidth: 64, frameHeight: 64.1 })
-		//this.load.spritesheet('goblin', '/assets/goblins.png', { frameWidth: 48, frameHeight: 48 })
 		this.load.spritesheet('goblin', '/assets/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
 		this.load.spritesheet('muerte', '/assets/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', '/assets/bullets.png', { frameWidth: 16, frameHeight: 16 })
@@ -147,7 +142,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.cameras.main.fadeOut(500);
 		this.cameras.main.once("camerafadeoutcomplete", function () {
 			this.scene.start('game_over');
-			this.scene.remove('UIScene');
+			this.scene.sleep('UIScene');
 		}, this);
 	}
 }

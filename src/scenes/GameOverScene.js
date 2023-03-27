@@ -66,10 +66,5 @@ export default class GameOverScene extends Phaser.Scene {
 			this.scene.start('mainScene');
 		});
 
-		this.input.keyboard.on('keydown', (event) => {
-            if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
-                this.scene.start('mainScene');
-            }
-        });
 	}
 }
