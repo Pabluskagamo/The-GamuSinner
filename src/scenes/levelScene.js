@@ -14,13 +14,13 @@ export default class LevelScene extends Phaser.Scene {
 
 	preload() {
 		this.load.image('level_background', '/img/top-down-forest.png')
-		this.load.spritesheet('character', '/assets/character.png', { frameWidth: 64, frameHeight: 32 })
-		this.load.spritesheet('blackWolf', '/assets/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
-		this.load.spritesheet('cyclops', '/assets/cyclops.png', { frameWidth: 64, frameHeight: 64.1 })
-		this.load.spritesheet('goblin', '/assets/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
-		this.load.spritesheet('muerte', '/assets/explosion.png', { frameWidth: 32, frameHeight: 32 })
-		this.load.spritesheet('bullet', '/assets/bullets.png', { frameWidth: 16, frameHeight: 16 })
-		this.load.spritesheet('healthbar', '/assets/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
+		this.load.spritesheet('character', '/assets/character/character.png', { frameWidth: 64, frameHeight: 32 })
+		this.load.spritesheet('character_shot', '/assets/character/character_shooting.png', { frameWidth: 64, frameHeight: 32 })
+		this.load.spritesheet('blackWolf', '/assets/enemies/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
+		this.load.spritesheet('cyclops', '/assets/enemies/cyclops.png', { frameWidth: 64, frameHeight: 64.1 })
+		this.load.spritesheet('goblin', '/assets/enemies/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
+		this.load.spritesheet('muerte', '/assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('bullet', '/assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.image('tiles', '/assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('map', '/assets/tilemap/mapa.json')
 	}
@@ -29,7 +29,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.initPlayerAndPools();
 		this.initMap();
 		this.bulletPool.fillPull(10);
-		this.initTimers(false);
+		this.initTimers(true);
 		this.scene.launch('UIScene');
 	}
 

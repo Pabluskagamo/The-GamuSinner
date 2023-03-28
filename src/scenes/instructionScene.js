@@ -26,9 +26,9 @@ export default class LevelScene extends Phaser.Scene {
         this.load.spritesheet('tab_key', '/assets/keyboards/TAB.png', { frameWidth: 33, frameHeight: 21 });
         this.load.spritesheet('up_key', '/assets/keyboards/ARROWUP.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('w_key', '/assets/keyboards/W.png', { frameWidth: 19, frameHeight: 21 });
-        this.load.spritesheet('potion', '/assets/potions.png', { frameWidth: 16, frameHeight: 16 });
-        this.load.image('granade', '/assets/granade.png');
-        this.load.spritesheet('character', '/assets/character.png', { frameWidth: 64, frameHeight: 32 });
+        this.load.spritesheet('potion', '/assets/items/potions.png', { frameWidth: 16, frameHeight: 16 });
+        this.load.image('granade', '/assets/items/granade.png');
+        this.load.spritesheet('character', '/assets/character/character.png', { frameWidth: 64, frameHeight: 32 });
         this.load.image('skip_title', '/assets/skip_title.png');
         this.load.image('skip', '/assets/skip.png');
         this.load.spritesheet('skip_sprite', '/assets/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });
