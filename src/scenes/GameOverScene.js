@@ -10,10 +10,10 @@ export default class GameOverScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image('background2', '/img/fondo_pixelart3.png');
-		this.load.image('game_over', '/img/game_over.png');
-		this.load.spritesheet('game_restart', '/assets/ui/restart_sprite.png', {frameWidth: 480 , frameHeight: 170});
-		this.load.spritesheet('main_menu', '/assets/ui/MainMenu_sprite.png', {frameWidth: 480 , frameHeight: 170});
+		this.load.image('background2', './img/fondo_pixelart3.png');
+		this.load.image('game_over', './img/game_over.png');
+		this.load.spritesheet('game_restart', './assets/ui/restart_sprite.png', {frameWidth: 480 , frameHeight: 170});
+		this.load.spritesheet('main_menu', './assets/ui/MainMenu_sprite.png', {frameWidth: 480 , frameHeight: 170});
 		}
 
 	create() {
