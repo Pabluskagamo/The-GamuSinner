@@ -91,7 +91,7 @@ export default class Character extends MovableObject {
         this.d = this.scene.input.keyboard.addKey('D');
         this.w = this.scene.input.keyboard.addKey('W');
         this.spacebar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.tab = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        this.shift = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
     }
 
     preUpdate(t, dt) {
@@ -139,7 +139,7 @@ export default class Character extends MovableObject {
             }
         }
 
-        if(this.tab.isDown){
+        if(this.shift.isDown){
             this.dash();
         }
 

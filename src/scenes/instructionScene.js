@@ -13,7 +13,7 @@ export default class LevelScene extends Phaser.Scene {
 
     preload() {
         this.load.image('background_instructions', '/img/pergamino.png')
-        this.load.image('controls', '/assets/controls.png');
+        this.load.image('controls', '/assets/ui/controls.png');
         this.load.spritesheet('a_key', '/assets/keyboards/A.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('b_key', '/assets/keyboards/B.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('d_key', '/assets/keyboards/D.png', { frameWidth: 19, frameHeight: 21 });
@@ -29,9 +29,9 @@ export default class LevelScene extends Phaser.Scene {
         this.load.spritesheet('potion', '/assets/items/potions.png', { frameWidth: 16, frameHeight: 16 });
         this.load.image('granade', '/assets/items/granade.png');
         this.load.spritesheet('character', '/assets/character/character.png', { frameWidth: 64, frameHeight: 32 });
-        this.load.image('skip_title', '/assets/skip_title.png');
-        this.load.image('skip', '/assets/skip.png');
-        this.load.spritesheet('skip_sprite', '/assets/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });
+        this.load.image('skip_title', '/assets/ui/skip_title.png');
+        this.load.image('skip', '/assets/ui/skip.png');
+        this.load.spritesheet('skip_sprite', '/assets/ui/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });
     }
 
     create() {

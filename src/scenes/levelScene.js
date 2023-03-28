@@ -22,14 +22,14 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('muerte', '/assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', '/assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.image('tiles', '/assets/tileset/forest_tiles.png')
-		this.load.tilemapTiledJSON('map', '/assets/tilemap/mapa.json')
+		this.load.tilemapTiledJSON('map', '/assets/tilemap/mapa_sinrio.json')
 	}
 
 	create() {
 		this.initPlayerAndPools();
 		this.initMap();
 		this.bulletPool.fillPull(10);
-		this.initTimers(true);
+		this.initTimers(false);
 		this.scene.launch('UIScene');
 	}
 
@@ -47,18 +47,18 @@ export default class LevelScene extends Phaser.Scene {
 		const tiles = mapa.addTilesetImage('Forest', 'tiles');
 		this.groundLayer = this.map.createLayer('Suelo', tiles);
 		this.foregroundLayer = this.map.createLayer('Bordes', tiles);
-		this.river = this.map.createLayer('Rio', tiles);
-		this.borderRiver = this.map.createLayer('MargenRio', tiles);
+		//this.river = this.map.createLayer('Rio', tiles);
+		//this.borderRiver = this.map.createLayer('MargenRio', tiles);
 		this.objetos = this.map.createLayer('Objetos', tiles);
 		this.borderTrees = this.map.createLayer('bordeArboles', tiles);
 
-		this.river.setCollisionBetween(0, 999);
+		//this.river.setCollisionBetween(0, 999);
 		this.foregroundLayer.setCollisionBetween(0, 999);
 
 		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
 		this.physics.add.collider(this.player, this.foregroundLayer);
-		this.physics.add.collider(this.enemyPool._group, this.river);
-		this.physics.add.collider(this.player, this.river);
+		//this.physics.add.collider(this.enemyPool._group, this.river);
+		//this.physics.add.collider(this.player, this.river);
 
 		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
 			this.bulletPool.release(obj1);
