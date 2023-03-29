@@ -54,6 +54,9 @@ export default class enemyObject extends MovableObject {
 
     dieMe(){
         this.hp = 0;
+        if (this.scene.coinPool.hasCoins()) {
+            this.scene.coinPool.spawn(this.x, this.y);
+        }
         this.play('died_' + this.key, true);
     }
 

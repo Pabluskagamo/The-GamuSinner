@@ -1,26 +1,23 @@
-export default class Bullet extends Phaser.Physics.Arcade.Sprite{
+export default class PowerUp extends Phaser.Physics.Arcade.Sprite{
 
-    constructor(scene, x, y, speed, dmg){
-        super(scene, x, y, 'bullet', 0);
-        this.speed = speed
+    constructor(scene, x, y, key){
+        super(scene, x, y, key);
         this.dmg = dmg
+        this.collected = false;
 
-        this.justHit = false;
-
-        this.setScale(1.5)
-
-
+        //this.setScale(1.5)
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);  
 
         this.scene.anims.create({
-            key: 'bullet_animation',
-            frames: this.scene.anims.generateFrameNumbers('bullet', { start: 106, end: 109 }),
+            key: 'coin_animation',
+            frames: this.scene.anims.generateFrameNumbers('coin', { start: 0, end: 7 }),
             frameRate: 10,
-            repeat: -1
+            repeat: 0
         })
 
-        this.play('bullet_animation')
+        this.play(key + '_animation')
+
     }
 
 
@@ -62,10 +59,10 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite{
         this.setVelocityY(dir.y*this.speed)
     }
 
-    hit(enemie){
-        if(!this.justHit){
-            this.justHit = true;
-            enemie.hitEnemy(this.dmg);
+    collect(character){
+        if(!this.collected){
+            this.collected = true;
+            collected.hitEnemy();
             this.scene.bulletPool.release(this);
         }
     }

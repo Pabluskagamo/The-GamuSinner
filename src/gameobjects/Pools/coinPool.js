@@ -1,12 +1,13 @@
-import Bullet from "../bullet";
+import Coin from "../bullet";
 
-export default class BulletPool {
+export default class CoinPool {
 
 
     constructor (scene, max) {
         this.scene = scene;
         this._group = scene.add.group();
         this.max = max;
+        this.fillPull();
     }
 
     addMultipleEntity(entities) {
@@ -23,7 +24,7 @@ export default class BulletPool {
         if (entity) {
           entity.x = x;
           entity.y = y;
-          entity.justHit = false
+          entity.collected = false;
           entity.setActive(true);
           entity.setVisible(true);
           entity.body.checkCollision.none = false;
@@ -32,7 +33,7 @@ export default class BulletPool {
     }
 
 
-    hasBullets(){
+    hasCoins(){
         return this._group.countActive() < this.max;
     }
     
@@ -41,13 +42,11 @@ export default class BulletPool {
         this._group.killAndHide(entity);
     }
 
-    fillPull(num){
-        let bullets = []
+    fillPull(){
+        let coins = []
 
-        for (let i = 0; i < num; i++) {
-			bullets.push(new Bullet(this.scene, -100, -100, 300, 20));
-		}
-
-        this.addMultipleEntity(bullets);
+        for (let i = 0; i < 20; i++) 
+			coins.push(new Coin(this.scene, -150, -150, 1));
+        this.addMultipleEntity(coins);
     }
 }

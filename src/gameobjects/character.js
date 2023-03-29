@@ -6,8 +6,10 @@ export default class Character extends MovableObject {
         super(scene, x, y, 'character', speed, 20);
 
         this.speed = speed;
+        this.wallet = 0;
         this.isAttacking = false;
         this.isDashing = false;
+        this.tripleShot = false;
         let f = this.frame;
         this.hp = 6
         this.lastFired = 0;
@@ -257,6 +259,15 @@ export default class Character extends MovableObject {
             this.speed = speed;
         }
     }
+
+    collectCoin(value){
+        this.wallet += value;
+        console.log("Tengo " + this.wallet + "monedas")
+    }
+
+    /*tripleShot(){
+        this.tripleShot = true;
+    }*/
 }
 
 
