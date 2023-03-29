@@ -96,7 +96,7 @@ export default class Cyclops extends EnemyObject{
     }
 
     attack(enemie){
-        if(!this.attacking && !this.isDead()){
+        if(!this.attacking && !this.isDead() && !this.player.isDead()){
             this.attacking = true;
             super.attack()
             enemie.getHit(1)

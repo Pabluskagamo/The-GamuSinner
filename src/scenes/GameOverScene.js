@@ -10,10 +10,10 @@ export default class GameOverScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image('background2', '/img/fondo_pixelart3.png');
-		this.load.image('game_over', '/img/game_over.png');
-		this.load.spritesheet('game_restart', '/assets/restart_sprite.png', {frameWidth: 480 , frameHeight: 170});
-		this.load.spritesheet('main_menu', '/assets/MainMenu_sprite.png', {frameWidth: 480 , frameHeight: 170});
+		this.load.image('background2', './img/fondo_pixelart3.png');
+		this.load.image('game_over', './img/game_over.png');
+		this.load.spritesheet('game_restart', './assets/ui/restart_sprite.png', {frameWidth: 480 , frameHeight: 170});
+		this.load.spritesheet('main_menu', './assets/ui/MainMenu_sprite.png', {frameWidth: 480 , frameHeight: 170});
 		}
 
 	create() {
@@ -48,7 +48,7 @@ export default class GameOverScene extends Phaser.Scene {
 
 		this.input.keyboard.on('keydown', (event) => {
             if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
-                this.scene.restart('level');
+                this.scene.start('level');
             }
         });
 
@@ -66,10 +66,5 @@ export default class GameOverScene extends Phaser.Scene {
 			this.scene.start('mainScene');
 		});
 
-		this.input.keyboard.on('keydown', (event) => {
-            if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
-                this.scene.start('mainScene');
-            }
-        });
 	}
 }

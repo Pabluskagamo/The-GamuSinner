@@ -12,26 +12,26 @@ export default class LevelScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('background_instructions', '/img/pergamino.png')
-        this.load.image('controls', '/assets/controls.png');
-        this.load.spritesheet('a_key', '/assets/keyboards/A.png', { frameWidth: 19, frameHeight: 21 });
-        this.load.spritesheet('b_key', '/assets/keyboards/B.png', { frameWidth: 19, frameHeight: 21 });
-        this.load.spritesheet('d_key', '/assets/keyboards/D.png', { frameWidth: 19, frameHeight: 21 });
-        this.load.spritesheet('down_key', '/assets/keyboards/ARROWDOWN.png', { frameWidth: 19, frameHeight: 21 });
-        this.load.spritesheet('g_key', '/assets/keyboards/G.png', { frameWidth: 19, frameHeight: 21 });
-        this.load.spritesheet('left_key', '/assets/keyboards/ARROWLEFT.png', { frameWidth: 19, frameHeight: 21 });
-        this.load.spritesheet('right_key', '/assets/keyboards/ARROWRIGHT.png', { frameWidth: 19, frameHeight: 21 });
-        this.load.spritesheet('s_key', '/assets/keyboards/S.png', { frameWidth: 19, frameHeight: 21 });
+        this.load.image('background_instructions', './img/pergamino.png')
+        this.load.image('controls', './assets/ui/controls.png');
+        this.load.spritesheet('a_key', './assets/keyboards/A.png', { frameWidth: 19, frameHeight: 21 });
+        this.load.spritesheet('b_key', './assets/keyboards/B.png', { frameWidth: 19, frameHeight: 21 });
+        this.load.spritesheet('d_key', './assets/keyboards/D.png', { frameWidth: 19, frameHeight: 21 });
+        this.load.spritesheet('down_key', './assets/keyboards/ARROWDOWN.png', { frameWidth: 19, frameHeight: 21 });
+        this.load.spritesheet('g_key', './assets/keyboards/G.png', { frameWidth: 19, frameHeight: 21 });
+        this.load.spritesheet('left_key', './assets/keyboards/ARROWLEFT.png', { frameWidth: 19, frameHeight: 21 });
+        this.load.spritesheet('right_key', './assets/keyboards/ARROWRIGHT.png', { frameWidth: 19, frameHeight: 21 });
+        this.load.spritesheet('s_key', './assets/keyboards/S.png', { frameWidth: 19, frameHeight: 21 });
         // this.load.spritesheet('spacebar_key', '/assets/keyboards/SPACEBAR.png', { frameWidth: 98, frameHeight: 21 });
-        this.load.spritesheet('tab_key', '/assets/keyboards/TAB.png', { frameWidth: 33, frameHeight: 21 });
-        this.load.spritesheet('up_key', '/assets/keyboards/ARROWUP.png', { frameWidth: 19, frameHeight: 21 });
-        this.load.spritesheet('w_key', '/assets/keyboards/W.png', { frameWidth: 19, frameHeight: 21 });
-        this.load.spritesheet('potion', '/assets/potions.png', { frameWidth: 16, frameHeight: 16 });
-        this.load.image('granade', '/assets/granade.png');
-        this.load.spritesheet('character', '/assets/character.png', { frameWidth: 64, frameHeight: 32 });
-        this.load.image('skip_title', '/assets/skip_title.png');
-        this.load.image('skip', '/assets/skip.png');
-        this.load.spritesheet('skip_sprite', '/assets/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });
+        this.load.spritesheet('tab_key', './assets/keyboards/TAB.png', { frameWidth: 33, frameHeight: 21 });
+        this.load.spritesheet('up_key', './assets/keyboards/ARROWUP.png', { frameWidth: 19, frameHeight: 21 });
+        this.load.spritesheet('w_key', './assets/keyboards/W.png', { frameWidth: 19, frameHeight: 21 });
+        this.load.spritesheet('potion', './assets/items/potions.png', { frameWidth: 16, frameHeight: 16 });
+        this.load.image('granade', './assets/items/granade.png');
+        this.load.spritesheet('character', './assets/character/character.png', { frameWidth: 64, frameHeight: 32 });
+        this.load.image('skip_title', './assets/ui/skip_title.png');
+        this.load.image('skip', './assets/ui/skip.png');
+        this.load.spritesheet('skip_sprite', './assets/ui/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });
     }
 
     create() {

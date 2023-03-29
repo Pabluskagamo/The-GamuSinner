@@ -29,11 +29,11 @@ const config = {
 		default: 'arcade',
 		
 		arcade: {
-			debug: true
+			//debug: true
 		},
 	},
 
-	scene: [/*MainScene,*/InstructionScene, LevelScene, Hud, GameOverScene],
+	scene: [MainScene,InstructionScene, LevelScene, Hud, GameOverScene],
 }
 
 export default new Phaser.Game(config)

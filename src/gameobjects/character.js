@@ -57,6 +57,13 @@ export default class Character extends MovableObject {
         })
 
         this.scene.anims.create({
+            key: 'mainChar_shootlado_izq',
+            frames: this.scene.anims.generateFrameNumbers('character_shot', { start: 0, end: 3 }),
+            frameRate: 15,
+            repeat: 0
+        })
+
+        this.scene.anims.create({
             key: 'mainChar_die',
             frames: this.scene.anims.generateFrameNumbers('character', { start: 48, end: 52 }),
             frameRate: 5,
@@ -86,7 +93,7 @@ export default class Character extends MovableObject {
         this.d = this.scene.input.keyboard.addKey('D');
         this.w = this.scene.input.keyboard.addKey('W');
         this.spacebar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.tab = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        this.shift = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
     }
 
     preUpdate(t, dt) {
@@ -134,7 +141,7 @@ export default class Character extends MovableObject {
             }
         }
 
-        if(this.tab.isDown){
+        if(this.shift.isDown){
             this.dash();
         }
 
@@ -148,8 +155,10 @@ export default class Character extends MovableObject {
 
         if ((this.cursors.up.isDown || this.cursors.down.isDown || this.cursors.left.isDown || this.cursors.right.isDown) && t > this.lastFired) {
             this.flipX = true;
-            this.attack();
-            this.lastFired = t + 400;
+            if(!this.isDead()){
+                this.attack();
+                this.lastFired = t + 400;
+            }
         }
         
         // if(this.isStatic()){
@@ -174,12 +183,12 @@ export default class Character extends MovableObject {
             dir = new Phaser.Math.Vector2(1, -1).normalize();
         } else if (this.cursors.down.isDown && this.cursors.left.isDown) {
             // Diagonal abajo-izquierda
-            this.play('mainChar_shootlado', true);
+            this.play('mainChar_shootlado_izq', true);
             // this.flipX = true;
             dir = new Phaser.Math.Vector2(-1, 1).normalize();
         } else if (this.cursors.up.isDown && this.cursors.left.isDown) {
             // Diagonal arriba-izquierda
-            this.play('mainChar_shootlado', true);
+            this.play('mainChar_shootlado_izq', true);
             // this.flipX = true;
             dir = new Phaser.Math.Vector2(-1, -1).normalize();
         } else if (this.cursors.down.isDown) {
@@ -194,7 +203,7 @@ export default class Character extends MovableObject {
             dir.y = -1;
         } else if (this.cursors.left.isDown) {
             // Movimiento hacia izq
-            this.play('mainChar_shootlado', true);
+            this.play('mainChar_shootlado_izq', true);
             this.flipX = true;
             dir.x = -1
             dir.y = 0

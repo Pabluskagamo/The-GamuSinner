@@ -1,10 +1,6 @@
-import BlackWolf from "../gameobjects/blackWolf"
-import Bullet from "../gameobjects/bullet"
 import BulletPool from "../gameobjects/Pools/bulletPool"
 import EnemyPool from "../gameobjects/Pools/EnemyPool"
 import Character from "../gameobjects/character"
-import Goblin from "../gameobjects/Goblin"
-import Cyclops from "../gameobjects/cyclops"
 import HealthPoint from "../ui/healthpoint"
 
 export default class LevelScene extends Phaser.Scene {
@@ -17,17 +13,16 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image('level_background', '/img/top-down-forest.png')
-		this.load.spritesheet('character', '/assets/character.png', { frameWidth: 64, frameHeight: 32 })
-		this.load.spritesheet('blackWolf', '/assets/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
-		this.load.spritesheet('cyclops', '/assets/cyclops.png', { frameWidth: 64, frameHeight: 64.1 })
-		//this.load.spritesheet('goblin', '/assets/goblins.png', { frameWidth: 48, frameHeight: 48 })
-		this.load.spritesheet('goblin', '/assets/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
-		this.load.spritesheet('muerte', '/assets/explosion.png', { frameWidth: 32, frameHeight: 32 })
-		this.load.spritesheet('bullet', '/assets/bullets.png', { frameWidth: 16, frameHeight: 16 })
-		this.load.spritesheet('healthbar', '/assets/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
-		this.load.image('tiles', '/assets/tileset/forest_tiles.png')
-		this.load.tilemapTiledJSON('map', '/assets/tilemap/mapa.json')
+		this.load.image('level_background', './img/top-down-forest.png')
+		this.load.spritesheet('character', './assets/character/character.png', { frameWidth: 64, frameHeight: 32 })
+		this.load.spritesheet('character_shot', './assets/character/character_shooting.png', { frameWidth: 64, frameHeight: 32 })
+		this.load.spritesheet('blackWolf', './assets/enemies/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
+		this.load.spritesheet('cyclops', './assets/enemies/cyclops.png', { frameWidth: 64, frameHeight: 64.1 })
+		this.load.spritesheet('goblin', './assets/enemies/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
+		this.load.spritesheet('muerte', './assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('bullet', './assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
+		this.load.image('tiles', './assets/tileset/forest_tiles.png')
+		this.load.tilemapTiledJSON('map', './assets/tilemap/mapa_sinrio.json')
 	}
 
 	create() {
@@ -52,18 +47,18 @@ export default class LevelScene extends Phaser.Scene {
 		const tiles = mapa.addTilesetImage('Forest', 'tiles');
 		this.groundLayer = this.map.createLayer('Suelo', tiles);
 		this.foregroundLayer = this.map.createLayer('Bordes', tiles);
-		this.river = this.map.createLayer('Rio', tiles);
-		this.borderRiver = this.map.createLayer('MargenRio', tiles);
+		//this.river = this.map.createLayer('Rio', tiles);
+		//this.borderRiver = this.map.createLayer('MargenRio', tiles);
 		this.objetos = this.map.createLayer('Objetos', tiles);
 		this.borderTrees = this.map.createLayer('bordeArboles', tiles);
 
-		this.river.setCollisionBetween(0, 999);
+		//this.river.setCollisionBetween(0, 999);
 		this.foregroundLayer.setCollisionBetween(0, 999);
 
 		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
 		this.physics.add.collider(this.player, this.foregroundLayer);
-		this.physics.add.collider(this.enemyPool._group, this.river);
-		this.physics.add.collider(this.player, this.river);
+		//this.physics.add.collider(this.enemyPool._group, this.river);
+		//this.physics.add.collider(this.player, this.river);
 
 		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
 			this.bulletPool.release(obj1);
@@ -147,7 +142,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.cameras.main.fadeOut(500);
 		this.cameras.main.once("camerafadeoutcomplete", function () {
 			this.scene.start('game_over');
-			this.scene.remove('UIScene');
+			this.scene.sleep('UIScene');
 		}, this);
 	}
 }
