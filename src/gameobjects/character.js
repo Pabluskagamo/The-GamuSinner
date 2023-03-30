@@ -271,7 +271,7 @@ export default class Character extends MovableObject {
 
     collectCoin(value){
         this.wallet += value;
-        console.log("Tengo " + this.wallet + "monedas")
+        console.log("Wallet: " + this.wallet + " percebes")
     }
 
     /*tripleShot(){

@@ -1,6 +1,8 @@
 import BulletPool from "../gameobjects/Pools/bulletPool"
-import EnemyPool from "../gameobjects/Pools/EnemyPool"
+import CoinPool from "../gameobjects/Pools/coinPool"
+import EnemyPool from "../gameobjects/Pools/enemyPool"
 import Character from "../gameobjects/character"
+import Coin from "../gameobjects/items/coin";
 import HealthPoint from "../ui/healthpoint"
 
 export default class LevelScene extends Phaser.Scene {
@@ -21,6 +23,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('goblin', './assets/enemies/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
 		this.load.spritesheet('muerte', './assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', './assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
+		this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('map', './assets/tilemap/mapa_sinrio.json')
 	}
@@ -31,6 +34,12 @@ export default class LevelScene extends Phaser.Scene {
 		this.bulletPool.fillPull(10);
 		this.initTimers(false);
 		this.scene.launch('UIScene');
+
+		//Por ahora aqui porque con la funcion fillPool no se carga el sprite
+		let coins = []
+        for (let i = 0; i < 20; i++)
+			coins.push(new Coin(this, -150, -150, 1));
+        this.coinPool.addMultipleEntity(coins);
 	}
 
 
@@ -76,6 +85,7 @@ export default class LevelScene extends Phaser.Scene {
 
 
 		this.bulletPool = new BulletPool(this, 10)
+		this.coinPool = new CoinPool(this, 15)
 		this.enemyPool = new EnemyPool(this, 15);
 
 
@@ -85,6 +95,9 @@ export default class LevelScene extends Phaser.Scene {
 			obj1.hit(obj2)
 		}, (obj1, obj2) => !obj2.isDead());
 
+		this.physics.add.overlap(this.coinPool._group, this.player, (obj1, obj2) => {
+			obj1.collect(obj2);
+		});
 
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
 			obj1.attack(obj2);

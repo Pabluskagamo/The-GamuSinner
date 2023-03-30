@@ -1,10 +1,10 @@
 import Phaser from 'phaser'
 
-import MainScene from './scenes/MainScene'
+import MainScene from './scenes/mainScene'
 import InstructionScene from './scenes/instructionScene'
 import LevelScene from './scenes/levelScene'
 import Hud from './ui/hud'
-import GameOverScene from './scenes/GameOverScene'
+import GameOverScene from './scenes/gameOverScene'
 
 const config = {
 	type: Phaser.AUTO,

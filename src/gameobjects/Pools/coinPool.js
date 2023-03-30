@@ -1,20 +1,19 @@
-import Coin from "../bullet";
+import Coin from "../items/coin";
 
 export default class CoinPool {
-
 
     constructor (scene, max) {
         this.scene = scene;
         this._group = scene.add.group();
         this.max = max;
-        this.fillPull();
+        //this.fillPull();
     }
 
     addMultipleEntity(entities) {
 		this._group.addMultiple(entities);
 		this._group.children.iterate(c => {
 			this._group.killAndHide(c);
-			c.body.checkCollision.none = true;
+			c.body.overlap = true;
 		});
 	}
 
@@ -27,7 +26,7 @@ export default class CoinPool {
           entity.collected = false;
           entity.setActive(true);
           entity.setVisible(true);
-          entity.body.checkCollision.none = false;
+          entity.body.overlap = false;
         }
         return entity;
     }
@@ -38,15 +37,16 @@ export default class CoinPool {
     }
     
     release(entity) {
-        entity.body.checkCollision.none = true;
+        entity.body.overlap = true;
         this._group.killAndHide(entity);
     }
 
     fillPull(){
         let coins = []
 
-        for (let i = 0; i < 20; i++) 
-			coins.push(new Coin(this.scene, -150, -150, 1));
+        for (let i = 0; i < 20; i++) {
+        console.log("Moneda:"+(i+1))
+			coins.push(new Coin(this.scene, -150, -150, 1));}
         this.addMultipleEntity(coins);
     }
 }
