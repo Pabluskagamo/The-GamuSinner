@@ -1,6 +1,6 @@
 import MovableObject from "./movableObject";
 
-export default class enemyObject extends MovableObject {
+export default class EnemyObject extends MovableObject {
     
     
     constructor(scene, x, y, key, speed, firstFrame, enemypool, hp, dmg) {
@@ -54,6 +54,8 @@ export default class enemyObject extends MovableObject {
 
     dieMe(){
         this.hp = 0;
+        if (this.scene.coinPool.hasCoins() && Phaser.Math.RND.between(0, 1) < 0.9)
+            this.scene.coinPool.spawn(this.x, this.y);
         this.play('died_' + this.key, true);
     }
 

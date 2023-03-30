@@ -6,8 +6,10 @@ export default class Character extends MovableObject {
         super(scene, x, y, 'character', speed, 20);
 
         this.speed = speed;
+        this.wallet = 0;
         this.isAttacking = false;
         this.isDashing = false;
+        this.tripleShot = false;
         let f = this.frame;
         this.hp = 6
         this.lastFired = 0;
@@ -91,7 +93,7 @@ export default class Character extends MovableObject {
         this.d = this.scene.input.keyboard.addKey('D');
         this.w = this.scene.input.keyboard.addKey('W');
         this.spacebar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.tab = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        this.shift = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
     }
 
     preUpdate(t, dt) {
@@ -139,7 +141,7 @@ export default class Character extends MovableObject {
             }
         }
 
-        if(this.tab.isDown){
+        if(this.shift.isDown){
             this.dash();
         }
 
@@ -266,6 +268,15 @@ export default class Character extends MovableObject {
             this.speed = speed;
         }
     }
+
+    collectCoin(value){
+        this.wallet += value;
+        console.log("Wallet: " + this.wallet + " percebes")
+    }
+
+    /*tripleShot(){
+        this.tripleShot = true;
+    }*/
 }
 
 

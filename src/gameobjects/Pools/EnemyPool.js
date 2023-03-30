@@ -1,5 +1,5 @@
 import BlackWolf from "../blackWolf"
-import Goblin from "../Goblin"
+import Goblin from "../goblin"
 import Cyclops from "../cyclops"
 
 
