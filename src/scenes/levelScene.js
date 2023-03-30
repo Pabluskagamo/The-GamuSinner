@@ -29,7 +29,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.initPlayerAndPools();
 		this.initMap();
 		this.bulletPool.fillPull(10);
-		this.initTimers(true);
+		this.initTimers(false);
 		this.scene.launch('UIScene');
 	}
 
