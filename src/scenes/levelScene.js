@@ -26,7 +26,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('map', './assets/tilemap/mapa_sinrio.json')
-		this.load.image('game_settings', '/assets/ui/settings1.png')
+		this.load.image('game_settings', '/assets/ui/settings.png')
 	}
 
 	create() {
