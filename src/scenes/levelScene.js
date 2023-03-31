@@ -16,7 +16,7 @@ export default class LevelScene extends Phaser.Scene {
 
 	preload() {
 		this.load.image('level_background', './img/top-down-forest.png')
-		this.load.spritesheet('character', './assets/character/character.png', { frameWidth: 64, frameHeight: 32 })
+		this.load.spritesheet('character', './assets/character/character.png', { frameWidth: 64, frameHeight: 32.3 })
 		this.load.spritesheet('character_shot', './assets/character/character_shooting.png', { frameWidth: 64, frameHeight: 32 })
 		this.load.spritesheet('blackWolf', './assets/enemies/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('cyclops', './assets/enemies/cyclops.png', { frameWidth: 64, frameHeight: 64.1 })
@@ -26,6 +26,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('map', './assets/tilemap/mapa_sinrio.json')
+		this.load.image('game_settings', '/assets/ui/settings1.png')
 	}
 
 	create() {
@@ -33,13 +34,32 @@ export default class LevelScene extends Phaser.Scene {
 		this.initMap();
 		this.bulletPool.fillPull(10);
 		this.initTimers(false);
+		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
 		this.scene.launch('UIScene');
+
+		settings.setInteractive({ cursor: 'pointer' });
+
+		settings.on('pointerover', function (pointer) {
+			this.setTint(0xffc800);
+		});
+
+		settings.on('pointerout', function (pointer) {
+			this.clearTint();
+		});
+
+		settings.on('pointerup', () => {
+			this.player.stopHorizontal();
+			this.player.stopVertical();
+            this.scene.pause();
+			this.scene.pause('UIScene');
+            this.scene.launch('settings');
+        });
 
 		//Por ahora aqui porque con la funcion fillPool no se carga el sprite
 		let coins = []
-        for (let i = 0; i < 20; i++)
+		for (let i = 0; i < 20; i++)
 			coins.push(new Coin(this, -150, -150, 1));
-        this.coinPool.addMultipleEntity(coins);
+		this.coinPool.addMultipleEntity(coins);
 	}
 
 
@@ -49,7 +69,7 @@ export default class LevelScene extends Phaser.Scene {
 		}
 	}
 
-	initMap(){
+	initMap() {
 		const mapa = this.map = this.make.tilemap({
 			key: 'map'
 		});
@@ -79,7 +99,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.foregroundLayer.setDepth(3);
 	}
 
-	initPlayerAndPools(){
+	initPlayerAndPools() {
 		this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 150);
 		this.player.body.onCollide = true;
 
@@ -116,11 +136,11 @@ export default class LevelScene extends Phaser.Scene {
 		this.enemyPool.spawn(xPos[randX], yPos[randY]);
 	}
 
-	initTimers(debug){
-		if(debug){
+	initTimers(debug) {
+		if (debug) {
 			this.v = this.input.keyboard.addKey('v');
 			this.debugMode = true;
-		}else{
+		} else {
 			let timer = this.time.addEvent({
 
 				delay: 4000,
@@ -133,17 +153,17 @@ export default class LevelScene extends Phaser.Scene {
 			let timer2 = this.time.addEvent({
 
 				delay: 20000,
-				callback: () => { 
+				callback: () => {
 					const currDelay = timer.delay;
-					console.log('cambio de frecuencia de', currDelay, 'a', currDelay-500)
-					if(currDelay > 1000){
+					console.log('cambio de frecuencia de', currDelay, 'a', currDelay - 500)
+					if (currDelay > 1000) {
 						timer.reset({
-							delay: currDelay-500,
+							delay: currDelay - 500,
 							callback: () => { this.spawnInBounds(); },
 							callbackScope: this,
 							loop: true
 						})
-					} 
+					}
 				},
 				callbackScope: this,
 				loop: true
@@ -151,7 +171,7 @@ export default class LevelScene extends Phaser.Scene {
 		}
 	}
 
-	gameOver(){
+	gameOver() {
 		this.cameras.main.fadeOut(500);
 		this.cameras.main.once("camerafadeoutcomplete", function () {
 			this.scene.start('game_over');
