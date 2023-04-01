@@ -274,9 +274,10 @@ export default class Character extends MovableObject {
         console.log("Wallet: " + this.wallet + " percebes")
     }
 
-    /*tripleShot(){
+    collectPowerUp(){
         this.tripleShot = true;
-    }*/
+        console.log("TripleShot ACTIVATED")
+    }
 }
 
 
