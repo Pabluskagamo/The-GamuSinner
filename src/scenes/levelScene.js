@@ -35,7 +35,7 @@ export default class LevelScene extends Phaser.Scene {
 	create() {
 		this.initPlayerAndPools();
 		this.initMap();
-		this.bulletPool.fillPull(10);
+		this.bulletPool.fillPull(40);
 		this.initTimers(false);
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
 		this.scene.launch('UIScene');
@@ -84,7 +84,7 @@ export default class LevelScene extends Phaser.Scene {
 
 
 	update(t) {
-		if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
+		if(this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
 			this.enemyPool.spawn(0, 0)
 		}
 	}
