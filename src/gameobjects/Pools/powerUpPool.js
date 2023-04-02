@@ -1,3 +1,4 @@
+import EightDirShot from "../items/eightDirShot";
 import TripleShot from "../items/tripleShot";
 
 export default class PowerUpPool {
@@ -42,11 +43,12 @@ export default class PowerUpPool {
         this._group.killAndHide(entity);
     }
 
-    fillPull(){
+    fillPool(){
         let powerUps = []
 
         for (let i = 0; i < 20; i++){
-            powerUps.push(new TripleShot(this.scene, -125, -125));
+            //powerUps.push(new TripleShot(this.scene, -125, -125));
+            powerUps.push(new EightDirShot(this.scene, -125, -125));
         }
         this.addMultipleEntity(powerUps);
     }

@@ -41,7 +41,7 @@ export default class CoinPool {
         this._group.killAndHide(entity);
     }
 
-    fillPull(){
+    fillPool(){
         let coins = []
 
         for (let i = 0; i < 20; i++) {

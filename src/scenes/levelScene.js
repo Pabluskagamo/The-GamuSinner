@@ -6,6 +6,7 @@ import Character from "../gameobjects/character"
 import Coin from "../gameobjects/items/coin";
 import HealthPoint from "../ui/healthpoint"
 import TripleShot from "../gameobjects/items/tripleShot"
+import EightDirShot from "../gameobjects/items/eightDirShot"
 
 export default class LevelScene extends Phaser.Scene {
 	constructor() {
@@ -27,6 +28,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('bullet', './assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('fire', './assets/items/fire.png', { frameWidth: 24, frameHeight: 32 })
+		this.load.spritesheet('fire2', './assets/items/fire2.png', { frameWidth: 15, frameHeight: 24 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('map', './assets/tilemap/mapa_sinrio.json')
 		this.load.image('game_settings', '/assets/ui/settings.png')
@@ -35,7 +37,7 @@ export default class LevelScene extends Phaser.Scene {
 	create() {
 		this.initPlayerAndPools();
 		this.initMap();
-		this.bulletPool.fillPull(40);
+		this.bulletPool.fillPool(200);
 		this.initTimers(false);
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
 		this.scene.launch('UIScene');
@@ -76,8 +78,9 @@ export default class LevelScene extends Phaser.Scene {
 		//
 		let powerUps = []
 
-        for (let i = 0; i < 20; i++){
+        for (let i = 0; i < 10; i++){
             powerUps.push(new TripleShot(this, -125, -125));
+            powerUps.push(new EightDirShot(this, -125, -125));
         }
         this.powerUpPool.addMultipleEntity(powerUps);
 	}
@@ -124,13 +127,13 @@ export default class LevelScene extends Phaser.Scene {
 		this.player.body.onCollide = true;
 
 
-		this.bulletPool = new BulletPool(this, 10)
+		this.bulletPool = new BulletPool(this, 150)
 		this.coinPool = new CoinPool(this, 15)
 		this.powerUpPool = new PowerUpPool(this, 15)
 		this.enemyPool = new EnemyPool(this, 15);
 
 
-		this.enemyPool.fillPull(25, this.player);
+		this.enemyPool.fillPool(25, this.player);
 
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
 			obj1.hit(obj2)
