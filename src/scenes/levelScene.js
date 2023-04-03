@@ -55,6 +55,16 @@ export default class LevelScene extends Phaser.Scene {
             this.scene.launch('settings');
         });
 
+		this.input.keyboard.on('keydown', (event) => {
+            if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ESC) {
+				this.player.stopHorizontal();
+				this.player.stopVertical();
+				this.scene.pause();
+				this.scene.pause('UIScene');
+				this.scene.launch('settings');
+            }
+        });
+
 		//Por ahora aqui porque con la funcion fillPool no se carga el sprite
 		let coins = []
 		for (let i = 0; i < 20; i++)
