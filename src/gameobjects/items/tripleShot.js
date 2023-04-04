@@ -1,36 +1,40 @@
-export default class TripleShot extends powerUP{
+import PowerUp from "./powerUp"
+
+export default class TripleShot extends PowerUp{
 
     constructor(scene, x, y){
         super(scene, x, y, "tripleShot");
-        this.justHit = false;
-
-        //this.setScale(1.5)
-        this.scene.add.existing(this);
-        this.scene.physics.add.existing(this);  
 
         this.scene.anims.create({
-            key: 'coin_animation',
-            frames: this.scene.anims.generateFrameNumbers('coin', { start: 0, end: 7 }),
+            key: 'tripleShot_animation',
+            frames: this.scene.anims.generateFrameNumbers('fire', { start: 0, end: 7 }),
             frameRate: 10,
-            repeat: 0
+            repeat: -1
         })
+        this.play('tripleShot_animation')
     }
 
-
-    preUpdate(t, dt){
-        super.preUpdate(t, dt)
-
-        if (this.y > this.scene.game.config.height || this.y < 0 || this.x < 0 || this.x > this.scene.game.config.width) {
-            this.scene.bulletPool.release(this);
+    run(charX,charY,dir){
+        if (this.scene.bulletPool.hasBullets()) {
+            let bullet = this.scene.bulletPool.spawn(charX,charY);
+            let bullet2 = this.scene.bulletPool.spawn(charX,charY);
+            let bullet3 = this.scene.bulletPool.spawn(charX,charY);
+            if(dir.x === 0) {
+                bullet.setDireccion(dir);
+                bullet2.setDireccion(new Phaser.Math.Vector2(dir.x+0.3, dir.y).normalize());
+                bullet3.setDireccion(new Phaser.Math.Vector2(dir.x-0.3, dir.y).normalize());
+            }
+            else if(dir.y === 0) {
+                bullet.setDireccion(dir);
+                bullet2.setDireccion(new Phaser.Math.Vector2(dir.x, dir.y+0.3).normalize());
+                bullet3.setDireccion(new Phaser.Math.Vector2(dir.x, dir.y-0.3).normalize());
+            }
+            else {
+                console.log("X: "+ (dir.x+0.3) +"Y: "+  dir.y)
+                bullet.setDireccion(dir.normalize());
+                bullet2.setDireccion(new Phaser.Math.Vector2(dir.x+0.3, dir.y).normalize());
+                bullet3.setDireccion(new Phaser.Math.Vector2(dir.x-0.3, dir.y).normalize());
+            }
         }
     }
-
-    hit(enemie){
-        if(!this.justHit){
-            this.justHit = true;
-            enemie.hitEnemy(this.dmg);
-            this.scene.powerUpPool.release(this);
-        }
-    }
-
 }

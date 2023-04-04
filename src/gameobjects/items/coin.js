@@ -17,7 +17,6 @@ export default class Coin extends Phaser.Physics.Arcade.Sprite{
         this.play('coin_animation')
     }
 
-
     preUpdate(t, dt){
         super.preUpdate(t, dt)
     }

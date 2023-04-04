@@ -64,7 +64,7 @@ export default class EnemyPool {
         return this._group.countActive() === this.max;
     }
 
-	fillPull(num, player){
+	fillPool(num, player){
         let enemies = []
 
 		let randNum = 0;

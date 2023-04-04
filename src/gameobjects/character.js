@@ -1,7 +1,11 @@
 import MovableObject from "./movableObject";
+import NonePowerUp from "./items/nonePowerUp";
+import { PowerUpFactory } from "./items/powerUpFactory";
+import { Directions } from "./utils/directions"
+import MultipleDirectionShot from "./items/multipleDirectionShot";
 
 export default class Character extends MovableObject {
-
+    
     constructor(scene, x, y, speed) {
         super(scene, x, y, 'character', speed, 20);
 
@@ -9,10 +13,17 @@ export default class Character extends MovableObject {
         this.wallet = 0;
         this.isAttacking = false;
         this.isDashing = false;
-        this.tripleShot = false;
-        let f = this.frame;
-        this.hp = 6
+        this.tripleShot = true;
+        this.eightDirShot = false;
+        this.currentPowerUp = new NonePowerUp(this.scene)
+        this.numDirections = 8;
+        this.bulletMultiplier = 3;
+        this.bulletSpread = 0.25;
+        //let f = this.frame;
+        this.hp = 6;
         this.lastFired = 0;
+        
+
         this.setScale(1.7);
 
         this.scene.add.existing(this);
@@ -169,55 +180,91 @@ export default class Character extends MovableObject {
 
     attack() {
 
-        let dir = new Phaser.Math.Vector2(0, 1);
-
-        
-
+        let dir = Directions.DOWN
         if (this.cursors.down.isDown && this.cursors.right.isDown) {
             // Diagonal abajo-derecha
             this.play('mainChar_shootlado', true);
-            dir = new Phaser.Math.Vector2(1, 1).normalize();
+            dir = Directions.DOWNRIGHT
         } else if (this.cursors.up.isDown && this.cursors.right.isDown) {
             // Diagonal arriba-derecha
             this.play('mainChar_shootlado', true);
-            dir = new Phaser.Math.Vector2(1, -1).normalize();
+            dir = Directions.UPRIGHT
         } else if (this.cursors.down.isDown && this.cursors.left.isDown) {
             // Diagonal abajo-izquierda
             this.play('mainChar_shootlado_izq', true);
             // this.flipX = true;
-            dir = new Phaser.Math.Vector2(-1, 1).normalize();
+            dir = Directions.DOWNLEFT
         } else if (this.cursors.up.isDown && this.cursors.left.isDown) {
             // Diagonal arriba-izquierda
             this.play('mainChar_shootlado_izq', true);
             // this.flipX = true;
-            dir = new Phaser.Math.Vector2(-1, -1).normalize();
+            dir = Directions.UPLEFT
         } else if (this.cursors.down.isDown) {
             // Movimiento hacia abajo
             this.play('mainChar_shootlado', true);
-            dir.x = 0;
-            dir.y = 1;
+            dir = Directions.DOWN
         } else if (this.cursors.up.isDown) {
             // Movimiento hacia arriba
             this.play('mainChar_shootlado', true);
-            dir.x = 0;
-            dir.y = -1;
+            dir = Directions.UP
         } else if (this.cursors.left.isDown) {
             // Movimiento hacia izq
             this.play('mainChar_shootlado_izq', true);
             this.flipX = true;
-            dir.x = -1
-            dir.y = 0
+            dir = Directions.LEFT
         } else if (this.cursors.right.isDown) {
             this.play('mainChar_shootlado', true);
-            dir.x = 1
-            dir.y = 0
+            dir = Directions.RIGHT
         }
         //Comprobar si hay balas.
-        if (this.scene.bulletPool.hasBullets()) {
-            let bullet = this.scene.bulletPool.spawn(this.x, this.y);
-            bullet.setDireccion(dir);
+        /* if (this.scene.bulletPool.hasBullets() && this.eightDirShot) {
+            //let bullets = []
+            let offsetSign = [1,-1]
+            let arrayDirections = Object.values(Directions)
+            for(let i = 0; i < this.numDirections; i++){
+                for(let j = 0; j < this.bulletMultiplier; j++){
+                    let offsetFactor = Math.ceil(j/2)
+                    let dirSpread = arrayDirections[i].y === 0 ? 2 : 1
+                    let bulletDir = new Phaser.Math.Vector2(
+                        arrayDirections[i].x+((dirSpread%2)*offsetSign[j%2]*offsetFactor*this.bulletSpread),
+                        arrayDirections[i].y+((dirSpread/2)*offsetSign[j%2]*offsetFactor*this.bulletSpread)
+                    ).normalize()
+                    console.log("X: "+ bulletDir.x +"Y: "+ bulletDir.y)
+                    let tempBullet = this.scene.bulletPool.spawn(this.x, this.y)
+                    tempBullet.setDireccion(bulletDir)
+                    //bullets.push(tempBullet)
+                }
+            }
+            
         }
-
+        else if (this.scene.bulletPool.hasBullets() && this.tripleShot) {
+            let bullet = this.scene.bulletPool.spawn(this.x, this.y);
+            let bullet2 = this.scene.bulletPool.spawn(this.x, this.y);
+            let bullet3 = this.scene.bulletPool.spawn(this.x, this.y);
+            if(dir.x === 0) {
+                bullet.setDireccion(dir);
+                bullet2.setDireccion(new Phaser.Math.Vector2(dir.x+0.3, dir.y).normalize());
+                bullet3.setDireccion(new Phaser.Math.Vector2(dir.x-0.3, dir.y).normalize());
+            }
+            else if(dir.y === 0) {
+                bullet.setDireccion(dir);
+                bullet2.setDireccion(new Phaser.Math.Vector2(dir.x, dir.y+0.3).normalize());
+                bullet3.setDireccion(new Phaser.Math.Vector2(dir.x, dir.y-0.3).normalize());
+            }
+            else {
+                //y<0 && x<0 || y>0 && x>0 sale bien else 
+                //y>0
+                console.log("X: "+ (dir.x+0.3) +"Y: "+  dir.y)
+                bullet.setDireccion(dir.normalize());
+                bullet2.setDireccion(new Phaser.Math.Vector2(dir.x+0.3, dir.y).normalize());
+                bullet3.setDireccion(new Phaser.Math.Vector2(dir.x-0.3, dir.y).normalize());
+            }
+        }
+        else if (this.scene.bulletPool.hasBullets()) {
+            let bullet = this.scene.bulletPool.spawn(this.x, this.y);
+            bullet.setDireccion(dir.normalize());
+        } */
+        this.currentPowerUp.run(this.x,this.y,dir)
     }
 
     stopAttack() {
@@ -240,6 +287,10 @@ export default class Character extends MovableObject {
     setHp(health) {
         this.hp = health;
     }
+
+    /* getActualPowerUp(){
+        return this.actualPowerUp.getKey()
+    } */
 
     getHit(dmg) {
         this.hp -= dmg;
@@ -281,6 +332,22 @@ export default class Character extends MovableObject {
     /*tripleShot(){
         this.tripleShot = true;
     }*/
+    collectPowerUp(powerUp){
+        if(!powerUp.getCollected()){
+            powerUp.collect()
+            this.activatePowerUp(powerUp)
+        }
+    }
+
+    activatePowerUp(powerUp){
+        let combo = PowerUpFactory.getCombo(powerUp, this.currentPowerUp)
+        if(combo === "none"){
+            this.currentPowerUp = powerUp
+        }
+        else{
+            this.currentPowerUp = PowerUpFactory.create(combo,this.scene)
+        }
+    }
 }
 
 

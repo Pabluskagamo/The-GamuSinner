@@ -41,7 +41,7 @@ export default class BulletPool {
         this._group.killAndHide(entity);
     }
 
-    fillPull(num){
+    fillPool(num){
         let bullets = []
 
         for (let i = 0; i < num; i++) {
