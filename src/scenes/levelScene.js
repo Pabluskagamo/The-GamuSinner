@@ -33,6 +33,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.initPlayerAndPools();
 		this.initMap();
 		this.bulletPool.fillPull(10);
+		this.coinPool.fillPull(20);
 		this.initTimers(false);
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
 		this.scene.launch('UIScene');
@@ -50,26 +51,21 @@ export default class LevelScene extends Phaser.Scene {
 		settings.on('pointerup', () => {
 			this.player.stopHorizontal();
 			this.player.stopVertical();
-            this.scene.pause();
+			this.scene.pause();
 			this.scene.pause('UIScene');
-            this.scene.launch('settings');
-        });
+			this.scene.launch('settings');
+		});
 
 		this.input.keyboard.on('keydown', (event) => {
-            if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ESC) {
+			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ESC) {
 				this.player.stopHorizontal();
 				this.player.stopVertical();
 				this.scene.pause();
 				this.scene.pause('UIScene');
 				this.scene.launch('settings');
-            }
-        });
+			}
+		});
 
-		//Por ahora aqui porque con la funcion fillPool no se carga el sprite
-		let coins = []
-		for (let i = 0; i < 20; i++)
-			coins.push(new Coin(this, -150, -150, 1));
-		this.coinPool.addMultipleEntity(coins);
 	}
 
 
@@ -77,6 +73,14 @@ export default class LevelScene extends Phaser.Scene {
 		if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
 			this.enemyPool.spawn(0, 0)
 		}
+
+		const remaining = (this.freqChangeTime - this.freqTimer.getElapsed()) / 1000;
+
+		if (this.lastSec != remaining) {
+			this.events.emit('changeCount', remaining.toFixed(0));
+		}
+
+		this.lastSec = remaining
 	}
 
 	initMap() {
@@ -115,8 +119,8 @@ export default class LevelScene extends Phaser.Scene {
 
 
 		this.bulletPool = new BulletPool(this, 10)
-		this.coinPool = new CoinPool(this, 15)
 		this.enemyPool = new EnemyPool(this, 15);
+		this.coinPool = new CoinPool(this, 20);
 
 
 		this.enemyPool.fillPull(25, this.player);
@@ -127,6 +131,7 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.physics.add.overlap(this.coinPool._group, this.player, (obj1, obj2) => {
 			obj1.collect(obj2);
+			this.events.emit('earnCoin', obj2.getWallet());
 		});
 
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
@@ -147,11 +152,15 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
+		this.freqChangeTime = 20000;
+		this.lastSec = 20;
+		this.freqFactor = 500;
+
 		if (debug) {
 			this.v = this.input.keyboard.addKey('v');
 			this.debugMode = true;
 		} else {
-			let timer = this.time.addEvent({
+			this.enemySpawnTimer = this.time.addEvent({
 
 				delay: 4000,
 				callback: () => { this.spawnInBounds(); },
@@ -160,21 +169,10 @@ export default class LevelScene extends Phaser.Scene {
 			});
 
 
-			let timer2 = this.time.addEvent({
+			this.freqTimer = this.time.addEvent({
 
-				delay: 20000,
-				callback: () => {
-					const currDelay = timer.delay;
-					console.log('cambio de frecuencia de', currDelay, 'a', currDelay - 500)
-					if (currDelay > 1000) {
-						timer.reset({
-							delay: currDelay - 500,
-							callback: () => { this.spawnInBounds(); },
-							callbackScope: this,
-							loop: true
-						})
-					}
-				},
+				delay: this.freqChangeTime,
+				callback: this.changeFreqHandler,
 				callbackScope: this,
 				loop: true
 			});
@@ -187,5 +185,23 @@ export default class LevelScene extends Phaser.Scene {
 			this.scene.start('game_over');
 			this.scene.sleep('UIScene');
 		}, this);
+	}
+
+	changeFreqHandler() {
+		const currDelay = this.enemySpawnTimer.delay;
+
+		this.freqFactor = currDelay > 1000 ? 500: 200; 
+
+		console.log('cambio de frecuencia de', currDelay, 'a', currDelay - this.freqFactor)
+		if (currDelay > 400) {
+			this.enemySpawnTimer.reset({
+				delay: currDelay - this.freqFactor,
+				callback: () => { this.spawnInBounds(); },
+				callbackScope: this,
+				loop: true
+			})
+		}else{
+			this.enemySpawnTimer.remove();
+		}
 	}
 }

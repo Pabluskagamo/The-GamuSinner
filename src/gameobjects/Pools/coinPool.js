@@ -41,12 +41,13 @@ export default class CoinPool {
         this._group.killAndHide(entity);
     }
 
-    fillPull(){
+    fillPull(num){
         let coins = []
 
-        for (let i = 0; i < 20; i++) {
-        console.log("Moneda:"+(i+1))
-			coins.push(new Coin(this.scene, -150, -150, 1));}
+        for (let i = 0; i < num; i++) {
+            console.log("Moneda:"+(i+1))
+			coins.push(new Coin(this.scene, -150, -150, 1));
+        }
         this.addMultipleEntity(coins);
     }
 }
