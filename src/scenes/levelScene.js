@@ -144,7 +144,7 @@ export default class LevelScene extends Phaser.Scene {
 		});
 
 		this.physics.add.overlap(this.powerUpPool._group, this.player, (obj1, obj2) => {
-			obj1.collect(obj2);
+			obj2.collectPowerUp(obj1);
 		});
 
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
