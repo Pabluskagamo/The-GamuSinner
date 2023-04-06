@@ -105,6 +105,7 @@ export default class LevelScene extends Phaser.Scene {
             shootCharacter.play('mainChar_controls_shootlado');
             down_key.play('DOWN_Press');
         })
+        
         // DASH CHARACTER
 
         const dashCharacter = new Character(this, 600, 540, 0, "dash").setScale(3.5);

@@ -7,7 +7,7 @@ export default class TripleShot extends PowerUp{
 
         this.scene.anims.create({
             key: 'tripleShot_animation',
-            frames: this.scene.anims.generateFrameNumbers('fire', { start: 0, end: 7 }),
+            frames: this.scene.anims.generateFrameNumbers('tripleshoot', { start: 0, end: 7 }),
             frameRate: 10,
             repeat: -1
         })

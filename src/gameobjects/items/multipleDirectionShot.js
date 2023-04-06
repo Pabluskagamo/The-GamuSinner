@@ -11,7 +11,7 @@ export default class MultipleDirectionShot extends PowerUp{
         this.setScale(1.5)
         this.scene.anims.create({
             key: 'multipleDirectionShot_animation',
-            frames: this.scene.anims.generateFrameNumbers('fire2', { start: 0, end: 5 }),
+            frames: this.scene.anims.generateFrameNumbers('multishoot', { start: 0, end: 5 }),
             frameRate: 10,
             repeat: -1
         })

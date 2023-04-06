@@ -27,8 +27,8 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('muerte', './assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', './assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
-		this.load.spritesheet('fire', './assets/items/fire.png', { frameWidth: 24, frameHeight: 32 })
-		this.load.spritesheet('fire2', './assets/items/fire2.png', { frameWidth: 15, frameHeight: 24 })
+		this.load.spritesheet('tripleshoot', './assets/powerups/Tripleshoot.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('multishoot', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('map', './assets/tilemap/mapa_sinrio.json')
 		this.load.image('game_settings', '/assets/ui/settings.png')
@@ -73,16 +73,16 @@ export default class LevelScene extends Phaser.Scene {
 
 		let powerUps = []
 
-        for (let i = 0; i < 10; i++){
-            powerUps.push(new TripleShot(this, -125, -125));
-            powerUps.push(new EightDirShot(this, -125, -125));
-        }
-        this.powerUpPool.addMultipleEntity(powerUps);
+		for (let i = 0; i < 10; i++) {
+			powerUps.push(new TripleShot(this, -125, -125));
+			powerUps.push(new EightDirShot(this, -125, -125));
+		}
+		this.powerUpPool.addMultipleEntity(powerUps);
 	}
 
 
 	update(t) {
-		if(this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
+		if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
 			this.enemyPool.spawn(0, 0)
 		}
 
@@ -207,7 +207,7 @@ export default class LevelScene extends Phaser.Scene {
 	changeFreqHandler() {
 		const currDelay = this.enemySpawnTimer.delay;
 
-		this.freqFactor = currDelay > 1000 ? 500: 200; 
+		this.freqFactor = currDelay > 1000 ? 500 : 200;
 
 		console.log('cambio de frecuencia de', currDelay, 'a', currDelay - this.freqFactor)
 		if (currDelay > 400) {
@@ -217,7 +217,7 @@ export default class LevelScene extends Phaser.Scene {
 				callbackScope: this,
 				loop: true
 			})
-		}else{
+		} else {
 			this.enemySpawnTimer.remove();
 		}
 	}
