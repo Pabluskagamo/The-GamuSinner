@@ -86,13 +86,18 @@ export default class LevelScene extends Phaser.Scene {
 			this.enemyPool.spawn(0, 0)
 		}
 
-		const remaining = (this.freqChangeTime - this.freqTimer.getElapsed()) / 1000;
+		if(!this.levelFinished){
+			const remaining = (this.freqChangeTime - this.freqTimer.getElapsed()) / 1000;
 
-		if (this.lastSec != remaining) {
-			this.events.emit('changeCount', remaining.toFixed(0));
+			if (this.lastSec != remaining) {
+				this.events.emit('changeCount', remaining.toFixed(0));
+			}
+
+			this.lastSec = remaining
+		}else if(this.enemyPool.fullPool()){
+			this.events.emit('levelComplete');
 		}
-
-		this.lastSec = remaining
+		
 	}
 
 	initMap() {
@@ -159,19 +164,37 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	spawnInBounds() {
+		console.log('SPAWN ENEMY')
+
 		const xPos = [0, this.sys.game.canvas.width]
 		const yPos = [0, this.sys.game.canvas.height]
 
 		const randX = Phaser.Math.RND.between(0, 1);
 		const randY = Phaser.Math.RND.between(0, 1);
 
-		this.enemyPool.spawn(xPos[randX], yPos[randY]);
+		const randNum = Phaser.Math.RND.between(1, 10);
+
+		console.log('SPAWN ENEMY RAND NUM:', randNum)
+
+		if(randNum < 8){
+			console.log('GOB SPAWNED')
+			this.enemyPool.spawnGob(xPos[randX], yPos[randY])
+		}else if(randNum >= 7 && randNum < 10){
+			console.log('WOLF SPAWNED')
+			this.enemyPool.spawnWolf(xPos[randX], yPos[randY])
+		}else{
+			console.log('CYCLOPS SPAWNED')
+			this.enemyPool.spawnCyclops(xPos[randX], yPos[randY])
+		}
+
+		//this.enemyPool.spawn(xPos[randX], yPos[randY]);
 	}
 
 	initTimers(debug) {
 		this.freqChangeTime = 20000;
 		this.lastSec = 20;
 		this.freqFactor = 500;
+		this.levelFinished = false;
 
 		if (debug) {
 			this.v = this.input.keyboard.addKey('v');
@@ -180,7 +203,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.enemySpawnTimer = this.time.addEvent({
 
 				delay: 4000,
-				callback: () => { this.spawnInBounds(); },
+				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true
 			});
@@ -209,16 +232,30 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.freqFactor = currDelay > 1000 ? 500 : 200;
 
+		if(currDelay === 1500){
+			this.freqChangeTime = 30000;
+			this.lastSec = 30;
+			this.freqTimer.reset({
+				delay: this.freqChangeTime,
+				callback: this.changeFreqHandler,
+				callbackScope: this,
+				loop: true
+			})
+		}
+
 		console.log('cambio de frecuencia de', currDelay, 'a', currDelay - this.freqFactor)
 		if (currDelay > 400) {
 			this.enemySpawnTimer.reset({
 				delay: currDelay - this.freqFactor,
-				callback: () => { this.spawnInBounds(); },
+				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true
 			})
 		} else {
+			
 			this.enemySpawnTimer.remove();
+			this.freqTimer.remove();
+			this.levelFinished = true;
 		}
 	}
 }

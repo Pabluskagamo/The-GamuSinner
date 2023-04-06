@@ -40,6 +40,10 @@ export default class Hud extends Phaser.Scene{
             this.countdown.setText('00:'+ (newTime < 10 ? '0' : '') +newTime)
         }, this);
 
+        levelGame.events.on('levelComplete', function () {
+            this.countdown.setText('!Has completado todas las oleadas!')
+        }, this);
+
         levelGame.events.on('earnCoin', function (coins) {
             this.numMonedas.setText('X ' + coins)
         }, this);
