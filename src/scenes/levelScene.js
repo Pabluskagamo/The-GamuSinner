@@ -126,7 +126,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initPlayerAndPools() {
-		this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 150);
+		this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 150, null);
 		this.player.body.onCollide = true;
 
 

@@ -4,6 +4,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="preload" as="font" href="/assets/fonts/MedievalSharp-Regular.ttf" type="font/ttf" />
 	<!-- NUESTRO CSS -->
 	<link rel='stylesheet' href='/css/main.css' />
 	<!-- BOOTSTRAP -->
@@ -115,6 +116,18 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		function loadFont(name, url) {
+			var newFont = new FontFace(name, `url(${url})`);
+			newFont.load().then(function (loaded) {
+				document.fonts.add(loaded);
+			}).catch(function (error) {
+				return error;
+			});
+		}
+
+		loadFont("MedievalSharp-Regular", "/assets/fonts/MedievalSharp-Regular.ttf");
+	</script>
 	<script type="module" src="src/main.js"></script>
 </body>
 

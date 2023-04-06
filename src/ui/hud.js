@@ -17,7 +17,7 @@ export default class Hud extends Phaser.Scene{
         this.uiLive = [new HealthPoint(this, 960, 90), new HealthPoint(this, 990, 90),
             new HealthPoint(this, 1020, 90), new HealthPoint(this, 1050, 90), new HealthPoint(this, 1080, 90), new HealthPoint(this, 1110, 90)]
 
-        this.numMonedas = this.add.text(1044, 115, 'X 0');
+        this.numMonedas = this.add.text(1044, 115, 'X 0', { fontFamily: 'MedievalSharp-Regular' });
         this.numMonedas.setFontSize(20);
 
         const coinHud = this.add.image(1110, 123, 'coinhud')
@@ -25,7 +25,7 @@ export default class Hud extends Phaser.Scene{
         coinHud.setScale(1.5)
         
 
-        this.countdown = this.add.text(this.sys.game.canvas.width/2, 75, '00:20');
+        this.countdown = this.add.text(555, 75, '00:20',  { fontFamily: 'MedievalSharp-Regular' });
         this.countdown.setFontSize(24);
 
         //  Grab a reference to the Game Scene

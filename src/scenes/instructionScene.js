@@ -1,6 +1,5 @@
-import moveCharacter from "../gameobjects/instructions/moveCharacter"
-import shootCharacter from "../gameobjects/instructions/shootCharacter"
-import dashCharacter from "../gameobjects/instructions/dashCharacter"
+import Character from "../gameobjects/character"
+
 
 export default class LevelScene extends Phaser.Scene {
     constructor() {
@@ -64,10 +63,59 @@ export default class LevelScene extends Phaser.Scene {
         const b_key = this.add.sprite(800, 390, 'b_key').setScale(3.2);
         const granade = this.add.sprite(920, 390, 'granade').setScale(0.7);
 
-        // CHARACTER
-        new moveCharacter(this, 600, 220, 0, w_key, a_key, s_key, d_key).setScale(3.5);
-        new shootCharacter(this, 600, 380, 0, up_key, left_key, down_key, right_key).setScale(3.5);
-        new dashCharacter(this, 600, 540, 0, tab_key).setScale(3.5);
+        //MOVE CHARACTER
+        const moveCharacter = new Character(this, 600, 220, 0, "move").setScale(3.5);
+        s_key.play('S_Press');
+
+        s_key.on('animationcomplete', (param1, param2, param3) => {
+            moveCharacter.play('mainChar_controls_lado');
+            d_key.play('D_Press');
+        })
+        d_key.on('animationcomplete', (param1, param2, param3) => {
+            moveCharacter.play('mainChar_controls_lado');
+            w_key.play('W_Press');
+        })
+        w_key.on('animationcomplete', (param1, param2, param3) => {
+            moveCharacter.play('mainChar_controls_lado');
+            a_key.play('A_Press');
+        })
+        a_key.on('animationcomplete', (param1, param2, param3) => {
+            moveCharacter.play('mainChar_controls_lado');
+            s_key.play('S_Press');
+        })
+
+        // SHOOT CHARACTER
+
+        const shootCharacter = new Character(this, 600, 380, 0, "shoot").setScale(3.5);
+        down_key.play('DOWN_Press');
+
+        down_key.on('animationcomplete', (param1, param2, param3) => {
+            shootCharacter.play('mainChar_controls_shootlado');
+            right_key.play('RIGHT_Press');
+        })
+        right_key.on('animationcomplete', (param1, param2, param3) => {
+            shootCharacter.play('mainChar_controls_shootlado');
+            up_key.play('UP_Press');
+        })
+        up_key.on('animationcomplete', (param1, param2, param3) => {
+            shootCharacter.play('mainChar_controls_shootlado');
+            left_key.play('LEFT_Press');
+        })
+        left_key.on('animationcomplete', (param1, param2, param3) => {
+            shootCharacter.play('mainChar_controls_shootlado');
+            down_key.play('DOWN_Press');
+        })
+        // DASH CHARACTER
+
+        const dashCharacter = new Character(this, 600, 540, 0, "dash").setScale(3.5);
+        tab_key.play('TAB_Press');
+
+        dashCharacter.on('animationcomplete', (param1, param2, param3) => {
+            if (dashCharacter.anims.currentAnim.key == 'mainChar_controls_dash') {
+                dashCharacter.play('mainChar_controls_dash');
+                tab_key.play('TAB_Press');
+            }
+        });
 
         // SKIP BUTTON
         this.anims.create({
