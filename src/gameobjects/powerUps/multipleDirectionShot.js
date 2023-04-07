@@ -4,14 +4,14 @@ import { Directions } from "../utils/directions"
 export default class MultipleDirectionShot extends PowerUp{
 
     constructor(scene, x, y){
-        super(scene, x, y, "multipleDirectionShot");
+        super(scene, x, y, "multipleDirectionShot", false);
         this.numDirections = 8;
         this.bulletMultiplier = 3;
         this.bulletSpread = 0.3;
         this.setScale(1.5)
         this.scene.anims.create({
             key: 'multipleDirectionShot_animation',
-            frames: this.scene.anims.generateFrameNumbers('multishoot', { start: 0, end: 5 }),
+            frames: this.scene.anims.generateFrameNumbers('multishot', { start: 0, end: 5 }),
             frameRate: 10,
             repeat: -1
         })
@@ -38,7 +38,7 @@ export default class MultipleDirectionShot extends PowerUp{
     }
 
     static isCombo(power1, power2) {
-        let combo = ["tripleShot", "eigthDirShot", "multipleDirectionShot"]
+        let combo = ["tripleShot", "eightDirShot", "multipleDirectionShot", "freezingShot", "bouncingShot"]
         return power1.getKey() !== power2.getKey() && combo.includes(power1.getKey()) && combo.includes(power2.getKey())
     }
 }

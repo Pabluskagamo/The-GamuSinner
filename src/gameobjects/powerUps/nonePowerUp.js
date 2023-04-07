@@ -3,10 +3,10 @@ import PowerUp from "./powerUp"
 export default class nonePowerUp extends PowerUp{
 
     constructor(scene, x, y){
-        super(scene, x, y, "nonePowerUp");
+        super(scene, x, y, "nonePowerUp", false);
         this.scene.anims.create({
             key: 'tripleShot_animation',
-            frames: this.scene.anims.generateFrameNumbers('tripleshoot', { start: 0, end: 7 }),
+            frames: this.scene.anims.generateFrameNumbers('tripleshot', { start: 0, end: 6 }),
             frameRate: 10,
             repeat: -1
         })

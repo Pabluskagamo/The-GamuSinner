@@ -1,8 +1,8 @@
 import MovableObject from "./movableObject";
-import NonePowerUp from "./items/nonePowerUp";
-import { PowerUpFactory } from "./items/powerUpFactory";
+import NonePowerUp from "./powerUps/nonePowerUp";
+import { PowerUpFactory } from "./powerUps/powerUpFactory";
 import { Directions } from "./utils/directions"
-import MultipleDirectionShot from "./items/multipleDirectionShot";
+import MultipleDirectionShot from "./powerUps/multipleDirectionShot";
 
 export default class Character extends MovableObject {
     
@@ -432,7 +432,9 @@ export default class Character extends MovableObject {
     collectPowerUp(powerUp){
         if(!powerUp.getCollected()){
             powerUp.collect()
-            this.activatePowerUp(powerUp)
+            if (!powerUp.isPassive()) {
+                this.activatePowerUp(powerUp)
+            }
         }
     }
 

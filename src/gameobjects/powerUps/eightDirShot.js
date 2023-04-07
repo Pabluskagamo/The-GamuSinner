@@ -4,11 +4,11 @@ import { Directions } from "../utils/directions"
 export default class EightDirShot extends PowerUp{
 
     constructor(scene, x, y) {
-        super(scene, x, y, "eigthDirShot");
+        super(scene, x, y, "eightDirShot", false);
         this.numDirections = 8;
         this.scene.anims.create({
             key: 'eightDirShot_animation',
-            frames: this.scene.anims.generateFrameNumbers('multishoot', { start: 0, end: 5 }),
+            frames: this.scene.anims.generateFrameNumbers('multishot', { start: 0, end: 5 }),
             frameRate: 10,
             repeat: -1
         })

@@ -5,8 +5,8 @@ import EnemyPool from "../gameobjects/Pools/enemyPool"
 import Character from "../gameobjects/character"
 import Coin from "../gameobjects/items/coin";
 import HealthPoint from "../ui/healthpoint"
-import TripleShot from "../gameobjects/items/tripleShot"
-import EightDirShot from "../gameobjects/items/eightDirShot"
+import TripleShot from "../gameobjects/powerUps/tripleShot"
+import EightDirShot from "../gameobjects/powerUps/eightDirShot"
 
 export default class LevelScene extends Phaser.Scene {
 	constructor() {
@@ -27,8 +27,10 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('muerte', './assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', './assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
-		this.load.spritesheet('tripleshoot', './assets/powerups/Tripleshoot.png', { frameWidth: 32, frameHeight: 32 })
-		this.load.spritesheet('multishoot', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('tripleshot', './assets/powerups/Tripleshoot.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('multishot', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('fire', './assets/items/fire.png', { frameWidth: 24, frameHeight: 32 })
+		this.load.spritesheet('fire2', './assets/items/fire2.png', { frameWidth: 15, frameHeight: 24 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('map', './assets/tilemap/mapa_sinrio.json')
 		this.load.image('game_settings', '/assets/ui/settings.png')
