@@ -139,6 +139,7 @@ export default class LevelScene extends Phaser.Scene {
         });
 
         skip.on('pointerup', () => {
+            this.sound.removeByKey('musica');
             this.cameras.main.fadeOut(500);
             this.cameras.main.once("camerafadeoutcomplete", function () {
                 this.scene.start('level');
@@ -148,6 +149,7 @@ export default class LevelScene extends Phaser.Scene {
 
         this.input.keyboard.on('keydown', (event) => {
             if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
+                this.sound.removeByKey('musica');
                 this.cameras.main.fadeOut(500);
                 this.cameras.main.once("camerafadeoutcomplete", function () {
                     this.scene.start('level');

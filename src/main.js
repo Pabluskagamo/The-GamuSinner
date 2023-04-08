@@ -9,13 +9,13 @@ import SettingScene from './scenes/settingsScene'
 
 const config = {
 	type: Phaser.AUTO,
-	parent: 'app',
-	width: 1176,
-	height: 672,
 
 	scale: {
 		autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
+		parent: 'app',
 		mode: Phaser.Scale.FIT,
+		width: 1176,
+		height: 672,
 		min: {
             width: 784,
             height: 448
@@ -26,6 +26,7 @@ const config = {
         },
 		zoom: 1
 	},
+	
 	physics: {
 		default: 'arcade',
 		

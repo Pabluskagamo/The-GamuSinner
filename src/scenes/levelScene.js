@@ -34,9 +34,17 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('map', './assets/tilemap/mapa_sinrio.json')
 		this.load.image('game_settings', '/assets/ui/settings.png')
+		this.load.audio("fightSong", "assets/audio/Dream Raid Full Version (Mock Up).mp3");
 	}
 
 	create() {
+
+		let banda = this.sound.add("fightSong", {
+			volume: 0.1,
+			loop: true
+		});
+		banda.play();
+
 		this.initPlayerAndPools();
 		this.initMap();
 		this.coinPool.fillPull(20);
@@ -60,16 +68,16 @@ export default class LevelScene extends Phaser.Scene {
 			this.player.stopVertical();
 			this.scene.pause();
 			this.scene.pause('UIScene');
-			this.scene.launch('settings');
+			this.scene.launch('settings', {music: banda});
 		});
 
 		this.input.keyboard.on('keydown', (event) => {
-			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ESC) {
+			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.CTRL) {
 				this.player.stopHorizontal();
 				this.player.stopVertical();
 				this.scene.pause();
 				this.scene.pause('UIScene');
-				this.scene.launch('settings');
+				this.scene.launch('settings', {music: banda});
 			}
 		});
 
