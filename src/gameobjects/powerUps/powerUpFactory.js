@@ -3,10 +3,15 @@ import NonePowerUp from "./nonePowerUp";
 
 export class PowerUpFactory {
     static create(power, scene) {
+        let powerUp
         switch (power) {
-            case "multipleDirectionShot": return new MultipleDirectionShot(scene)
-            default: return new NonePowerUp(scene)
+            case "multipleDirectionShot": powerUp = new MultipleDirectionShot(scene)
+                break;
+            default: powerUp = new NonePowerUp(scene)
+                break;
         }
+        powerUp.collect()
+        return powerUp
     }
 
     static getCombo(power1, power2) {

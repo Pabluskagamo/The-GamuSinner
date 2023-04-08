@@ -4,7 +4,10 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite{
         super(scene, x, y, 'bullet', 0);
         this.speed = speed
         this.dmg = dmg
-
+        //
+        this.icedmg = 0
+        this.slow = false
+        //
         this.justHit = false;
 
         this.setScale(1.5)
@@ -65,7 +68,10 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite{
     hit(enemie){
         if(!this.justHit){
             this.justHit = true;
-            enemie.hitEnemy(this.dmg);
+            enemie.hitEnemy(this.dmg+this.icedmg);
+            //
+            /* if (this.icedmg > 0) enemie.slow(20) */
+            //
             this.scene.bulletPool.release(this);
         }
     }

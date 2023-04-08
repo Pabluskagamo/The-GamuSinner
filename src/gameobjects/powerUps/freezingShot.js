@@ -15,6 +15,10 @@ export default class freezingShot extends PowerUp{
     }
 
     runOnCollect(){
-        //this.scene.bulletPool.setFreezing(true)
+        this.scene.bulletPool.setFreezing(true)
+    }
+
+    runOnDisable(){
+        this.scene.bulletPool.setFreezing(false)
     }
 }

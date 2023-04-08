@@ -68,12 +68,17 @@ export default class EnemyObject extends MovableObject {
     hitEnemy(dmg){
         this.hp -= dmg;
 
-        console.log(this.key, this.hp, '/', this.initialHp)
+        //console.log(this.key, this.hp, '/', this.initialHp)
 
         if(this.hp <= 0){
             this.dieMe();
         }
 
+    }
+
+    slow(slow){
+        this.speed -= slow;
+        if (this.speed < 0) this.speed = 0
     }
     
     attack(){
@@ -92,5 +97,4 @@ export default class EnemyObject extends MovableObject {
     isDead(){
         return this.hp === 0;
     }
-
 }

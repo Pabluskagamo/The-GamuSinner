@@ -1,5 +1,4 @@
 import PowerUp from "./powerUp"
-import { Directions } from "../utils/directions"
 
 export default class BouncingShot extends PowerUp{
 
@@ -16,6 +15,10 @@ export default class BouncingShot extends PowerUp{
     }
 
     runOnCollect(){
-        
+        this.scene.bulletPool.setBouncing(true)
+    }
+
+    runOnDisable(){
+        this.scene.bulletPool.setBouncing(false)
     }
 }

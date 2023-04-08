@@ -6,6 +6,10 @@ export default class BulletPool {
     constructor (scene, max) {
         this.scene = scene;
         this._group = scene.add.group();
+        //
+        this.bouncing = false;
+        this.freezing = false;
+        //
         this.max = max;
     }
 
@@ -24,6 +28,10 @@ export default class BulletPool {
           entity.x = x;
           entity.y = y;
           entity.justHit = false
+          //
+          /* entity.setFreezing(this.freezing)
+          entity.setBouncing(this.bouncing) */
+          //
           entity.setActive(true);
           entity.setVisible(true);
           entity.body.checkCollision.none = false;
@@ -49,5 +57,13 @@ export default class BulletPool {
 		}
 
         this.addMultipleEntity(bullets);
+    }
+
+    setFreezing(value){
+        this.freezing = value
+    }
+
+    setBouncing(value){
+        this.bouncing = value
     }
 }
