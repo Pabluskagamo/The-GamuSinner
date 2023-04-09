@@ -38,7 +38,7 @@ export default class MultipleDirectionShot extends PowerUp{
     }
 
     static isCombo(power1, power2) {
-        let combo = ["tripleShot", "eightDirShot", "multipleDirectionShot", "freezingShot", "bouncingShot"]
+        let combo = ["tripleShot", "eightDirShot", "multipleDirectionShot"]
         return power1.getKey() !== power2.getKey() && combo.includes(power1.getKey()) && combo.includes(power2.getKey())
     }
 }

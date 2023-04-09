@@ -83,7 +83,7 @@ export default class LevelScene extends Phaser.Scene {
 
 		let powerUps = []
 
-		for (let i = 0; i < 10; i++) {
+		for (let i = 0; i < 2; i++) {
 			powerUps.push(new TripleShot(this, -125, -125));
 			powerUps.push(new EightDirShot(this, -125, -125));
 		}
@@ -104,10 +104,10 @@ export default class LevelScene extends Phaser.Scene {
 			}
 
 			this.lastSec = remaining
-		}else if(this.enemyPool.fullPool()){
+		}
+		else if(this.enemyPool.fullPool()){
 			this.events.emit('levelComplete');
 		}
-		
 	}
 
 	initMap() {

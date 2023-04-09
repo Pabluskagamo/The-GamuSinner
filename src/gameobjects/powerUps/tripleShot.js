@@ -30,7 +30,6 @@ export default class TripleShot extends PowerUp{
                 bullet3.setDireccion(new Phaser.Math.Vector2(dir.x, dir.y-0.3).normalize());
             }
             else {
-                console.log("X: "+ (dir.x+0.3) +"Y: "+  dir.y)
                 bullet.setDireccion(dir.normalize());
                 bullet2.setDireccion(new Phaser.Math.Vector2(dir.x+0.3, dir.y).normalize());
                 bullet3.setDireccion(new Phaser.Math.Vector2(dir.x-0.3, dir.y).normalize());

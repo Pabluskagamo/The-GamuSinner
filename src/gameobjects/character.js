@@ -18,11 +18,12 @@ export default class Character extends MovableObject {
             this.isDashing = false;
             this.tripleShot = true;
             this.eightDirShot = false;
-            this.currentPowerUp = new NonePowerUp(this.scene)
+            this.nonePowerUp = new NonePowerUp(this.scene)
+            this.currentPowerUp = this.nonePowerUp
+            this.passivePowerUps = []
             this.numDirections = 8;
             this.bulletMultiplier = 3;
             this.bulletSpread = 0.25;
-            //let f = this.frame;
             this.hp = 6;
             this.lastFired = 0;
             
@@ -86,7 +87,6 @@ export default class Character extends MovableObject {
     
             this.on('animationcomplete', end => {
                 if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)) {
-                    this.stopAttack()
                 }
     
                 if (this.anims.currentAnim.key === 'mainChar_die') {
@@ -204,6 +204,9 @@ export default class Character extends MovableObject {
 
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
+
+        this.checkPowerUps()
+
         if(this.instruction === null){
 
             this.flipX = false;
@@ -272,7 +275,6 @@ export default class Character extends MovableObject {
             //     this.play('mainChar_static', true);
             // }
         }
-
     }
 
     attack() {
@@ -313,59 +315,8 @@ export default class Character extends MovableObject {
             this.play('mainChar_shootlado', true);
             dir = Directions.RIGHT
         }
-        //Comprobar si hay balas.
-        /* if (this.scene.bulletPool.hasBullets() && this.eightDirShot) {
-            //let bullets = []
-            let offsetSign = [1,-1]
-            let arrayDirections = Object.values(Directions)
-            for(let i = 0; i < this.numDirections; i++){
-                for(let j = 0; j < this.bulletMultiplier; j++){
-                    let offsetFactor = Math.ceil(j/2)
-                    let dirSpread = arrayDirections[i].y === 0 ? 2 : 1
-                    let bulletDir = new Phaser.Math.Vector2(
-                        arrayDirections[i].x+((dirSpread%2)*offsetSign[j%2]*offsetFactor*this.bulletSpread),
-                        arrayDirections[i].y+((dirSpread/2)*offsetSign[j%2]*offsetFactor*this.bulletSpread)
-                    ).normalize()
-                    console.log("X: "+ bulletDir.x +"Y: "+ bulletDir.y)
-                    let tempBullet = this.scene.bulletPool.spawn(this.x, this.y)
-                    tempBullet.setDireccion(bulletDir)
-                    //bullets.push(tempBullet)
-                }
-            }
-            
-        }
-        else if (this.scene.bulletPool.hasBullets() && this.tripleShot) {
-            let bullet = this.scene.bulletPool.spawn(this.x, this.y);
-            let bullet2 = this.scene.bulletPool.spawn(this.x, this.y);
-            let bullet3 = this.scene.bulletPool.spawn(this.x, this.y);
-            if(dir.x === 0) {
-                bullet.setDireccion(dir);
-                bullet2.setDireccion(new Phaser.Math.Vector2(dir.x+0.3, dir.y).normalize());
-                bullet3.setDireccion(new Phaser.Math.Vector2(dir.x-0.3, dir.y).normalize());
-            }
-            else if(dir.y === 0) {
-                bullet.setDireccion(dir);
-                bullet2.setDireccion(new Phaser.Math.Vector2(dir.x, dir.y+0.3).normalize());
-                bullet3.setDireccion(new Phaser.Math.Vector2(dir.x, dir.y-0.3).normalize());
-            }
-            else {
-                //y<0 && x<0 || y>0 && x>0 sale bien else 
-                //y>0
-                console.log("X: "+ (dir.x+0.3) +"Y: "+  dir.y)
-                bullet.setDireccion(dir.normalize());
-                bullet2.setDireccion(new Phaser.Math.Vector2(dir.x+0.3, dir.y).normalize());
-                bullet3.setDireccion(new Phaser.Math.Vector2(dir.x-0.3, dir.y).normalize());
-            }
-        }
-        else if (this.scene.bulletPool.hasBullets()) {
-            let bullet = this.scene.bulletPool.spawn(this.x, this.y);
-            bullet.setDireccion(dir.normalize());
-        } */
-        this.currentPowerUp.run(this.x,this.y,dir)
-    }
 
-    stopAttack() {
-        //this.isAttacking = false;
+        this.currentPowerUp.run(this.x,this.y,dir)
     }
 
     isAttackInProcess() {
@@ -373,7 +324,6 @@ export default class Character extends MovableObject {
     }
 
     dieMe() {
-        console.log('Animacion de morir Personaje')
         this.play('mainChar_die');
     }
 
@@ -385,14 +335,8 @@ export default class Character extends MovableObject {
         this.hp = health;
     }
 
-    /* getActualPowerUp(){
-        return this.actualPowerUp.getKey()
-    } */
-
     getHit(dmg) {
         this.hp -= dmg;
-        
-        console.log('Player HP:', this.hp, 'Is Dead??', this.isDead())
 
         if(this.hp <= 0){
             this.hp = 0;
@@ -419,21 +363,20 @@ export default class Character extends MovableObject {
 
     collectCoin(value){
         this.wallet += value;
-        console.log("Wallet: " + this.wallet + " percebes")
     }
 
     getWallet(){
         return this.wallet;
     }
 
-    /*tripleShot(){
-        this.tripleShot = true;
-    }*/
     collectPowerUp(powerUp){
         if(!powerUp.getCollected()){
             powerUp.collect()
             if (!powerUp.isPassive()) {
                 this.activatePowerUp(powerUp)
+            }
+            else{
+                this.passivePowerUps.push(powerUp)
             }
         }
     }
@@ -447,258 +390,13 @@ export default class Character extends MovableObject {
             this.currentPowerUp = PowerUpFactory.create(combo,this.scene)
         }
     }
-}
 
-
-/*import MovableObject from "./movableObject";
-
-export default class Character extends MovableObject {
-
-    constructor(scene, x, y, speed) {
-        super(scene, x, y, 'character', speed, 20);
-
-        this.speed = speed;
-        this.isAttacking = false;
-        let f = this.frame;
-        this.hp = 5
-        this.lastFired = 0;
-
-        this.scene.add.existing(this);
-        this.scene.physics.add.existing(this);
-        this.setCollideWorldBounds();
-
-        this.bodyOffsetWidth = this.body.width / 3;
-        this.bodyOffsetHeight = this.body.height / 1.8;
-        this.bodyWidth = this.body.width / 2.7;
-        this.bodyHeight = this.body.height / 2.5;
-
-        this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
-        this.body.width = this.bodyWidth;
-        this.body.height = this.bodyHeight;
-
-
-        this.scene.anims.create({
-            key: 'mainChar_abajo',
-            frames: this.scene.anims.generateFrameNumbers('character', { start: 130, end: 138 }),
-            frameRate: 5,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'mainChar_arriba',
-            frames: this.scene.anims.generateFrameNumbers('character', { start: 104, end: 112 }),
-            frameRate: 5,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'mainChar_lado',
-            frames: this.scene.anims.generateFrameNumbers('character', { start: 117, end: 125 }),
-            frameRate: 10,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'mainChar_static',
-            frames: this.scene.anims.generateFrameNumbers('character', { start: 182, end: 187 }),
-            frameRate: 5,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'mainChar_shootarriba',
-            frames: this.scene.anims.generateFrameNumbers('character', { start: 52, end: 59 }),
-            frameRate: 15,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'mainChar_shootabajo',
-            frames: this.scene.anims.generateFrameNumbers('character', { start: 78, end: 85 }),
-            frameRate: 15,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'mainChar_shootlado',
-            frames: this.scene.anims.generateFrameNumbers('character', { start: 65, end: 72 }),
-            frameRate: 15,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'mainChar_die',
-            frames: this.scene.anims.generateFrameNumbers('character', { start: 260, end: 265 }),
-            frameRate: 5,
-            repeat: 0
-        })
-
-
-        this.on('animationcomplete', end => {
-            if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)) {
-                this.stopAttack()
+    checkPowerUps(){
+        if (this.currentPowerUp && !this.currentPowerUp.isEnabled()) { this.currentPowerUp = this.nonePowerUp }
+        /* this.passivePowerUps.forEach(e => {
+            if (!e.isEnabled()) {
+                this.passivePowerUps.splice(this.passivePowerUps.indexOf(e), 1)
             }
-        })
-
-        this.play('mainChar_static');
-
-        this.cursors = this.scene.input.keyboard.createCursorKeys();
-        this.a = this.scene.input.keyboard.addKey('A');
-        this.s = this.scene.input.keyboard.addKey('S');
-        this.d = this.scene.input.keyboard.addKey('D');
-        this.w = this.scene.input.keyboard.addKey('W');
-        this.f = this.scene.input.keyboard.addKey('F');
-        this.spacebar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-    }
-
-    preUpdate(t, dt) {
-        super.preUpdate(t, dt)
-
-        this.flipX = false;
-
-        if (this.s.isDown && this.d.isDown) {
-            // Diagonal abajo-derecha
-            this.play('mainChar_lado', true);
-            this.flipX = true;
-            this.moveRightDown();
-        } else if (this.w.isDown && this.d.isDown) {
-            // Diagonal arriba-derecha
-            this.play('mainChar_lado', true);
-            this.flipX = true;
-            this.moveRightUp();
-        } else if (this.s.isDown && this.a.isDown) {
-            // Diagonal abajo-izquierda
-            this.play('mainChar_lado', true);
-            this.moveLeftDown();
-        } else if (this.w.isDown && this.a.isDown) {
-            // Diagonal arriba-izquierda
-            this.play('mainChar_lado', true);
-            this.moveLeftUp();
-        } else if (this.s.isDown) {
-            // Movimiento hacia abajo
-            this.play('mainChar_abajo', true);
-            this.moveDown();
-        } else if (this.w.isDown) {
-            // Movimiento hacia arriba
-            this.play('mainChar_arriba', true);
-            this.moveUp();
-        } else if (this.a.isDown) {
-            // Movimiento hacia izq
-            this.play('mainChar_lado', true);
-            this.moveLeft();
-        } else if (this.d.isDown) {
-            this.play('mainChar_lado', true);
-            this.flipX = true;
-            this.moveRight();
-        } else if (this.f.isDown) {
-            this.dieMe();
-        } else {
-            this.frictionEffect();
-        }
-
-        if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
-            this.stopHorizontal();
-        }
-
-        if (Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)) {
-            this.stopVertical();
-        }
-
-        if ((this.cursors.up.isDown || this.cursors.down.isDown || this.cursors.left.isDown || this.cursors.right.isDown) && t > this.lastFired) {
-            this.attack();
-            this.lastFired = t + 400;
-        }
-
-    }
-
-    attack() {
-        // const lastAnim = this.anims.currentAnim.key;
-
-        // if (lastAnim == 'mainChar_lado') {
-        //     this.play('mainChar_shootlado');
-        // } else if (lastAnim == 'mainChar_abajo') {
-        //     this.play('mainChar_shootabajo');
-        // } else if (lastAnim == 'mainChar_arriba') {
-        //     this.play('mainChar_shootarriba');
-        // } else {
-        //     this.play(lastAnim);
-        // }
-        let dir = new Phaser.Math.Vector2(0, 1);
-
-        this.flipX = false;
-
-        if (this.cursors.down.isDown && this.cursors.right.isDown) {
-            // Diagonal abajo-derecha
-            this.flipX = true;
-            this.play('mainChar_shootlado');
-            dir = new Phaser.Math.Vector2(1, 1).normalize();
-        } else if (this.cursors.up.isDown && this.cursors.right.isDown) {
-            // Diagonal arriba-derecha
-            this.flipX = true;
-            this.play('mainChar_shootlado');
-            dir = new Phaser.Math.Vector2(1, -1).normalize();
-        } else if (this.cursors.down.isDown && this.cursors.left.isDown) {
-            // Diagonal abajo-izquierda
-            this.play('mainChar_shootlado');
-            dir = new Phaser.Math.Vector2(-1, 1).normalize();
-        } else if (this.cursors.up.isDown && this.cursors.left.isDown) {
-            // Diagonal arriba-izquierda
-            this.play('mainChar_shootlado');
-            dir = new Phaser.Math.Vector2(-1, -1).normalize();
-        } else if (this.cursors.down.isDown) {
-            // Movimiento hacia abajo
-            this.play('mainChar_shootabajo');
-            dir.x = 0;
-            dir.y = 1;
-        } else if (this.cursors.up.isDown) {
-            // Movimiento hacia arriba
-            this.play('mainChar_shootarriba');
-            dir.x = 0;
-            dir.y = -1;
-        } else if (this.cursors.left.isDown) {
-            // Movimiento hacia izq
-            this.play('mainChar_shootlado');
-            dir.x = -1
-            dir.y = 0
-        } else if (this.cursors.right.isDown) {
-            this.flipX = true;
-            this.play('mainChar_shootlado');
-            dir.x = 1
-            dir.y = 0
-        }
-        //Comprobar si hay balas.
-        if (this.scene.bulletPool.hasBullets()) {
-            let bullet = this.scene.bulletPool.spawn(this.x, this.y);
-            bullet.setDireccion(dir);
-        }
-
-    }
-
-    stopAttack() {
-        //this.isAttacking = false;
-    }
-
-    isAttackInProcess() {
-        return this.isAttacking;
-    }
-
-    dieMe() {
-        if (this.getHp() === 0) {
-            this.play('mainChar_die');
-        }
-
-    }
-
-    getHp() {
-        return this.hp;
-    }
-
-    setHp(health) {
-        this.hp = health;
-    }
-
-    getHit(dmg) {
-        this.hp -= dmg;
+        }) */
     }
 }
-*/
