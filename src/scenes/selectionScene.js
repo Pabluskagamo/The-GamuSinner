@@ -7,7 +7,7 @@ export default class selectionScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image('mapa', './img/spain.PNG');
+		this.load.image('mapa', './img/espania.png');
 	}
 
 
