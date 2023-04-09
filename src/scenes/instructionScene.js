@@ -1,7 +1,7 @@
 import Character from "../gameobjects/character"
 
 
-export default class LevelScene extends Phaser.Scene {
+export default class instructionScene extends Phaser.Scene {
     constructor() {
         super('instructions')
     }

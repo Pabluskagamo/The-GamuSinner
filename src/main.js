@@ -1,10 +1,11 @@
 import Phaser from 'phaser'
 
-import MainScene from './scenes/mainScene'
+import MainScene from './scenes/MainScene'
 import InstructionScene from './scenes/instructionScene'
+import selecScene from './scenes/selectionScene'
 import LevelScene from './scenes/levelScene'
 import Hud from './ui/hud'
-import GameOverScene from './scenes/gameOverScene'
+import GameOverScene from './scenes/GameOverScene'
 import SettingScene from './scenes/settingsScene'
 
 const config = {
@@ -35,7 +36,7 @@ const config = {
 		},
 	},
 
-	scene: [MainScene,InstructionScene, LevelScene, Hud, SettingScene, GameOverScene],
+	scene: [MainScene,InstructionScene, selecScene, LevelScene, Hud, SettingScene, GameOverScene],
 }
 
 export default new Phaser.Game(config)
