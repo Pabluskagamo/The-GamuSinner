@@ -1,0 +1,32 @@
+export default class Food extends Phaser.Physics.Arcade.Sprite{
+
+    constructor(scene, x, y, value){
+        super(scene, x, y, 'food');
+        this.value = value
+        this.collected = false;
+        this.scene.add.existing(this);
+        this.scene.physics.add.existing(this);  
+
+        this.scene.anims.create({
+            key: 'food_animation',
+            frames: this.scene.anims.generateFrameNumbers('food', { start: 181, end: 181}),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.play('food_animation')
+    }
+
+    preUpdate(t, dt){
+        super.preUpdate(t, dt)
+    }
+
+    collect(character){
+        if(!this.collected){
+            this.collected = true;
+            character.collectFood(this.value);
+            this.scene.foodPool.release(this);
+        }
+    }
+
+}

@@ -25,6 +25,7 @@ export default class Character extends MovableObject {
             this.bulletMultiplier = 3;
             this.bulletSpread = 0.25;
             this.hp = 6;
+            this.maxHp = 6;
             this.lastFired = 0;
             
     
@@ -398,5 +399,12 @@ export default class Character extends MovableObject {
                 this.passivePowerUps.splice(this.passivePowerUps.indexOf(e), 1)
             }
         }) */
+    }
+
+    collectFood(value){
+        if( this.hp < this.maxHp){
+            this.hp += value;
+        }
+       
     }
 }

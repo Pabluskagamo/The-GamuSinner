@@ -1,12 +1,14 @@
 import BulletPool from "../gameobjects/Pools/bulletPool"
 import CoinPool from "../gameobjects/Pools/coinPool"
+import FoodPool from "../gameobjects/Pools/foodPool"
 import PowerUpPool from "../gameobjects/Pools/powerUpPool"
-import EnemyPool from "../gameobjects/Pools/enemyPool"
+import EnemyPool from "../gameobjects/Pools/EnemyPool"
 import Character from "../gameobjects/character"
 import Coin from "../gameobjects/items/coin";
 import HealthPoint from "../ui/healthpoint"
 import TripleShot from "../gameobjects/powerUps/tripleShot"
 import EightDirShot from "../gameobjects/powerUps/eightDirShot"
+import Food from "../gameobjects/items/food"
 
 export default class LevelScene extends Phaser.Scene {
 	constructor() {
@@ -27,6 +29,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('muerte', './assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', './assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
+		this.load.spritesheet('food', './assets/items/food.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('tripleshot', './assets/powerups/Tripleshoot.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('multishot', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('fire', './assets/items/fire.png', { frameWidth: 24, frameHeight: 32 })
@@ -48,11 +51,13 @@ export default class LevelScene extends Phaser.Scene {
 		this.initPlayerAndPools();
 		this.initMap();
 		this.coinPool.fillPull(20);
+		this.foodPool.fillPull(20);
 		this.bulletPool.fillPool(200);
 		this.initTimers(false);
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
 		this.scene.launch('UIScene');
 
+		this.foodPool.spawn(500,150);
 		settings.setInteractive({ cursor: 'pointer' });
 
 		settings.on('pointerover', function (pointer) {
@@ -149,6 +154,8 @@ export default class LevelScene extends Phaser.Scene {
 		this.powerUpPool = new PowerUpPool(this, 15)
 		this.enemyPool = new EnemyPool(this, 15);
 		this.coinPool = new CoinPool(this, 20);
+		this.foodPool = new FoodPool(this, 20);
+
 
 
 		this.enemyPool.fillPool(25, this.player);
@@ -164,6 +171,10 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.physics.add.overlap(this.powerUpPool._group, this.player, (obj1, obj2) => {
 			obj2.collectPowerUp(obj1);
+		});
+		this.physics.add.overlap(this.foodPool._group, this.player, (obj1, obj2) => {
+			obj1.collect(obj2);
+			this.events.emit('addScore', obj2.getHp());
 		});
 
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
