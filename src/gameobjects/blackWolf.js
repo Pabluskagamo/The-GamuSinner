@@ -8,7 +8,6 @@ export default class BlackWolf extends EnemyObject {
         
         //this.setScale(1.5);
 
-        this.speed = speed;
         this.player = player;
         this.attacking = false;
 

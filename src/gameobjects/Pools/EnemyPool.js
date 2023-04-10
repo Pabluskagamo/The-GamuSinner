@@ -1,5 +1,6 @@
 import BlackWolf from "../blackWolf"
 import Goblin from "../goblin"
+import Spectre from "../spectre"
 import Cyclops from "../cyclops"
 
 
@@ -9,6 +10,7 @@ export default class EnemyPool {
 		this._group = scene.add.group()	
 		this._gobsgroup = scene.add.group()
 		this._wolfsgroup = scene.add.group()
+		this._spectresgroup = scene.add.group()
 		this._cyclopsgroup = scene.add.group()	
 		this.max = max
 		//this.scene = scene;
@@ -91,6 +93,23 @@ export default class EnemyPool {
 		}
 	}
 
+	spawnSpectre(x,y){
+		if(!this.emptyPool()){
+			let entity = this._spectresgroup.getFirstDead();
+			
+			if (entity) {
+				entity.x = x;
+				entity.y = y;
+				entity.justHit = false
+				entity.setActive(true);
+				entity.setVisible(true);
+				entity.body.checkCollision.none = false;
+				entity.restoreEnemy()
+			}
+			return entity;
+		}
+	}
+
 	spawnCyclops(x,y){
 		if(!this.emptyPool()){
 			let entity = this._cyclopsgroup.getFirstDead();
@@ -123,7 +142,7 @@ export default class EnemyPool {
 	}
 
 	emptyPool(){
-        return this._group.countActive() === this.max;
+        return this._group.countActive() === this.max
     }
 
 	fullPool(){
@@ -132,11 +151,12 @@ export default class EnemyPool {
 
 	fillPool(num, player){
         let enemies = []
-		let gobs = [];
-		let wolfs = [];
-		let cyclops = [];
+		let gobs = []
+		let wolfs = []
+		let spectres = []
+		let cyclops = []
 
-		let randNum = 0;
+		let randNum = 0
 
         // for (let i = 0; i < num; i++) {
 		// 	randNum = Phaser.Math.RND.between(1, 10);
@@ -163,16 +183,23 @@ export default class EnemyPool {
 			wolfs.push(wolf)
 		}
 
+		for (let i = 0; i < 15; i++) {
+			const spectre = new Spectre(this.scene, -50, -50, 100, player, this)
+			enemies.push(spectre)
+			spectres.push(spectre)
+		}
+
 		for (let i = 0; i < 10; i++) {
 			const cycl = new Cyclops(this.scene, -50, -50, 45, player, this)
 			enemies.push(cycl)
 			cyclops.push(cycl)
 		}
 
-        this.addMultipleEntity(enemies);
-		this.addMultipleEntityToGroup(gobs, this._gobsgroup);
-		this.addMultipleEntityToGroup(wolfs, this._wolfsgroup);
-		this.addMultipleEntityToGroup(cyclops, this._cyclopsgroup);
-		this.max = 85;
+        this.addMultipleEntity(enemies)
+		this.addMultipleEntityToGroup(gobs, this._gobsgroup)
+		this.addMultipleEntityToGroup(wolfs, this._wolfsgroup)
+		this.addMultipleEntityToGroup(spectres, this._spectresgroup)
+		this.addMultipleEntityToGroup(cyclops, this._cyclopsgroup)
+		this.max = 100
     }
 }

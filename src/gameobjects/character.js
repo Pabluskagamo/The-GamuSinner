@@ -394,7 +394,7 @@ export default class Character extends MovableObject {
 
     checkPowerUps(){
         if (this.currentPowerUp && !this.currentPowerUp.isEnabled()) { this.currentPowerUp = this.nonePowerUp }
-       /*  this.passives.forEach(e => {
+        /* this.passives.forEach(e => {
             if (!e.isEnabled()) {
                 this.passives.splice(this.passives.indexOf(e), 1)
             }

@@ -28,6 +28,8 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('blackWolf', './assets/enemies/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('cyclops', './assets/enemies/cyclops.png', { frameWidth: 64, frameHeight: 64.1 })
 		this.load.spritesheet('goblin', './assets/enemies/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
+		this.load.spritesheet('spectre', './assets/enemies/spectre.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('spectre2', './assets/enemies/spectre2.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('muerte', './assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', './assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('icebullet', './assets/bullets/icebullets.png', { frameWidth: 16, frameHeight: 16 })
@@ -199,16 +201,19 @@ export default class LevelScene extends Phaser.Scene {
 		const randX = Phaser.Math.RND.between(0, 1);
 		const randY = Phaser.Math.RND.between(0, 1);
 
-		const randNum = Phaser.Math.RND.between(1, 10);
+		const randNum = Phaser.Math.RND.between(1, 15);
 
 		console.log('SPAWN ENEMY RAND NUM:', randNum)
 
-		if(randNum < 8){
+		if(randNum < 7){
 			console.log('GOB SPAWNED')
 			this.enemyPool.spawnGob(xPos[randX], yPos[randY])
-		}else if(randNum >= 7 && randNum < 10){
+		}else if(randNum > 7 && randNum < 11){
 			console.log('WOLF SPAWNED')
 			this.enemyPool.spawnWolf(xPos[randX], yPos[randY])
+		}else if(randNum > 11 && randNum < 14){
+			console.log('SPECTRE SPAWNED')
+			this.enemyPool.spawnSpectre(xPos[randX], yPos[randY])
 		}else{
 			console.log('CYCLOPS SPAWNED')
 			this.enemyPool.spawnCyclops(xPos[randX], yPos[randY])

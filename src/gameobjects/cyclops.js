@@ -3,13 +3,12 @@ import EnemyObject from "./enemyObject";
 export default class Cyclops extends EnemyObject{
 
     constructor(scene, x, y, speed, player, enemypool){
-        super(scene, x, y, 'cyclops', speed, 20, enemypool, 100, 15);
+        super(scene, x, y, 'cyclops', speed, 20, enemypool, 100, 15)
         this.scene.add.existing(this);
         this.setScale(1.5);
         this.scene.physics.add.existing(this);
         this.setCollideWorldBounds();
 
-        this.speed = speed;
         this.player = player;
         this.attacking = false;
         
@@ -76,7 +75,6 @@ export default class Cyclops extends EnemyObject{
         })
 
         this.play('static_cyclops');
-        
     }
 
     preUpdate(t, dt){

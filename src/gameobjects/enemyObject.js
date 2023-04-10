@@ -4,16 +4,19 @@ export default class EnemyObject extends MovableObject {
     
     
     constructor(scene, x, y, key, speed, firstFrame, enemypool, hp, dmg) {
-        super(scene, x, y, key, speed, firstFrame);
-        this.key = key;
-        this.hp = hp;
-        this.initialHp = this.hp;
-        this.dmg = dmg;
-        this.pool = enemypool;
+        super(scene, x, y, key, speed, firstFrame)
+        this.key = key
+        this.initialHp = hp
+        this.initialSpeed = speed
+        this.hp = hp
+        this.speed = speed
+        this.dmg = dmg
+        this.pool = enemypool
     }
 
     restoreEnemy(){
-       this.hp = this.initialHp;
+       this.hp = this.initialHp
+       this.speed = this.initialSpeed
     }
 
     follow(){
@@ -73,7 +76,6 @@ export default class EnemyObject extends MovableObject {
         if(this.hp <= 0){
             this.dieMe();
         }
-
     }
 
     slow(slow){

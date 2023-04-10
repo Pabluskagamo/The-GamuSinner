@@ -9,7 +9,6 @@ export default class Goblin extends EnemyObject {
         this.scene.physics.add.existing(this);
 
         this.player = player;
-        this.speed = speed;
 
         this.setCollideWorldBounds();
         this.bodyOffsetWidth = this.body.width / 6.6;
