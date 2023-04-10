@@ -6,10 +6,11 @@ export default class Food extends Phaser.Physics.Arcade.Sprite{
         this.collected = false;
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);  
+        this.setScale(0.8);
 
         this.scene.anims.create({
             key: 'food_animation',
-            frames: this.scene.anims.generateFrameNumbers('food', { start: 181, end: 181}),
+            frames: this.scene.anims.generateFrameNumbers('food', { start: 0, end: 4}),
             frameRate: 8,
             repeat: -1
         })

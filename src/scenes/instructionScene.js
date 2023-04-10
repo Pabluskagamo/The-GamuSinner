@@ -25,7 +25,7 @@ export default class instructionScene extends Phaser.Scene {
         this.load.spritesheet('tab_key', './assets/keyboards/TAB.png', { frameWidth: 33, frameHeight: 21 });
         this.load.spritesheet('up_key', './assets/keyboards/ARROWUP.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('w_key', './assets/keyboards/W.png', { frameWidth: 19, frameHeight: 21 });
-        this.load.spritesheet('potion', './assets/items/potions.png', { frameWidth: 16, frameHeight: 16 });
+        this.load.spritesheet('powerup', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 });
         this.load.image('granade', './assets/items/granade.png');
         this.load.spritesheet('character', './assets/character/character.png', { frameWidth: 64, frameHeight: 32 });
         this.load.image('skip_title', './assets/ui/skip_title.png');
@@ -57,7 +57,7 @@ export default class instructionScene extends Phaser.Scene {
 
         // GUARDAR MODIFICADOR
         const g_key = this.add.sprite(800, 275, 'g_key').setScale(3.2);
-        const powerUp = this.add.sprite(920, 275, 'potion', 71).setScale(3.5);
+        const powerUp = this.add.sprite(920, 275, 'powerup', 71).setScale(3.5);
 
         // USO DE GRANADA
         const b_key = this.add.sprite(800, 390, 'b_key').setScale(3.2);
