@@ -31,7 +31,6 @@ export default class PowerUp extends Phaser.Physics.Arcade.Sprite{
             this.enabled = true
             console.log("Collect POWERUP")
             this.time = -1
-            this.runOnCollect()
             this.scene.powerUpPool.release(this)
         }
     }
@@ -51,16 +50,9 @@ export default class PowerUp extends Phaser.Physics.Arcade.Sprite{
     disable(){
         this.enabled = false
         this.time = 0
-        this.runOnDisable()
     }
 
     isEnabled(){
         return this.enabled
     }
-    
-    run(){}
-    
-    runOnCollect(){}
-
-    runOnDisable(){}
 }

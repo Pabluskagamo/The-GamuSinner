@@ -5,10 +5,10 @@ export default class MultipleDirectionShot extends PowerUp{
 
     constructor(scene, x, y){
         super(scene, x, y, "multipleDirectionShot", false);
-        this.numDirections = 8;
-        this.bulletMultiplier = 3;
-        this.bulletSpread = 0.3;
-        this.setScale(1.5)
+        this.numDirections = 8
+        this.bulletMultiplier = 3
+        this.bulletSpread = 0.3
+
         this.scene.anims.create({
             key: 'multipleDirectionShot_animation',
             frames: this.scene.anims.generateFrameNumbers('multishot', { start: 0, end: 5 }),
@@ -18,7 +18,7 @@ export default class MultipleDirectionShot extends PowerUp{
        /*  this.play('multipleDirectionShot_animation') */
     }
 
-    run(charX, charY) {
+    run(charX, charY, passives) {
         if (this.scene.bulletPool.hasBullets()) {
             let offsetSign = [1,-1]
             let arrayDirections = Object.values(Directions)
@@ -30,7 +30,7 @@ export default class MultipleDirectionShot extends PowerUp{
                         arrayDirections[i].x+((dirSpread%2)*offsetSign[j%2]*offsetFactor*this.bulletSpread),
                         arrayDirections[i].y+((dirSpread/2)*offsetSign[j%2]*offsetFactor*this.bulletSpread)
                     ).normalize()
-                    let tempBullet = this.scene.bulletPool.spawn(charX, charY)
+                    let tempBullet = this.scene.bulletPool.spawn(charX, charY, passives)
                     tempBullet.setDireccion(bulletDir)
                 }
             }

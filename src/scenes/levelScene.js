@@ -9,6 +9,8 @@ import HealthPoint from "../ui/healthpoint"
 import TripleShot from "../gameobjects/powerUps/tripleShot"
 import EightDirShot from "../gameobjects/powerUps/eightDirShot"
 import Food from "../gameobjects/items/food"
+import BouncingShot from "../gameobjects/powerUps/bouncingShot"
+import FreezingShot from "../gameobjects/powerUps/freezingShot"
 
 export default class LevelScene extends Phaser.Scene {
 	constructor() {
@@ -28,12 +30,14 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('goblin', './assets/enemies/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
 		this.load.spritesheet('muerte', './assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', './assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
+		this.load.spritesheet('icebullet', './assets/bullets/icebullets.png', { frameWidth: 16, frameHeight: 16 })
+		this.load.spritesheet('bouncigbullet', './assets/bullets/bouncigbullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('food', './assets/items/food.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('tripleshot', './assets/powerups/Tripleshoot.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('multishot', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
-		this.load.spritesheet('fire', './assets/items/fire.png', { frameWidth: 24, frameHeight: 32 })
-		this.load.spritesheet('fire2', './assets/items/fire2.png', { frameWidth: 15, frameHeight: 24 })
+		this.load.spritesheet('freezingshot', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('bouncingshot', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('map', './assets/tilemap/mapa_sinrio.json')
 		this.load.image('game_settings', '/assets/ui/settings.png')
@@ -89,6 +93,8 @@ export default class LevelScene extends Phaser.Scene {
 		let powerUps = []
 
 		for (let i = 0; i < 2; i++) {
+			powerUps.push(new FreezingShot(this, -125, -125));
+			powerUps.push(new BouncingShot(this, -125, -125));
 			powerUps.push(new TripleShot(this, -125, -125));
 			powerUps.push(new EightDirShot(this, -125, -125));
 		}
@@ -136,7 +142,7 @@ export default class LevelScene extends Phaser.Scene {
 		//this.physics.add.collider(this.player, this.river);
 
 		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
-			this.bulletPool.release(obj1);
+			obj1.reboundOrRelease()
 		});
 
 		this.player.setDepth(2);
@@ -278,5 +284,13 @@ export default class LevelScene extends Phaser.Scene {
 			this.freqTimer.remove();
 			this.levelFinished = true;
 		}
+	}
+
+	getGameHeight(){
+		return this.game.config.height
+	}
+
+	getGameWidth(){
+		return this.game.config.width
 	}
 }

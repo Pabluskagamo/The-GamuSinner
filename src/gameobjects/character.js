@@ -20,7 +20,7 @@ export default class Character extends MovableObject {
             this.eightDirShot = false;
             this.nonePowerUp = new NonePowerUp(this.scene)
             this.currentPowerUp = this.nonePowerUp
-            this.passivePowerUps = []
+            this.passives = []
             this.numDirections = 8;
             this.bulletMultiplier = 3;
             this.bulletSpread = 0.25;
@@ -317,7 +317,7 @@ export default class Character extends MovableObject {
             dir = Directions.RIGHT
         }
 
-        this.currentPowerUp.run(this.x,this.y,dir)
+        this.currentPowerUp.run(this.x, this.y , this.passives, dir)
     }
 
     isAttackInProcess() {
@@ -377,7 +377,7 @@ export default class Character extends MovableObject {
                 this.activatePowerUp(powerUp)
             }
             else{
-                this.passivePowerUps.push(powerUp)
+                this.passives.push(powerUp)
             }
         }
     }
@@ -394,9 +394,9 @@ export default class Character extends MovableObject {
 
     checkPowerUps(){
         if (this.currentPowerUp && !this.currentPowerUp.isEnabled()) { this.currentPowerUp = this.nonePowerUp }
-        /* this.passivePowerUps.forEach(e => {
+       /*  this.passives.forEach(e => {
             if (!e.isEnabled()) {
-                this.passivePowerUps.splice(this.passivePowerUps.indexOf(e), 1)
+                this.passives.splice(this.passives.indexOf(e), 1)
             }
         }) */
     }

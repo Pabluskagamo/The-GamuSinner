@@ -20,6 +20,7 @@ export default class PowerUpPool {
 	}
 
     spawn(x, y) {
+        //cambiar politica y añadir que no s epueda spawnear si enable de powerUp es true
         let entity = this._group.getFirstDead();
 
         if (entity) {

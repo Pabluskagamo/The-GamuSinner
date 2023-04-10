@@ -10,20 +10,20 @@ import SettingScene from './scenes/settingsScene'
 
 const config = {
 	type: Phaser.AUTO,
-
+	parent: 'app',
+	pixelArt: true,
+	width: 1176,
+	height: 672,
 	scale: {
 		autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
-		parent: 'app',
 		mode: Phaser.Scale.FIT,
-		width: 1176,
-		height: 672,
 		min: {
             width: 784,
             height: 448
         },
 		max: {
-            width: 1568,
-            height: 896
+            width: 1920,
+            height: 1080
         },
 		zoom: 1
 	},

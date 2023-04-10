@@ -3,7 +3,8 @@ import PowerUp from "./powerUp"
 export default class nonePowerUp extends PowerUp{
 
     constructor(scene, x, y){
-        super(scene, x, y, "nonePowerUp", false);
+        super(scene, x, y, "nonePowerUp", false)
+        
         this.scene.anims.create({
             key: 'tripleShot_animation',
             frames: this.scene.anims.generateFrameNumbers('tripleshot', { start: 0, end: 6 }),
@@ -12,9 +13,9 @@ export default class nonePowerUp extends PowerUp{
         })
     }
 
-    run(charX,charY,dir){
+    run (charX, charY, passives, dir){
         if (this.scene.bulletPool.hasBullets()) {
-            let bullet = this.scene.bulletPool.spawn(charX,charY);
+            let bullet = this.scene.bulletPool.spawn(charX, charY, passives);
             bullet.setDireccion(dir.normalize());
         }
     }
