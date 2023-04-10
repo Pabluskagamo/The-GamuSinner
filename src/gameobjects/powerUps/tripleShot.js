@@ -3,7 +3,7 @@ import PowerUp from "./powerUp"
 export default class TripleShot extends PowerUp{
 
     constructor(scene, x, y){
-        super(scene, x, y, "tripleShot", false);
+        super(scene, x, y, "tripleShot", false)
 
         this.scene.anims.create({
             key: 'tripleShot_animation',
@@ -14,11 +14,11 @@ export default class TripleShot extends PowerUp{
         this.play('tripleShot_animation')
     }
 
-    run(charX, charY, dir){
+    run (charX, charY, passives, dir){
         if (this.scene.bulletPool.hasBullets()) {
-            let bullet = this.scene.bulletPool.spawn(charX,charY);
-            let bullet2 = this.scene.bulletPool.spawn(charX,charY);
-            let bullet3 = this.scene.bulletPool.spawn(charX,charY);
+            let bullet = this.scene.bulletPool.spawn(charX, charY, passives);
+            let bullet2 = this.scene.bulletPool.spawn(charX, charY, passives);
+            let bullet3 = this.scene.bulletPool.spawn(charX, charY, passives);
             if(dir.x === 0) {
                 bullet.setDireccion(dir);
                 bullet2.setDireccion(new Phaser.Math.Vector2(dir.x+0.3, dir.y).normalize());

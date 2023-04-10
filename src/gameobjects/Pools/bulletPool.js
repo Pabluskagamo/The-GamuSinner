@@ -4,12 +4,8 @@ export default class BulletPool {
 
 
     constructor (scene, max) {
-        this.scene = scene;
+        this.scene = scene
         this._group = scene.add.group();
-        //
-        this.bouncing = false;
-        this.freezing = false;
-        //
         this.max = max;
     }
 
@@ -21,32 +17,32 @@ export default class BulletPool {
 		});
 	}
 
-    spawn(x, y) {
-        let entity = this._group.getFirstDead();
+    spawn(x, y, passives) {
+        let bullet = this._group.getFirstDead()
 
-        if (entity) {
-          entity.x = x;
-          entity.y = y;
-          entity.justHit = false
-          //
-          /* entity.setFreezing(this.freezing)
-          entity.setBouncing(this.bouncing) */
-          //
-          entity.setActive(true);
-          entity.setVisible(true);
-          entity.body.checkCollision.none = false;
+        if (bullet) {
+            /* bullet.x = x
+            bullet.y = y
+            bullet.justHit = false */
+            bullet.init(x, y)
+            passives.forEach (e => {
+                e.run(bullet)
+            })
+            //
+            bullet.setActive(true);
+            bullet.setVisible(true);
+            bullet.body.checkCollision.none = false
         }
-        return entity;
-    }
-
-
-    hasBullets(){
-        return this._group.countActive() < this.max;
+        return bullet;
     }
     
-    release(entity) {
-        entity.body.checkCollision.none = true;
-        this._group.killAndHide(entity);
+    release(bullet) {
+        bullet.body.checkCollision.none = true
+        this._group.killAndHide(bullet)
+    }
+    
+    hasBullets(){
+        return this._group.countActive() < this.max
     }
 
     fillPool(num){
@@ -57,13 +53,5 @@ export default class BulletPool {
 		}
 
         this.addMultipleEntity(bullets);
-    }
-
-    setFreezing(value){
-        this.freezing = value
-    }
-
-    setBouncing(value){
-        this.bouncing = value
     }
 }

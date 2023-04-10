@@ -59,7 +59,7 @@ export default class EnemyObject extends MovableObject {
     }
 
     drop(){
-        if (this.scene.coinPool.hasCoins() && this.scene.powerUpPool.hasPowerUps()  && Phaser.Math.RND.between(0, 1) < 0.9){
+        if (this.scene.coinPool.hasCoins() && this.scene.powerUpPool.hasPowerUps() && Phaser.Math.FloatBetween(0, 1) < 0.9){
             this.scene.coinPool.spawn(this.x, this.y);
             this.scene.powerUpPool.spawn(this.x, this.y);
         }
@@ -68,7 +68,7 @@ export default class EnemyObject extends MovableObject {
     hitEnemy(dmg){
         this.hp -= dmg;
 
-        //console.log(this.key, this.hp, '/', this.initialHp)
+        console.log(this.key, this.hp, '/', this.initialHp)
 
         if(this.hp <= 0){
             this.dieMe();

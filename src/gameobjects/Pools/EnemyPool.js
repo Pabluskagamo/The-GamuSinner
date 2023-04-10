@@ -6,11 +6,11 @@ import Cyclops from "../cyclops"
 export default class EnemyPool {
 	constructor (scene, max) {
 		this.scene = scene;
-		this._group = scene.add.group();	
-		this._gobsgroup = scene.add.group();
-		this._wolfsgroup = scene.add.group();
-		this._cyclopsgroup = scene.add.group();	
-		this.max = max;
+		this._group = scene.add.group()	
+		this._gobsgroup = scene.add.group()
+		this._wolfsgroup = scene.add.group()
+		this._cyclopsgroup = scene.add.group()	
+		this.max = max
 		//this.scene = scene;
 		//this.reuse = reuse;
 	}
@@ -22,11 +22,11 @@ export default class EnemyPool {
 	 * @param {Array} entities - array de objetos que añadir a la pool
 	 */
 	addMultipleEntity(entities) {
-		this._group.addMultiple(entities);
+		this._group.addMultiple(entities)
 		this._group.children.iterate(c => {
-			this._group.killAndHide(c);
-			c.body.checkCollision.none = true;
-		});
+			this._group.killAndHide(c)
+			c.body.checkCollision.none = true
+		})
 	}
 
 	addMultipleEntityToGroup(entities, group) {
