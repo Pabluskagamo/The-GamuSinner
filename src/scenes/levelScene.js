@@ -121,6 +121,15 @@ export default class LevelScene extends Phaser.Scene {
 		else if(this.enemyPool.fullPool()){
 			this.events.emit('levelComplete');
 		}
+
+		if(this.powerUpActive){
+			const remaining = (10000 - this.powerUpTimer.getElapsed()) / 1000;
+
+			if (this.lastSecPow != remaining) {
+				this.events.emit('UpdatePowerUpTimer', remaining.toFixed(0));
+			}
+			this.lastSecPow = remaining
+		}
 	}
 
 	initMap() {
@@ -164,8 +173,6 @@ export default class LevelScene extends Phaser.Scene {
 		this.coinPool = new CoinPool(this, 20);
 		this.foodPool = new FoodPool(this, 20);
 
-
-
 		this.enemyPool.fillPool(25, this.player);
 
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
@@ -179,7 +186,8 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.physics.add.overlap(this.powerUpPool._group, this.player, (obj1, obj2) => {
 			obj2.collectPowerUp(obj1);
-		});
+			this.updatePowerUpTimer(obj1);
+		}, (obj1, obj2) => !obj1.isEnabled());
 		this.physics.add.overlap(this.foodPool._group, this.player, (obj1, obj2) => {
 			obj1.collect(obj2);
 			this.events.emit('addScore', obj2.getHp());
@@ -190,6 +198,25 @@ export default class LevelScene extends Phaser.Scene {
 			this.events.emit('addScore', obj2.getHp());
 		});
 
+	}
+
+	updatePowerUpTimer(obj1){
+		this.lastSecPow = 5;
+		this.powerUpActive = true;
+		this.powerUpTimer = this.time.addEvent({
+			delay: 10000,
+			callback: this.finishPowerUp,
+			callbackScope: obj1,
+			loop: false
+		});
+		this.events.emit('collectPowerUp', obj1.key);
+	}
+
+	finishPowerUp(){
+		this.powerUpActive = false;
+		console.log('SE ACABA EL POWERUP')
+		this.disable()
+		this.scene.events.emit('UpdatePowerUpTimer', -1);
 	}
 
 	spawnInBounds() {
@@ -203,19 +230,15 @@ export default class LevelScene extends Phaser.Scene {
 
 		const randNum = Phaser.Math.RND.between(1, 15);
 
-		console.log('SPAWN ENEMY RAND NUM:', randNum)
+		// console.log('SPAWN ENEMY RAND NUM:', randNum)
 
 		if(randNum < 7){
-			console.log('GOB SPAWNED')
 			this.enemyPool.spawnGob(xPos[randX], yPos[randY])
 		}else if(randNum > 7 && randNum < 11){
-			console.log('WOLF SPAWNED')
 			this.enemyPool.spawnWolf(xPos[randX], yPos[randY])
 		}else if(randNum > 11 && randNum < 14){
-			console.log('SPECTRE SPAWNED')
 			this.enemyPool.spawnSpectre(xPos[randX], yPos[randY])
 		}else{
-			console.log('CYCLOPS SPAWNED')
 			this.enemyPool.spawnCyclops(xPos[randX], yPos[randY])
 		}
 

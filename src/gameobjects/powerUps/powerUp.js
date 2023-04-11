@@ -14,15 +14,7 @@ export default class PowerUp extends Phaser.Physics.Arcade.Sprite{
 
     preUpdate(t, dt){
         super.preUpdate(t, dt)
-        console.log("PREUPDATE")
-        if (this.time === -1) {
-            this.time = t
-            console.log("collect time: " + this.time)
-        }
-        else if (this.time > 0 && (t - this.time) >= this.lifespan) {
-            console.log("time: " + this.time + " t: " + t + " resta : "+ (t - this.time))
-            this.disable()
-        }
+        // console.log("PREUPDATE POWERUP")
     }
 
     collect(){
@@ -48,6 +40,7 @@ export default class PowerUp extends Phaser.Physics.Arcade.Sprite{
     }
 
     disable(){
+        console.log("POWERUP DISABLED")
         this.enabled = false
         this.time = 0
     }
