@@ -217,6 +217,7 @@ export default class LevelScene extends Phaser.Scene {
 		console.log('SE ACABA EL POWERUP')
 		this.disable()
 		this.scene.events.emit('UpdatePowerUpTimer', -1);
+		this.scene.events.emit('endPowerUpPlayer');
 	}
 
 	spawnInBounds() {

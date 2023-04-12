@@ -99,6 +99,10 @@ export default class Character extends MovableObject {
                 }
             })
             this.play('mainChar_static', true);
+
+            this.scene.events.on('endPowerUpPlayer', function () {
+                this.checkPowerUps()
+            }, this);
         }
         else if(this.instruction === "dash"){
             this.scene.anims.create({
@@ -205,8 +209,6 @@ export default class Character extends MovableObject {
 
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
-
-        this.checkPowerUps()
 
         if(this.instruction === null){
 
@@ -394,13 +396,17 @@ export default class Character extends MovableObject {
 
     checkPowerUps(){
         if (this.currentPowerUp && !this.currentPowerUp.isEnabled()) { this.currentPowerUp = this.nonePowerUp }
-        /* this.passives.forEach(e => {
-            if (!e.isEnabled()) {
-                this.passives.splice(this.passives.indexOf(e), 1)
-            }
-        }) */
+        console.log(this.passives)
+        
+        if(this.passives){
+            this.passives.forEach(e => {
+                if (!e.isEnabled()) {
+                    this.passives.splice(this.passives.indexOf(e), 1)
+                }
+            })
+        }
     }
-
+    
     collectFood(value){
         if( this.hp < this.maxHp){
             this.hp += value;
