@@ -196,7 +196,8 @@ export default class LevelScene extends Phaser.Scene {
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
 			obj1.attack(obj2);
 			this.events.emit('addScore', obj2.getHp());
-		});
+		},(obj1, obj2) => !obj2.getDash()
+		);
 
 	}
 
