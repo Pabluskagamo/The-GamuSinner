@@ -10,7 +10,7 @@ export default class Cyclops extends EnemyObject{
         this.setCollideWorldBounds();
 
         this.player = player;
-        this.attacking = false;
+        //this.attacking = false;
         
         this.bodyOffsetWidth = this.body.width/5;
         this.bodyOffsetHeight = this.body.height/3.8;
@@ -48,6 +48,13 @@ export default class Cyclops extends EnemyObject{
             frameRate: 15,
             repeat: 0
         })
+
+        /*this.scene.anims.create({
+            key: 'freezed_cyclops',
+            frames: this.scene.anims.generateFrameNumbers('cyclops', {frames: [0]}),
+            frameRate: 15,
+            repeat: 0
+        })*/
 
         this.scene.anims.create({
             key: 'died_cyclops',

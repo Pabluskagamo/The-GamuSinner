@@ -2,7 +2,7 @@ import BulletPool from "../gameobjects/Pools/bulletPool"
 import CoinPool from "../gameobjects/Pools/coinPool"
 import FoodPool from "../gameobjects/Pools/foodPool"
 import PowerUpPool from "../gameobjects/Pools/powerUpPool"
-import EnemyPool from "../gameobjects/Pools/EnemyPool"
+import EnemyPool from "../gameobjects/Pools/enemyPool"
 import Character from "../gameobjects/character"
 import Coin from "../gameobjects/items/coin";
 import HealthPoint from "../ui/healthpoint"

@@ -9,7 +9,7 @@ export default class BlackWolf extends EnemyObject {
         //this.setScale(1.5);
 
         this.player = player;
-        this.attacking = false;
+        //this.attacking = false;
 
         this.scene.physics.add.existing(this);
         this.setCollideWorldBounds();

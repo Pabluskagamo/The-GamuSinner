@@ -12,15 +12,18 @@ export default class EnemyObject extends MovableObject {
         this.speed = speed
         this.dmg = dmg
         this.pool = enemypool
+        this.attacking = false
     }
 
     restoreEnemy(){
        this.hp = this.initialHp
        this.speed = this.initialSpeed
+       this.attacking = false
     }
 
     follow(){
         this.flipX = false;
+        
         if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
             // Diagonal abajo-derecha
             this.play('side_' + this.key, true);
@@ -80,7 +83,9 @@ export default class EnemyObject extends MovableObject {
 
     slow(slow){
         this.speed -= slow;
-        if (this.speed < 0) this.speed = 0
+        if (this.speed <= 0) {
+            this.speed = 0
+        }
     }
     
     attack(){
@@ -100,3 +105,7 @@ export default class EnemyObject extends MovableObject {
         return this.hp === 0;
     }
 }
+/*this.play('freezed_' + this.key, true).clearTint();
+if (this.freezed && this.speed === 0) {
+    this.play('freezed_' + this.key, true).setTint(0x4fb3ec)
+}else*/

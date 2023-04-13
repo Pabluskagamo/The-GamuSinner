@@ -13,6 +13,10 @@ export default class PowerUp extends Phaser.Physics.Arcade.Sprite{
         this.scene.physics.add.existing(this)  
     }
 
+    init() {
+        
+    }
+
     preUpdate(t, dt){
         super.preUpdate(t, dt)
         

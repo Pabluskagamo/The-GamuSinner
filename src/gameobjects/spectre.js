@@ -10,7 +10,7 @@ export default class Spectre extends EnemyObject{
         this.setCollideWorldBounds()
 
         this.player = player
-        this.attacking = false
+        //this.attacking = false
         
         this.bodyOffsetWidth = this.body.width/5
         this.bodyOffsetHeight = this.body.height/3.8
