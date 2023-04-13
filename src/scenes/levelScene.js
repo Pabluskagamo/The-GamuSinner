@@ -150,14 +150,14 @@ export default class LevelScene extends Phaser.Scene {
 			}
 		}
 
-		if(this.powerUpActive){
-			const remaining = (10000 - this.powerUpTimer.getElapsed()) / 1000;
+		// if(this.powerUpActive){
+		// 	const remaining = (10000 - this.powerUpTimer.getElapsed()) / 1000;
 
-			if (this.lastSecPow != remaining) {
-				this.events.emit('UpdatePowerUpTimer', remaining.toFixed(0));
-			}
-			this.lastSecPow = remaining
-		}
+		// 	if (this.lastSecPow != remaining) {
+		// 		this.events.emit('UpdatePowerUpTimer', remaining.toFixed(0));
+		// 	}
+		// 	this.lastSecPow = remaining
+		// }
 	}
 
 	initMap() {
@@ -214,7 +214,6 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.physics.add.overlap(this.powerUpPool._group, this.player, (obj1, obj2) => {
 			obj2.collectPowerUp(obj1);
-			this.updatePowerUpTimer(obj1);
 		}, (obj1, obj2) => !obj1.isEnabled());
 		this.physics.add.overlap(this.foodPool._group, this.player, (obj1, obj2) => {
 			obj1.collect(obj2);
@@ -224,28 +223,9 @@ export default class LevelScene extends Phaser.Scene {
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
 			obj1.attack(obj2);
 			this.events.emit('addScore', obj2.getHp());
-		});
+		},(obj1, obj2) => !obj2.getDash()
+		);
 
-	}
-
-	updatePowerUpTimer(obj1){
-		this.lastSecPow = 5;
-		this.powerUpActive = true;
-		this.powerUpTimer = this.time.addEvent({
-			delay: 10000,
-			callback: this.finishPowerUp,
-			callbackScope: obj1,
-			loop: false
-		});
-		this.events.emit('collectPowerUp', obj1.key);
-	}
-
-	finishPowerUp(){
-		this.powerUpActive = false;
-		console.log('SE ACABA EL POWERUP')
-		this.disable()
-		this.scene.events.emit('UpdatePowerUpTimer', -1);
-		this.scene.events.emit('endPowerUpPlayer');
 	}
 
 	spawnInBounds() {
