@@ -30,15 +30,24 @@ export default class Hud extends Phaser.Scene{
         coinHud.setScale(1.5)
 
         //POWERUPS
-        this.powerUpTimer = this.add.text(1044, 145, '', { fontFamily: 'MedievalSharp-Regular' });
-        this.powerUpTimer.setFontSize(15);
-        this.powerUpTimer.setVisible(false);
         this.powerUpsList = []
         this.powerUpsImgs = {
-            tripleShot: this.add.image(-150, -150, 'tripleShotHud'),
-            eightDirShot: this.add.image(-150, -150, 'eightDirShotHud'),
-            multipleDirfreezingShotectionShot: this.add.image(-150, -150, 'multipleDirfreezingShotectionShotHud'),
-            bouncingShot: this.add.image(-150, -150, 'bouncingShotHud')
+            tripleShot: {
+                img: this.add.image(-150, -150, 'tripleShotHud'),
+                text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
+            },
+            eightDirShot: {
+                img: this.add.image(-150, -150, 'eightDirShotHud'),
+                text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
+            },
+            multipleDirfreezingShotectionShot: {
+                img: this.add.image(-150, -150, 'multipleDirfreezingShotectionShotHud'),
+                text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
+            },
+            bouncingShot: {
+                img: this.add.image(-150, -150, 'bouncingShotHud'),
+                text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
+            }
         }
         
         //CONTADOR TIEMPO OLEADA
@@ -66,22 +75,25 @@ export default class Hud extends Phaser.Scene{
         }, this);
 
         levelGame.events.on('collectPowerUp', function (type) {
-            this.powerUpTimer.setVisible(true)
+            
             if(!this.powerUpsList.includes(type)){
                 this.powerUpsList.push(type)
-                this.updatePowerUpsIcons()
+                this.updatePowerUpsHud()
             }
         }, this);
 
-        levelGame.events.on('UpdatePowerUpTimer', function (newTime) {
+        levelGame.events.on('updatePowerupCount', function (key, newTime) {
             if(newTime !== -1){
-                this.powerUpTimer.setText('00:'+ (newTime < 10 ? '0' : '') +newTime)
+                this.updatePowerUpCount(key, newTime)
             }else{
-                this.powerUpTimer.setVisible(false)
-                this.clearPowerUps()
+                // this.powerUpTimer.setVisible(false)
+                // this.clearPowerUps()
             }
-        }, this);
+        }, this);   
         
+        levelGame.events.on('endPowerUpTime', function (key) {
+            this.clearPowerUp(key)
+        }, this);  
     }
 
     updateHealthUi(hp) {
@@ -98,26 +110,41 @@ export default class Hud extends Phaser.Scene{
 		}
 	}
 
-    updatePowerUpsIcons(){
-        const separation = 30;
-        let currentX = 1050
+    updatePowerUpsHud(){
+        const separationX = 20;
+        const separationY = 30;
+        let currentX = 1025
+        let currentY = 130
 
         this.powerUpsList.forEach(p=>{
-            const img = this.powerUpsImgs[p];
-            img.x = currentX - separation;
-            img.y = 152;
-            img.setVisible(true)
-            currentX -= separation;
+            const pow = this.powerUpsImgs[p];
+            pow.img.x = currentX;
+            pow.img.y = currentY + separationY;
+            pow.img.setVisible(true)
+
+            pow.text.x = currentX + separationX;
+            pow.text.y = currentY + separationY - 8;
+            pow.text.setVisible(true)
+            currentY += separationY;
         })
     }
 
-    clearPowerUps(){
-        this.powerUpsList.forEach(p=>{
-            const img = this.powerUpsImgs[p];
-            img.setVisible(false)
-        })
+    updatePowerUpCount(key, newTime){
+        const pow = this.powerUpsImgs[key];
+        pow.text.setText('00:'+ (newTime < 10 ? '0' : '') +newTime);
+    }
 
-        this.powerUpsList = []
+    clearPowerUp(key){
+        console.log("SE ACABA EL POWER UP", key)
+
+        const pow = this.powerUpsImgs[key];
+        pow.img.setVisible(false);
+        pow.text.setVisible(false);
+
+        const index = this.powerUpsList.indexOf(key);
+        this.powerUpsList.splice(index, 1);
+
+        this.updatePowerUpsHud();
     }
 
 
