@@ -103,6 +103,8 @@ export default class LevelScene extends Phaser.Scene {
 			powerUps.push(new EightDirShot(this, -125, -125));
 		}
 		this.powerUpPool.addMultipleEntity(powerUps);
+		this.spawnMeiga = false;
+		this.e = this.input.keyboard.addKey('E');
 	}
 
 
@@ -122,14 +124,30 @@ export default class LevelScene extends Phaser.Scene {
 		}
 		else if(this.enemyPool.fullPool()){
 			this.events.emit('levelComplete');
-			for (let i = 0; i < 25; i++) {
-				setTimeout(() => {
-					this.cameras.main.flash(500);
-				}, i * 900);
-			}
-			this.cameras.main.once("camerafadeoutcomplete", function () {
+			if(!this.spawnMeiga){
+				for (let i = 0; i < 5; i++) {
+					setTimeout(() => {
+						this.cameras.main.flash(500);
+					}, i * 900);
+				}
 				this.addMeiga();
-			}, this);
+				this.spawnMeiga = true;
+			}
+			else{
+				if (this.e.isDown){
+					this.player.stopHorizontal();
+					this.player.stopVertical();
+					this.scene.pause();
+					this.scene.pause('UIScene');
+					if(this.scene.isSleeping('stats')){
+						this.scene.wake('stats');
+						this.scene.resume('stats');
+
+					}else{
+						this.scene.launch('stats');
+					}
+				}
+			}
 		}
 
 		if(this.powerUpActive){
@@ -257,7 +275,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 20000;
+		this.freqChangeTime = 0;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -268,7 +286,7 @@ export default class LevelScene extends Phaser.Scene {
 		} else {
 			this.enemySpawnTimer = this.time.addEvent({
 
-				delay: 4000,
+				delay: 300,
 				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true
