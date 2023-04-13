@@ -5,14 +5,14 @@ import { Directions } from "./utils/directions"
 import MultipleDirectionShot from "./powerUps/multipleDirectionShot";
 
 export default class Character extends MovableObject {
-    
+
     constructor(scene, x, y, speed, instruction) {
         super(scene, x, y, 'character', speed, 20);
         this.speed = speed;
         this.scene.add.existing(this);
         this.instruction = instruction;
 
-        if(this.instruction === null){
+        if (this.instruction === null) {
             this.wallet = 0;
             this.isAttacking = false;
             this.isDashing = false;
@@ -27,73 +27,73 @@ export default class Character extends MovableObject {
             this.hp = 6;
             this.maxHp = 6;
             this.lastFired = 0;
-            
-    
+
+
             this.setScale(1.7);
-    
+
             this.scene.physics.add.existing(this);
             this.setCollideWorldBounds();
-    
+
             this.bodyOffsetWidth = this.body.width / 4.6;
             this.bodyOffsetHeight = this.body.height / 5;
             this.bodyWidth = this.body.width / 4;
             this.bodyHeight = this.body.height / 1.5;
-    
+
             this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
             this.body.width = this.bodyWidth;
             this.body.height = this.bodyHeight;
-    
+
             this.scene.anims.create({
                 key: 'mainChar_static',
                 frames: this.scene.anims.generateFrameNumbers('character', { start: 0, end: 7 }),
                 frameRate: 5,
                 repeat: -1
             })
-            
+
             this.scene.anims.create({
                 key: 'mainChar_lado',
                 frames: this.scene.anims.generateFrameNumbers('character', { start: 8, end: 15 }),
                 frameRate: 10,
                 repeat: 0
             })
-    
+
             this.scene.anims.create({
                 key: 'mainChar_dash',
                 frames: this.scene.anims.generateFrameNumbers('character', { start: 16, end: 22 }),
                 frameRate: 10,
                 repeat: 0
             })
-    
+
             this.scene.anims.create({
                 key: 'mainChar_shootlado',
                 frames: this.scene.anims.generateFrameNumbers('character', { start: 40, end: 43 }),
                 frameRate: 15,
                 repeat: 0
             })
-    
+
             this.scene.anims.create({
                 key: 'mainChar_shootlado_izq',
                 frames: this.scene.anims.generateFrameNumbers('character_shot', { start: 0, end: 3 }),
                 frameRate: 15,
                 repeat: 0
             })
-    
+
             this.scene.anims.create({
                 key: 'mainChar_die',
                 frames: this.scene.anims.generateFrameNumbers('character', { start: 48, end: 52 }),
                 frameRate: 5,
                 repeat: 0
             })
-    
-    
+
+
             this.on('animationcomplete', end => {
                 if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)) {
                 }
-    
+
                 if (this.anims.currentAnim.key === 'mainChar_die') {
                     this.scene.gameOver();
                 }
-    
+
                 if (this.anims.currentAnim.key === 'mainChar_dash') {
                     this.isDashing = false;
                 }
@@ -104,97 +104,97 @@ export default class Character extends MovableObject {
                 this.checkPowerUps()
             }, this);
         }
-        else if(this.instruction === "dash"){
+        else if (this.instruction === "dash") {
             this.scene.anims.create({
                 key: 'mainChar_controls_dash',
                 frames: this.scene.anims.generateFrameNumbers('character', { start: 16, end: 22 }),
                 frameRate: 5,
                 repeat: 0
             });
-    
+
             this.scene.anims.create({
                 key: 'TAB_Press',
                 frames: this.scene.anims.generateFrameNumbers('tab_key', { start: 0, end: 2 }),
                 frameRate: 5,
                 repeat: 0
             });
-    
+
             this.play('mainChar_controls_dash');
         }
-        else if(this.instruction === "move"){
+        else if (this.instruction === "move") {
             this.scene.anims.create({
                 key: 'mainChar_controls_lado',
                 frames: this.scene.anims.generateFrameNumbers('character', { start: 8, end: 15 }),
                 frameRate: 6,
                 repeat: 0
             });
-    
+
             this.scene.anims.create({
                 key: 'W_Press',
                 frames: this.anims.generateFrameNumbers('w_key', { start: 0, end: 2 }),
                 frameRate: 4,
                 repeat: 0
             });
-    
+
             this.scene.anims.create({
                 key: 'A_Press',
                 frames: this.anims.generateFrameNumbers('a_key', { start: 0, end: 2 }),
                 frameRate: 4,
                 repeat: 0
             });
-    
+
             this.scene.anims.create({
                 key: 'S_Press',
                 frames: this.anims.generateFrameNumbers('s_key', { start: 0, end: 2 }),
                 frameRate: 4,
                 repeat: 0
             });
-    
+
             this.scene.anims.create({
                 key: 'D_Press',
                 frames: this.anims.generateFrameNumbers('d_key', { start: 0, end: 2 }),
                 frameRate: 4,
                 repeat: 0
             });
-    
+
             this.play('mainChar_controls_lado');
         }
-        else if(this.instruction === "shoot"){
+        else if (this.instruction === "shoot") {
             this.scene.anims.create({
                 key: 'mainChar_controls_shootlado',
                 frames: this.scene.anims.generateFrameNumbers('character', { start: 40, end: 43 }),
                 frameRate: 6,
                 repeat: 0
             });
-    
+
             this.scene.anims.create({
                 key: 'UP_Press',
                 frames: this.anims.generateFrameNumbers('up_key', { start: 0, end: 2 }),
                 frameRate: 4,
                 repeat: 0
             });
-    
+
             this.scene.anims.create({
                 key: 'LEFT_Press',
                 frames: this.anims.generateFrameNumbers('left_key', { start: 0, end: 2 }),
                 frameRate: 4,
                 repeat: 0
             });
-    
+
             this.scene.anims.create({
                 key: 'DOWN_Press',
                 frames: this.anims.generateFrameNumbers('down_key', { start: 0, end: 2 }),
                 frameRate: 4,
                 repeat: 0
             });
-    
+
             this.scene.anims.create({
                 key: 'RIGHT_Press',
                 frames: this.anims.generateFrameNumbers('right_key', { start: 0, end: 2 }),
                 frameRate: 4,
                 repeat: 0
             });
-    
+
             this.play('mainChar_controls_shootlado');
         }
 
@@ -210,11 +210,11 @@ export default class Character extends MovableObject {
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
 
-        if(this.instruction === null){
+        if (this.instruction === null) {
 
             this.flipX = false;
-    
-            if(!this.isDashing && !this.isDead()){
+
+            if (!this.isDashing && !this.isDead()) {
                 if (this.s.isDown && this.d.isDown) {
                     // Diagonal abajo-derecha
                     this.play('mainChar_lado', true);
@@ -253,27 +253,27 @@ export default class Character extends MovableObject {
                     this.frictionEffect();
                 }
             }
-    
-            if(this.shift.isDown){
+
+            if (this.shift.isDown) {
                 this.dash();
             }
-    
+
             if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
                 this.stopHorizontal();
             }
-    
+
             if (Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)) {
                 this.stopVertical();
             }
-    
+
             if ((this.cursors.up.isDown || this.cursors.down.isDown || this.cursors.left.isDown || this.cursors.right.isDown) && t > this.lastFired) {
                 this.flipX = true;
-                if(!this.isDead()){
+                if (!this.isDead()) {
                     this.attack();
                     this.lastFired = t + 400;
                 }
             }
-            
+
             // if(this.isStatic()){
             //     this.play('mainChar_static', true);
             // }
@@ -319,7 +319,7 @@ export default class Character extends MovableObject {
             dir = Directions.RIGHT
         }
 
-        this.currentPowerUp.run(this.x, this.y , this.passives, dir)
+        this.currentPowerUp.run(this.x, this.y, this.passives, dir)
     }
 
     isAttackInProcess() {
@@ -339,66 +339,73 @@ export default class Character extends MovableObject {
     }
 
     getHit(dmg) {
-        this.hp -= dmg;
+        if (!this.isDashing) {
+            this.hp -= dmg;
 
-        if(this.hp <= 0){
-            this.hp = 0;
-            this.dieMe();
+            if (this.hp <= 0) {
+                this.hp = 0;
+                this.dieMe();
+            }
         }
+
     }
 
-    isDead(){
+    isDead() {
         return this.hp === 0;
     }
 
-    dash(){
+    dash() {
         this.flipX = this.body.velocity.x < 0;
-        let speed = this.speed; 
+        let speed = this.speed;
 
-        if(!this.isDead()){
+        if (!this.isDead()) {
             this.speed *= 1.3;
             this.isDashing = true;
             this.play('mainChar_dash', true);
+
             this.applyLastDir();
             this.speed = speed;
         }
     }
+    getDash() {
+        return this.isDashing;
+    }
 
-    collectCoin(value){
+    collectCoin(value) {
         this.wallet += value;
     }
 
-    getWallet(){
+    getWallet() {
         return this.wallet;
     }
 
-    collectPowerUp(powerUp){
-        if(!powerUp.getCollected()){
+    collectPowerUp(powerUp) {
+        if (!powerUp.getCollected()) {
             powerUp.collect()
             if (!powerUp.isPassive()) {
                 this.activatePowerUp(powerUp)
             }
-            else{
+            else {
                 this.passives.push(powerUp)
             }
         }
     }
 
-    activatePowerUp(powerUp){
+    activatePowerUp(powerUp) {
         let combo = PowerUpFactory.getCombo(powerUp, this.currentPowerUp)
-        if(combo === "none"){
+        if (combo === "none") {
             this.currentPowerUp = powerUp
         }
-        else{
-            this.currentPowerUp = PowerUpFactory.create(combo,this.scene)
+        else {
+            this.currentPowerUp = PowerUpFactory.create(combo, this.scene)
         }
     }
 
-    checkPowerUps(){
+    checkPowerUps() {
         if (this.currentPowerUp && !this.currentPowerUp.isEnabled()) { this.currentPowerUp = this.nonePowerUp }
         console.log(this.passives)
-        
-        if(this.passives){
+
+        if (this.passives) {
             this.passives.forEach(e => {
                 if (!e.isEnabled()) {
                     this.passives.splice(this.passives.indexOf(e), 1)
@@ -406,11 +413,10 @@ export default class Character extends MovableObject {
             })
         }
     }
-    
-    collectFood(value){
-        if( this.hp < this.maxHp){
+
+    collectFood(value) {
+        if (this.hp < this.maxHp) {
             this.hp += value;
         }
-       
     }
 }
