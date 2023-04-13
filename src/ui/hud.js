@@ -13,6 +13,7 @@ export default class Hud extends Phaser.Scene{
 		this.load.spritesheet('eightDirShotHud', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('multipleDirfreezingShotectionShotHud', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bouncingShotHud', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('multipleDirectionShotHud', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
 	}
 
     create ()
@@ -46,6 +47,11 @@ export default class Hud extends Phaser.Scene{
             },
             bouncingShot: {
                 img: this.add.image(-150, -150, 'bouncingShotHud'),
+                text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
+            },
+            multipleDirectionShot: {
+                multiple: true,
+                comboKeys: ["tripleShot", "eightDirShot"],
                 text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
             }
         }
@@ -93,7 +99,8 @@ export default class Hud extends Phaser.Scene{
         
         levelGame.events.on('endPowerUpTime', function (key) {
             this.clearPowerUp(key)
-        }, this);  
+        }, this);
+
     }
 
     updateHealthUi(hp) {
@@ -118,9 +125,21 @@ export default class Hud extends Phaser.Scene{
 
         this.powerUpsList.forEach(p=>{
             const pow = this.powerUpsImgs[p];
-            pow.img.x = currentX;
-            pow.img.y = currentY + separationY;
-            pow.img.setVisible(true)
+
+            if(!pow.multiple){
+                pow.img.x = currentX;
+                pow.img.y = currentY + separationY;
+                pow.img.setVisible(true)
+            }else{
+                let imgSepCombo = 0
+                pow.comboKeys.forEach(k=>{
+                    const comboPow = this.powerUpsImgs[k];
+                    comboPow.img.x = currentX - imgSepCombo;
+                    comboPow.img.y = currentY + separationY;
+                    comboPow.img.setVisible(true)
+                    imgSepCombo += (separationX + 10);
+                })
+            }
 
             pow.text.x = currentX + separationX;
             pow.text.y = currentY + separationY - 8;
@@ -138,8 +157,17 @@ export default class Hud extends Phaser.Scene{
         console.log("SE ACABA EL POWER UP", key)
 
         const pow = this.powerUpsImgs[key];
-        pow.img.setVisible(false);
+        
         pow.text.setVisible(false);
+        
+        if(!pow.multiple){
+            pow.img.setVisible(false);
+        }else{
+            pow.comboKeys.forEach(k=>{
+                const comboPow = this.powerUpsImgs[k];
+                comboPow.img.setVisible(false);
+            })
+        }
 
         const index = this.powerUpsList.indexOf(key);
         this.powerUpsList.splice(index, 1);

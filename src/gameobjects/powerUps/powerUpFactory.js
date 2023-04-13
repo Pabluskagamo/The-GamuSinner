@@ -18,6 +18,8 @@ export class PowerUpFactory {
         let combo = "none"
         if (MultipleDirectionShot.isCombo(power1, power2)) {
             combo = "multipleDirectionShot"
+            power1.disable();
+            power2.disable();
         }
         return combo
     }

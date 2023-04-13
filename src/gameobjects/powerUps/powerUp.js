@@ -51,11 +51,16 @@ export default class PowerUp extends Phaser.Physics.Arcade.Sprite{
         return this.passive
     }
 
-    disable(){
+    disable(reloaded){
         console.log("POWERUP DISABLED")
         this.enabled = false
         this.scene.powerUpPool.release(this)
-        this.scene.events.emit('endPowerUpTime', this.key);
+
+        if(!reloaded){
+            this.scene.events.emit('endPowerUpTime', this.key);
+        }else{
+            this.timer.remove();
+        }
     }
 
     isEnabled(){

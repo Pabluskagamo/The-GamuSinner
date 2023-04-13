@@ -381,6 +381,7 @@ export default class Character extends MovableObject {
 
     collectPowerUp(powerUp) {
         if (!powerUp.getCollected()) {
+            this.checkPowerUpAlreadyActive(powerUp)
             powerUp.collect()
             if (!powerUp.isPassive()) {
                 this.activatePowerUp(powerUp)
@@ -397,7 +398,9 @@ export default class Character extends MovableObject {
             this.currentPowerUp = powerUp
         }
         else {
-            this.currentPowerUp = PowerUpFactory.create(combo, this.scene)
+            const powerCombo = PowerUpFactory.create(combo, this.scene)
+            this.checkPowerUpAlreadyActive(powerCombo)
+            this.currentPowerUp = powerCombo
         }
     }
 
@@ -418,5 +421,19 @@ export default class Character extends MovableObject {
         if (this.hp < this.maxHp) {
             this.hp += value;
         }
+    }
+
+    checkPowerUpAlreadyActive(powerUp){
+
+        if(powerUp.getKey() === this.currentPowerUp.getKey()){
+            this.currentPowerUp.disable(true);
+        }
+        else{
+            const powerExist = this.passives.find(p => {return p.getKey() === powerUp.getKey()})
+            if(powerExist){
+                powerExist.disable(true);
+            }
+        }
+
     }
 }
