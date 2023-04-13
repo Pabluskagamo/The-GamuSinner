@@ -44,6 +44,8 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.tilemapTiledJSON('map', './assets/tilemap/mapa_sinrio.json')
 		this.load.image('game_settings', '/assets/ui/settings.png')
 		this.load.audio("fightSong", "assets/audio/Dream Raid Full Version (Mock Up).mp3");
+		this.load.spritesheet('meiga', './assets/enemies/meiga.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('a_key', './assets/keyboards/A.png', { frameWidth: 19, frameHeight: 21 });
 	}
 
 	create() {
@@ -120,6 +122,14 @@ export default class LevelScene extends Phaser.Scene {
 		}
 		else if(this.enemyPool.fullPool()){
 			this.events.emit('levelComplete');
+			for (let i = 0; i < 25; i++) {
+				setTimeout(() => {
+					this.cameras.main.flash(500);
+				}, i * 900);
+			}
+			this.cameras.main.once("camerafadeoutcomplete", function () {
+				this.addMeiga();
+			}, this);
 		}
 
 		if(this.powerUpActive){
@@ -322,5 +332,24 @@ export default class LevelScene extends Phaser.Scene {
 
 	getGameWidth(){
 		return this.game.config.width
+	}
+
+	addMeiga(){
+		const meiga = this.add.sprite(960, 250, 'meiga').setScale(1.6);
+		this.anims.create({
+            key: 'meigaState',
+			frames: this.anims.generateFrameNumbers('meiga', { start: 0, end: 3 }),
+            frameRate: 3,
+            repeat: -1
+        });
+        meiga.play('meigaState');
+		const h_key = this.add.sprite(957, 220, 'a_key');
+		this.anims.create({
+			key: 'H_Press',
+			frames: this.anims.generateFrameNumbers('a_key', { start: 0, end: 2 }),
+			frameRate: 2,
+			repeat: -1
+		});
+		h_key.play('H_Press');
 	}
 }
