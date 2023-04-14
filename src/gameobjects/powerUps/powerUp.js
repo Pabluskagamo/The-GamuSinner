@@ -13,8 +13,13 @@ export default class PowerUp extends Phaser.Physics.Arcade.Sprite{
         this.scene.physics.add.existing(this)  
     }
 
-    init() {
-        
+    init(x, y) {
+        this.x = x
+        this.y = y
+        this.collected = false
+        this.overlap = false
+        this.setActive(true)
+        this.setVisible(true)
     }
 
     preUpdate(t, dt){
@@ -33,13 +38,13 @@ export default class PowerUp extends Phaser.Physics.Arcade.Sprite{
 
     collect(){
         this.initTimer();
-        this.x = -150;
-        this.y = -150;
-
+        //this.x = -150;
+        //this.y = -150;
+        this.visible = false
+        this.overlap = true
         if (!this.collected) {
             this.collected = true
             this.enabled = true
-            console.log("Collect POWERUP")
         }
     }
     

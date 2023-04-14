@@ -17,21 +17,23 @@ export default class PowerUpPool {
 			this._group.killAndHide(c);
 			c.body.overlap = true;
 		});
+        this._group.shuffle()
 	}
 
     spawn(x, y) {
         //cambiar politica y añadir que no s epueda spawnear si enable de powerUp es true
-        let entity = this._group.getFirstDead();
-
-        if (entity) {
-          entity.x = x;
-          entity.y = y;
-          entity.collected = false
-          entity.setActive(true);
-          entity.setVisible(true);
-          entity.body.overlap = false;
+        //usa false para el active por defecto ver si hacemos esto o hacemos el shuffle cada x tiempo
+        let entity = this._group.getLast()
+        console.log("selecciono la 0 ")
+        for(let i = 0; i < Phaser.Math.Between(0,3); i++){
+            console.log("selecciono la " + (i+1))
+            this.release(entity)
+            entity = this._group.getLast();
         }
-        return entity;
+        if (entity) {
+            entity.init(x, y)
+        }
+        return entity
     }
 
 
@@ -40,8 +42,8 @@ export default class PowerUpPool {
     }
     
     release(entity) {
-        entity.body.overlap = true;
-        this._group.killAndHide(entity);
+        entity.body.overlap = false
+        this._group.killAndHide(entity)
     }
 
     fillPool(){
@@ -51,6 +53,6 @@ export default class PowerUpPool {
             powerUps.push(new TripleShot(this.scene, -125, -125));
             powerUps.push(new EightDirShot(this.scene, -125, -125));
         }
-        this.addMultipleEntity(powerUps);
+        this.addMultipleEntity(powerUps)
     }
 }
