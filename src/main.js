@@ -15,6 +15,9 @@ const config = {
 	pixelArt: true,
 	width: 1176,
 	height: 672,
+	renderer: Phaser.CANVAS,
+	antialias: false,
+	crisp: true,
 	scale: {
 		autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
 		mode: Phaser.Scale.FIT,

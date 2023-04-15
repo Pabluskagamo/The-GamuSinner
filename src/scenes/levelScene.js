@@ -42,10 +42,12 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('bouncingshot', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('map', './assets/tilemap/mapa_sinrio.json')
-		this.load.image('game_settings', '/assets/ui/settings.png')
-		this.load.audio("fightSong", "assets/audio/Dream Raid Full Version (Mock Up).mp3");
+		this.load.image('game_settings', './assets/ui/settings.png')
+		this.load.audio("appearEffect", "./assets/audio/Effects/AppearSoundEffect.mp3");
+		this.load.audio("fightSong", "./assets/audio/Dream Raid Full Version (Mock Up).mp3");
+		this.load.audio("explorationSong", "./assets/audio/Winds Of Stories.mp3");
 		this.load.spritesheet('meiga', './assets/enemies/meiga.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.spritesheet('a_key', './assets/keyboards/A.png', { frameWidth: 19, frameHeight: 21 });
+		this.load.spritesheet('e_key', './assets/keyboards/E.png', { frameWidth: 19, frameHeight: 21 });
 	}
 
 	create() {
@@ -63,9 +65,9 @@ export default class LevelScene extends Phaser.Scene {
 		this.bulletPool.fillPool(200);
 		this.initTimers(false);
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
-		this.scene.launch('UIScene');
+		this.scene.launch('UIScene', {maxHp: this.player.getMaxHp(), hp: this.player.getHp()});
 
-		this.foodPool.spawn(500,150);
+		this.foodPool.spawn(500, 150);
 		settings.setInteractive({ cursor: 'pointer' });
 
 		settings.on('pointerover', function (pointer) {
@@ -81,7 +83,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.player.stopVertical();
 			this.scene.pause();
 			this.scene.pause('UIScene');
-			this.scene.launch('settings', {music: banda});
+			this.scene.launch('settings', { music: banda });
 		});
 
 		this.input.keyboard.on('keydown', (event) => {
@@ -90,7 +92,7 @@ export default class LevelScene extends Phaser.Scene {
 				this.player.stopVertical();
 				this.scene.pause();
 				this.scene.pause('UIScene');
-				this.scene.launch('settings', {music: banda});
+				this.scene.launch('settings', { music: banda });
 			}
 		});
 
@@ -105,6 +107,28 @@ export default class LevelScene extends Phaser.Scene {
 		this.powerUpPool.addMultipleEntity(powerUps);
 		this.spawnMeiga = false;
 		this.e = this.input.keyboard.addKey('E');
+		let statsGame = this.scene.get('stats');
+
+		statsGame.events.on('spentcoins', function (coins) {
+			this.player.setWallet(coins);
+		}, this);
+
+		statsGame.events.on('incrementStrong', function (dmg) {
+			this.bulletPool.changeDmg(dmg);
+		}, this);
+
+		statsGame.events.on('incrementSpeed', function (speed) {
+			this.player.setSpeed(speed);
+		}, this);
+
+		statsGame.events.on('incrementLife', function (hp) {
+			this.player.incrementHp();
+			this.player.setHp(hp);
+		}, this);
+
+		statsGame.events.on('incrementCadence', function (cadence) {
+			this.player.setCadence(cadence);
+		}, this);
 	}
 
 
@@ -113,7 +137,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.enemyPool.spawn(0, 0)
 		}
 
-		if(!this.levelFinished){
+		if (!this.levelFinished) {
 			const remaining = (this.freqChangeTime - this.freqTimer.getElapsed()) / 1000;
 
 			if (this.lastSec != remaining) {
@@ -122,29 +146,31 @@ export default class LevelScene extends Phaser.Scene {
 
 			this.lastSec = remaining
 		}
-		else if(this.enemyPool.fullPool()){
+		else if (this.enemyPool.fullPool()) {
+			this.sound.removeByKey('fightSong');
 			this.events.emit('levelComplete');
-			if(!this.spawnMeiga){
+			if (!this.spawnMeiga) {
 				for (let i = 0; i < 5; i++) {
 					setTimeout(() => {
 						this.cameras.main.flash(500);
-					}, i * 900);
+					}, i * 600);
 				}
 				this.addMeiga();
 				this.spawnMeiga = true;
+				this.player.collectCoin(1000);
 			}
-			else{
-				if (this.e.isDown){
+			else {
+				if (this.e.isDown) {
 					this.player.stopHorizontal();
 					this.player.stopVertical();
 					this.scene.pause();
 					this.scene.pause('UIScene');
-					if(this.scene.isSleeping('stats')){
-						this.scene.wake('stats');
-						this.scene.resume('stats');
+					if (this.scene.isSleeping('stats')) {
+						this.scene.wake('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
+						this.scene.resume('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
 
-					}else{
-						this.scene.launch('stats');
+					} else {
+						this.scene.launch('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
 					}
 				}
 			}
@@ -195,7 +221,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.player.body.onCollide = true;
 
 
-		this.bulletPool = new BulletPool(this, 150)
+		this.bulletPool = new BulletPool(this, 150, 20)
 		this.powerUpPool = new PowerUpPool(this, 15)
 		this.enemyPool = new EnemyPool(this, 15);
 		this.coinPool = new CoinPool(this, 20);
@@ -217,13 +243,12 @@ export default class LevelScene extends Phaser.Scene {
 		}, (obj1, obj2) => !obj1.isEnabled());
 		this.physics.add.overlap(this.foodPool._group, this.player, (obj1, obj2) => {
 			obj1.collect(obj2);
-			this.events.emit('addScore', obj2.getHp());
 		});
 
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
 			obj1.attack(obj2);
 			this.events.emit('addScore', obj2.getHp());
-		},(obj1, obj2) => !obj2.getDash()
+		}, (obj1, obj2) => !obj2.getDash()
 		);
 
 	}
@@ -241,13 +266,13 @@ export default class LevelScene extends Phaser.Scene {
 
 		// console.log('SPAWN ENEMY RAND NUM:', randNum)
 
-		if(randNum < 7){
+		if (randNum < 7) {
 			this.enemyPool.spawnGob(xPos[randX], yPos[randY])
-		}else if(randNum > 7 && randNum < 11){
+		} else if (randNum > 7 && randNum < 11) {
 			this.enemyPool.spawnWolf(xPos[randX], yPos[randY])
-		}else if(randNum > 11 && randNum < 14){
+		} else if (randNum > 11 && randNum < 14) {
 			this.enemyPool.spawnSpectre(xPos[randX], yPos[randY])
-		}else{
+		} else {
 			this.enemyPool.spawnCyclops(xPos[randX], yPos[randY])
 		}
 
@@ -255,7 +280,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 20000;
+		this.freqChangeTime = 0;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -266,7 +291,7 @@ export default class LevelScene extends Phaser.Scene {
 		} else {
 			this.enemySpawnTimer = this.time.addEvent({
 
-				delay: 4000,
+				delay: 300,
 				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true
@@ -296,7 +321,7 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.freqFactor = currDelay > 1000 ? 500 : 200;
 
-		if(currDelay === 1500){
+		if (currDelay === 1500) {
 			this.freqChangeTime = 30000;
 			this.lastSec = 30;
 			this.freqTimer.reset({
@@ -316,37 +341,50 @@ export default class LevelScene extends Phaser.Scene {
 				loop: true
 			})
 		} else {
-			
+
 			this.enemySpawnTimer.remove();
 			this.freqTimer.remove();
 			this.levelFinished = true;
 		}
 	}
 
-	getGameHeight(){
+	getGameHeight() {
 		return this.game.config.height
 	}
 
-	getGameWidth(){
+	getGameWidth() {
 		return this.game.config.width
 	}
 
-	addMeiga(){
+	addMeiga() {
+		const appearEffect = this.sound.add("appearEffect", {
+			volume: 0.1
+		});
+		const explorationSong = this.sound.add("explorationSong", {
+			volume: 0.1,
+			loop: true
+		});
+
+		appearEffect.play();
+
+		appearEffect.once('complete', () => {
+			explorationSong.play();
+		});
 		const meiga = this.add.sprite(960, 250, 'meiga').setScale(1.6);
 		this.anims.create({
-            key: 'meigaState',
+			key: 'meigaState',
 			frames: this.anims.generateFrameNumbers('meiga', { start: 0, end: 3 }),
-            frameRate: 3,
-            repeat: -1
-        });
-        meiga.play('meigaState');
-		const h_key = this.add.sprite(957, 220, 'a_key');
+			frameRate: 3,
+			repeat: -1
+		});
+		meiga.play('meigaState');
+		const e_key = this.add.sprite(957, 220, 'e_key');
 		this.anims.create({
-			key: 'H_Press',
-			frames: this.anims.generateFrameNumbers('a_key', { start: 0, end: 2 }),
+			key: 'E_Press',
+			frames: this.anims.generateFrameNumbers('e_key', { start: 0, end: 2 }),
 			frameRate: 2,
 			repeat: -1
 		});
-		h_key.play('H_Press');
+		e_key.play('E_Press');
 	}
 }

@@ -129,4 +129,8 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite{
             this.scene.bulletPool.release(this);
         }
     }
+
+    setDmg(dmg){
+        this.dmg = dmg;
+    }
 }

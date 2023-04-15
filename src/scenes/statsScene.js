@@ -5,8 +5,11 @@ export default class SettingScene extends Phaser.Scene {
         super('stats');
     }
 
-    init() {
+    init(data) {
         this.cameras.main.fadeIn(500);
+        this.player = data.player;
+        this.wallet = this.player.getWallet();
+        this.dmg = data.dmg;
     }
 
     preload() {
@@ -18,7 +21,7 @@ export default class SettingScene extends Phaser.Scene {
         this.load.spritesheet('cadencebar', './assets/statusbars/CadenceBar.png', { frameWidth: 256, frameHeight: 64 });
         this.load.image('buttonStats', './assets/ui/Statsbutton.png');
         this.load.image('closeButton', './assets/ui/CloseButton.png');
-
+        this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
     }
 
     create(data) {
@@ -28,18 +31,18 @@ export default class SettingScene extends Phaser.Scene {
         const closeButton = this.add.image(1070, 80, 'closeButton');
         closeButton.setInteractive({ cursor: 'pointer' });
 
-		closeButton.on('pointerover', function (pointer) {
-			this.setTint(0x856127);
-		});
+        closeButton.on('pointerover', function (pointer) {
+            this.setTint(0x856127);
+        });
 
-		closeButton.on('pointerout', function (pointer) {
-			this.clearTint();
-		});
+        closeButton.on('pointerout', function (pointer) {
+            this.clearTint();
+        });
 
-		closeButton.on('pointerdown', () => {
+        closeButton.on('pointerdown', () => {
             this.scene.resume('level');
             this.scene.resume('UIScene');
-			this.scene.pause('stats');
+            this.scene.pause('stats');
             this.scene.sleep('stats');
         });
 
@@ -55,22 +58,179 @@ export default class SettingScene extends Phaser.Scene {
         });
         meiga.play('meigaMovement');
 
+        const coins = this.add.sprite(980, 150, 'coin').setScale(1.6);
+        this.actualcoins = this.add.text(995, 140, `X ${this.wallet}`, { fontFamily: 'MedievalSharp-Regular' }).setFontSize(24);
+        this.actualcoins.setColor('#856127');
+
+        this.barIndex = [0, 0, 0, 0];
+        this.barSpent = [20, 20, 20, 20];
+
+        // LIFEBAR
         const lifebar = this.add.sprite(840, 220, 'lifebar').setScale(1.4);
-        const lifeButton = this.add.image(1040, 227, 'buttonStats').setScale(0.75);
+        this.lifeButton = this.add.image(1040, 227, 'buttonStats').setScale(0.75);
+        const lifecoin = this.add.sprite(1010, 227, 'coin').setScale(1.6);
+        var numMonedasLife = this.add.text(1025, 218, `X ${this.barSpent[0]}`, { fontFamily: 'MedievalSharp-Regular' }).setFontSize(17);
+        this.lifeButton.setInteractive({ cursor: 'pointer' });
+
+        this.lifeButton.on('pointerover', function (pointer) {
+            this.setTint(0x856127);
+        });
+
+        this.lifeButton.on('pointerout', function (pointer) {
+            this.clearTint();
+        });
+
+        this.lifeButton.on('pointerdown', () => {
+            this.aumentarBar(this.lifeButton, 0, numMonedasLife, lifebar);
+            this.events.emit('incrementLife', this.player.getHp() + 1);
+        });
+
+        // STRONGBAR
         const strongbar = this.add.sprite(840, 320, 'strongbar').setScale(1.4);
-        const strongButton = this.add.image(1040, 327, 'buttonStats').setScale(0.75);
+        this.strongButton = this.add.image(1040, 327, 'buttonStats').setScale(0.75);
+        const strongcoin = this.add.sprite(1010, 327, 'coin').setScale(1.6);
+        var numMonedasStrong = this.add.text(1025, 318, `X ${this.barSpent[1]}`, { fontFamily: 'MedievalSharp-Regular' }).setFontSize(17);
+        this.strongButton.setInteractive({ cursor: 'pointer' });
+
+        this.strongButton.on('pointerover', function (pointer) {
+            this.setTint(0x856127);
+        });
+
+        this.strongButton.on('pointerout', function (pointer) {
+            this.clearTint();
+        });
+
+        this.strongButton.on('pointerdown', () => {
+            this.aumentarBar(this.strongButton, 1, numMonedasStrong, strongbar);
+            this.dmg = this.dmg + 10;
+            this.events.emit('incrementStrong', this.dmg);
+        });
+
+        // SPEEDBAR
         const speedbar = this.add.sprite(840, 420, 'speedbar').setScale(1.4);
-        const speedButton = this.add.image(1040, 427, 'buttonStats').setScale(0.75);
+        this.speedButton = this.add.image(1040, 427, 'buttonStats').setScale(0.75);
+        const speedcoin = this.add.sprite(1010, 427, 'coin').setScale(1.6);
+        var numMonedasSpeed = this.add.text(1025, 418, `X ${this.barSpent[2]}`, { fontFamily: 'MedievalSharp-Regular' }).setFontSize(17);
+        this.speedButton.setInteractive({ cursor: 'pointer' });
+
+        this.speedButton.on('pointerover', function (pointer) {
+            this.setTint(0x856127);
+        });
+
+        this.speedButton.on('pointerout', function (pointer) {
+            this.clearTint();
+        });
+
+        this.speedButton.on('pointerdown', () => {
+            this.aumentarBar(this.speedButton, 2, numMonedasSpeed, speedbar);
+            this.events.emit('incrementSpeed', this.player.getSpeed() + 15);
+        });
+
+        // CADENCEBAR
         const cadencebar = this.add.sprite(840, 520, 'cadencebar').setScale(1.4);
-        const cadenceButton = this.add.image(1040, 527, 'buttonStats').setScale(0.75);
+        this.cadenceButton = this.add.image(1040, 527, 'buttonStats').setScale(0.75);
+        const cadencecoin = this.add.sprite(1010, 527, 'coin').setScale(1.6);
+        var numMonedasCadence = this.add.text(1025, 518, `X ${this.barSpent[3]}`, { fontFamily: 'MedievalSharp-Regular' }).setFontSize(17);
+        this.cadenceButton.setInteractive({ cursor: 'pointer' });
+
+        this.cadenceButton.on('pointerover', function (pointer) {
+            this.setTint(0x856127);
+        });
+
+        this.cadenceButton.on('pointerout', function (pointer) {
+            this.clearTint();
+        });
+
+        this.cadenceButton.on('pointerdown', () => {
+            this.aumentarBar(this.cadenceButton, 3, numMonedasCadence, cadencebar);
+            this.events.emit('incrementCadence', this.player.getCadence() - 50);
+        });
     }
 
-    update(t){
-        if (this.e.isDown){
-            this.scene.resume('level');
-            this.scene.resume('UIScene');
-			this.scene.pause('stats');
-            this.scene.sleep('stats');
+    aumentarBar(button, index, numMonedas, bar) {
+        if(this.barIndex[index] !== 3){
+            this.barIndex[index] = this.barIndex[index] + 1;
+
+            bar.setFrame(this.barIndex[index]);
+
+            this.wallet = this.wallet - this.barSpent[index];
+
+            this.barSpent[index] = this.barSpent[index] * 10;
+
+            this.events.emit('spentcoins', this.wallet);
+
+            if(this.barIndex[index] !== 3){
+                numMonedas.setText(`X ${this.barSpent[index]}`);
+            }else{
+                numMonedas.setText(`X MAX`);
+            }
+        }
+        else{
+            button.setInteractive(false);
         }
     }
+
+    update(t) {
+        if (this.e.isDown) {
+            this.scene.resume('level');
+            this.scene.resume('UIScene');
+            this.scene.pause('stats');
+            this.scene.sleep('stats');
+        }
+        this.actualcoins.setText(`X ${this.wallet}`);
+        let i = 0;
+        for(let spent of this.barSpent){
+            if(i === 0){
+                if(this.wallet < spent){
+                    this.lifeButton.disableInteractive().setAlpha(0.5);
+                }else{
+                    this.lifeButton.setInteractive({ cursor: 'pointer' });
+                    this.lifeButton.on('pointerover', function (pointer) {
+                        this.setTint(0x856127);
+                    });
+                    this.lifeButton.on('pointerout', function (pointer) {
+                        this.clearTint();
+                    });
+                }
+            }else if(i === 1){
+                if(this.wallet < spent){
+                    this.strongButton.disableInteractive().setAlpha(0.5);
+                }else{
+                    this.strongButton.setInteractive({ cursor: 'pointer' });
+                    this.strongButton.on('pointerover', function (pointer) {
+                        this.setTint(0x856127);
+                    });
+                    this.strongButton.on('pointerout', function (pointer) {
+                        this.clearTint();
+                    });
+                }
+            }else if(i === 2){
+                if(this.wallet < spent){
+                    this.speedButton.disableInteractive().setAlpha(0.5);
+                }else{
+                    this.speedButton.setInteractive({ cursor: 'pointer' });
+                    this.speedButton.on('pointerover', function (pointer) {
+                        this.setTint(0x856127);
+                    });
+                    this.speedButton.on('pointerout', function (pointer) {
+                        this.clearTint();
+                    });
+                }
+            }else{
+                if(this.wallet < spent){
+                    this.cadenceButton.disableInteractive().setAlpha(0.5);
+                }else{
+                    this.cadenceButton.setInteractive({ cursor: 'pointer' });
+                    this.cadenceButton.on('pointerover', function (pointer) {
+                        this.setTint(0x856127);
+                    });
+                    this.cadenceButton.on('pointerout', function (pointer) {
+                        this.clearTint();
+                    });
+                }
+            }
+            i++;
+        }
+    }
+
 }

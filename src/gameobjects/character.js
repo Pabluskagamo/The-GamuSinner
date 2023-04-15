@@ -24,9 +24,10 @@ export default class Character extends MovableObject {
             this.numDirections = 8;
             this.bulletMultiplier = 3;
             this.bulletSpread = 0.25;
-            this.hp = 6;
-            this.maxHp = 6;
+            this.hp = 4;
+            this.maxHp = 4;
             this.lastFired = 0;
+            this.cadence = 400;
 
 
             this.setScale(1.7);
@@ -270,7 +271,7 @@ export default class Character extends MovableObject {
                 this.flipX = true;
                 if (!this.isDead()) {
                     this.attack();
-                    this.lastFired = t + 400;
+                    this.lastFired = t + this.cadence;
                 }
             }
 
@@ -379,6 +380,18 @@ export default class Character extends MovableObject {
         return this.wallet;
     }
 
+    setWallet(coins){
+        this.wallet = coins;
+    }
+
+    getSpeed(){
+        return this.speed;
+    }
+
+    setSpeed(speed){
+        this.speed = speed;
+    }
+
     collectPowerUp(powerUp) {
         if (!powerUp.getCollected()) {
             this.checkPowerUpAlreadyActive(powerUp)
@@ -435,5 +448,21 @@ export default class Character extends MovableObject {
             }
         }
 
+    }
+
+    getMaxHp(){
+        return this.maxHp;
+    }
+
+    incrementHp(){
+        this.maxHp++;
+    }
+
+    getCadence(){
+        return this.cadence;
+    }
+
+    setCadence(c){
+        this.cadence = c;
     }
 }

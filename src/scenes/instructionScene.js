@@ -142,7 +142,6 @@ export default class instructionScene extends Phaser.Scene {
             this.cameras.main.fadeOut(500);
             this.cameras.main.once("camerafadeoutcomplete", function () {
                 this.scene.start('selecScene');
-                this.sound.removeByKey('musica');
             }, this);
         });
 
@@ -152,7 +151,6 @@ export default class instructionScene extends Phaser.Scene {
                 this.cameras.main.fadeOut(500);
                 this.cameras.main.once("camerafadeoutcomplete", function () {
                     this.scene.start('selecScene');
-                    this.sound.removeByKey('musica');
                 }, this);
             }
         });

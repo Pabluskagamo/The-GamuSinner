@@ -5,6 +5,10 @@ export default class Hud extends Phaser.Scene{
         super('UIScene');
     }
 
+    init(data){
+        this.maxHp = data.maxHp;
+        this.hp = data.hp;
+    }
 
     preload() {
 		this.load.spritesheet('healthbar', './assets/ui/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
@@ -72,8 +76,16 @@ export default class Hud extends Phaser.Scene{
             this.countdown.setText('00:'+ (newTime < 10 ? '0' : '') +newTime)
         }, this);
 
+        this.fadeTime = 0;
+
+        let faded = false;
+
         levelGame.events.on('levelComplete', function () {
-            this.countdown.setText('!Has completado todas las oleadas!')
+            this.countdown.setText('!Has completado todas las oleadas!');
+            if(!faded){
+                this.fadeTime = 0;
+                faded = true;
+            }
         }, this);
 
         levelGame.events.on('earnCoin', function (coins) {
@@ -101,19 +113,46 @@ export default class Hud extends Phaser.Scene{
             this.clearPowerUp(key)
         }, this);
 
+        let statsGame = this.scene.get('stats');
+
+        statsGame.events.on('spentcoins', function (coins) {
+            this.numMonedas.setText('X ' + coins)
+        }, this);
+
+        statsGame.events.on('incrementLife', function (hp) {
+            this.maxHp++;
+            this.hp = hp;
+            this.updateHealthUi(this.hp);
+        }, this);
+
+        this.updateHealthUi(this.hp);
+    }
+    update(t){
+        if (this.fadeTime < 3500) {
+            this.fadeTime = this.fadeTime + (t / 1000);
+        } else {
+            this.tweens.add({
+                targets: this.countdown,
+                alpha: 0,
+                duration: 2000,
+                ease: 'Linear'
+            });
+        }
     }
 
     updateHealthUi(hp) {
 		//setscrollfactor(0, 0) para que cuando se 
 		//mueva la camara no se mueva el HUD
 
-
 		for (let i = 1; i <= 6; i++) {
+            this.uiLive[6 - i].setVisible(true);
 			if (i <= hp) {
-				this.uiLive[i - 1].full()
-			} else {
-				this.uiLive[i - 1].empty()
-			}
+				this.uiLive[6 - i].full()
+			} else if(i <= this.maxHp){
+				this.uiLive[6 - i].empty()
+			}else{
+                this.uiLive[6 - i].setVisible(false);
+            }
 		}
 	}
 
