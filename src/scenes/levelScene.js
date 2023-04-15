@@ -220,7 +220,6 @@ export default class LevelScene extends Phaser.Scene {
 		this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 150, null);
 		this.player.body.onCollide = true;
 
-
 		this.bulletPool = new BulletPool(this, 150, 20)
 		this.powerUpPool = new PowerUpPool(this, 15)
 		this.enemyPool = new EnemyPool(this, 15);
