@@ -196,7 +196,7 @@ export default class LevelScene extends Phaser.Scene {
 
 
 		this.bulletPool = new BulletPool(this, 150)
-		this.powerUpPool = new PowerUpPool(this, 15)
+		this.powerUpPool = new PowerUpPool(this, 6)
 		this.enemyPool = new EnemyPool(this, 15);
 		this.coinPool = new CoinPool(this, 20);
 		this.foodPool = new FoodPool(this, 20);
