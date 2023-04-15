@@ -23,9 +23,7 @@ export default class Hud extends Phaser.Scene{
     create ()
     {   
         //VIDA
-        this.uiLive = [new HealthPoint(this, 960, 90), new HealthPoint(this, 990, 90),
-            new HealthPoint(this, 1020, 90), new HealthPoint(this, 1050, 90), new HealthPoint(this, 1080, 90), new HealthPoint(this, 1110, 90)]
-
+        this.initHearthsHud()
 
         //MONEDAS
         this.numMonedas = this.add.text(1044, 115, 'X 0', { fontFamily: 'MedievalSharp-Regular' });
@@ -78,13 +76,13 @@ export default class Hud extends Phaser.Scene{
 
         this.fadeTime = 0;
 
-        let faded = false;
+        this.faded = false;
 
         levelGame.events.on('levelComplete', function () {
             this.countdown.setText('!Has completado todas las oleadas!');
-            if(!faded){
+            if(!this.faded){
                 this.fadeTime = 0;
-                faded = true;
+                this.faded = true;
             }
         }, this);
 
@@ -120,6 +118,8 @@ export default class Hud extends Phaser.Scene{
         }, this);
 
         statsGame.events.on('incrementLife', function (hp) {
+            this.uiLive.unshift(new HealthPoint(this, this.uiLive[0].x-30, 90))
+            console.log("SUBIR HP", this.uiLive[0].x)
             this.maxHp++;
             this.hp = hp;
             this.updateHealthUi(this.hp);
@@ -128,15 +128,28 @@ export default class Hud extends Phaser.Scene{
         this.updateHealthUi(this.hp);
     }
     update(t){
-        if (this.fadeTime < 3500) {
-            this.fadeTime = this.fadeTime + (t / 1000);
-        } else {
-            this.tweens.add({
-                targets: this.countdown,
-                alpha: 0,
-                duration: 2000,
-                ease: 'Linear'
-            });
+        if(this.faded){
+            if (this.fadeTime < 3500) {
+                this.fadeTime = this.fadeTime + (t / 1000);
+            } else {
+                this.tweens.add({
+                    targets: this.countdown,
+                    alpha: 0,
+                    duration: 2000,
+                    ease: 'Linear'
+                });
+            }
+        }
+    }
+
+
+    initHearthsHud(){
+        let lastPosX = 1110;
+        this.uiLive = []
+
+        for(let i = 0; i < this.maxHp; i++){
+            this.uiLive.unshift(new HealthPoint(this, lastPosX, 90));
+            lastPosX-=30;
         }
     }
 
@@ -144,15 +157,13 @@ export default class Hud extends Phaser.Scene{
 		//setscrollfactor(0, 0) para que cuando se 
 		//mueva la camara no se mueva el HUD
 
-		for (let i = 1; i <= 6; i++) {
-            this.uiLive[6 - i].setVisible(true);
+		for (let i = 1; i <= this.maxHp; i++) {
+        
 			if (i <= hp) {
-				this.uiLive[6 - i].full()
+				this.uiLive[i-1].full()
 			} else if(i <= this.maxHp){
-				this.uiLive[6 - i].empty()
-			}else{
-                this.uiLive[6 - i].setVisible(false);
-            }
+				this.uiLive[i-1].empty()
+			}
 		}
 	}
 

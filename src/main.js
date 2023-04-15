@@ -40,7 +40,7 @@ const config = {
 		},
 	},
 
-	scene: [MainScene, InstructionScene, selecScene,LevelScene, Hud, StatsScene, SettingScene, GameOverScene],
+	scene: [MainScene, InstructionScene, selecScene, LevelScene, Hud, StatsScene, SettingScene, GameOverScene],
 }
 
 export default new Phaser.Game(config)

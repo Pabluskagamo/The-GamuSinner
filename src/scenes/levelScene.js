@@ -137,16 +137,10 @@ export default class LevelScene extends Phaser.Scene {
 			this.enemyPool.spawn(0, 0)
 		}
 
-		if (!this.levelFinished) {
-			const remaining = (this.freqChangeTime - this.freqTimer.getElapsed()) / 1000;
-
-			if (this.lastSec != remaining) {
-				this.events.emit('changeCount', remaining.toFixed(0));
-			}
-
-			this.lastSec = remaining
+		if (!this.levelFinished && !this.debugMode) {
+			this.updateWaveCount()
 		}
-		else if (this.enemyPool.fullPool()) {
+		else if (this.enemyPool.fullPool() && !this.debugMode) {
 			this.sound.removeByKey('fightSong');
 			this.events.emit('levelComplete');
 			if (!this.spawnMeiga) {
@@ -221,7 +215,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.player.body.onCollide = true;
 
 		this.bulletPool = new BulletPool(this, 150, 20)
-		this.powerUpPool = new PowerUpPool(this, 15)
+		this.powerUpPool = new PowerUpPool(this, 6)
 		this.enemyPool = new EnemyPool(this, 15);
 		this.coinPool = new CoinPool(this, 20);
 		this.foodPool = new FoodPool(this, 20);
@@ -242,6 +236,7 @@ export default class LevelScene extends Phaser.Scene {
 		}, (obj1, obj2) => !obj1.isEnabled());
 		this.physics.add.overlap(this.foodPool._group, this.player, (obj1, obj2) => {
 			obj1.collect(obj2);
+			this.events.emit('addScore', obj2.getHp());
 		});
 
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
@@ -290,7 +285,7 @@ export default class LevelScene extends Phaser.Scene {
 		} else {
 			this.enemySpawnTimer = this.time.addEvent({
 
-				delay: 300,
+				delay: 4000,
 				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true
@@ -353,6 +348,16 @@ export default class LevelScene extends Phaser.Scene {
 
 	getGameWidth() {
 		return this.game.config.width
+	}
+
+	updateWaveCount(){
+		const remaining = (this.freqChangeTime - this.freqTimer.getElapsed()) / 1000;
+
+		if (this.lastSec != remaining) {
+			this.events.emit('changeCount', remaining.toFixed(0));
+		}
+
+		this.lastSec = remaining
 	}
 
 	addMeiga() {
