@@ -16,6 +16,7 @@ export default class Character extends MovableObject {
             this.wallet = 0;
             this.isAttacking = false;
             this.isDashing = false;
+            this.lastDash = 0;
             this.tripleShot = true;
             this.eightDirShot = false;
             this.nonePowerUp = new NonePowerUp(this.scene)
@@ -256,7 +257,12 @@ export default class Character extends MovableObject {
             }
 
             if (this.shift.isDown) {
-                this.dash();
+
+                //Momentaneo, se hara con timer
+                if(t > this.lastDash){
+                    this.dash();
+                    this.lastDash = t + 5000
+                }
             }
 
             if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
@@ -368,6 +374,7 @@ export default class Character extends MovableObject {
             this.speed = speed;
         }
     }
+
     getDash() {
         return this.isDashing;
     }

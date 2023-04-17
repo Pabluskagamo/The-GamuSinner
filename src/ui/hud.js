@@ -79,6 +79,7 @@ export default class Hud extends Phaser.Scene{
         this.faded = false;
 
         levelGame.events.on('levelComplete', function () {
+            this.countdown.x -= 150
             this.countdown.setText('!Has completado todas las oleadas!');
             if(!this.faded){
                 this.fadeTime = 0;

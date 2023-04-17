@@ -52,11 +52,11 @@ export default class LevelScene extends Phaser.Scene {
 
 	create() {
 
-		let banda = this.sound.add("fightSong", {
+		this.banda = this.sound.add("fightSong", {
 			volume: 0.1,
 			loop: true
 		});
-		banda.play();
+		this.banda.play();
 
 		this.initPlayerAndPools();
 		this.initMap();
@@ -83,7 +83,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.player.stopVertical();
 			this.scene.pause();
 			this.scene.pause('UIScene');
-			this.scene.launch('settings', { music: banda });
+			this.scene.launch('settings', { music: this.banda });
 		});
 
 		this.input.keyboard.on('keydown', (event) => {
@@ -92,7 +92,7 @@ export default class LevelScene extends Phaser.Scene {
 				this.player.stopVertical();
 				this.scene.pause();
 				this.scene.pause('UIScene');
-				this.scene.launch('settings', { music: banda });
+				this.scene.launch('settings', { music: this.banda });
 			}
 		});
 
@@ -137,47 +137,18 @@ export default class LevelScene extends Phaser.Scene {
 			this.enemyPool.spawn(0, 0)
 		}
 
-		if (!this.levelFinished && !this.debugMode) {
+		if (!this.wavesFinished && !this.debugMode) {
 			this.updateWaveCount()
 		}
-		else if (this.enemyPool.fullPool() && !this.debugMode) {
-			this.sound.removeByKey('fightSong');
-			this.events.emit('levelComplete');
-			if (!this.spawnMeiga) {
-				for (let i = 0; i < 5; i++) {
-					setTimeout(() => {
-						this.cameras.main.flash(500);
-					}, i * 600);
-				}
-				this.addMeiga();
-				this.spawnMeiga = true;
-				this.player.collectCoin(1000);
-			}
-			else {
-				if (this.e.isDown) {
-					this.player.stopHorizontal();
-					this.player.stopVertical();
-					this.scene.pause();
-					this.scene.pause('UIScene');
-					if (this.scene.isSleeping('stats')) {
-						this.scene.wake('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
-						this.scene.resume('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
-
-					} else {
-						this.scene.launch('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
-					}
-				}
-			}
+		else if (!this.levelFinished && this.enemyPool.fullPool() && !this.debugMode) {
+			this.levelFinished = true;
+			this.completeLevel();
 		}
 
-		// if(this.powerUpActive){
-		// 	const remaining = (10000 - this.powerUpTimer.getElapsed()) / 1000;
+		if (this.spawnMeiga && this.e.isDown) {
+			this.openMeigaMenu()
+		}
 
-		// 	if (this.lastSecPow != remaining) {
-		// 		this.events.emit('UpdatePowerUpTimer', remaining.toFixed(0));
-		// 	}
-		// 	this.lastSecPow = remaining
-		// }
 	}
 
 	initMap() {
@@ -274,10 +245,11 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 0;
+		this.freqChangeTime = 20000;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
+		this.wavesFinished = false;
 
 		if (debug) {
 			this.v = this.input.keyboard.addKey('v');
@@ -285,7 +257,7 @@ export default class LevelScene extends Phaser.Scene {
 		} else {
 			this.enemySpawnTimer = this.time.addEvent({
 
-				delay: 4000,
+				delay: 400,
 				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true
@@ -306,8 +278,26 @@ export default class LevelScene extends Phaser.Scene {
 		this.cameras.main.fadeOut(500);
 		this.cameras.main.once("camerafadeoutcomplete", function () {
 			this.scene.start('game_over');
-			this.scene.sleep('UIScene');
+			this.scene.stop('UIScene')
+			this.banda.stop()
 		}, this);
+	}
+
+	completeLevel(){
+		console.log("NIVEL COMPLETADO")
+
+		this.sound.removeByKey('fightSong');
+		this.events.emit('levelComplete');
+
+		for (let i = 0; i < 5; i++) {
+			setTimeout(() => {
+				this.cameras.main.flash(500);
+			}, i * 600);
+		}
+
+		this.addMeiga();
+		this.spawnMeiga = true;
+		this.player.collectCoin(1000);
 	}
 
 	changeFreqHandler() {
@@ -335,10 +325,9 @@ export default class LevelScene extends Phaser.Scene {
 				loop: true
 			})
 		} else {
-
 			this.enemySpawnTimer.remove();
 			this.freqTimer.remove();
-			this.levelFinished = true;
+			this.wavesFinished = true;
 		}
 	}
 
@@ -390,5 +379,19 @@ export default class LevelScene extends Phaser.Scene {
 			repeat: -1
 		});
 		e_key.play('E_Press');
+	}
+
+	openMeigaMenu(){
+		this.player.stopHorizontal();
+		this.player.stopVertical();
+		this.scene.pause();
+		this.scene.pause('UIScene');
+		if (this.scene.isSleeping('stats')) {
+			this.scene.wake('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
+			this.scene.resume('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
+
+		} else {
+			this.scene.launch('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
+		}
 	}
 }
