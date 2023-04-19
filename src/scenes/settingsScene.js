@@ -64,6 +64,8 @@ export default class SettingScene extends Phaser.Scene {
 			restart.playReverse('hoverRestart');
 		});
         restart.on('pointerup', () => {
+			this.sound.removeByKey('explorationSong');
+			this.sound.removeByKey('fightSong');
 			this.scene.sleep('settings');
 			this.scene.sleep('UIScene');
 			this.scene.start('level');
@@ -85,6 +87,8 @@ export default class SettingScene extends Phaser.Scene {
 			menu.playReverse('hoverMenu');
 		});
         menu.on('pointerup', () => {
+			this.sound.removeByKey('explorationSong');
+			this.sound.removeByKey('fightSong');
 			this.scene.sleep('settings');
 			this.scene.sleep('UIScene');
 			this.scene.stop('level')
