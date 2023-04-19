@@ -33,6 +33,7 @@ export default class PowerUpPool {
             }
             if (entity) {
                 entity.init(x, y)
+                entity.initItem()
             }
             return entity
         }

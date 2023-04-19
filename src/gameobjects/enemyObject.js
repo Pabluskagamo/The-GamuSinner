@@ -65,10 +65,19 @@ export default class EnemyObject extends MovableObject {
     }
 
     drop(){
-        if (this.scene.coinPool.hasCoins() && this.scene.powerUpPool.hasPowerUps() && Phaser.Math.FloatBetween(0, 1) < 0.9){
+        
+        if (this.scene.coinPool.hasCoins() && Phaser.Math.FloatBetween(0, 1) < 0.7){
             this.scene.coinPool.spawn(this.x, this.y);
+        }
+        
+        if(this.scene.foodPool.hasFood() && Phaser.Math.FloatBetween(0, 1) < 0.1){
+            this.scene.foodPool.spawn(this.x, this.y);
+        }
+
+        if(this.scene.powerUpPool.hasPowerUps() && Phaser.Math.FloatBetween(0, 1) < 0.25){
             this.scene.powerUpPool.spawn(this.x, this.y);
         }
+
     }
 
     hitEnemy(dmg){

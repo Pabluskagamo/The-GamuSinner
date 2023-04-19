@@ -1,4 +1,6 @@
-export default class Coin extends Phaser.Physics.Arcade.Sprite{
+import Item from "./item";
+
+export default class Coin extends Item{
 
     constructor(scene, x, y, value){
         super(scene, x, y, 'coin');
@@ -23,10 +25,15 @@ export default class Coin extends Phaser.Physics.Arcade.Sprite{
 
     collect(character){
         if(!this.collected){
+            super.collect();
             this.collected = true;
             character.collectCoin(this.value);
             this.scene.coinPool.release(this);
         }
+    }
+
+    deSpawn(){
+        this.scene.coinPool.release(this);
     }
 
 }

@@ -1,4 +1,6 @@
-export default class Food extends Phaser.Physics.Arcade.Sprite{
+import Item from "./item";
+
+export default class Food extends Item{
 
     constructor(scene, x, y, value){
         super(scene, x, y, 'food');
@@ -23,11 +25,18 @@ export default class Food extends Phaser.Physics.Arcade.Sprite{
     }
 
     collect(character){
+
         if(!this.collected){
+            super.collect();
             this.collected = true;
             character.collectFood(this.value);
             this.scene.foodPool.release(this);
         }
     }
+
+    deSpawn(){
+        this.scene.foodPool.release(this);
+    }
+
 
 }

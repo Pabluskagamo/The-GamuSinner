@@ -1,4 +1,6 @@
-export default class PowerUp extends Phaser.Physics.Arcade.Sprite{
+import Item from "../items/item"
+
+export default class PowerUp extends Item{
 
     constructor(scene, x, y, key, passive){
         super(scene, x, y, key)
@@ -43,6 +45,7 @@ export default class PowerUp extends Phaser.Physics.Arcade.Sprite{
         this.visible = false
         this.overlap = true
         if (!this.collected) {
+            super.collect();
             this.collected = true
             this.enabled = true
         }
@@ -91,4 +94,9 @@ export default class PowerUp extends Phaser.Physics.Arcade.Sprite{
 		this.scene.events.emit('UpdatePowerUpTimer', -1);
 		this.scene.events.emit('endPowerUpPlayer');
 	}
+
+
+    deSpawn(){
+        this.scene.powerUpPool.release(this);
+    }
 }

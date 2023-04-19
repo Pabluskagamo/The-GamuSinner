@@ -23,7 +23,7 @@ export default class foodPool {
         if (entity) {
           entity.x = x;
           entity.y = y;
-          entity.collected = false;
+          entity.initItem()
           entity.setActive(true);
           entity.setVisible(true);
           entity.body.overlap = false;
