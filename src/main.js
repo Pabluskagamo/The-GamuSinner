@@ -8,7 +8,7 @@ import Hud from './ui/hud'
 import GameOverScene from './scenes/GameOverScene'
 import SettingScene from './scenes/settingsScene'
 import StatsScene from './scenes/statsScene'
-
+import historyScene from './scenes/historyScene'
 const config = {
 	type: Phaser.AUTO,
 	parent: 'app',
@@ -40,7 +40,7 @@ const config = {
 		},
 	},
 
-	scene: [MainScene, InstructionScene, selecScene, LevelScene, Hud, StatsScene, SettingScene, GameOverScene],
+	scene: [MainScene, historyScene, InstructionScene, selecScene, LevelScene, Hud, StatsScene, SettingScene, GameOverScene],
 }
 
 export default new Phaser.Game(config)

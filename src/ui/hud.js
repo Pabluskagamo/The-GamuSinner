@@ -1,3 +1,4 @@
+import dialogBox from "../dialogs/dialogBox";
 import HealthPoint from "./healthpoint";
 
 export default class Hud extends Phaser.Scene{
@@ -22,6 +23,7 @@ export default class Hud extends Phaser.Scene{
 
     create ()
     {   
+        new dialogBox(this,200,200, 500);
         //VIDA
         this.initHearthsHud()
 
