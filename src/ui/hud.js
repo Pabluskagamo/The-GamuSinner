@@ -55,6 +55,10 @@ export default class Hud extends Phaser.Scene{
                 multiple: true,
                 comboKeys: ["tripleShot", "eightDirShot"],
                 text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
+            },
+            dash_char: {
+                img: this.add.image(-150, -150, 'bouncingShotHud'),
+                text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
             }
         }
         
@@ -99,6 +103,11 @@ export default class Hud extends Phaser.Scene{
             }
         }, this);
 
+        levelGame.events.on('characterDash', function () {
+            this.powerUpsList.push("dash_char")
+            this.updatePowerUpsHud()
+        }, this); 
+
         levelGame.events.on('updatePowerupCount', function (key, newTime) {
             if(newTime !== -1){
                 this.updatePowerUpCount(key, newTime)
@@ -106,7 +115,11 @@ export default class Hud extends Phaser.Scene{
                 // this.powerUpTimer.setVisible(false)
                 // this.clearPowerUps()
             }
-        }, this);   
+        }, this);
+
+        levelGame.events.on('characterDashEnd', function () {
+            this.clearPowerUp("dash_char")
+        }, this); 
         
         levelGame.events.on('endPowerUpTime', function (key) {
             this.clearPowerUp(key)
