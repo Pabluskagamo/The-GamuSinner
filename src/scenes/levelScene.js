@@ -245,7 +245,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 20000;
+		this.freqChangeTime = 1;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -257,7 +257,7 @@ export default class LevelScene extends Phaser.Scene {
 		} else {
 			this.enemySpawnTimer = this.time.addEvent({
 
-				delay: 4000,
+				delay: 100,
 				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true

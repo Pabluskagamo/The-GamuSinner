@@ -14,6 +14,7 @@ export default class CoinPool {
 		this._group.children.iterate(c => {
 			this._group.killAndHide(c);
 			c.body.overlap = true;
+            c.body.enable = false;
 		});
 	}
 
@@ -27,6 +28,7 @@ export default class CoinPool {
           entity.setActive(true);
           entity.setVisible(true);
           entity.body.overlap = false;
+          entity.body.enable = true;
         }
         return entity;
     }
@@ -38,6 +40,7 @@ export default class CoinPool {
     
     release(entity) {
         entity.body.overlap = true;
+        entity.body.enable = false;
         this._group.killAndHide(entity);
     }
 
