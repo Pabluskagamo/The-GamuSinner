@@ -13,16 +13,17 @@ import BouncingShot from "../gameobjects/powerUps/bouncingShot"
 import FreezingShot from "../gameobjects/powerUps/freezingShot"
 
 export default class LevelScene extends Phaser.Scene {
-	constructor() {
-		super('level')
+	constructor(scene) {
+		super(scene)
+        this.namescene = scene;
 	}
 
 	init() {
+		console.log("Entre")
 		this.cameras.main.fadeIn(500);
 	}
 
 	preload() {
-		this.load.image('level_background', './img/top-down-forest.png')
 		this.load.spritesheet('character', './assets/character/character.png', { frameWidth: 64, frameHeight: 32.3 })
 		this.load.spritesheet('character_shot', './assets/character/character_shooting.png', { frameWidth: 64, frameHeight: 32 })
 		this.load.spritesheet('blackWolf', './assets/enemies/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
@@ -51,15 +52,15 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('e_key', './assets/keyboards/E.png', { frameWidth: 19, frameHeight: 21 });
 	}
 
-	create() {
+	create(data) {
 
-		this.banda = this.sound.add("fightSong", {
+        this.banda = this.sound.add("fightSong", {
 			volume: 0.1,
 			loop: true
 		});
 		this.banda.play();
 
-		this.initPlayerAndPools();
+		this.initPlayerAndPools(data);
 		this.initMap();
 		this.coinPool.fillPull(20);
 		this.foodPool.fillPull(20);
@@ -84,7 +85,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.player.stopVertical();
 			this.scene.pause();
 			this.scene.pause('UIScene');
-			this.scene.launch('settings', { music: this.banda });
+			this.scene.launch('settings', { level: this.namescene });
 		});
 
 		this.input.keyboard.on('keydown', (event) => {
@@ -93,7 +94,7 @@ export default class LevelScene extends Phaser.Scene {
 				this.player.stopVertical();
 				this.scene.pause();
 				this.scene.pause('UIScene');
-				this.scene.launch('settings', { music: this.banda });
+				this.scene.launch('settings', { level: this.namescene });
 			}
 		});
 
@@ -165,6 +166,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.borderTrees = this.map.createLayer('bordeArboles', tiles);
 
 		this.foregroundLayer.setCollisionBetween(0, 999);
+        this.puertaSolida.setImmovable(true);
 
 		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
 		this.physics.add.collider(this.player, this.foregroundLayer);
@@ -186,8 +188,18 @@ export default class LevelScene extends Phaser.Scene {
 		this.foregroundLayer.setDepth(3);
 	}
 
-	initPlayerAndPools() {
-		this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 150, null);
+	initPlayerAndPools(data) {
+		this.prevScene = data.prevScene;
+		let x = this.sys.game.canvas.width / 2;
+		let y = this.sys.game.canvas.height / 2;
+		if(this.prevScene === "level1"){
+			y = this.sys.game.canvas.height - 80;
+		}
+        if(data.length !== undefined){
+            this.player = new Character(this, x, y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(),  data.player.getCadence());
+        }else{
+            this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, null, 150, 4, 4, 0, 400);
+        }
 		this.player.body.onCollide = true;
 
 		this.bulletPool = new BulletPool(this, 150, 20)
@@ -250,7 +262,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 1;
+		this.freqChangeTime = 30000;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -261,7 +273,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.debugMode = true;
 		} else {
 			this.enemySpawnTimer = this.time.addEvent({
-				delay: 100,
+				delay: 4000,
 				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true
@@ -301,7 +313,6 @@ export default class LevelScene extends Phaser.Scene {
 			}, i * 600);
 		}
 
-		this.addMeiga();
 		this.spawnMeiga = true;
 		this.player.collectCoin(1000);
 	}
@@ -355,7 +366,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.lastSec = remaining
 	}
 
-	addMeiga() {
+    addMeiga() {
 		const appearEffect = this.sound.add("appearEffect", {
 			volume: 0.1
 		});
@@ -387,7 +398,7 @@ export default class LevelScene extends Phaser.Scene {
 		e_key.play('E_Press');
 	}
 
-	openMeigaMenu(){
+    openMeigaMenu() {
 		this.player.stopHorizontal();
 		this.player.stopVertical();
 		this.scene.pause();
@@ -400,4 +411,5 @@ export default class LevelScene extends Phaser.Scene {
 			this.scene.launch('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
 		}
 	}
+
 }

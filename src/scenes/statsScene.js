@@ -40,7 +40,7 @@ export default class SettingScene extends Phaser.Scene {
         });
 
         closeButton.on('pointerdown', () => {
-            this.scene.resume('level');
+            this.scene.resume('level1');
             this.scene.resume('UIScene');
             this.scene.pause('stats');
             this.scene.sleep('stats');
@@ -172,7 +172,7 @@ export default class SettingScene extends Phaser.Scene {
 
     update(t) {
         if (this.e.isDown) {
-            this.scene.resume('level');
+            this.scene.resume('level1');
             this.scene.resume('UIScene');
             this.scene.pause('stats');
             this.scene.sleep('stats');

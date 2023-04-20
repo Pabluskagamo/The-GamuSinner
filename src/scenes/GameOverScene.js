@@ -45,14 +45,14 @@ export default class GameOverScene extends Phaser.Scene {
 		restart.on('pointerup', () => {
 			this.sound.removeByKey('explorationSong');
 			this.sound.removeByKey('fightSong');
-			this.scene.start('level');
+			this.scene.start('level1');
 		});
 
 		this.input.keyboard.on('keydown', (event) => {
 			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
 				this.sound.removeByKey('explorationSong');
 				this.sound.removeByKey('fightSong');
-				this.scene.start('level');
+				this.scene.start('level1');
 			}
 		});
 

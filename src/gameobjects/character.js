@@ -6,14 +6,14 @@ import MultipleDirectionShot from "./powerUps/multipleDirectionShot";
 
 export default class Character extends MovableObject {
 
-    constructor(scene, x, y, speed, instruction) {
+    constructor(scene, x, y, instruction, speed, hp, maxHp, wallet, cadence) {
         super(scene, x, y, 'character', speed, 20);
         this.speed = speed;
         this.scene.add.existing(this);
         this.instruction = instruction;
 
         if (this.instruction === null) {
-            this.wallet = 0;
+            this.wallet = wallet;
             this.isAttacking = false;
             this.isDashing = false;
             this.lastDash = 0;
@@ -25,10 +25,10 @@ export default class Character extends MovableObject {
             this.numDirections = 8;
             this.bulletMultiplier = 3;
             this.bulletSpread = 0.25;
-            this.hp = 4;
-            this.maxHp = 4;
+            this.hp = hp;
+            this.maxHp = maxHp;
             this.lastFired = 0;
-            this.cadence = 400;
+            this.cadence = cadence;
             this.dashTimer = null;
 
 

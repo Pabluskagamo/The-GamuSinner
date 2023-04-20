@@ -5,8 +5,9 @@ export default class SettingScene extends Phaser.Scene {
         super('settings');
     }
 
-    init() {
+    init(data) {
         this.cameras.main.fadeIn(500);
+		this.level = data.level;
     }
 
     preload() {
@@ -42,7 +43,7 @@ export default class SettingScene extends Phaser.Scene {
 			resume.playReverse('hoverResume');
 		});
 		resume.on('pointerdown', () => {
-            this.scene.resume('level');
+            this.scene.resume(this.level);
             this.scene.resume('UIScene');
 			this.scene.sleep('settings');
         });
@@ -68,7 +69,7 @@ export default class SettingScene extends Phaser.Scene {
 			this.sound.removeByKey('fightSong');
 			this.scene.sleep('settings');
 			this.scene.sleep('UIScene');
-			this.scene.start('level');
+			this.scene.start('level1');
 		});
 
         // MENU BUTTON
@@ -91,7 +92,7 @@ export default class SettingScene extends Phaser.Scene {
 			this.sound.removeByKey('fightSong');
 			this.scene.sleep('settings');
 			this.scene.sleep('UIScene');
-			this.scene.stop('level')
+			this.scene.stop(this.level)
 			this.scene.start('mainScene');
 		});
 

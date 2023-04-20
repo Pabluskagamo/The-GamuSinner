@@ -69,7 +69,7 @@ export default class Hud extends Phaser.Scene{
         this.countdown.setFontSize(24);
 
         //  Grab a reference to the Game Scene
-        let levelGame = this.scene.get('level');
+        let levelGame = this.scene.get('level1');
 
         //  Listen for events from it
         levelGame.events.on('addScore', function (hp) {

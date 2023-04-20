@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 
+
 export default class selectionScene extends Phaser.Scene {
 	constructor() {
 		super('selecScene');
@@ -28,7 +29,7 @@ export default class selectionScene extends Phaser.Scene {
 		botonGalicia.on('pointerup', () => {
 			this.cameras.main.fadeOut(500);
 			this.cameras.main.once("camerafadeoutcomplete", function () {
-				this.scene.start('level');
+				this.scene.start('level1');
 				this.sound.removeByKey('musica');
 			}, this);
 		});

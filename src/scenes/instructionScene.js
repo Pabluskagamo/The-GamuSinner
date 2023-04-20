@@ -64,7 +64,7 @@ export default class instructionScene extends Phaser.Scene {
         const granade = this.add.sprite(920, 390, 'granade').setScale(0.7);
 
         //MOVE CHARACTER
-        const moveCharacter = new Character(this, 600, 220, 0, "move").setScale(3.5);
+        const moveCharacter = new Character(this, 600, 220, "move").setScale(3.5);
         s_key.play('S_Press');
 
         s_key.on('animationcomplete', (param1, param2, param3) => {
@@ -86,7 +86,7 @@ export default class instructionScene extends Phaser.Scene {
 
         // SHOOT CHARACTER
 
-        const shootCharacter = new Character(this, 600, 380, 0, "shoot").setScale(3.5);
+        const shootCharacter = new Character(this, 600, 380, "shoot").setScale(3.5);
         down_key.play('DOWN_Press');
 
         down_key.on('animationcomplete', (param1, param2, param3) => {
@@ -105,10 +105,10 @@ export default class instructionScene extends Phaser.Scene {
             shootCharacter.play('mainChar_controls_shootlado');
             down_key.play('DOWN_Press');
         })
-        
+
         // DASH CHARACTER
 
-        const dashCharacter = new Character(this, 600, 540, 0, "dash").setScale(3.5);
+        const dashCharacter = new Character(this, 600, 540, "dash").setScale(3.5);
         tab_key.play('TAB_Press');
 
         dashCharacter.on('animationcomplete', (param1, param2, param3) => {
