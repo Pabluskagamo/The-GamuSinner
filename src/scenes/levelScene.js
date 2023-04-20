@@ -41,7 +41,8 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('freezingshot', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bouncingshot', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
-		this.load.tilemapTiledJSON('map', './assets/tilemap/mapa_sinrio.json')
+		this.load.tilemapTiledJSON('map', './assets/tilemap/sala1.json')
+		this.load.image('puertaSala1', './assets/tileset/puertas_32x32.png')
 		this.load.image('game_settings', './assets/ui/settings.png')
 		this.load.audio("appearEffect", "./assets/audio/Effects/AppearSoundEffect.mp3");
 		this.load.audio("fightSong", "./assets/audio/Dream Raid Full Version (Mock Up).mp3");
@@ -158,23 +159,27 @@ export default class LevelScene extends Phaser.Scene {
 		const tiles = mapa.addTilesetImage('Forest', 'tiles');
 		this.groundLayer = this.map.createLayer('Suelo', tiles);
 		this.foregroundLayer = this.map.createLayer('Bordes', tiles);
-		//this.river = this.map.createLayer('Rio', tiles);
-		//this.borderRiver = this.map.createLayer('MargenRio', tiles);
+		this.puertaSolida = this.physics.add.image(576, 16, 'puertaSala1');
+		this.puerta = this.map.createLayer('Puerta2', tiles);
 		this.objetos = this.map.createLayer('Objetos', tiles);
 		this.borderTrees = this.map.createLayer('bordeArboles', tiles);
 
-		//this.river.setCollisionBetween(0, 999);
 		this.foregroundLayer.setCollisionBetween(0, 999);
 
 		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
 		this.physics.add.collider(this.player, this.foregroundLayer);
-		//this.physics.add.collider(this.enemyPool._group, this.river);
-		//this.physics.add.collider(this.player, this.river);
+		this.physics.add.collider(this.enemyPool._group, this.puertaSolida);
+		this.physics.add.collider(this.player, this.puertaSolida);
 
 		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
 			obj1.reboundOrRelease()
 		});
 
+		this.physics.add.collider(this.bulletPool._group, this.puertaSolida, (obj1, obj2) => {
+			obj1.reboundOrRelease()
+		});
+
+		this.puertaSolida.setDepth(3);
 		this.player.setDepth(2);
 		this.enemyPool._group.setDepth(2);
 		this.borderTrees.setDepth(3);
@@ -245,7 +250,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 20000;
+		this.freqChangeTime = 0;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -257,7 +262,7 @@ export default class LevelScene extends Phaser.Scene {
 		} else {
 			this.enemySpawnTimer = this.time.addEvent({
 
-				delay: 4000,
+				delay: 0,
 				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true
@@ -288,6 +293,8 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.sound.removeByKey('fightSong');
 		this.events.emit('levelComplete');
+		this.puerta.setVisible(false);
+		this.puertaSolida.destroy();
 
 		for (let i = 0; i < 5; i++) {
 			setTimeout(() => {
