@@ -16,6 +16,7 @@ export default class PowerUpPool {
 		this._group.children.iterate(c => {
 			this._group.killAndHide(c);
 			c.body.overlap = true;
+            c.body.enable = false;
 		});
         this._group.shuffle()
 	}
@@ -34,6 +35,7 @@ export default class PowerUpPool {
             if (entity) {
                 entity.init(x, y)
                 entity.initItem()
+                entity.body.enable = true;
             }
             return entity
         }
@@ -45,7 +47,8 @@ export default class PowerUpPool {
     }
     
     release(entity) {
-        entity.body.overlap = false
+        entity.body.overlap = false;
+        entity.body.enable = false;
         this._group.killAndHide(entity)
     }
 

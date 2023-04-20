@@ -29,6 +29,7 @@ export default class Character extends MovableObject {
             this.maxHp = 4;
             this.lastFired = 0;
             this.cadence = 400;
+            this.dashTimer = null;
 
 
             this.setScale(1.7);
@@ -258,24 +259,32 @@ export default class Character extends MovableObject {
 
             if (this.shift.isDown) {
 
-                //Momentaneo, se hara con timer
-                if(t > this.lastDash){
+                if(!this.dashTimer || this.dashTimer.hasDispatched){
                     this.dash();
-                    this.lastDash = t + 5000
+                    this.scene.events.emit('characterDash');
+
+                    this.dashTimer = this.scene.time.addEvent({
+                        delay: 5000,
+                        callback: ()=>{this.scene.events.emit('characterDashEnd');},
+                        callbackScope: this,
+                        loop: false
+                    });
                 }
             }
 
-            if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
-                this.stopHorizontal();
-            }
-
-            if (Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)) {
-                this.stopVertical();
+            if(!this.isDashing){
+                if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
+                    this.stopHorizontal();
+                }
+    
+                if (Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)) {
+                    this.stopVertical();
+                }
             }
 
             if ((this.cursors.up.isDown || this.cursors.down.isDown || this.cursors.left.isDown || this.cursors.right.isDown) && t > this.lastFired) {
                 this.flipX = true;
-                if (!this.isDead()) {
+                if (!this.isDead() && !this.isDashing) {
                     this.attack();
                     this.lastFired = t + this.cadence;
                 }
@@ -284,6 +293,16 @@ export default class Character extends MovableObject {
             // if(this.isStatic()){
             //     this.play('mainChar_static', true);
             // }
+
+            if(this.dashTimer){
+                const remaining = (5000 - this.dashTimer.getElapsed()) / 1000;
+    
+                if (this.lastTime != remaining) {
+                    this.scene.events.emit('updatePowerupCount', 'dash_char', remaining.toFixed(0));
+                }
+    
+                this.lastTime = remaining
+            }
         }
     }
 
@@ -400,6 +419,7 @@ export default class Character extends MovableObject {
     }
 
     collectPowerUp(powerUp) {
+        
         if (!powerUp.getCollected()) {
             this.checkPowerUpAlreadyActive(powerUp)
             powerUp.collect()
@@ -462,7 +482,9 @@ export default class Character extends MovableObject {
     }
 
     incrementHp(){
-        this.maxHp++;
+        if(this.maxHp < 7){
+            this.maxHp++;
+        }
     }
 
     getCadence(){
