@@ -12,7 +12,7 @@ export default class LevelScene2 extends LevelScene {
 		const tiles = mapa.addTilesetImage('Forest', 'tiles');
 		this.groundLayer = this.map.createLayer('Suelo', tiles);
 		this.foregroundLayer = this.map.createLayer('Bordes', tiles);
-		this.puertaSolida = this.physics.add.image(1136, 240, 'puertaSala3');
+		this.puertaSolida = this.physics.add.image(1168, 320, 'puertaSala3');
 		this.puerta = this.map.createLayer('Puerta2', tiles);
 		this.objetos = this.map.createLayer('Objetos', tiles);
 		this.borderTrees = this.map.createLayer('bordeArboles', tiles);
@@ -38,6 +38,66 @@ export default class LevelScene2 extends LevelScene {
 		this.enemyPool._group.setDepth(2);
 		this.borderTrees.setDepth(3);
 		this.foregroundLayer.setDepth(3);
+	}
+
+	completeLevel() {
+		console.log("NIVEL COMPLETADO")
+
+		this.sound.removeByKey('fightSong');
+		this.events.emit('levelComplete');
+		this.puerta.setVisible(false);
+		this.puertaSolida.destroy();
+		const zonaInvisible = this.add.zone(this.sys.game.canvas.width, 320, 10, 128);
+		this.physics.add.existing(zonaInvisible);
+
+		this.physics.add.overlap(this.player, zonaInvisible, () => {
+			this.sound.stopAll();
+			this.scene.sleep();
+			this.setPlayerPosition(80,this.player.y,'level1')
+			this.scene.wake('level1', { player: this.player});
+		});
+
+		for (let i = 0; i < 5; i++) {
+			setTimeout(() => {
+				this.cameras.main.flash(500);
+			}, i * 600);
+		}
+
+		this.addMeiga();
+		this.spawnMeiga = true;
+		this.player.collectCoin(1000);
+	}
+
+	addMeiga() {
+		const appearEffect = this.sound.add("appearEffect", {
+			volume: 0.1
+		});
+		const explorationSong = this.sound.add("explorationSong", {
+			volume: 0.1,
+			loop: true
+		});
+
+		appearEffect.play();
+
+		appearEffect.once('complete', () => {
+			explorationSong.play();
+		});
+		const meiga = this.add.sprite(480, 300, 'meiga').setScale(1.6);
+		this.anims.create({
+			key: 'meigaState',
+			frames: this.anims.generateFrameNumbers('meiga', { start: 0, end: 3 }),
+			frameRate: 3,
+			repeat: -1
+		});
+		meiga.play('meigaState');
+		const e_key = this.add.sprite(480, 270, 'e_key');
+		this.anims.create({
+			key: 'E_Press',
+			frames: this.anims.generateFrameNumbers('e_key', { start: 0, end: 2 }),
+			frameRate: 2,
+			repeat: -1
+		});
+		e_key.play('E_Press');
 	}
 
 }

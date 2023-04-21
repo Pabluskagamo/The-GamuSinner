@@ -45,7 +45,7 @@ export default class SettingScene extends Phaser.Scene {
 		resume.on('pointerdown', () => {
             this.scene.resume(this.level);
             this.scene.resume('UIScene');
-			this.scene.sleep('settings');
+			this.scene.stop('settings');
         });
 
 

@@ -10,6 +10,7 @@ export default class SettingScene extends Phaser.Scene {
         this.player = data.player;
         this.wallet = this.player.getWallet();
         this.dmg = data.dmg;
+        this.level = data.level;
     }
 
     preload() {
@@ -24,7 +25,7 @@ export default class SettingScene extends Phaser.Scene {
         this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
     }
 
-    create(data) {
+    create() {
         // BACKGROUND
         this.add.image(40, 0, 'background_stats').setOrigin(0, 0).setScale(0.86);
 
@@ -40,9 +41,8 @@ export default class SettingScene extends Phaser.Scene {
         });
 
         closeButton.on('pointerdown', () => {
-            this.scene.resume('level1');
+            this.scene.resume(this.level);
             this.scene.resume('UIScene');
-            this.scene.pause('stats');
             this.scene.sleep('stats');
         });
 
@@ -145,6 +145,11 @@ export default class SettingScene extends Phaser.Scene {
             this.aumentarBar(this.cadenceButton, 3, numMonedasCadence, cadencebar);
             this.events.emit('incrementCadence', this.player.getCadence() - 50);
         });
+
+        this.levelGame = this.scene.get(this.level);
+        this.levelGame.events.on('passLevel', function (level) {
+            this.level = level;
+        }, this);
     }
 
     aumentarBar(button, index, numMonedas, bar) {
@@ -172,9 +177,8 @@ export default class SettingScene extends Phaser.Scene {
 
     update(t) {
         if (this.e.isDown) {
-            this.scene.resume('level1');
+            this.scene.resume(this.level);
             this.scene.resume('UIScene');
-            this.scene.pause('stats');
             this.scene.sleep('stats');
         }
         this.actualcoins.setText(`X ${this.wallet}`);

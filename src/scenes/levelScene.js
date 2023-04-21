@@ -64,7 +64,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.coinPool.fillPull(20);
 		this.foodPool.fillPull(20);
 		this.bulletPool.fillPool(200);
-		this.initTimers(true);
+		this.initTimers(false);
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
 
 		if(this.scene.isActive('UIScene')){
@@ -194,16 +194,12 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initPlayerAndPools(data) {
-		this.prevScene = data.prevScene;
-		let x = this.sys.game.canvas.width / 2;
-		let y = this.sys.game.canvas.height / 2;
+		// if(this.prevScene === "level2"){
+		// 	x = this.sys.game.canvas.width - 80;
+		// }
 
-		if(this.prevScene === "level1"){
-			y = this.sys.game.canvas.height - 80;
-		}
-		console.log(data, "DATAAAA", data.hasOwnProperty('prevScene'))
-        if(data.hasOwnProperty('prevScene')){
-            this.player = new Character(this, x, y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(),  data.player.getCadence());
+        if(data.hasOwnProperty('x') && data.hasOwnProperty('y')){
+            this.player = new Character(this, data.x, data.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(),  data.player.getCadence());
         }else{
             this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, null, 150, 4, 4, 0, 400);
         }
@@ -269,7 +265,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 10000;
+		this.freqChangeTime = 1;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -411,12 +407,19 @@ export default class LevelScene extends Phaser.Scene {
 		this.scene.pause();
 		this.scene.pause('UIScene');
 		if (this.scene.isSleeping('stats')) {
-			this.scene.wake('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
-			this.scene.resume('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
+			this.scene.wake('stats', { player: this.player, dmg: this.bulletPool.getDmg(), level: this.namescene });
+			this.scene.resume('stats', { player: this.player, dmg: this.bulletPool.getDmg(), level: this.namescene  });
 
 		} else {
-			this.scene.launch('stats', { player: this.player, dmg: this.bulletPool.getDmg() });
+			this.scene.launch('stats', { player: this.player, dmg: this.bulletPool.getDmg(), level: this.namescene  });
 		}
+	}
+
+	setPlayerPosition(x, y, level){
+		this.scene.get(level).player.stopHorizontal();
+		this.scene.get(level).player.stopVertical();
+		this.scene.get(level).player.x = x;
+		this.scene.get(level).player.y = y;
 	}
 
 }

@@ -19,7 +19,14 @@ export default class LevelScene1 extends LevelScene {
 		this.physics.add.overlap(this.player, zonaInvisible, () => {
 			this.sound.stopAll();
 			this.scene.sleep();
-			this.scene.launch('level3', { player: this.player , prevScene: 'level2'});
+			this.events.emit('passLevel', 'level3');
+			if (this.scene.isSleeping('level3')) {
+				this.setPlayerPosition(this.player.x, this.sys.game.canvas.height - 80,'level3')
+				this.scene.wake('level3', { player: this.player});
+			}
+			else{
+				this.scene.launch('level3', { player: this.player, x: this.player.x, y: this.sys.game.canvas.height - 80});
+			}
 		});
 
 		for (let i = 0; i < 5; i++) {
