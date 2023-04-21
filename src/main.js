@@ -5,6 +5,7 @@ import InstructionScene from './scenes/instructionScene'
 import selecScene from './scenes/selectionScene'
 import LevelScene1 from './scenes/levelScenes/levelScene1'
 import LevelScene2 from './scenes/levelScenes/levelScene2'
+import LevelScene3 from './scenes/levelScenes/levelScene3'
 import Hud from './ui/hud'
 import GameOverScene from './scenes/GameOverScene'
 import SettingScene from './scenes/settingsScene'
@@ -23,25 +24,25 @@ const config = {
 		autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
 		mode: Phaser.Scale.FIT,
 		min: {
-            width: 784,
-            height: 448
-        },
+			width: 784,
+			height: 448
+		},
 		max: {
-            width: 1920,
-            height: 1080
-        },
+			width: 1920,
+			height: 1080
+		},
 		zoom: 1
 	},
-	
+
 	physics: {
 		default: 'arcade',
-		
+
 		arcade: {
 			debug: true
 		},
 	},
 
-	scene: [MainScene, historyScene, InstructionScene, selecScene, LevelScene1, LevelScene2, Hud, StatsScene, SettingScene, GameOverScene],
+	scene: [MainScene, historyScene, InstructionScene, selecScene, LevelScene1, LevelScene2, LevelScene3, Hud, StatsScene, SettingScene, GameOverScene],
 }
 
 export default new Phaser.Game(config)

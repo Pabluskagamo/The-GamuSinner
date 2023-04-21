@@ -4,11 +4,8 @@ import FoodPool from "../gameobjects/Pools/foodPool"
 import PowerUpPool from "../gameobjects/Pools/powerUpPool"
 import EnemyPool from "../gameobjects/Pools/enemyPool"
 import Character from "../gameobjects/character"
-import Coin from "../gameobjects/items/coin";
-import HealthPoint from "../ui/healthpoint"
 import TripleShot from "../gameobjects/powerUps/tripleShot"
 import EightDirShot from "../gameobjects/powerUps/eightDirShot"
-import Food from "../gameobjects/items/food"
 import BouncingShot from "../gameobjects/powerUps/bouncingShot"
 import FreezingShot from "../gameobjects/powerUps/freezingShot"
 
@@ -42,8 +39,10 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('freezingshot', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bouncingshot', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
-		this.load.tilemapTiledJSON('map', './assets/tilemap/sala1.json')
+		this.load.tilemapTiledJSON('sala1', './assets/tilemap/sala1.json')
+		this.load.tilemapTiledJSON('sala3', './assets/tilemap/sala3.json')
 		this.load.image('puertaSala1', './assets/tileset/puertas_32x32.png')
+		this.load.image('puertaSala3', './assets/tileset/puertas3_32x32.png')
 		this.load.image('game_settings', './assets/ui/settings.png')
 		this.load.audio("appearEffect", "./assets/audio/Effects/AppearSoundEffect.mp3");
 		this.load.audio("fightSong", "./assets/audio/Dream Raid Full Version (Mock Up).mp3");
@@ -155,7 +154,7 @@ export default class LevelScene extends Phaser.Scene {
 
 	initMap() {
 		const mapa = this.map = this.make.tilemap({
-			key: 'map'
+			key: 'sala1'
 		});
 		const tiles = mapa.addTilesetImage('Forest', 'tiles');
 		this.groundLayer = this.map.createLayer('Suelo', tiles);
@@ -262,7 +261,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 30000;
+		this.freqChangeTime = 10000;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -273,7 +272,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.debugMode = true;
 		} else {
 			this.enemySpawnTimer = this.time.addEvent({
-				delay: 4000,
+				delay: 400,
 				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true
