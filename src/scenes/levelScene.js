@@ -64,9 +64,15 @@ export default class LevelScene extends Phaser.Scene {
 		this.coinPool.fillPull(20);
 		this.foodPool.fillPull(20);
 		this.bulletPool.fillPool(200);
-		this.initTimers(false);
+		this.initTimers(true);
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
-		this.scene.launch('UIScene', {maxHp: this.player.getMaxHp(), hp: this.player.getHp()});
+
+		if(this.scene.isActive('UIScene')){
+			this.scene.stop('UIScene');			
+		}
+
+		console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
+		this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene});
 
 		this.foodPool.spawn(500, 150);
 		settings.setInteractive({ cursor: 'pointer' });
@@ -191,10 +197,12 @@ export default class LevelScene extends Phaser.Scene {
 		this.prevScene = data.prevScene;
 		let x = this.sys.game.canvas.width / 2;
 		let y = this.sys.game.canvas.height / 2;
+
 		if(this.prevScene === "level1"){
 			y = this.sys.game.canvas.height - 80;
 		}
-        if(data.length !== undefined){
+		console.log(data, "DATAAAA", data.hasOwnProperty('prevScene'))
+        if(data.hasOwnProperty('prevScene')){
             this.player = new Character(this, x, y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(),  data.player.getCadence());
         }else{
             this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, null, 150, 4, 4, 0, 400);

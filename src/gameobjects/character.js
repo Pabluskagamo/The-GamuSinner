@@ -365,12 +365,14 @@ export default class Character extends MovableObject {
     }
 
     getHit(dmg) {
-        if (!this.isDashing) {
+        if (!this.isDashing && !this.invicible) {
             this.hp -= dmg;
 
             if (this.hp <= 0) {
                 this.hp = 0;
                 this.dieMe();
+            }else{
+                this.setInvincible2secs()
             }
         }
 
@@ -493,5 +495,36 @@ export default class Character extends MovableObject {
 
     setCadence(c){
         this.cadence = c;
+    }
+
+    getPlayerStats(){
+        return {
+            hp: this.hp,
+            maxHp: this.maxHp,
+            coins: this.wallet
+        }
+    }
+
+    setInvincible2secs(){
+        this.invicible = true;
+
+        this.scene.tweens.add({
+            targets: this,
+            alpha: {from:1, to: 0},
+            duration: 500,
+            loop: 1,
+            ease: 'Sine.easeInOut',
+            yoyo: true,
+            onComplete: ()=>{
+                console.log("Tween fin");
+            }
+        })
+
+        this.scene.time.addEvent({
+            delay: 2000,
+            callback: ()=>{this.invicible = false;},
+            callbackScope: this,
+            loop: false
+        });
     }
 }

@@ -7,13 +7,17 @@ export default class Hud extends Phaser.Scene{
     }
 
     init(data){
-        this.maxHp = data.maxHp;
-        this.hp = data.hp;
+        // this.maxHp = data.maxHp;
+        // this.hp = data.hp;
+        this.playerData = data.playerData;
+        this.level = data.level
     }
 
     preload() {
 		this.load.spritesheet('healthbar', './assets/ui/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
         this.load.image('coinhud', '/assets/items/coin.png');
+        this.load.image('dash_hud', '/assets/powerups/DashEffect.png');
+        this.load.image('pwpanel', './assets/ui/powerUpPanel.png');
         this.load.spritesheet('tripleShotHud', './assets/powerups/Tripleshoot.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('eightDirShotHud', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('multipleDirfreezingShotectionShotHud', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
@@ -29,6 +33,7 @@ export default class Hud extends Phaser.Scene{
 
         //MONEDAS
         this.numMonedas = this.add.text(1044, 115, 'X 0', { fontFamily: 'MedievalSharp-Regular' });
+        this.numMonedas.setText('X ' + this.playerData.coins);
         this.numMonedas.setFontSize(20);
         const coinHud = this.add.image(1110, 123, 'coinhud')
         coinHud.setCrop(0, 0, 16, 16)
@@ -59,17 +64,22 @@ export default class Hud extends Phaser.Scene{
                 text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
             },
             dash_char: {
-                img: this.add.image(-150, -150, 'bouncingShotHud'),
+                img: this.add.image(-150, -150, 'dash_hud').setScale(0.85),
                 text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
             }
         }
-        
+
+        //Power Up Save Panel
+        this.powerUpPanel = this.add.image(990, 123, 'pwpanel'),
+        this.add.image(990, 123, 'tripleShotHud')
+
+
         //CONTADOR TIEMPO OLEADA
         this.countdown = this.add.text(555, 75, '00:20',  { fontFamily: 'MedievalSharp-Regular' });
         this.countdown.setFontSize(24);
 
         //  Grab a reference to the Game Scene
-        let levelGame = this.scene.get('level1');
+        let levelGame = this.scene.get(this.level);
 
         //  Listen for events from it
         levelGame.events.on('addScore', function (hp) {
@@ -136,12 +146,12 @@ export default class Hud extends Phaser.Scene{
         statsGame.events.on('incrementLife', function (hp) {
             this.uiLive.unshift(new HealthPoint(this, this.uiLive[0].x-30, 90))
             console.log("SUBIR HP", this.uiLive[0].x)
-            this.maxHp++;
-            this.hp = hp;
-            this.updateHealthUi(this.hp);
+            this.playerData.maxHp++;
+            this.playerData.hp = hp;
+            this.updateHealthUi(this.playerData.hp);
         }, this);
 
-        this.updateHealthUi(this.hp);
+        this.updateHealthUi(this.playerData.hp);
     }
     update(t){
         if(this.faded){
@@ -163,7 +173,7 @@ export default class Hud extends Phaser.Scene{
         let lastPosX = 1110;
         this.uiLive = []
 
-        for(let i = 0; i < this.maxHp; i++){
+        for(let i = 0; i < this.playerData.maxHp; i++){
             this.uiLive.unshift(new HealthPoint(this, lastPosX, 90));
             lastPosX-=30;
         }
@@ -173,11 +183,11 @@ export default class Hud extends Phaser.Scene{
 		//setscrollfactor(0, 0) para que cuando se 
 		//mueva la camara no se mueva el HUD
 
-		for (let i = 1; i <= this.maxHp; i++) {
+		for (let i = 1; i <= this.playerData.maxHp; i++) {
         
 			if (i <= hp) {
 				this.uiLive[i-1].full()
-			} else if(i <= this.maxHp){
+			} else if(i <= this.playerData.maxHp){
 				this.uiLive[i-1].empty()
 			}
 		}
