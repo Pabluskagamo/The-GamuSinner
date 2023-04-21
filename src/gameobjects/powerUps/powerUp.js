@@ -54,6 +54,10 @@ export default class PowerUp extends Item{
     getCollected(){
         return this.collected
     }
+
+    setCollected(value){
+        this.collected = value
+    }
     
     getKey(){
         return this.key

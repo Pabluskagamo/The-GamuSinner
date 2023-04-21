@@ -17,11 +17,12 @@ export default class Character extends MovableObject {
             this.isAttacking = false;
             this.isDashing = false;
             this.lastDash = 0;
-            this.tripleShot = true;
-            this.eightDirShot = false;
             this.nonePowerUp = new NonePowerUp(this.scene)
             this.currentPowerUp = this.nonePowerUp
+            this.inventory = null
             this.passives = []
+            this.hp = 4;
+            this.maxHp = 4;
             this.numDirections = 8;
             this.bulletMultiplier = 3;
             this.bulletSpread = 0.25;
@@ -208,6 +209,7 @@ export default class Character extends MovableObject {
         this.w = this.scene.input.keyboard.addKey('W');
         this.spacebar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.shift = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        this.inventoryKey = this.scene.input.keyboard.addKey('V');
     }
 
     preUpdate(t, dt) {
@@ -272,14 +274,12 @@ export default class Character extends MovableObject {
                 }
             }
 
-            if(!this.isDashing){
-                if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
-                    this.stopHorizontal();
-                }
-    
-                if (Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)) {
-                    this.stopVertical();
-                }
+            if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
+                this.stopHorizontal();
+            }
+
+            if (Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)) {
+                this.stopVertical();
             }
 
             if ((this.cursors.up.isDown || this.cursors.down.isDown || this.cursors.left.isDown || this.cursors.right.isDown) && t > this.lastFired) {
@@ -421,8 +421,13 @@ export default class Character extends MovableObject {
     }
 
     collectPowerUp(powerUp) {
-        
-        if (!powerUp.getCollected()) {
+        if(this.inventory == null){
+            console.log("inventarioooooooooo")
+            this.inventory = powerUp
+            powerUp.collect()
+        }
+        else if (!powerUp.getCollected()) {
+            console.log(" noo inventarioooooooooo")
             this.checkPowerUpAlreadyActive(powerUp)
             powerUp.collect()
             if (!powerUp.isPassive()) {
