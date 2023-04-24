@@ -18,8 +18,8 @@ export default class LevelScene1 extends LevelScene {
 
 		this.physics.add.overlap(this.player, zonaInvisible, () => {
 			this.sound.stopAll();
-			this.events.emit('passLevel', 'level3');
-			this.scene.start('level3', { player: this.player, gate: {x: this.player.x, y: this.sys.game.canvas.height - 80}});
+			this.events.emit('passLevel', 'level2');
+			this.scene.start('level2', { player: this.player, gate: {x: this.player.x, y: this.sys.game.canvas.height - 80}});
 		});
 
 		for (let i = 0; i < 5; i++) {

@@ -10,6 +10,14 @@ import BouncingShot from "../gameobjects/powerUps/bouncingShot"
 import FreezingShot from "../gameobjects/powerUps/freezingShot"
 
 export default class LevelScene extends Phaser.Scene {
+	static progress = {
+		level1: false,
+		level2: false,
+		level3: false,
+		level4: false
+	}
+
+
 	constructor(scene) {
 		super(scene)
         this.namescene = scene;
@@ -39,11 +47,19 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('freezingshot', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bouncingshot', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
+		this.load.image('tilesCastleProps', './assets/tileset/sala2/tilesetCastle/TX Props.png')
+		this.load.image('tilesCastleStruct', './assets/tileset/sala2/tilesetCastle/TX Struct.png')
+		this.load.image('tilesCastleWall', './assets/tileset/sala2/tilesetCastle/TX Tileset Wall.png')
+		this.load.image('tilesCastleGrass', './assets/tileset/sala2/tilesetCastle/TX Tileset Grass.png')
+		this.load.image('tilesCastlePlant', './assets/tileset/sala2/tilesetCastle/TX Plant.png')
 		this.load.tilemapTiledJSON('sala1', './assets/tilemap/sala1.json')
 		this.load.tilemapTiledJSON('sala2', './assets/tilemap/sala2.json')
 		this.load.tilemapTiledJSON('sala3', './assets/tilemap/sala3.json')
 		this.load.image('puertaSala1', './assets/tileset/puertas_32x32.png')
 		this.load.image('puertaSala3', './assets/tileset/puertas3_32x32.png')
+		this.load.image('puertaSala2Izq', './assets/tileset/sala2/Pizq.png')
+		this.load.image('puertaSala2Der', './assets/tileset/sala2/Pder.png')
+		this.load.image('puertaSala2Abajo', './assets/tileset/sala2/Pabj.png')
 		this.load.image('game_settings', './assets/ui/settings.png')
 		this.load.audio("appearEffect", "./assets/audio/Effects/AppearSoundEffect.mp3");
 		this.load.audio("fightSong", "./assets/audio/Dream Raid Full Version (Mock Up).mp3");
@@ -65,7 +81,13 @@ export default class LevelScene extends Phaser.Scene {
 		this.coinPool.fillPull(20);
 		this.foodPool.fillPull(20);
 		this.bulletPool.fillPool(200);
-		this.initTimers(false);
+		
+		if(LevelScene.progress[this.namescene]){
+			this.initLevelFreeMode()
+		}else{
+			this.initLevelFightMode();
+		}
+
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
 
 		if(this.scene.isActive('UIScene')){
@@ -75,7 +97,6 @@ export default class LevelScene extends Phaser.Scene {
 		console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
 		this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene});
 
-		this.foodPool.spawn(500, 150);
 		settings.setInteractive({ cursor: 'pointer' });
 
 		settings.on('pointerover', function (pointer) {
@@ -145,12 +166,14 @@ export default class LevelScene extends Phaser.Scene {
 			this.enemyPool.spawn(0, 0)
 		}
 
-		if (!this.wavesFinished && !this.debugMode) {
-			this.updateWaveCount()
-		}
-		else if (!this.levelFinished && this.enemyPool.fullPool() && !this.debugMode) {
-			this.levelFinished = true;
-			this.completeLevel();
+		if(!LevelScene.progress[this.namescene]){
+			if (!this.wavesFinished && !this.debugMode) {
+				this.updateWaveCount()
+			}
+			else if (!this.levelFinished && this.enemyPool.fullPool() && !this.debugMode) {
+				this.levelFinished = true;
+				this.completeLevel();
+			}
 		}
 
 		if (this.spawnMeiga && this.e.isDown) {
@@ -291,6 +314,14 @@ export default class LevelScene extends Phaser.Scene {
 		}
 	}
 
+	initLevelFightMode(){
+		this.initTimers(false);
+	}
+
+	initLevelFreeMode(){
+		this.addMeiga()
+	}
+
 	gameOver() {
 		this.cameras.main.fadeOut(500);
 		this.cameras.main.once("camerafadeoutcomplete", function () {
@@ -308,11 +339,11 @@ export default class LevelScene extends Phaser.Scene {
 		this.puerta.setVisible(false);
 		this.puertaSolida.destroy();
 
-		for (let i = 0; i < 5; i++) {
-			setTimeout(() => {
-				this.cameras.main.flash(500);
-			}, i * 600);
-		}
+		// for (let i = 0; i < 5; i++) {
+		// 	setTimeout(() => {
+		// 		this.cameras.main.flash(500);
+		// 	}, i * 600);
+		// }
 
 		this.spawnMeiga = true;
 		this.player.collectCoin(1000);
