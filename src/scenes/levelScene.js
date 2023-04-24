@@ -40,6 +40,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('bouncingshot', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.tilemapTiledJSON('sala1', './assets/tilemap/sala1.json')
+		this.load.tilemapTiledJSON('sala2', './assets/tilemap/sala2.json')
 		this.load.tilemapTiledJSON('sala3', './assets/tilemap/sala3.json')
 		this.load.image('puertaSala1', './assets/tileset/puertas_32x32.png')
 		this.load.image('puertaSala3', './assets/tileset/puertas3_32x32.png')
@@ -194,12 +195,9 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initPlayerAndPools(data) {
-		// if(this.prevScene === "level2"){
-		// 	x = this.sys.game.canvas.width - 80;
-		// }
-
-        if(data.hasOwnProperty('x') && data.hasOwnProperty('y')){
-            this.player = new Character(this, data.x, data.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(),  data.player.getCadence());
+		
+        if(data.hasOwnProperty('gate')){
+            this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(),  data.player.getCadence());
         }else{
             this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, null, 150, 4, 4, 0, 400);
         }
