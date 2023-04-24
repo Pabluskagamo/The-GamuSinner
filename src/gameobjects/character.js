@@ -273,13 +273,22 @@ export default class Character extends MovableObject {
                     });
                 }
             }
-
-            if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
-                this.stopHorizontal();
+            
+            // activate inventory
+            if (this.inventoryKey.isDown && this.inventory != null) {
+                this.inventory.setCollected(false)
+                this.collectPowerUp(this.inventory)
+                this.inventory = null;
             }
 
-            if (Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)) {
-                this.stopVertical();
+            if(!this.isDashing){
+                if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
+                    this.stopHorizontal();
+                }
+    
+                if (Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)) {
+                    this.stopVertical();
+                }
             }
 
             if ((this.cursors.up.isDown || this.cursors.down.isDown || this.cursors.left.isDown || this.cursors.right.isDown) && t > this.lastFired) {
@@ -430,6 +439,7 @@ export default class Character extends MovableObject {
             console.log(" noo inventarioooooooooo")
             this.checkPowerUpAlreadyActive(powerUp)
             powerUp.collect()
+            powerUp.initTimer()
             if (!powerUp.isPassive()) {
                 this.activatePowerUp(powerUp)
             }

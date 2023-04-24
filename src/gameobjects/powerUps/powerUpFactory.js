@@ -11,6 +11,7 @@ export class PowerUpFactory {
                 break;
         }
         powerUp.collect()
+        powerUp.initTimer()
         return powerUp
     }
 

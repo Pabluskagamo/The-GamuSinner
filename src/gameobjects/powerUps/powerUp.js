@@ -39,7 +39,7 @@ export default class PowerUp extends Item{
     }
 
     collect(){
-        this.initTimer();
+        //this.initTimer();
         //this.x = -150;
         //this.y = -150;
         this.visible = false
