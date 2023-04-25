@@ -71,8 +71,6 @@ export default class Hud extends Phaser.Scene{
 
         //Power Up Save Panel
         this.powerUpPanel = this.add.image(990, 123, 'pwpanel'),
-        this.add.image(990, 123, 'tripleShotHud')
-
 
         //CONTADOR TIEMPO OLEADA
         this.countdown = this.add.text(555, 75, '00:20',  { fontFamily: 'MedievalSharp-Regular' });
@@ -135,6 +133,14 @@ export default class Hud extends Phaser.Scene{
         
         levelGame.events.on('endPowerUpTime', function (key) {
             this.clearPowerUp(key)
+        }, this);
+
+        levelGame.events.on('savePowerUp', function (key) {
+            this.savePowerUp(key)
+        }, this);
+
+        levelGame.events.on('usePowerUpInventory', function () {
+            this.usePowerUpSaved()
         }, this);
 
         let statsGame = this.scene.get('stats');
@@ -249,6 +255,18 @@ export default class Hud extends Phaser.Scene{
         this.powerUpsList.splice(index, 1);
 
         this.updatePowerUpsHud();
+    }
+
+    savePowerUp(key){
+        const img_key = key + 'Hud'
+        
+        this.savedPowerUp = this.add.image(990, 123, img_key)
+    }
+
+    usePowerUpSaved(){
+        if(this.savedPowerUp){
+            this.savedPowerUp.destroy();
+        }
     }
 
 

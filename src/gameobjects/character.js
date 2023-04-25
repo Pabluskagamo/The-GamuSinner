@@ -278,6 +278,7 @@ export default class Character extends MovableObject {
             if (this.inventoryKey.isDown && this.inventory != null) {
                 this.inventory.setCollected(false)
                 this.collectPowerUp(this.inventory)
+                this.scene.events.emit("usePowerUpInventory")
                 this.inventory = null;
             }
 
@@ -433,6 +434,7 @@ export default class Character extends MovableObject {
         if(this.inventory == null){
             console.log("inventarioooooooooo")
             this.inventory = powerUp
+            this.scene.events.emit('savePowerUp', powerUp.getKey())
             powerUp.collect()
         }
         else if (!powerUp.getCollected()) {

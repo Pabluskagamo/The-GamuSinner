@@ -42,38 +42,19 @@ export default class LevelScene2 extends LevelScene {
 
 	completeLevel() {
 		console.log("NIVEL COMPLETADO")
+		LevelScene.progress[this.namescene] = true
 
 		this.sound.removeByKey('fightSong');
 		this.events.emit('levelComplete');
-		this.puerta.setVisible(false);
-		this.puertaSolida.destroy();
-		const zonaInvisible = this.add.zone(this.sys.game.canvas.width, 320, 10, 128);
-		this.physics.add.existing(zonaInvisible);
-
-		this.physics.add.overlap(this.player, zonaInvisible, () => {
-			this.sound.stopAll();
-			this.scene.start('level2', { player: this.player, gate: {x: 80, y: this.player.y}});
-		});
-
+		this.abrirPuertas()
+		
 		this.addMeiga();
 		this.spawnMeiga = true;
 		this.player.collectCoin(1000);
 	}
 
 	addMeiga() {
-		const appearEffect = this.sound.add("appearEffect", {
-			volume: 0.1
-		});
-		const explorationSong = this.sound.add("explorationSong", {
-			volume: 0.1,
-			loop: true
-		});
-
-		appearEffect.play();
-
-		appearEffect.once('complete', () => {
-			explorationSong.play();
-		});
+		
 		const meiga = this.add.sprite(480, 300, 'meiga').setScale(1.6);
 		this.anims.create({
 			key: 'meigaState',
@@ -90,6 +71,18 @@ export default class LevelScene2 extends LevelScene {
 			repeat: -1
 		});
 		e_key.play('E_Press');
+	}
+
+	abrirPuertas(){
+		this.puerta.setVisible(false);
+		this.puertaSolida.destroy();
+		const zonaInvisible = this.add.zone(this.sys.game.canvas.width, 320, 10, 128);
+		this.physics.add.existing(zonaInvisible);
+
+		this.physics.add.overlap(this.player, zonaInvisible, () => {
+			this.sound.stopAll();
+			this.scene.start('level2', { player: this.player, gate: {x: 80, y: this.player.y}});
+		});
 	}
 
 }
