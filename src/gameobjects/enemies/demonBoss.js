@@ -1,9 +1,9 @@
 import EnemyObject from "./enemyObject";
 
-export default class BlackWolf extends EnemyObject {
+export default class DemonBoss extends EnemyObject {
 
     constructor(scene, x, y, speed, player, enemypool) {
-        super(scene, x, y, 'blackWolf', speed, 20, enemypool, 60, 20);
+        super(scene, x, y, 'demonboss', speed, 20, enemypool, 60, 20);
         this.scene.add.existing(this);
         
         //this.setScale(1.5);
@@ -14,74 +14,74 @@ export default class BlackWolf extends EnemyObject {
         this.scene.physics.add.existing(this);
         this.setCollideWorldBounds();
 
-        this.bodyOffsetWidth = this.body.width / 4.7;
+        /* this.bodyOffsetWidth = this.body.width / 4.7;
         this.bodyOffsetHeight = this.body.height / 2.7;
         this.bodyWidth = this.body.width / 2.5;
         this.bodyHeight = this.body.height / 1.8;
 
         this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
         this.body.width = this.bodyWidth;
-        this.body.height = this.bodyHeight;
+        this.body.height = this.bodyHeight; */
 
 
         this.scene.anims.create({
-            key: 'down_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 180, end: 188 }),
+            key: 'down_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 22, end: 33 }),
             frameRate: 5,
             repeat: 0
         })
 
         this.scene.anims.create({
-            key: 'up_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 144, end: 152 }),
+            key: 'up_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 22, end: 33 }),
             frameRate: 5,
             repeat: 0
         })
 
         this.scene.anims.create({
-            key: 'side_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 162, end: 170 }),
-            frameRate: 10,
+            key: 'side_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 22, end: 33 }),
+            frameRate: 12,
             repeat: 0
         })
 
         this.scene.anims.create({
-            key: 'static_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 36, end: 37 }),
+            key: 'static_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 0, end: 5 }),
             frameRate: 1.5,
             repeat: 0
         })
 
         this.scene.anims.create({
-            key: 'died_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 360, end: 365 }),
-            frameRate: 5,
+            key: 'hit_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 66, end: 70 }),
+            frameRate: 10,
             repeat: 0
         })
 
         this.scene.anims.create({
-            key: 'up_attack_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', {frames: [397, 400, 403, 406, 409, 412]}),
-            frameRate: 15,
+            key: 'rage_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { frames: [88, 89, 90, 91, 92, 92, 92, 91, 90, 89] }),
+            frameRate: 10,
             repeat: 0
         })
 
         this.scene.anims.create({
-            key: 'side_attack_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', {frames: [451, 454, 457, 460, 463, 466]}),
-            frameRate: 15,
+            key: 'died_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 88, end: 109 }),
+            frameRate: 10,
             repeat: 0
         })
 
         this.scene.anims.create({
-            key: 'down_attack_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', {frames: [505, 508, 511, 514, 517, 520]}),
+            key: 'side_attack_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', {start: 44, end: 58}),
             frameRate: 15,
             repeat: 0
         })
 
         this.on('animationcomplete', () => {
-            if (this.anims.currentAnim.key === 'died_blackWolf') {
+            if (this.anims.currentAnim.key === 'died_demonboss') {
                 this.pool.release(this);
             } 
 
@@ -90,7 +90,7 @@ export default class BlackWolf extends EnemyObject {
             }
         })
 
-        this.play('static_blackWolf');
+        this.play('static_demonboss');
     }
 
     preUpdate(t, dt) {

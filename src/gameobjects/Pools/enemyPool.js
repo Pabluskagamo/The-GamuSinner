@@ -1,7 +1,7 @@
-import BlackWolf from "../blackWolf"
-import Goblin from "../goblin"
-import Spectre from "../spectre"
-import Cyclops from "../cyclops"
+import BlackWolf from "../enemies/blackWolf"
+import Goblin from "../enemies/goblin"
+import Spectre from "../enemies/spectre"
+import Cyclops from "../enemies/cyclops"
 
 
 export default class EnemyPool {

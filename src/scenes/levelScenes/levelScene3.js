@@ -55,8 +55,6 @@ export default class LevelScene2 extends LevelScene {
 			this.scene.start('level2', { player: this.player, gate: {x: 80, y: this.player.y}});
 		});
 
-		a
-
 		this.addMeiga();
 		this.spawnMeiga = true;
 		this.player.collectCoin(1000);

@@ -1,4 +1,4 @@
-import MovableObject from "./movableObject";
+import MovableObject from "../movableObject";
 
 export default class EnemyObject extends MovableObject {
     
@@ -20,27 +20,28 @@ export default class EnemyObject extends MovableObject {
        this.speed = this.initialSpeed
        this.attacking = false
     }
-
+s
+    // Por como funciona el flip con los side walk hay que cargar siempre sprites andando hacia la derecha
     follow(){
         this.flipX = false;
         
         if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
             // Diagonal abajo-derecha
             this.play('side_' + this.key, true);
-            this.flipX = true;
             //this.angle = -0.1;
         } else if (this.body.velocity.x > 0 && this.body.velocity.y > 0) {
             // Diagonal arriba-derecha
             this.play('side_' + this.key, true);
-            this.flipX = true;
             //this.angle += 0.1;
         } else if (this.body.velocity.x < 0 && this.body.velocity.y < 0) {
             // Diagonal abajo-izquierda
             this.play('side_' + this.key, true);
+            this.flipX = true;
             //this.angle += 0.1;
         } else if (this.body.velocity.x < 0 && this.body.velocity.y > 0) {
             // Diagonal arriba-izquierda
             this.play('side_' + this.key, true);
+            this.flipX = true;
             //this.angle += -0.1;
         } else if (this.body.velocity.y > 0 && this.body.velocity.x === 0) {
             // Movimiento hacia abajo
@@ -51,7 +52,7 @@ export default class EnemyObject extends MovableObject {
         }else if (this.body.velocity.x !== 0 && this.body.velocity.y < 5) {
             // Movimiento hacia los lados
             this.play('side_' + this.key, true);
-            this.flipX = this.body.velocity.x < 0;
+            this.flipX = this.body.velocity.x > 0;
         } else {
             // Reproducir la animación estática si no se está moviendo
             this.play('static_' + this.key);
