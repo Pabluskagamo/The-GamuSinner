@@ -143,11 +143,11 @@ export default class LevelScene2 extends LevelScene {
 			this.scene.start('level3', { player: this.player, gate: this.salidasSala.izq.coords});
 		});
 
-		// this.physics.add.overlap(this.player, this.puertaSolidaDer, () => {
-		// 	this.sound.stopAll();
-		// 	this.events.emit('passLevel', 'level4');
-		// 	this.scene.start('level4', { player: this.player, gate: this.salidasSala.der.coords});
-		// });
+		this.physics.add.overlap(this.player, this.puertaSolidaDer, () => {
+			this.sound.stopAll();
+			this.events.emit('passLevel', 'levelBoss');
+			this.scene.start('levelBoss', { player: this.player, gate: this.salidasSala.der.coords});
+		});
 	}
 
 }

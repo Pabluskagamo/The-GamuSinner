@@ -11,10 +11,11 @@ import FreezingShot from "../gameobjects/powerUps/freezingShot"
 
 export default class LevelScene extends Phaser.Scene {
 	static progress = {
-		level1: false,
+		level1: true,
 		level2: true,
 		level3: false,
-		level4: false
+		level4: false,
+		levelBoss: false
 	}
 
 
