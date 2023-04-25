@@ -79,9 +79,40 @@ export default class LevelScene2 extends LevelScene {
 
 	completeLevel() {
 		console.log("NIVEL COMPLETADO")
+		LevelScene.progress[this.namescene] = true
 
 		this.sound.removeByKey('fightSong');
+
+		const explorationSong = this.sound.add("explorationSong", {
+			volume: 0.1,
+			loop: true
+		});
+		
+		const appearEffect = this.sound.add("appearEffect", {
+			volume: 0.1
+		});
+		
+		appearEffect.play();
+
+		appearEffect.once('complete', () => {
+			explorationSong.play();
+		});
+		
 		this.events.emit('levelComplete');
+		this.abrirPuertas();
+
+		for (let i = 0; i < 5; i++) {
+			setTimeout(() => {
+				this.cameras.main.flash(500);
+			}, i * 600);
+		}
+
+		this.addMeiga();
+		this.spawnMeiga = true;
+		this.player.collectCoin(1000);
+	}
+
+	abrirPuertas(){
 		this.puerta.setVisible(false);
 		this.puertasGroup.setVisible(false)
 
@@ -117,16 +148,6 @@ export default class LevelScene2 extends LevelScene {
 		// 	this.events.emit('passLevel', 'level4');
 		// 	this.scene.start('level4', { player: this.player, gate: this.salidasSala.der.coords});
 		// });
-
-		for (let i = 0; i < 5; i++) {
-			setTimeout(() => {
-				this.cameras.main.flash(500);
-			}, i * 600);
-		}
-
-		this.addMeiga();
-		this.spawnMeiga = true;
-		this.player.collectCoin(1000);
 	}
 
 }

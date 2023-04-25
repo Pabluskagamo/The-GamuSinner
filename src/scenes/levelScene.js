@@ -12,7 +12,7 @@ import FreezingShot from "../gameobjects/powerUps/freezingShot"
 export default class LevelScene extends Phaser.Scene {
 	static progress = {
 		level1: false,
-		level2: false,
+		level2: true,
 		level3: false,
 		level4: false
 	}
@@ -74,7 +74,6 @@ export default class LevelScene extends Phaser.Scene {
 			volume: 0.1,
 			loop: true
 		});
-		this.banda.play();
 
 		this.initPlayerAndPools(data);
 		this.initMap();
@@ -286,7 +285,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 1;
+		this.freqChangeTime = 20000;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -297,7 +296,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.debugMode = true;
 		} else {
 			this.enemySpawnTimer = this.time.addEvent({
-				delay: 400,
+				delay: 4000,
 				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true
@@ -315,10 +314,12 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initLevelFightMode(){
+		this.banda.play();
 		this.initTimers(false);
 	}
 
 	initLevelFreeMode(){
+		this.abrirPuertas()
 		this.addMeiga()
 	}
 
@@ -335,6 +336,22 @@ export default class LevelScene extends Phaser.Scene {
 		console.log("NIVEL COMPLETADO")
 
 		this.sound.removeByKey('fightSong');
+
+		const explorationSong = this.sound.add("explorationSong", {
+			volume: 0.1,
+			loop: true
+		});
+		
+		const appearEffect = this.sound.add("appearEffect", {
+			volume: 0.1
+		});
+		
+		appearEffect.play();
+
+		appearEffect.once('complete', () => {
+			explorationSong.play();
+		});
+
 		this.events.emit('levelComplete');
 		this.puerta.setVisible(false);
 		this.puertaSolida.destroy();
@@ -399,19 +416,6 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
     addMeiga() {
-		const appearEffect = this.sound.add("appearEffect", {
-			volume: 0.1
-		});
-		const explorationSong = this.sound.add("explorationSong", {
-			volume: 0.1,
-			loop: true
-		});
-
-		appearEffect.play();
-
-		appearEffect.once('complete', () => {
-			explorationSong.play();
-		});
 		const meiga = this.add.sprite(960, 250, 'meiga').setScale(1.6);
 		this.anims.create({
 			key: 'meigaState',
@@ -449,6 +453,10 @@ export default class LevelScene extends Phaser.Scene {
 		this.scene.get(level).player.stopVertical();
 		this.scene.get(level).player.x = x;
 		this.scene.get(level).player.y = y;
+	}
+
+	abrirPuertas(){
+
 	}
 
 }
