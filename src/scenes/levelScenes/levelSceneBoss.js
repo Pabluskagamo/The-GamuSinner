@@ -5,6 +5,8 @@ import PowerUpPool from "../../gameobjects/Pools/powerUpPool";
 import EnemyPool from "../../gameobjects/Pools/enemyPool";
 import CoinPool from "../../gameobjects/Pools/coinPool";
 import FoodPool from "../../gameobjects/Pools/foodPool";
+import DemonBoss from "../../gameobjects/enemies/demonBoss";
+import BlackWolf from "../../gameobjects/enemies/blackWolf";
 
 export default class LevelSceneBoss extends LevelScene {
 
@@ -12,8 +14,22 @@ export default class LevelSceneBoss extends LevelScene {
 		super('levelBoss')
 	}
 
-    initPlayerAndPools(data) {
+	create(data){
+        super.create(data);
+        this.demon = new DemonBoss(this, 0, 0, 60, this.player, this.enemyPool)
 
+		this.physics.add.collider(this.bulletPool._group, this.demon, (obj1, obj2) => {
+            obj1.hit(obj2)
+        }, (obj1, obj2) => !obj2.isDead());
+
+		this.physics.add.collider(this.demon, this.player, (obj1, obj2) => {
+				obj1.attack(obj2);
+				this.events.emit('addScore', obj2.getHp());
+			}, (obj1, obj2) => !obj2.getDash()
+		);
+    }
+
+    initPlayerAndPools(data) {
 		console.log("LLEGO AQUI")
 		
         if(data.hasOwnProperty('gate')){
@@ -28,6 +44,16 @@ export default class LevelSceneBoss extends LevelScene {
 		this.enemyPool = new EnemyPool(this, 15);
 		this.coinPool = new CoinPool(this, 20);
 		this.foodPool = new FoodPool(this, 20);
+
+		/* this.physics.add.collider(this.bulletPool._group, this.demon, (obj1, obj2) => {
+            obj1.hit(obj2)
+        }, (obj1, obj2) => !obj2.isDead());
+
+		this.physics.add.collider(this.demon, this.player, (obj1, obj2) => {
+				obj1.attack(obj2);
+				this.events.emit('addScore', obj2.getHp());
+			}, (obj1, obj2) => !obj2.getDash()
+		); */
 	}
 
 	initTimers(debug) {

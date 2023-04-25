@@ -133,6 +133,7 @@ export default class LevelScene extends Phaser.Scene {
 			powerUps.push(new TripleShot(this, -125, -125));
 			powerUps.push(new EightDirShot(this, -125, -125));
 		}
+		
 		this.powerUpPool.addMultipleEntity(powerUps);
 		this.spawnMeiga = false;
 		this.e = this.input.keyboard.addKey('E');
@@ -246,6 +247,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.physics.add.overlap(this.powerUpPool._group, this.player, (obj1, obj2) => {
 			obj2.collectPowerUp(obj1);
 		}, (obj1, obj2) => !obj1.isEnabled());
+		
 		this.physics.add.overlap(this.foodPool._group, this.player, (obj1, obj2) => {
 			obj1.collect(obj2);
 			this.events.emit('addScore', obj2.getHp());
