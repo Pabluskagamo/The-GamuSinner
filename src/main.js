@@ -6,6 +6,7 @@ import selecScene from './scenes/selectionScene'
 import LevelScene1 from './scenes/levelScenes/levelScene1'
 import LevelScene2 from './scenes/levelScenes/levelScene2'
 import LevelScene3 from './scenes/levelScenes/levelScene3'
+import LevelScene4 from './scenes/levelScenes/levelScene4'
 import Hud from './ui/hud'
 import GameOverScene from './scenes/GameOverScene'
 import SettingScene from './scenes/settingsScene'
@@ -43,7 +44,7 @@ const config = {
 		},
 	},
 
-	scene: [/*MainScene, historyScene, InstructionScene, selecScene,*/ LevelSceneBoss, LevelScene1, LevelScene2, LevelScene3, Hud, StatsScene, SettingScene, GameOverScene],
+	scene: [/*MainScene,*/ historyScene, /* InstructionScene, selecScene,*/ LevelScene4, LevelSceneBoss, LevelScene1, LevelScene2, LevelScene3, Hud, StatsScene, SettingScene, GameOverScene],
 }
 
 export default new Phaser.Game(config)

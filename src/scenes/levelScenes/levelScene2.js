@@ -56,7 +56,7 @@ export default class LevelScene2 extends LevelScene {
 		
 		this.salidasSala = {
 			izq: {destino: 'sala3', coords: {x: this.sys.game.canvas.width - 80, y: this.sys.game.canvas.height/2}},
-			der: {destino: 'sala4', coords: {x: this.player.x, y: 80}},
+			der: {destino: 'sala4', coords: {x: 80, y: this.player.y}},
 			abajo: {destino: 'sala1', coords: {x: this.sys.game.canvas.width/2, y: 80}}
 		}
 		
@@ -146,7 +146,7 @@ export default class LevelScene2 extends LevelScene {
 		this.physics.add.overlap(this.player, this.puertaSolidaDer, () => {
 			this.sound.stopAll();
 			this.events.emit('passLevel', 'levelBoss');
-			this.scene.start('levelBoss', { player: this.player, gate: this.salidasSala.der.coords});
+			this.scene.start('level4', { player: this.player, gate: this.salidasSala.der.coords});
 		});
 	}
 

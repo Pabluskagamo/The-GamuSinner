@@ -14,6 +14,10 @@ export default class historyScene extends Phaser.Scene {
     }
 
     create() {
+        this.label = this.add.text(100, 100, '', { fontSize: '25px', fontFamily: 'Arial', lineSpacing: 20 })
+        this.textList = "Un día Dieguiño estaba aburrido, no sabía que hacer en el verano.\nSe aburría tanto, que decidió preguntarle a su abuelo que podía hacer.\nEl abuelo cansado de oir a Dieguiño protestar y quejarse\ndecidió mandarle una misión imposible.\nIr a cazar un Gamusino\nDieguiño sin pensárselo dos veces,\ncogió su mochila y el arma de su abuelo a escondidas.\nY emprendió el viaje que cambiaría su vida por completo.\n¿Con qué aventuras se encontrará Dieguiño?";
+
+        this.typewriteText(this.textList);
 
         // SKIP BUTTON
         this.anims.create({
@@ -35,20 +39,33 @@ export default class historyScene extends Phaser.Scene {
             skip.playReverse('hoverSkip');
         });
         skip.on('pointerup', () => {
-			this.cameras.main.fadeOut(500);
-			this.cameras.main.once("camerafadeoutcomplete", function () {
-				this.scene.start('instructions');
-			}, this);
-		});
+            this.cameras.main.fadeOut(500);
+            this.cameras.main.once("camerafadeoutcomplete", function () {
+                this.scene.start('instructions');
+            }, this);
+        });
 
-		this.input.keyboard.on('keydown', (event) => {
-			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
-				this.cameras.main.fadeOut(500);
-				this.cameras.main.once("camerafadeoutcomplete", function () {
-					this.scene.start('instructions');
-				}, this);
-			}
-		});
+        this.input.keyboard.on('keydown', (event) => {
+            if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
+                this.cameras.main.fadeOut(500);
+                this.cameras.main.once("camerafadeoutcomplete", function () {
+                    this.scene.start('instructions');
+                }, this);
+            }
+        });
+    }
+
+    typewriteText(text) {
+        const length = text.length
+        let i = 0
+        this.time.addEvent({
+            callback: () => {
+                this.label.text += text[i]
+                ++i
+            },
+            repeat: length - 1,
+            delay: 50
+        })
     }
 
 }
