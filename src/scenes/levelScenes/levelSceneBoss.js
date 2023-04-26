@@ -6,7 +6,6 @@ import EnemyPool from "../../gameobjects/Pools/enemyPool";
 import CoinPool from "../../gameobjects/Pools/coinPool";
 import FoodPool from "../../gameobjects/Pools/foodPool";
 import DemonBoss from "../../gameobjects/enemies/demonBoss";
-import BlackWolf from "../../gameobjects/enemies/blackWolf";
 
 export default class LevelSceneBoss extends LevelScene {
 
@@ -34,6 +33,30 @@ export default class LevelSceneBoss extends LevelScene {
 				this.events.emit('addScore', obj2.getHp());
 			}, (obj1, obj2) => !obj2.getDash()
 		);
+
+		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
+			obj1.hit(obj2)
+		}, (obj1, obj2) => !obj2.isDead());
+
+		this.physics.add.overlap(this.coinPool._group, this.player, (obj1, obj2) => {
+			obj1.collect(obj2);
+			this.events.emit('earnCoin', obj2.getWallet());
+		});
+
+		this.physics.add.overlap(this.powerUpPool._group, this.player, (obj1, obj2) => {
+			obj2.collectPowerUp(obj1);
+		}, (obj1, obj2) => !obj1.isEnabled());
+		
+		this.physics.add.overlap(this.foodPool._group, this.player, (obj1, obj2) => {
+			obj1.collect(obj2);
+			this.events.emit('addScore', obj2.getHp());
+		});
+
+		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
+			obj1.attack(obj2);
+			this.events.emit('addScore', obj2.getHp());
+		}, (obj1, obj2) => !obj2.getDash()
+		);
     }
 
     initPlayerAndPools(data) {
@@ -51,16 +74,6 @@ export default class LevelSceneBoss extends LevelScene {
 		this.enemyPool = new EnemyPool(this, 15);
 		this.coinPool = new CoinPool(this, 20);
 		this.foodPool = new FoodPool(this, 20);
-
-		/* this.physics.add.collider(this.bulletPool._group, this.demon, (obj1, obj2) => {
-            obj1.hit(obj2)
-        }, (obj1, obj2) => !obj2.isDead());
-
-		this.physics.add.collider(this.demon, this.player, (obj1, obj2) => {
-				obj1.attack(obj2);
-				this.events.emit('addScore', obj2.getHp());
-			}, (obj1, obj2) => !obj2.getDash()
-		); */
 	}
 
 	initTimers(debug) {
