@@ -16,10 +16,11 @@ export default class dialogBox extends Phaser.GameObjects.Text {
 
     	// Cambia la fuente del texto
 		this.setFontFamily('Silkscreen');
-
+		this.setColor('#856127');
 		/* Si quiereis cambiar el tamaño de la letra usar esta instruccion, 
 		volver a contar los caracteres por linea y actualizar el comentario de setTextToDisplay */
-		this.setFontSize(20);
+		//this.setFontSize(70);
+		this.setFontSize(12);
 	//	this.emitter = EventDispatcher.getInstance();
 	}
 

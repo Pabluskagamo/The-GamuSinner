@@ -1,12 +1,12 @@
 import dialogBox from "../dialogs/dialogBox";
 import HealthPoint from "./healthpoint";
 
-export default class Hud extends Phaser.Scene{
-    constructor(){
+export default class Hud extends Phaser.Scene {
+    constructor() {
         super('UIScene');
     }
 
-    init(data){
+    init(data) {
         // this.maxHp = data.maxHp;
         // this.hp = data.hp;
         this.playerData = data.playerData;
@@ -14,20 +14,37 @@ export default class Hud extends Phaser.Scene{
     }
 
     preload() {
-		this.load.spritesheet('healthbar', './assets/ui/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
+        this.load.spritesheet('healthbar', './assets/ui/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
         this.load.image('coinhud', '/assets/items/coin.png');
         this.load.image('dash_hud', '/assets/powerups/DashEffect.png');
         this.load.image('pwpanel', './assets/ui/powerUpPanel.png');
+        this.load.image('dialog2', './assets/ui/dialogBox 2.png');
+        this.load.image('dialog', './assets/ui/dialogBox.png');
         this.load.spritesheet('tripleShotHud', './assets/powerups/Tripleshoot.png', { frameWidth: 32, frameHeight: 32 })
-		this.load.spritesheet('eightDirShotHud', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
-		this.load.spritesheet('multipleDirfreezingShotectionShotHud', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
-		this.load.spritesheet('bouncingShotHud', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('eightDirShotHud', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('multipleDirfreezingShotectionShotHud', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('bouncingShotHud', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('multipleDirectionShotHud', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
-	}
+    }
 
-    create ()
-    {   
-        new dialogBox(this,200,200, 500);
+    create() {
+        // Cuadro de dialogo
+      /*  this.dialogBox = new dialogBox(this, 98, 480, 1000);
+        this.dialogBox.clearText();
+        this.dialogBox.setTextToDisplay('Hola viajero, ¿que deseas comprar?');
+        this.dialogBox.printText();
+        this.dialogBox.setDepth(2);
+        
+        const dialog = this.add.image(595, 513, 'dialog2').setScale(1.05);
+        dialog.setDepth(1);*/
+        this.dialogBox = new dialogBox(this, 880, 286, 200);
+        this.dialogBox.clearText();
+        this.dialogBox.setTextToDisplay('Hola viajero, ¿que deseas comprar?');
+        this.dialogBox.printText();
+        this.dialogBox.setDepth(2);
+
+        const dialog = this.add.image(965, 294, 'dialog').setScale(1.05);
+        dialog.setDepth(1);
         //VIDA
         this.initHearthsHud()
 
@@ -72,8 +89,8 @@ export default class Hud extends Phaser.Scene{
         //Power Up Save Panel
         this.powerUpPanel = this.add.image(990, 123, 'pwpanel'),
 
-        //CONTADOR TIEMPO OLEADA
-        this.countdown = this.add.text(555, 75, '00:20',  { fontFamily: 'MedievalSharp-Regular' });
+            //CONTADOR TIEMPO OLEADA
+            this.countdown = this.add.text(555, 75, '00:20', { fontFamily: 'MedievalSharp-Regular' });
         this.countdown.setFontSize(24);
 
         //  Grab a reference to the Game Scene
@@ -85,7 +102,7 @@ export default class Hud extends Phaser.Scene{
         }, this);
 
         levelGame.events.on('changeCount', function (newTime) {
-            this.countdown.setText('00:'+ (newTime < 10 ? '0' : '') +newTime)
+            this.countdown.setText('00:' + (newTime < 10 ? '0' : '') + newTime)
         }, this);
 
         this.fadeTime = 0;
@@ -95,7 +112,7 @@ export default class Hud extends Phaser.Scene{
         levelGame.events.on('levelComplete', function () {
             this.countdown.x -= 150
             this.countdown.setText('!Has completado todas las oleadas!');
-            if(!this.faded){
+            if (!this.faded) {
                 this.fadeTime = 0;
                 this.faded = true;
             }
@@ -106,8 +123,8 @@ export default class Hud extends Phaser.Scene{
         }, this);
 
         levelGame.events.on('collectPowerUp', function (type) {
-            
-            if(!this.powerUpsList.includes(type)){
+
+            if (!this.powerUpsList.includes(type)) {
                 this.powerUpsList.push(type)
                 this.updatePowerUpsHud()
             }
@@ -116,12 +133,12 @@ export default class Hud extends Phaser.Scene{
         levelGame.events.on('characterDash', function () {
             this.powerUpsList.push("dash_char")
             this.updatePowerUpsHud()
-        }, this); 
+        }, this);
 
         levelGame.events.on('updatePowerupCount', function (key, newTime) {
-            if(newTime !== -1){
+            if (newTime !== -1) {
                 this.updatePowerUpCount(key, newTime)
-            }else{
+            } else {
                 // this.powerUpTimer.setVisible(false)
                 // this.clearPowerUps()
             }
@@ -129,8 +146,8 @@ export default class Hud extends Phaser.Scene{
 
         levelGame.events.on('characterDashEnd', function () {
             this.clearPowerUp("dash_char")
-        }, this); 
-        
+        }, this);
+
         levelGame.events.on('endPowerUpTime', function (key) {
             this.clearPowerUp(key)
         }, this);
@@ -150,7 +167,7 @@ export default class Hud extends Phaser.Scene{
         }, this);
 
         statsGame.events.on('incrementLife', function (hp) {
-            this.uiLive.unshift(new HealthPoint(this, this.uiLive[0].x-30, 90))
+            this.uiLive.unshift(new HealthPoint(this, this.uiLive[0].x - 30, 90))
             console.log("SUBIR HP", this.uiLive[0].x)
             this.playerData.maxHp++;
             this.playerData.hp = hp;
@@ -159,8 +176,8 @@ export default class Hud extends Phaser.Scene{
 
         this.updateHealthUi(this.playerData.hp);
     }
-    update(t){
-        if(this.faded){
+    update(t, dt) {
+        if (this.faded) {
             if (this.fadeTime < 3500) {
                 this.fadeTime = this.fadeTime + (t / 1000);
             } else {
@@ -172,49 +189,57 @@ export default class Hud extends Phaser.Scene{
                 });
             }
         }
+        super.update(t, dt);
+        this.previousLetterTime += dt; // Contador del tiempo transcurrido desde la ultima letra
+
+        // Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
+        if (this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime) {
+            this.dialogBox.write();
+            this.previousLetterTime = 0;
+        }
     }
 
 
-    initHearthsHud(){
+    initHearthsHud() {
         let lastPosX = 1110;
         this.uiLive = []
 
-        for(let i = 0; i < this.playerData.maxHp; i++){
+        for (let i = 0; i < this.playerData.maxHp; i++) {
             this.uiLive.unshift(new HealthPoint(this, lastPosX, 90));
-            lastPosX-=30;
+            lastPosX -= 30;
         }
     }
 
     updateHealthUi(hp) {
-		//setscrollfactor(0, 0) para que cuando se 
-		//mueva la camara no se mueva el HUD
+        //setscrollfactor(0, 0) para que cuando se 
+        //mueva la camara no se mueva el HUD
 
-		for (let i = 1; i <= this.playerData.maxHp; i++) {
-        
-			if (i <= hp) {
-				this.uiLive[i-1].full()
-			} else if(i <= this.playerData.maxHp){
-				this.uiLive[i-1].empty()
-			}
-		}
-	}
+        for (let i = 1; i <= this.playerData.maxHp; i++) {
 
-    updatePowerUpsHud(){
+            if (i <= hp) {
+                this.uiLive[i - 1].full()
+            } else if (i <= this.playerData.maxHp) {
+                this.uiLive[i - 1].empty()
+            }
+        }
+    }
+
+    updatePowerUpsHud() {
         const separationX = 20;
         const separationY = 30;
         let currentX = 1025
         let currentY = 130
 
-        this.powerUpsList.forEach(p=>{
+        this.powerUpsList.forEach(p => {
             const pow = this.powerUpsImgs[p];
 
-            if(!pow.multiple){
+            if (!pow.multiple) {
                 pow.img.x = currentX;
                 pow.img.y = currentY + separationY;
                 pow.img.setVisible(true)
-            }else{
+            } else {
                 let imgSepCombo = 0
-                pow.comboKeys.forEach(k=>{
+                pow.comboKeys.forEach(k => {
                     const comboPow = this.powerUpsImgs[k];
                     comboPow.img.x = currentX - imgSepCombo;
                     comboPow.img.y = currentY + separationY;
@@ -230,22 +255,22 @@ export default class Hud extends Phaser.Scene{
         })
     }
 
-    updatePowerUpCount(key, newTime){
+    updatePowerUpCount(key, newTime) {
         const pow = this.powerUpsImgs[key];
-        pow.text.setText('00:'+ (newTime < 10 ? '0' : '') +newTime);
+        pow.text.setText('00:' + (newTime < 10 ? '0' : '') + newTime);
     }
 
-    clearPowerUp(key){
+    clearPowerUp(key) {
         console.log("SE ACABA EL POWER UP", key)
 
         const pow = this.powerUpsImgs[key];
-        
+
         pow.text.setVisible(false);
-        
-        if(!pow.multiple){
+
+        if (!pow.multiple) {
             pow.img.setVisible(false);
-        }else{
-            pow.comboKeys.forEach(k=>{
+        } else {
+            pow.comboKeys.forEach(k => {
                 const comboPow = this.powerUpsImgs[k];
                 comboPow.img.setVisible(false);
             })
@@ -257,14 +282,14 @@ export default class Hud extends Phaser.Scene{
         this.updatePowerUpsHud();
     }
 
-    savePowerUp(key){
+    savePowerUp(key) {
         const img_key = key + 'Hud'
-        
+
         this.savedPowerUp = this.add.image(990, 123, img_key)
     }
 
-    usePowerUpSaved(){
-        if(this.savedPowerUp){
+    usePowerUpSaved() {
+        if (this.savedPowerUp) {
             this.savedPowerUp.destroy();
         }
     }
