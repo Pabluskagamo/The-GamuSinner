@@ -13,8 +13,8 @@ export default class LevelScene extends Phaser.Scene {
 	static progress = {
 		level1: true,
 		level2: true,
-		level3: false,
-		level4: false,
+		level3: true,
+		level4: true,
 		levelBoss: false
 	}
 
@@ -54,11 +54,14 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.image('tilesCastleWall', './assets/tileset/sala2/tilesetCastle/TX Tileset Wall.png')
 		this.load.image('tilesCastleGrass', './assets/tileset/sala2/tilesetCastle/TX Tileset Grass.png')
 		this.load.image('tilesCastlePlant', './assets/tileset/sala2/tilesetCastle/TX Plant.png')
+		this.load.image('tileFaerieForest', './assets/tileset/FaerieForest_PetricakeGamesPNG.png')
 		this.load.tilemapTiledJSON('sala1', './assets/tilemap/sala1.json')
 		this.load.tilemapTiledJSON('sala2', './assets/tilemap/sala2.json')
 		this.load.tilemapTiledJSON('sala3', './assets/tilemap/sala3.json')
+		this.load.tilemapTiledJSON('sala4', './assets/tilemap/sala4.json')
 		this.load.image('puertaSala1', './assets/tileset/puertas_32x32.png')
 		this.load.image('puertaSala3', './assets/tileset/puertas3_32x32.png')
+		this.load.image('puertaSala4', './assets/tileset/puerta4_32x32.PNG')
 		this.load.image('puertaSala2Izq', './assets/tileset/sala2/Pizq.png')
 		this.load.image('puertaSala2Der', './assets/tileset/sala2/Pder.png')
 		this.load.image('puertaSala2Abajo', './assets/tileset/sala2/Pabj.png')
@@ -91,12 +94,11 @@ export default class LevelScene extends Phaser.Scene {
 
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
 
-		if(this.scene.isActive('UIScene')){
-			this.scene.stop('UIScene');			
+		if(!this.scene.isActive('UIScene')){		
+			this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel});
+			console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
 		}
 
-		console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
-		this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel});
 
 		settings.setInteractive({ cursor: 'pointer' });
 

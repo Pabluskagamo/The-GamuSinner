@@ -45,33 +45,55 @@ export default class LevelScene2 extends LevelScene {
 		LevelScene.progress[this.namescene] = true
 
 		this.sound.removeByKey('fightSong');
-		this.events.emit('levelComplete');
-		this.abrirPuertas()
+
+		const explorationSong = this.sound.add("explorationSong", {
+			volume: 0.1,
+			loop: true
+		});
 		
+		const appearEffect = this.sound.add("appearEffect", {
+			volume: 0.1
+		});
+		
+		appearEffect.play();
+
+		appearEffect.once('complete', () => {
+			explorationSong.play();
+		});
+		
+		this.events.emit('levelComplete');
+		this.abrirPuertas();
+
+		for (let i = 0; i < 5; i++) {
+			setTimeout(() => {
+				this.cameras.main.flash(500);
+			}, i * 600);
+		}
+
 		this.addMeiga();
 		this.spawnMeiga = true;
 		this.player.collectCoin(1000);
 	}
 
-	addMeiga() {
+	// addMeiga() {
 		
-		const meiga = this.add.sprite(480, 300, 'meiga').setScale(1.6);
-		this.anims.create({
-			key: 'meigaState',
-			frames: this.anims.generateFrameNumbers('meiga', { start: 0, end: 3 }),
-			frameRate: 3,
-			repeat: -1
-		});
-		meiga.play('meigaState');
-		const e_key = this.add.sprite(480, 270, 'e_key');
-		this.anims.create({
-			key: 'E_Press',
-			frames: this.anims.generateFrameNumbers('e_key', { start: 0, end: 2 }),
-			frameRate: 2,
-			repeat: -1
-		});
-		e_key.play('E_Press');
-	}
+	// 	const meiga = this.add.sprite(480, 300, 'meiga').setScale(1.6);
+	// 	this.anims.create({
+	// 		key: 'meigaState',
+	// 		frames: this.anims.generateFrameNumbers('meiga', { start: 0, end: 3 }),
+	// 		frameRate: 3,
+	// 		repeat: -1
+	// 	});
+	// 	meiga.play('meigaState');
+	// 	const e_key = this.add.sprite(480, 270, 'e_key');
+	// 	this.anims.create({
+	// 		key: 'E_Press',
+	// 		frames: this.anims.generateFrameNumbers('e_key', { start: 0, end: 2 }),
+	// 		frameRate: 2,
+	// 		repeat: -1
+	// 	});
+	// 	e_key.play('E_Press');
+	// }
 
 	abrirPuertas(){
 		this.puerta.setVisible(false);
