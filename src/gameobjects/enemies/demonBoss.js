@@ -3,7 +3,7 @@ import EnemyObject from "./enemyObject";
 export default class DemonBoss extends EnemyObject {
 
     constructor(scene, x, y, speed, player, enemypool) {
-        super(scene, x, y, 'demonboss', speed, 20, enemypool, 60, 20);
+        super(scene, x, y, 'demonboss', speed, 20, enemypool, 600, 20);
         this.scene.add.existing(this);
         //this.key = 'demonboss'
         
@@ -57,7 +57,7 @@ export default class DemonBoss extends EnemyObject {
         this.scene.anims.create({
             key: 'hit_demonboss',
             frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 66, end: 70 }),
-            frameRate: 8,
+            frameRate: 15,
             repeat: 0
         })
 
@@ -89,7 +89,7 @@ export default class DemonBoss extends EnemyObject {
             }
 
             if (this.anims.currentAnim.key === 'hit_demonboss') {
-                this.following = true
+                this.isHitting = false
             }
 
             if (/attack/.test(this.anims.currentAnim.key)){
@@ -104,7 +104,9 @@ export default class DemonBoss extends EnemyObject {
     follow(){
         this.flipX = true;
 
-        if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
+        if(this.isHitting && !this.attacking){
+            this.play('hit_demonboss', true);
+        }else if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
             // Diagonal abajo-derecha
             this.play('side_' + this.key, true);
             //this.angle = -0.1;
@@ -141,7 +143,7 @@ export default class DemonBoss extends EnemyObject {
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
 
-        if (this.hp > 0 && !this.attacking && !this.player.isDead() && this.following) {
+        if (this.hp > 0 && !this.attacking && !this.player.isDead()) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
             this.follow();
         }else{
@@ -168,6 +170,9 @@ export default class DemonBoss extends EnemyObject {
             this.dieMe();
         }
         
-        //this.following = false
+        this.isHitting = true
+        this.scene.events.emit("bossHit" , dmg);
     }
+
+
 }
