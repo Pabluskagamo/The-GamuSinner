@@ -1,4 +1,5 @@
 import dialogBox from "../dialogs/dialogBox";
+import HealthBar from "./healthbar";
 import HealthPoint from "./healthpoint";
 
 export default class Hud extends Phaser.Scene {
@@ -11,6 +12,7 @@ export default class Hud extends Phaser.Scene {
         // this.hp = data.hp;
         this.playerData = data.playerData;
         this.level = data.level
+        this.isBoss = data.bossLevel
     }
 
     preload() {
@@ -95,6 +97,19 @@ export default class Hud extends Phaser.Scene {
 
         //  Grab a reference to the Game Scene
         let levelGame = this.scene.get(this.level);
+
+        if(this.isBoss){
+            //Boss health bar.
+            this.healthBar = new HealthBar(this, 370, 110, 1000);
+            this.countdown.setText("Demonboss")
+            this.countdown.x-=20;
+            // this.healthBar.decrease(300)
+
+            levelGame.events.on('bossHit', function (hp) {
+                this.healthBar.decrease(hp)
+            }, this);
+        }
+
 
         //  Listen for events from it
         levelGame.events.on('addScore', function (hp) {

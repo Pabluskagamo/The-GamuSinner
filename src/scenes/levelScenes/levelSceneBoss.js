@@ -15,8 +15,15 @@ export default class LevelSceneBoss extends LevelScene {
 	}
 
 	create(data){
-        super.create(data);
+        super.create({...data, bossLevel: true});
         this.demon = new DemonBoss(this, 0, 0, 60, this.player, this.enemyPool)
+
+		// if(this.scene.isActive('UIScene')){
+		// 	this.scene.stop('UIScene');			
+		// }
+
+		// console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
+		// this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene});
 
 		this.physics.add.collider(this.bulletPool._group, this.demon, (obj1, obj2) => {
             obj1.hit(obj2)

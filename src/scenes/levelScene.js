@@ -30,7 +30,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.spritesheet('character', './assets/character/character.png', { frameWidth: 64, frameHeight: 32.3 })
+		this.load.spritesheet('character', './assets/character/character.png', { frameWidth: 64, frameHeight: 32 })
 		this.load.spritesheet('character_shot', './assets/character/character_shooting.png', { frameWidth: 64, frameHeight: 32 })
 		this.load.spritesheet('blackWolf', './assets/enemies/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('cyclops', './assets/enemies/cyclops.png', { frameWidth: 64, frameHeight: 64.1 })
@@ -95,7 +95,7 @@ export default class LevelScene extends Phaser.Scene {
 		}
 
 		console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
-		this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene});
+		this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel});
 
 		settings.setInteractive({ cursor: 'pointer' });
 
@@ -135,7 +135,6 @@ export default class LevelScene extends Phaser.Scene {
 		}
 		
 		this.powerUpPool.addMultipleEntity(powerUps);
-		this.spawnMeiga = false;
 		this.e = this.input.keyboard.addKey('E');
 		let statsGame = this.scene.get('stats');
 
@@ -163,6 +162,7 @@ export default class LevelScene extends Phaser.Scene {
 
 
 	update(t) {
+		
 		if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
 			this.enemyPool.spawn(0, 0)
 		}
@@ -318,6 +318,7 @@ export default class LevelScene extends Phaser.Scene {
 
 	initLevelFightMode(){
 		this.banda.play();
+		this.spawnMeiga = false;
 		this.initTimers(false);
 	}
 
@@ -419,6 +420,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
     addMeiga() {
+		this.spawnMeiga = true;
 		const meiga = this.add.sprite(960, 250, 'meiga').setScale(1.6);
 		this.anims.create({
 			key: 'meigaState',

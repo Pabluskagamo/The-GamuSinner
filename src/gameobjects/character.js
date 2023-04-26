@@ -89,6 +89,8 @@ export default class Character extends MovableObject {
                 repeat: 0
             })
 
+            
+
 
             this.on('animationcomplete', end => {
                 if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)) {

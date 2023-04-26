@@ -20,7 +20,7 @@ export default class EnemyObject extends MovableObject {
        this.speed = this.initialSpeed
        this.attacking = false
     }
-s
+
     // Por como funciona el flip con los side walk hay que cargar siempre sprites andando hacia la derecha
     follow(){
         this.flipX = false;
