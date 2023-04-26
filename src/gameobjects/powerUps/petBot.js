@@ -2,8 +2,10 @@ import PowerUp from "./powerUp"
 
 export default class PetBot extends PowerUp{
 
-    constructor(scene, x, y){
+    constructor(scene, x, y, jellyfish){
         super(scene, x, y, "petbot", true)
+
+        this.jellyfish = jellyfish
         
         this.scene.anims.create({
             key: 'petbot_animation',
@@ -15,5 +17,6 @@ export default class PetBot extends PowerUp{
     }
 
     run () {
+        this.scene.player.setPet(this.jellyfish)
     }
 }

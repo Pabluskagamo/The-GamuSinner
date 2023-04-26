@@ -3,6 +3,7 @@ import NonePowerUp from "./powerUps/nonePowerUp";
 import { PowerUpFactory } from "./powerUps/powerUpFactory";
 import { Directions } from "./utils/directions"
 import MultipleDirectionShot from "./powerUps/multipleDirectionShot";
+import BouncingShot from "./powerUps/bouncingShot"
 
 export default class Character extends MovableObject {
 
@@ -17,10 +18,13 @@ export default class Character extends MovableObject {
             this.isAttacking = false;
             this.isDashing = false;
             this.lastDash = 0;
+            //this.nonePowerUp = new MultipleDirectionShot(this.scene)
             this.nonePowerUp = new NonePowerUp(this.scene)
             this.currentPowerUp = this.nonePowerUp
             this.inventory = null
+            this.pet = null
             this.passives = []
+            //this.passives = [new BouncingShot(this.scene)]
             this.hp = 4;
             this.maxHp = 4;
             this.numDirections = 8;
@@ -217,6 +221,7 @@ export default class Character extends MovableObject {
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
 
+        
         if (this.instruction === null) {
 
             this.flipX = false;
@@ -282,6 +287,10 @@ export default class Character extends MovableObject {
                 this.collectPowerUp(this.inventory)
                 this.scene.events.emit("usePowerUpInventory")
                 this.inventory = null;
+            }
+
+            if(this.pet != null){
+                this.movePet()
             }
 
             if(!this.isDashing){
@@ -358,6 +367,9 @@ export default class Character extends MovableObject {
         }
 
         this.currentPowerUp.run(this.x, this.y, this.passives, dir)
+        if (this.pet != null) {
+            this.pet.attack(this.currentPowerUp, this.passives, dir)
+        }
     }
 
     isAttackInProcess() {
@@ -545,5 +557,13 @@ export default class Character extends MovableObject {
             callbackScope: this,
             loop: false
         });
+    }
+
+    setPet(pet){
+        this.pet = pet
+    }
+
+    movePet(){
+        this.pet.follow(this.x+50, this.y)
     }
 }

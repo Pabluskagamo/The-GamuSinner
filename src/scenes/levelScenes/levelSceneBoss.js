@@ -6,6 +6,7 @@ import EnemyPool from "../../gameobjects/Pools/enemyPool";
 import CoinPool from "../../gameobjects/Pools/coinPool";
 import FoodPool from "../../gameobjects/Pools/foodPool";
 import DemonBoss from "../../gameobjects/enemies/demonBoss";
+import JellyfishPet from "../../gameobjects/powerUps/jellyfishPet";
 
 export default class LevelSceneBoss extends LevelScene {
 
@@ -16,6 +17,9 @@ export default class LevelSceneBoss extends LevelScene {
 	create(data){
         super.create({...data, bossLevel: true});
         this.demon = new DemonBoss(this, 0, 0, 60, this.player, this.enemyPool)
+		
+        this.jelly = new JellyfishPet(this, this.player.x,this.player.y)
+		this.player.setPet(this.jelly)
 
 		// if(this.scene.isActive('UIScene')){
 		// 	this.scene.stop('UIScene');			

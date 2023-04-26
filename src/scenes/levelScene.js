@@ -37,6 +37,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('goblin', './assets/enemies/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
 		this.load.spritesheet('spectre2', './assets/enemies/spectre2.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('demonboss', './assets/enemies/boss/boss_demon_slime/spritesheets/demonboss.png', { frameWidth: 288, frameHeight: 160 })
+		this.load.spritesheet('jellyfishpet', './assets/pets/jellyfish.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('muerte', './assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', './assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
 		this.load.spritesheet('icebullet', './assets/bullets/icebullets.png', { frameWidth: 16, frameHeight: 16 })
@@ -80,7 +81,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.initMap();
 		this.coinPool.fillPull(20);
 		this.foodPool.fillPull(20);
-		this.bulletPool.fillPool(200);
+		this.bulletPool.fillPool(1000);
 		
 		if(LevelScene.progress[this.namescene]){
 			this.initLevelFreeMode()
