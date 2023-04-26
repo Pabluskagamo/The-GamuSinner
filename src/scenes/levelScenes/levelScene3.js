@@ -45,9 +45,31 @@ export default class LevelScene2 extends LevelScene {
 		LevelScene.progress[this.namescene] = true
 
 		this.sound.removeByKey('fightSong');
-		this.events.emit('levelComplete');
-		this.abrirPuertas()
+
+		const explorationSong = this.sound.add("explorationSong", {
+			volume: 0.1,
+			loop: true
+		});
 		
+		const appearEffect = this.sound.add("appearEffect", {
+			volume: 0.1
+		});
+		
+		appearEffect.play();
+
+		appearEffect.once('complete', () => {
+			explorationSong.play();
+		});
+		
+		this.events.emit('levelComplete');
+		this.abrirPuertas();
+
+		for (let i = 0; i < 5; i++) {
+			setTimeout(() => {
+				this.cameras.main.flash(500);
+			}, i * 600);
+		}
+
 		this.addMeiga();
 		this.spawnMeiga = true;
 		this.player.collectCoin(1000);
