@@ -11,7 +11,7 @@ import FreezingShot from "../gameobjects/powerUps/freezingShot"
 
 export default class LevelScene extends Phaser.Scene {
 	static progress = {
-		level1: false,
+		level1: true,
 		level2: true,
 		level3: false,
 		level4: false,
@@ -95,7 +95,7 @@ export default class LevelScene extends Phaser.Scene {
 		}
 
 		console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
-		this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene});
+		this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel});
 
 		settings.setInteractive({ cursor: 'pointer' });
 

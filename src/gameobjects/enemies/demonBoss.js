@@ -3,7 +3,7 @@ import EnemyObject from "./enemyObject";
 export default class DemonBoss extends EnemyObject {
 
     constructor(scene, x, y, speed, player, enemypool) {
-        super(scene, x, y, 'demonboss', speed, 20, enemypool, 600, 20);
+        super(scene, x, y, 'demonboss', speed, 20, enemypool, 1000, 20);
         this.scene.add.existing(this);
         //this.key = 'demonboss'
         

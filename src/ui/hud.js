@@ -78,20 +78,12 @@ export default class Hud extends Phaser.Scene{
         this.countdown = this.add.text(555, 75, '00:20',  { fontFamily: 'MedievalSharp-Regular' });
         this.countdown.setFontSize(24);
 
-        if(this.isBoss){
-            //Boss health bar.
-            this.healthBar = new HealthBar(this, 370, 110);
-            this.countdown.setText("Demonboss")
-            this.countdown.x-=20;
-            // this.healthBar.decrease(300)
-        }
-
         //  Grab a reference to the Game Scene
         let levelGame = this.scene.get(this.level);
 
         if(this.isBoss){
             //Boss health bar.
-            this.healthBar = new HealthBar(this, 370, 110);
+            this.healthBar = new HealthBar(this, 370, 110, 1000);
             this.countdown.setText("Demonboss")
             this.countdown.x-=20;
             // this.healthBar.decrease(300)
