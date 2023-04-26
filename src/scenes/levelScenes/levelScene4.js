@@ -99,25 +99,25 @@ export default class LevelScene4 extends LevelScene {
 		this.player.collectCoin(1000);
 	}
 
-    addMeiga() {
+    // addMeiga() {
 
-        const meiga = this.add.sprite(945, 360, 'meiga').setScale(1.6);
-        this.anims.create({
-            key: 'meigaState',
-            frames: this.anims.generateFrameNumbers('meiga', { start: 0, end: 3 }),
-            frameRate: 3,
-            repeat: -1
-        });
-        meiga.play('meigaState');
-        const e_key = this.add.sprite(945, 330, 'e_key');
-        this.anims.create({
-            key: 'E_Press',
-            frames: this.anims.generateFrameNumbers('e_key', { start: 0, end: 2 }),
-            frameRate: 2,
-            repeat: -1
-        });
-        e_key.play('E_Press');
-    }
+    //     const meiga = this.add.sprite(945, 360, 'meiga').setScale(1.6);
+    //     this.anims.create({
+    //         key: 'meigaState',
+    //         frames: this.anims.generateFrameNumbers('meiga', { start: 0, end: 3 }),
+    //         frameRate: 3,
+    //         repeat: -1
+    //     });
+    //     meiga.play('meigaState');
+    //     const e_key = this.add.sprite(945, 330, 'e_key');
+    //     this.anims.create({
+    //         key: 'E_Press',
+    //         frames: this.anims.generateFrameNumbers('e_key', { start: 0, end: 2 }),
+    //         frameRate: 2,
+    //         repeat: -1
+    //     });
+    //     e_key.play('E_Press');
+    // }
 
     abrirPuertas() {
         this.puerta1.setVisible(false);
@@ -128,6 +128,7 @@ export default class LevelScene4 extends LevelScene {
 
         this.physics.add.overlap(this.player, zonaInvisible, () => {
             this.sound.stopAll();
+            this.events.emit('passLevel', {level: 'level2'});
             this.scene.start('level2', { player: this.player, gate: { x: this.sys.game.canvas.width - 80, y: this.player.y } });
         });
     }

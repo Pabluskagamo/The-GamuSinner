@@ -39,14 +39,14 @@ export default class Hud extends Phaser.Scene {
         
         const dialog = this.add.image(595, 513, 'dialog2').setScale(1.05);
         dialog.setDepth(1);*/
-        this.dialogBox = new dialogBox(this, 880, 286, 200);
-        this.dialogBox.clearText();
-        this.dialogBox.setTextToDisplay('Hola viajero, ¿que deseas comprar?');
-        this.dialogBox.printText();
-        this.dialogBox.setDepth(2);
+        // this.dialogBox = new dialogBox(this, 880, 286, 200);
+        // this.dialogBox.clearText();
+        // this.dialogBox.setTextToDisplay('Hola viajero, ¿que deseas comprar?');
+        // this.dialogBox.printText();
+        // this.dialogBox.setDepth(2);
 
-        const dialog = this.add.image(965, 294, 'dialog').setScale(1.05);
-        dialog.setDepth(1);
+        // const dialog = this.add.image(965, 294, 'dialog').setScale(1.05);
+        // dialog.setDepth(1);
         //VIDA
         this.initHearthsHud()
 
@@ -175,6 +175,11 @@ export default class Hud extends Phaser.Scene {
             this.usePowerUpSaved()
         }, this);
 
+        levelGame.events.on('passLevel', function (data) {
+            console.log("DATOS",data)
+            this.scene.restart(data);
+        }, this);
+
         let statsGame = this.scene.get('stats');
 
         statsGame.events.on('spentcoins', function (coins) {
@@ -205,13 +210,13 @@ export default class Hud extends Phaser.Scene {
             }
         }
         super.update(t, dt);
-        this.previousLetterTime += dt; // Contador del tiempo transcurrido desde la ultima letra
+        // this.previousLetterTime += dt; // Contador del tiempo transcurrido desde la ultima letra
 
-        // Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
-        if (this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime) {
-            this.dialogBox.write();
-            this.previousLetterTime = 0;
-        }
+        // // Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
+        // if (this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime) {
+        //     this.dialogBox.write();
+        //     this.previousLetterTime = 0;
+        // }
     }
 
 
