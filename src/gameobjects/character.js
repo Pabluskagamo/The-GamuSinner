@@ -19,6 +19,8 @@ export default class Character extends MovableObject {
             this.isDashing = false;
             this.lastDash = 0;
             //this.nonePowerUp = new MultipleDirectionShot(this.scene)
+            //this.nonePowerUp.collect()
+            //this.nonePowerUp.initTimer()
             this.nonePowerUp = new NonePowerUp(this.scene)
             this.currentPowerUp = this.nonePowerUp
             this.inventory = null
@@ -497,15 +499,9 @@ export default class Character extends MovableObject {
             })
         }
     }
-
-    collectFood(value) {
-        if (this.hp < this.maxHp) {
-            this.hp += value;
-        }
-    }
-
+    
     checkPowerUpAlreadyActive(powerUp){
-
+        
         if(powerUp.getKey() === this.currentPowerUp.getKey()){
             this.currentPowerUp.disable(true);
         }
@@ -515,9 +511,15 @@ export default class Character extends MovableObject {
                 powerExist.disable(true);
             }
         }
-
+        
     }
-
+    
+    collectFood(value) {
+        if (this.hp < this.maxHp) {
+            this.hp += value;
+        }
+    }
+    
     getMaxHp(){
         return this.maxHp;
     }
