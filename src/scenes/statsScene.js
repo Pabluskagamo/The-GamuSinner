@@ -83,6 +83,7 @@ export default class SettingScene extends Phaser.Scene {
         this.lifeButton.on('pointerdown', () => {
             this.aumentarBar(this.lifeButton, 0, numMonedasLife, lifebar);
             this.events.emit('incrementLife', this.player.getHp() + 1);
+            console.log('INCREMENTAR')
         });
 
         // STRONGBAR
