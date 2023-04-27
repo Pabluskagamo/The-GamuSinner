@@ -94,7 +94,7 @@ export default class LevelScene extends Phaser.Scene {
 
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
 
-		if(!this.scene.isActive('UIScene')){		
+		if(this.scene.isActive('UIScene')){		
 			this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel});
 			console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
 		}
