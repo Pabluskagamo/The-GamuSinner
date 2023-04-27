@@ -25,6 +25,11 @@ export default class Coin extends Item{
 
     collect(character){
         if(!this.collected){
+            this.scene.sound.add("takecoin_audio", {
+                volume: 0.3,
+                loop: false
+            }).play();
+
             super.collect();
             this.collected = true;
             character.collectCoin(this.value);

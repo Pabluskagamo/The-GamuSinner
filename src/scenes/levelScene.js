@@ -74,13 +74,19 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.audio("goblin_die", "./assets/effects/goblin_die.mp3");
 		this.load.audio("cyclops_die", "./assets/effects/cyclops_die.mp3");
 		this.load.audio("blackWolf_die", "./assets/effects/blackWolf_die.mp3");
+		this.load.audio("shoot_sound", "./assets/effects/shoot.wav");
+		this.load.audio("takecoin_audio", "./assets/effects/coin.wav");
+		this.load.audio("powerup_audio", "./assets/effects/powerup.wav");
+		this.load.audio("takefood_audio", "./assets/effects/heal.wav");
+		this.load.audio("fightSong1", "./assets/audio/AdventureHO2.mp3");
+		this.load.audio("fightSong2", "./assets/audio/AdventureHO2.mp3");
 		this.load.spritesheet('meiga', './assets/enemies/meiga.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('e_key', './assets/keyboards/E.png', { frameWidth: 19, frameHeight: 21 });
 	}
 
 	create(data) {
 
-        this.banda = this.sound.add("fightSong", {
+        this.banda = this.sound.add("fightSong1", {
 			volume: 0.1,
 			loop: true
 		});
@@ -348,7 +354,7 @@ export default class LevelScene extends Phaser.Scene {
 	completeLevel(){
 		console.log("NIVEL COMPLETADO")
 
-		this.sound.removeByKey('fightSong');
+		this.sound.removeByKey('fightSong1');
 
 		const explorationSong = this.sound.add("explorationSong", {
 			volume: 0.1,

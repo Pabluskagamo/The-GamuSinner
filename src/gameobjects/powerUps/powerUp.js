@@ -42,9 +42,14 @@ export default class PowerUp extends Item{
         //this.initTimer();
         //this.x = -150;
         //this.y = -150;
+
         this.visible = false
         this.overlap = true
         if (!this.collected) {
+            this.scene.sound.add("powerup_audio", {
+                volume: 0.3,
+                loop: false
+            }).play();
             super.collect();
             this.collected = true
             this.enabled = true

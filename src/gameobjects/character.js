@@ -329,6 +329,11 @@ export default class Character extends MovableObject {
 
     attack() {
 
+        this.scene.sound.add("shoot_sound", {
+            volume: 0.3,
+            loop: false
+        }).play();
+
         let dir = Directions.DOWN
         if (this.cursors.down.isDown && this.cursors.right.isDown) {
             // Diagonal abajo-derecha
