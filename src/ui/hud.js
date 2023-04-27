@@ -192,7 +192,6 @@ export default class Hud extends Phaser.Scene {
 
         
         levelGame.events.on('passLevel', function (data) {
-            console.log("DATOS",data)
             statsGame.events.removeAllListeners();
             this.scene.restart(data);
         }, this);

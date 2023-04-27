@@ -1,14 +1,15 @@
 import Phaser from 'phaser'
 
-export default class SettingScene extends Phaser.Scene {
+export default class StatsScene extends Phaser.Scene {
     constructor() {
         super('stats');
     }
 
     init(data) {
         this.cameras.main.fadeIn(500);
-        this.player = data.player;
-        this.wallet = this.player.getWallet();
+        console.log("INI SETTINGs",data)
+        this.player = data.playerData;
+        this.wallet = this.player.coins;
         this.dmg = data.dmg;
         this.level = data.level;
     }
@@ -41,6 +42,7 @@ export default class SettingScene extends Phaser.Scene {
         });
 
         closeButton.on('pointerdown', () => {
+            console.log('CUANDO LE DOY AL BOTON CERRAR', this.level)
             this.scene.resume(this.level);
             this.scene.resume('UIScene');
             this.scene.sleep('stats');
@@ -82,7 +84,7 @@ export default class SettingScene extends Phaser.Scene {
 
         this.lifeButton.on('pointerdown', () => {
             this.aumentarBar(this.lifeButton, 0, numMonedasLife, lifebar);
-            this.events.emit('incrementLife', this.player.getHp() + 1);
+            this.events.emit('incrementLife', this.player.hp + 1);
             console.log('INCREMENTAR')
         });
 
@@ -148,9 +150,11 @@ export default class SettingScene extends Phaser.Scene {
         });
 
         this.levelGame = this.scene.get(this.level);
-        this.levelGame.events.on('passLevel', function (level) {
-            this.level = level;
-        }, this);
+
+        // this.levelGame.events.on('passLevel', function (data) {
+        //     this.scene.stop()
+        // }, this);
+
     }
 
     aumentarBar(button, index, numMonedas, bar) {
@@ -177,11 +181,12 @@ export default class SettingScene extends Phaser.Scene {
     }
 
     update(t) {
-        if (this.e.isDown) {
-            this.scene.resume(this.level);
-            this.scene.resume('UIScene');
-            this.scene.sleep('stats');
-        }
+        // if (this.e.isDown) {
+        //     console.log("ESTO ES LA ESCENA AL E", this.level)
+        //     this.scene.resume(this.level);
+        //     this.scene.resume('UIScene');
+        //     this.scene.sleep('stats');
+        // }
         this.actualcoins.setText(`X ${this.wallet}`);
         let i = 0;
         for(let spent of this.barSpent){
@@ -236,6 +241,14 @@ export default class SettingScene extends Phaser.Scene {
             }
             i++;
         }
+    }
+
+    changeLevel(level){ 
+        this.level = level;
+
+        this.levelGame.events.removeAllListeners('passLevel');
+
+        this.levelGame = this.scene.get(this.level);
     }
 
 }

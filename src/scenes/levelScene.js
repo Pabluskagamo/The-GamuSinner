@@ -93,11 +93,11 @@ export default class LevelScene extends Phaser.Scene {
 		}
 
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
-        
-        
-		
-		console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
+
+		console.log("LAUNCH Level", this.namescene)
 		if(this.namescene == 'level1'){		
+			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: this.namescene, dmg: this.bulletPool.getDmg()})
+			this.scene.sleep('stats');
 			this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel});
 		}
 
@@ -140,26 +140,26 @@ export default class LevelScene extends Phaser.Scene {
 		
 		this.powerUpPool.addMultipleEntity(powerUps);
 		this.e = this.input.keyboard.addKey('E');
-		let statsGame = this.scene.get('stats');
+		this.statsGame = this.scene.get('stats');
 
-		statsGame.events.on('spentcoins', function (coins) {
+		this.statsGame.events.on('spentcoins', function (coins) {
 			this.player.setWallet(coins);
 		}, this);
 
-		statsGame.events.on('incrementStrong', function (dmg) {
+		this.statsGame.events.on('incrementStrong', function (dmg) {
 			this.bulletPool.changeDmg(dmg);
 		}, this);
 
-		statsGame.events.on('incrementSpeed', function (speed) {
+		this.statsGame.events.on('incrementSpeed', function (speed) {
 			this.player.setSpeed(speed);
 		}, this);
 
-		statsGame.events.on('incrementLife', function (hp) {
+		this.statsGame.events.on('incrementLife', function (hp) {
 			this.player.incrementHp();
 			this.player.setHp(hp);
 		}, this);
 
-		statsGame.events.on('incrementCadence', function (cadence) {
+		this.statsGame.events.on('incrementCadence', function (cadence) {
 			this.player.setCadence(cadence);
 		}, this);
 	}
@@ -424,6 +424,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
     addMeiga() {
+
 		this.spawnMeiga = true;
 		const meiga = this.add.sprite(960, 250, 'meiga').setScale(1.6);
 		this.anims.create({
@@ -448,13 +449,11 @@ export default class LevelScene extends Phaser.Scene {
 		this.player.stopVertical();
 		this.scene.pause();
 		this.scene.pause('UIScene');
-		if (this.scene.isSleeping('stats')) {
-			this.scene.wake('stats', { player: this.player, dmg: this.bulletPool.getDmg(), level: this.namescene });
-			this.scene.resume('stats', { player: this.player, dmg: this.bulletPool.getDmg(), level: this.namescene  });
 
-		} else {
-			this.scene.launch('stats', { player: this.player, dmg: this.bulletPool.getDmg(), level: this.namescene  });
+		if(this.scene.isSleeping('stats')){
 		}
+		this.scene.wake('stats');
+		this.scene.resume('stats');
 	}
 
 	setPlayerPosition(x, y, level){
