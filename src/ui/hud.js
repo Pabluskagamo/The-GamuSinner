@@ -175,11 +175,7 @@ export default class Hud extends Phaser.Scene {
             this.usePowerUpSaved()
         }, this);
 
-        levelGame.events.on('passLevel', function (data) {
-            console.log("DATOS",data)
-            this.scene.restart(data);
-        }, this);
-
+        
         let statsGame = this.scene.get('stats');
 
         statsGame.events.on('spentcoins', function (coins) {
@@ -193,6 +189,14 @@ export default class Hud extends Phaser.Scene {
             this.playerData.hp = hp;
             this.updateHealthUi(this.playerData.hp);
         }, this);
+
+        
+        levelGame.events.on('passLevel', function (data) {
+            console.log("DATOS",data)
+            statsGame.events.removeAllListeners();
+            this.scene.restart(data);
+        }, this);
+
 
         this.updateHealthUi(this.playerData.hp);
     }

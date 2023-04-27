@@ -98,12 +98,13 @@ export default class LevelScene extends Phaser.Scene {
 		}
 
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
-
-		if(!this.scene.isActive('UIScene')){		
+        
+        
+		
+		console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
+		if(this.namescene == 'level1'){		
 			this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel});
-			console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
 		}
-
 
 		settings.setInteractive({ cursor: 'pointer' });
 
