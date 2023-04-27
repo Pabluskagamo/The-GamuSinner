@@ -141,4 +141,5 @@ export default class Spectre extends EnemyObject{
             enemie.getHit(1)
         }
     }
+
 }

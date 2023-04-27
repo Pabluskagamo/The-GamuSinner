@@ -108,4 +108,5 @@ export default class Cyclops extends EnemyObject{
             enemie.getHit(1)
         }
     }
+
 }

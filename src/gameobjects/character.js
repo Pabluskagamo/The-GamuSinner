@@ -391,7 +391,10 @@ export default class Character extends MovableObject {
     getHit(dmg) {
         if (!this.isDashing && !this.invicible) {
             this.hp -= dmg;
-
+			this.scene.sound.add("hit", {
+                volume: 0.3,
+                loop: false
+            }).play();
             if (this.hp <= 0) {
                 this.hp = 0;
                 this.dieMe();
