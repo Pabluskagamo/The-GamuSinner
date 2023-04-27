@@ -13,8 +13,6 @@ export default class Hud extends Phaser.Scene {
         this.playerData = data.playerData;
         this.level = data.level
         this.isBoss = data.bossLevel
-
-        console.log("INICIANDO ESCENA",data)
     }
 
     preload() {
@@ -177,10 +175,10 @@ export default class Hud extends Phaser.Scene {
             this.usePowerUpSaved()
         }, this);
 
-        // levelGame.events.on('passLevel', function (data) {
-        //     console.log("DATOS RESTART",data)
-        //     this.scene.restart(data);
-        // }, this);
+        levelGame.events.on('passLevel', function (data) {
+            console.log("DATOS",data)
+            this.scene.restart(data);
+        }, this);
 
         let statsGame = this.scene.get('stats');
 
@@ -190,7 +188,7 @@ export default class Hud extends Phaser.Scene {
 
         statsGame.events.on('incrementLife', function (hp) {
             this.uiLive.unshift(new HealthPoint(this, this.uiLive[0].x - 30, 90))
-            console.log("SUBIR HP", this.uiLive[0].x, this.level)
+            console.log("SUBIR HP", this.uiLive[0].x)
             this.playerData.maxHp++;
             this.playerData.hp = hp;
             this.updateHealthUi(this.playerData.hp);
