@@ -11,7 +11,7 @@ import FreezingShot from "../gameobjects/powerUps/freezingShot"
 
 export default class LevelScene extends Phaser.Scene {
 	static progress = {
-		level1: true,
+		level1: false,
 		level2: true,
 		level3: true,
 		level4: true,
@@ -69,6 +69,11 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.audio("appearEffect", "./assets/audio/Effects/AppearSoundEffect.mp3");
 		this.load.audio("fightSong", "./assets/audio/Dream Raid Full Version (Mock Up).mp3");
 		this.load.audio("explorationSong", "./assets/audio/Winds Of Stories.mp3");
+		this.load.audio("hit", "./assets/effects/hit.mp3");
+		this.load.audio("spectre_die", "./assets/effects/spectre_die.mp3");
+		this.load.audio("goblin_die", "./assets/effects/goblin_die.mp3");
+		this.load.audio("cyclops_die", "./assets/effects/cyclops_die.mp3");
+		this.load.audio("blackWolf_die", "./assets/effects/blackWolf_die.mp3");
 		this.load.spritesheet('meiga', './assets/enemies/meiga.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('e_key', './assets/keyboards/E.png', { frameWidth: 19, frameHeight: 21 });
 	}
