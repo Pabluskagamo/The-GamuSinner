@@ -103,7 +103,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.initLevelFightMode();
 		}
 
-		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3);
+		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3).setDepth(4);
 
 		console.log("LAUNCH Level", this.namescene)
 		if(this.namescene == 'level1'){		

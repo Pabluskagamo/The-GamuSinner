@@ -14,7 +14,7 @@ export default class Character extends MovableObject {
         this.instruction = instruction;
 
         if (this.instruction === null) {
-            this.wallet = 10000;
+            this.wallet = wallet;
             this.isAttacking = false;
             this.isDashing = false;
             this.lastDash = 0;

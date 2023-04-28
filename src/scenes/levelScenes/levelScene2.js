@@ -23,6 +23,7 @@ export default class LevelScene2 extends LevelScene {
 		this.foregroundLayer = this.map.createLayer('Bordes', [tiles, tilesCastleStruct, tilesCastleWall, tilesCastlePlant]);
 		this.puerta = this.map.createLayer('EntradasSala', tiles);
 		this.objetos = this.map.createLayer('Objetos', [tiles, tilesCastleProps]);
+		this.objetosColl = this.map.createLayer('ObjetosColl', [tiles, tilesCastleProps]);
 		this.borderTrees = this.map.createLayer('bordeArboles', [tiles, tilesCastlePlant]);
 		this.vegetacion = this.map.createLayer('Vegetacion', [tilesCastlePlant]);
 		this.porton = this.map.createLayer('Porton', [tilesCastleStruct]);
@@ -32,12 +33,15 @@ export default class LevelScene2 extends LevelScene {
 		this.escaleras = this.map.createLayer('Escaleras', [tilesCastleStruct, tilesCastleProps]);
 		
 
-		this.foregroundLayer.setCollisionBetween(0, 999);
+		this.foregroundLayer.setCollisionBetween(0, 1200);
+		this.objetosColl.setCollisionBetween(0, 999);
+		this.porton.setCollisionBetween(0, 999);
 
 		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
 		this.physics.add.collider(this.player, this.foregroundLayer);
+		this.physics.add.collider(this.player, this.objetosColl);
+		this.physics.add.collider(this.enemyPool._group, this.objetosColl);
 
-		//Ver por que este collider no va
 		this.physics.add.collider(this.enemyPool._group, this.porton);
 		this.physics.add.collider(this.player, this.porton);
 
@@ -51,8 +55,11 @@ export default class LevelScene2 extends LevelScene {
 		// this.puertaSolida.setDepth(3);
 		this.player.setDepth(2);
 		this.enemyPool._group.setDepth(2);
-		this.borderTrees.setDepth(3);
-		this.foregroundLayer.setDepth(3);
+		this.borderTrees.setDepth(2);
+		this.foregroundLayer.setDepth(1);
+		this.objetos.setDepth(1);
+		this.objetosColl.setDepth(2)
+		this.vegetacion.setDepth(1);
 		
 		this.salidasSala = {
 			izq: {destino: 'sala3', coords: {x: this.sys.game.canvas.width - 80, y: this.sys.game.canvas.height/2}},
@@ -73,7 +80,6 @@ export default class LevelScene2 extends LevelScene {
 		this.physics.add.collider(this.bulletPool._group, this.puertasGroup, (obj1, obj2) => {
 			obj1.reboundOrRelease()
 		});
-
 
 	}
 
