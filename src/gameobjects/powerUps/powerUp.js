@@ -47,7 +47,7 @@ export default class PowerUp extends Item{
         this.overlap = true
         if (!this.collected) {
             this.scene.sound.add("powerup_audio", {
-                volume: 0.3,
+                volume: 0.15,
                 loop: false
             }).play();
             super.collect();

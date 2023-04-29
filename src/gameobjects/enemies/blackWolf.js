@@ -40,7 +40,7 @@ export default class BlackWolf extends EnemyObject {
 
         this.scene.anims.create({
             key: 'side_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 162, end: 170 }),
+            frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 198, end: 206 }),
             frameRate: 10,
             repeat: 0
         })

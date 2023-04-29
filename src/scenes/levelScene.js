@@ -67,7 +67,6 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.image('puertaSala2Abajo', './assets/tileset/sala2/Pabj.png')
 		this.load.image('game_settings', './assets/ui/settings.png')
 		this.load.audio("appearEffect", "./assets/audio/Effects/AppearSoundEffect.mp3");
-		this.load.audio("fightSong", "./assets/audio/Dream Raid Full Version (Mock Up).mp3");
 		this.load.audio("explorationSong", "./assets/audio/Winds Of Stories.mp3");
 		this.load.audio("hit", "./assets/effects/hit.mp3");
 		this.load.audio("spectre_die", "./assets/effects/spectre_die.mp3");
@@ -78,15 +77,14 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.audio("takecoin_audio", "./assets/effects/coin.wav");
 		this.load.audio("powerup_audio", "./assets/effects/powerup.wav");
 		this.load.audio("takefood_audio", "./assets/effects/heal.wav");
-		this.load.audio("fightSong1", "./assets/audio/AdventureHO2.mp3");
-		this.load.audio("fightSong2", "./assets/audio/AdventureHO2.mp3");
+		this.load.audio("fightSong", "./assets/audio/AdventureHO2.mp3");
 		this.load.spritesheet('meiga', './assets/enemies/meiga.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('e_key', './assets/keyboards/E.png', { frameWidth: 19, frameHeight: 21 });
 	}
 
 	create(data) {
 
-        this.banda = this.sound.add("fightSong1", {
+        this.banda = this.sound.add("fightSong", {
 			volume: 0.1,
 			loop: true
 		});
@@ -358,7 +356,7 @@ export default class LevelScene extends Phaser.Scene {
 	completeLevel(){
 		console.log("NIVEL COMPLETADO")
 
-		this.sound.removeByKey('fightSong1');
+		this.sound.removeByKey('fightSong');
 
 		const explorationSong = this.sound.add("explorationSong", {
 			volume: 0.1,

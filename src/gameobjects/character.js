@@ -330,7 +330,7 @@ export default class Character extends MovableObject {
     attack() {
 
         this.scene.sound.add("shoot_sound", {
-            volume: 0.3,
+            volume: 0.15,
             loop: false
         }).play();
 
@@ -397,7 +397,7 @@ export default class Character extends MovableObject {
         if (!this.isDashing && !this.invicible) {
             this.hp -= dmg;
 			this.scene.sound.add("hit", {
-                volume: 0.3,
+                volume: 0.2,
                 loop: false
             }).play();
             if (this.hp <= 0) {

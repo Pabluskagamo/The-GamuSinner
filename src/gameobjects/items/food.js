@@ -28,7 +28,7 @@ export default class Food extends Item{
 
         if(!this.collected){
             this.scene.sound.add("takefood_audio", {
-                volume: 0.3,
+                volume: 0.15,
                 loop: false
             }).play();
 
