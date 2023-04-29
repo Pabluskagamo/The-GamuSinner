@@ -1,4 +1,6 @@
 import Phaser from 'phaser'
+import dialogBox from '../dialogs/dialogBox';
+import dialogsMeiga from '../dialogs/dialogsMeiga';
 
 export default class StatsScene extends Phaser.Scene {
     constructor() {
@@ -24,6 +26,8 @@ export default class StatsScene extends Phaser.Scene {
         this.load.image('buttonStats', './assets/ui/Statsbutton.png');
         this.load.image('closeButton', './assets/ui/CloseButton.png');
         this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
+        this.load.image('dialog2', './assets/ui/dialogBox 2.png');
+        this.load.image('dialog', './assets/ui/dialogBox.png');
     }
 
     create() {
@@ -46,9 +50,11 @@ export default class StatsScene extends Phaser.Scene {
             this.scene.resume(this.level);
             this.scene.resume('UIScene');
             this.scene.sleep('stats');
+            this.dialogBox.clearText();
         });
 
         this.e = this.input.keyboard.addKey('E');
+        this.q = this.input.keyboard.addKey('Q')
 
         // MEIGA
         const meiga = this.add.sprite(330, 330, 'bigMeiga').setScale(0.4);
@@ -66,6 +72,29 @@ export default class StatsScene extends Phaser.Scene {
 
         this.barIndex = [0, 0, 0, 0];
         this.barSpent = [20, 20, 20, 20];
+
+        //DIALOGS
+        this.dialogBox = new dialogBox(this, 120, 525, 460);
+        this.dialogBox.setFontSize(18);
+        this.dialogBox.clearText();
+        // this.dialogBox.setTextToDisplay('Hola viajero, ¿que deseas comprar? dasdasjkldja lsjdkasjkldjak lsjkldjakljdkla jsjdasjlkdj aklsjdkl ajsldjas');
+        this.dialogBox.setDepth(2);
+
+        const dialog = this.add.image(347, 570, 'dialog').setScale(1.05);
+        dialog.setDepth(1);
+
+        this.skipkey = this.add.sprite(560, 600, 'e_key').setScale(1.3)
+
+        this.anims.create({
+			key: 'E_Press',
+			frames: this.anims.generateFrameNumbers('e_key', { start: 0, end: 2 }),
+			frameRate: 2,
+			repeat: -1
+		});
+
+		this.skipkey.play('E_Press');
+        this.skipkey.setVisible(false);
+        this.skipkey.setDepth(2);
 
         // LIFEBAR
         const lifebar = this.add.sprite(840, 220, 'lifebar').setScale(1.4);
@@ -155,6 +184,8 @@ export default class StatsScene extends Phaser.Scene {
         //     this.scene.stop()
         // }, this);
 
+        this.previousLetterTime = 0;
+
     }
 
     aumentarBar(button, index, numMonedas, bar) {
@@ -180,7 +211,7 @@ export default class StatsScene extends Phaser.Scene {
         }
     }
 
-    update(t) {
+    update(t, dt) {
         // if (this.e.isDown) {
         //     console.log("ESTO ES LA ESCENA AL E", this.level)
         //     this.scene.resume(this.level);
@@ -241,6 +272,22 @@ export default class StatsScene extends Phaser.Scene {
             }
             i++;
         }
+
+        this.previousLetterTime += dt; // Contador del tiempo transcurrido desde la ultima letra
+
+		// Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
+		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
+			this.dialogBox.write();
+			this.previousLetterTime = 0;
+		}else if(!this.skipkey.visible){
+            this.skipkey.setVisible(true);
+        }
+
+        if(this.q.isDown && !this.dialogBox.isWritting && this.listDialogs.length > 0){
+            this.dialogBox.clearText();
+            this.dialogBox.setTextToDisplay(this.listDialogs.shift())
+            this.skipkey.setVisible(false)
+        }
     }
 
     changeLevel(level){ 
@@ -249,6 +296,12 @@ export default class StatsScene extends Phaser.Scene {
         this.levelGame.events.removeAllListeners('passLevel');
 
         this.levelGame = this.scene.get(this.level);
+    }
+
+    initDialog(){
+        this.skipkey.setVisible(false)
+        this.listDialogs = [...dialogsMeiga.level1];
+        this.dialogBox.setTextToDisplay(this.listDialogs.shift())
     }
 
 }
