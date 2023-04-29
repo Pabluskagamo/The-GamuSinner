@@ -11,7 +11,7 @@ import FreezingShot from "../gameobjects/powerUps/freezingShot"
 
 export default class LevelScene extends Phaser.Scene {
 	static progress = {
-		level1: true,
+		level1: false,
 		level2: true,
 		level3: true,
 		level4: true,
@@ -35,7 +35,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('blackWolf', './assets/enemies/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('cyclops', './assets/enemies/cyclops.png', { frameWidth: 64, frameHeight: 64.1 })
 		this.load.spritesheet('goblin', './assets/enemies/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
-		this.load.spritesheet('spectre2', './assets/enemies/spectre2.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('spectre2', './assets/enemies/spectre.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('demonboss', './assets/enemies/boss/boss_demon_slime/spritesheets/demonboss.png', { frameWidth: 288, frameHeight: 160 })
 		this.load.spritesheet('jellyfishpet', './assets/pets/jellyfish.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('muerte', './assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
