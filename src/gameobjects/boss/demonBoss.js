@@ -1,4 +1,4 @@
-import EnemyObject from "./enemyObject";
+import EnemyObject from "../enemies/enemyObject";
 
 export default class DemonBoss extends EnemyObject {
 
@@ -24,39 +24,40 @@ export default class DemonBoss extends EnemyObject {
         this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
         this.body.width = this.bodyWidth;
         this.body.height = this.bodyHeight;
+        this.dmgAcum = 0;
 
 
         this.scene.anims.create({
             key: 'down_demonboss',
-            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 22, end: 33 }),
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 160, end: 171 }),
             frameRate: 12,
             repeat: 0
         })
 
         this.scene.anims.create({
             key: 'up_demonboss',
-            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 22, end: 33 }),
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 160, end: 171 }),
             frameRate: 12,
             repeat: 0
         })
 
         this.scene.anims.create({
             key: 'side_demonboss',
-            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 22, end: 33 }),
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 160, end: 171 }),
             frameRate: 12,
             repeat: 0
         })
 
         this.scene.anims.create({
             key: 'static_demonboss',
-            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 0, end: 5 }),
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 128, end: 133 }),
             frameRate: 8,
             repeat: 0
         })
 
         this.scene.anims.create({
             key: 'hit_demonboss',
-            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 66, end: 70 }),
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 320, end: 324 }),
             frameRate: 15,
             repeat: 0
         })
@@ -69,15 +70,22 @@ export default class DemonBoss extends EnemyObject {
         })
 
         this.scene.anims.create({
+            key: 'cast_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 288, end: 293 }),
+            frameRate: 10,
+            repeat: -1
+        })
+
+        this.scene.anims.create({
             key: 'died_demonboss',
-            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 88, end: 109 }),
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 352, end: 373 }),
             frameRate: 15,
             repeat: 0
         })
 
         this.scene.anims.create({
             key: 'side_attack_demonboss',
-            frames: this.scene.anims.generateFrameNumbers('demonboss', {start: 44, end: 58}),
+            frames: this.scene.anims.generateFrameNumbers('demonboss', {start: 192, end: 206}),
             frameRate: 15,
             repeat: 0
         })
@@ -96,6 +104,8 @@ export default class DemonBoss extends EnemyObject {
                 this.attacking = false;
             }
         })
+
+        this.isCasting = false;
 
 
         this.play('static_demonboss');
@@ -143,7 +153,7 @@ export default class DemonBoss extends EnemyObject {
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
 
-        if (this.hp > 0 && !this.attacking && !this.player.isDead()) {
+        if (this.hp > 0 && !this.attacking && !this.player.isDead() && !this.isCasting) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
             this.follow();
         }else{
@@ -161,17 +171,47 @@ export default class DemonBoss extends EnemyObject {
     }
 
     hitEnemy(dmg){
-        this.play('hit_demonboss')
-        this.hp -= dmg;
+        if(!this.isCasting){
+            if(!this.attacking){
+                this.play('hit_demonboss')
+            }
+            this.hp -= dmg;
+    
+            console.log(this.key, this.hp, '/', this.initialHp)
+    
+            if(this.hp <= 0){
+                this.dieMe();
+            }
+            
+            this.isHitting = true
+            this.scene.events.emit("bossHit" , dmg);
+            this.dmgAcum += dmg;
+    
+            if(this.dmgAcum >= 300){
+                this.isCasting = true;
+                this.play('cast_demonboss')
+                this.dmgAcum = 0;
+                //cast
 
-        console.log(this.key, this.hp, '/', this.initialHp)
-
-        if(this.hp <= 0){
-            this.dieMe();
+                this.bossCast()
+                this.castTimer = this.scene.time.addEvent({
+                    delay: 5000,
+                    callback: ()=>{this.isCasting = false;},
+                    callbackScope: this,
+                    loop: false
+                });
+            }
         }
-        
-        this.isHitting = true
-        this.scene.events.emit("bossHit" , dmg);
+    }
+
+    bossCast(){
+        console.log("CASTEANDO", this.x, this.y)
+        for(let i = 0; i< 10; i++) {
+            const randX = Phaser.Math.RND.between(-100, 100);
+            const randY = Phaser.Math.RND.between(-100, 100);
+
+            this.pool.spawnGob(this.x + randX, this.y + randY)
+        }
     }
 
 

@@ -11,7 +11,7 @@ import FreezingShot from "../gameobjects/powerUps/freezingShot"
 
 export default class LevelScene extends Phaser.Scene {
 	static progress = {
-		level1: false,
+		level1: true,
 		level2: true,
 		level3: true,
 		level4: true,
@@ -66,6 +66,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.image('puertaSala2Der', './assets/tileset/sala2/Pder.png')
 		this.load.image('puertaSala2Abajo', './assets/tileset/sala2/Pabj.png')
 		this.load.image('game_settings', './assets/ui/settings.png')
+		this.load.image('pana', './assets/enemies/pana_pixel.png')
 		this.load.audio("appearEffect", "./assets/audio/Effects/AppearSoundEffect.mp3");
 		this.load.audio("explorationSong", "./assets/audio/Winds Of Stories.mp3");
 		this.load.audio("hit", "./assets/effects/hit.mp3");
@@ -78,6 +79,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.audio("powerup_audio", "./assets/effects/powerup.wav");
 		this.load.audio("takefood_audio", "./assets/effects/heal.wav");
 		this.load.audio("fightSong", "./assets/audio/AdventureHO2.mp3");
+		this.load.audio("panasong", "./assets/audio/panamiguel.mp3");
 		this.load.spritesheet('meiga', './assets/enemies/meiga.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('e_key', './assets/keyboards/E.png', { frameWidth: 19, frameHeight: 21 });
 	}
@@ -85,6 +87,11 @@ export default class LevelScene extends Phaser.Scene {
 	create(data) {
 
         this.banda = this.sound.add("fightSong", {
+			volume: 0.1,
+			loop: true
+		});
+
+		this.explorationSong = this.sound.add("explorationSong", {
 			volume: 0.1,
 			loop: true
 		});
@@ -341,6 +348,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initLevelFreeMode(){
+		this.explorationSong.play();
 		this.abrirPuertas()
 	}
 
@@ -357,11 +365,6 @@ export default class LevelScene extends Phaser.Scene {
 		console.log("NIVEL COMPLETADO")
 
 		this.sound.removeByKey('fightSong');
-
-		const explorationSong = this.sound.add("explorationSong", {
-			volume: 0.1,
-			loop: true
-		});
 		
 		const appearEffect = this.sound.add("appearEffect", {
 			volume: 0.1
@@ -370,7 +373,7 @@ export default class LevelScene extends Phaser.Scene {
 		appearEffect.play();
 
 		appearEffect.once('complete', () => {
-			explorationSong.play();
+			this.explorationSong.play();
 		});
 
 		this.events.emit('levelComplete');
@@ -475,6 +478,11 @@ export default class LevelScene extends Phaser.Scene {
 
 	abrirPuertas(){
 
+	}
+
+	allLevelsComplete(){
+		return LevelScene.progress.level1 && LevelScene.progress.level2 && LevelScene.progress.level3
+				&& LevelScene.progress.level4;
 	}
 
 }

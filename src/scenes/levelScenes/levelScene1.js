@@ -37,8 +37,6 @@ export default class LevelScene1 extends LevelScene {
 			}, i * 600);
 		}
 
-		this.addMeiga();
-		this.spawnMeiga = true;
 		this.player.collectCoin(1000);
 	}
 

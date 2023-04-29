@@ -5,7 +5,7 @@ import PowerUpPool from "../../gameobjects/Pools/powerUpPool";
 import EnemyPool from "../../gameobjects/Pools/enemyPool";
 import CoinPool from "../../gameobjects/Pools/coinPool";
 import FoodPool from "../../gameobjects/Pools/foodPool";
-import DemonBoss from "../../gameobjects/enemies/demonBoss";
+import DemonBoss from "../../gameobjects/boss/demonBoss";
 import JellyfishPet from "../../gameobjects/powerUps/jellyfishPet";
 
 export default class LevelSceneBoss extends LevelScene {
@@ -78,6 +78,8 @@ export default class LevelSceneBoss extends LevelScene {
 		this.enemyPool = new EnemyPool(this, 15);
 		this.coinPool = new CoinPool(this, 20);
 		this.foodPool = new FoodPool(this, 20);
+
+		this.enemyPool.fillPool(25, this.player);
 	}
 
 	initTimers(debug) {
