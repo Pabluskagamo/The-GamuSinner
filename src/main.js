@@ -12,6 +12,7 @@ import GameOverScene from './scenes/GameOverScene'
 import SettingScene from './scenes/settingsScene'
 import StatsScene from './scenes/statsScene'
 import historyScene from './scenes/historyScene'
+import dialogScene from './scenes/dialogScene'
 import LevelSceneBoss from './scenes/levelScenes/levelSceneBoss'
 const config = {
 	type: Phaser.AUTO,
@@ -44,7 +45,7 @@ const config = {
 		},
 	},
 
-	scene: [/*MainScene, historyScene*//* InstructionScene, selecScene,*/ LevelScene1, LevelScene2, LevelScene3, LevelScene4, LevelSceneBoss ,Hud, StatsScene, SettingScene, GameOverScene],
+	scene: [MainScene, historyScene, dialogScene,  InstructionScene, selecScene,LevelScene1, LevelScene2, LevelScene3, LevelScene4, LevelSceneBoss ,Hud, StatsScene, SettingScene, GameOverScene],
 }
 
 export default new Phaser.Game(config)

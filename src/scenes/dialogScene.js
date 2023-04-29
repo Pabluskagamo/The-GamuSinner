@@ -1,23 +1,23 @@
-import dialogBox from "../dialogs/dialogBox";
-export default class historyScene extends Phaser.Scene {
-
+import Phaser from 'phaser'
+export default class dialogScene extends Phaser.Scene {
     constructor() {
-        super({ key: 'history' });
+        super('dialog')
     }
 
     init() {
-
+        this.cameras.main.fadeIn(500);
     }
-    preload() {
-        this.load.spritesheet('skip_sprite', './assets/ui/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });
 
+    preload() {
+        this.load.image('room', './img/room2.png')
+        this.load.image('historia', './img/sceneHistoria_final.png')
+        this.load.spritesheet('skip_sprite', './assets/ui/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });
     }
 
     create() {
-        this.label = this.add.text(100, 100, '', { fontSize: '25px', fontFamily: 'Arial', lineSpacing: 20 })
-        this.textList = "Un día Dieguiño estaba aburrido, no sabía que hacer en el verano.\nSe aburría tanto, que decidió preguntarle a su abuelo que podía hacer.\nEl abuelo cansado de oir a Dieguiño protestar y quejarse\ndecidió mandarle una misión imposible.\nIr a cazar un Gamusino\nDieguiño sin pensárselo dos veces,\ncogió su mochila y el arma de su abuelo a escondidas.\nY emprendió el viaje que cambiaría su vida por completo.\n¿Con qué aventuras se encontrará Dieguiño?";
-
-        this.typewriteText(this.textList);
+        // FONDO
+        this.add.image(0, 0, 'room').setOrigin(0, 0).setScale(1);
+        this.add.image(0, 0, 'historia').setOrigin(0, 0).setScale(1);
 
         // SKIP BUTTON
         this.anims.create({
@@ -38,34 +38,22 @@ export default class historyScene extends Phaser.Scene {
         skip.on('pointerout', () => {
             skip.playReverse('hoverSkip');
         });
+
         skip.on('pointerup', () => {
             this.cameras.main.fadeOut(500);
             this.cameras.main.once("camerafadeoutcomplete", function () {
-                this.scene.start('dialog');
+                this.scene.start('instructions');
             }, this);
         });
+
 
         this.input.keyboard.on('keydown', (event) => {
             if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
                 this.cameras.main.fadeOut(500);
                 this.cameras.main.once("camerafadeoutcomplete", function () {
-                    this.scene.start('dialog');
+                    this.scene.start('instructions');
                 }, this);
             }
         });
     }
-
-    typewriteText(text) {
-        const length = text.length
-        let i = 0
-        this.time.addEvent({
-            callback: () => {
-                this.label.text += text[i]
-                ++i
-            },
-            repeat: length - 1,
-            delay: 50
-        })
-    }
-
 }
