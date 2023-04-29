@@ -11,7 +11,7 @@ import FreezingShot from "../gameobjects/powerUps/freezingShot"
 
 export default class LevelScene extends Phaser.Scene {
 	static progress = {
-		level1: false,
+		level1: true,
 		level2: true,
 		level3: true,
 		level4: true,
@@ -110,6 +110,11 @@ export default class LevelScene extends Phaser.Scene {
 			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: this.namescene, dmg: this.bulletPool.getDmg()})
 			this.scene.sleep('stats');
 			this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel});
+		}
+
+		if(this.namescene == 'level2'){		
+			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: this.namescene, dmg: this.bulletPool.getDmg()})
+			this.scene.sleep('stats');
 		}
 
 		settings.setInteractive({ cursor: 'pointer' });
@@ -339,7 +344,6 @@ export default class LevelScene extends Phaser.Scene {
 
 	initLevelFreeMode(){
 		this.abrirPuertas()
-		this.addMeiga()
 	}
 
 	gameOver() {
@@ -380,8 +384,6 @@ export default class LevelScene extends Phaser.Scene {
 		// 		this.cameras.main.flash(500);
 		// 	}, i * 600);
 		// }
-
-		this.spawnMeiga = true;
 		this.player.collectCoin(1000);
 	}
 
@@ -461,8 +463,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.scene.pause();
 		this.scene.pause('UIScene');
 
-		if(this.scene.isSleeping('stats')){
-		}
+		this.statsGame.initDialog();
 		this.scene.wake('stats');
 		this.scene.resume('stats');
 	}

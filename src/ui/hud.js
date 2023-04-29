@@ -20,8 +20,6 @@ export default class Hud extends Phaser.Scene {
         this.load.image('coinhud', '/assets/items/coin.png');
         this.load.image('dash_hud', '/assets/powerups/DashEffect.png');
         this.load.image('pwpanel', './assets/ui/powerUpPanel.png');
-        this.load.image('dialog2', './assets/ui/dialogBox 2.png');
-        this.load.image('dialog', './assets/ui/dialogBox.png');
         this.load.spritesheet('tripleShotHud', './assets/powerups/Tripleshoot.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('eightDirShotHud', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('multipleDirfreezingShotectionShotHud', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })

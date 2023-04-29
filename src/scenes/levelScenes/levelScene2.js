@@ -83,6 +83,12 @@ export default class LevelScene2 extends LevelScene {
 
 	}
 
+
+	initLevelFreeMode(){
+		this.addMeiga();
+		this.abrirPuertas()
+	}
+
 	completeLevel() {
 		console.log("NIVEL COMPLETADO")
 		LevelScene.progress[this.namescene] = true
@@ -139,21 +145,18 @@ export default class LevelScene2 extends LevelScene {
 		this.physics.add.overlap(this.player, this.puertaSolidaAbajo, () => {
 			this.sound.stopAll();
 			this.events.emit('passLevel', {playerData: this.player.getPlayerStats(), level: 'level1'});
-			this.statsGame.changeLevel('level1')
 			this.scene.start('level1', { player: this.player, gate: this.salidasSala.abajo.coords});
 		});
 
 		this.physics.add.overlap(this.player, this.puertaSolidaIzq, () => {
 			this.sound.stopAll();
 			this.events.emit('passLevel', {playerData: this.player.getPlayerStats(), level: 'level3'});
-			this.statsGame.changeLevel('level3')
 			this.scene.start('level3', { player: this.player, gate: this.salidasSala.izq.coords});
 		});
 
 		this.physics.add.overlap(this.player, this.puertaSolidaDer, () => {
 			this.sound.stopAll();
 			this.events.emit('passLevel', {playerData: this.player.getPlayerStats(), level: 'level4', levelboss: true});
-			this.statsGame.changeLevel('level4')
 			this.scene.start('level4', { player: this.player, gate: this.salidasSala.der.coords});
 		});
 	}
