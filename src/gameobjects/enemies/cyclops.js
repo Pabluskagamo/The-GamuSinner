@@ -1,6 +1,6 @@
 import EnemyObject from "./enemyObject";
 
-export default class Cyclops extends EnemyObject{
+export default class Cyclops extends EnemyObject {
 
     constructor(scene, x, y, speed, player, enemypool){
         super(scene, x, y, 'cyclops', speed, 20, enemypool, 100, 15)
@@ -65,7 +65,7 @@ export default class Cyclops extends EnemyObject{
         })
 
         this.scene.anims.create({
-            key: 'side_attack_cyclops',
+            key: 'attack_cyclops',
             frames: this.scene.anims.generateFrameNumbers('cyclops', {start: 195, end: 207}),
             frameRate: 15,
             repeat: 0

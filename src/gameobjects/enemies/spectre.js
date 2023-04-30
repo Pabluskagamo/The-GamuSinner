@@ -21,62 +21,6 @@ export default class Spectre extends EnemyObject{
         this.body.width = this.bodyWidth
         this.body.height = this.bodyHeight
 
-       /*  this.scene.anims.create({
-            key: 'up_spectre',
-            frames: this.scene.anims.generateFrameNumbers('spectre', { start: 9, end: 16 }),
-            frameRate: 5,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'down_spectre',
-            frames: this.scene.anims.generateFrameNumbers('spectre', { start: 9, end: 16 }),
-            frameRate: 5,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'side_spectre',
-            frames: this.scene.anims.generateFrameNumbers('spectre', { start: 9, end: 16 }),
-            frameRate: 10,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'static_spectre',
-            frames: this.scene.anims.generateFrameNumbers('spectre', { start: 25, end: 28 }),
-            frameRate: 5,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'died_spectre',
-            frames: this.scene.anims.generateFrameNumbers('spectre', { start: 33, end: 38 }),
-            frameRate: 10,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'side_attack_spectre',
-            frames: this.scene.anims.generateFrameNumbers('spectre', { start: 17, end: 21 }),
-            frameRate: 10,
-            repeat: 0
-        }) */
-        
-        this.scene.anims.create({
-            key: 'up_spectre',
-            frames: this.scene.anims.generateFrameNumbers('spectre2', { start: 14, end: 17 }),
-            frameRate: 10,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'down_spectre',
-            frames: this.scene.anims.generateFrameNumbers('spectre2', { start: 14, end: 17 }),
-            frameRate: 10,
-            repeat: 0
-        })
-
         this.scene.anims.create({
             key: 'side_spectre',
             frames: this.scene.anims.generateFrameNumbers('spectre2', { start: 14, end: 17 }),
@@ -99,7 +43,7 @@ export default class Spectre extends EnemyObject{
         })
 
         this.scene.anims.create({
-            key: 'side_attack_spectre',
+            key: 'attack_spectre',
             frames: this.scene.anims.generateFrameNumbers('spectre2', { start: 7, end: 10 }),
             frameRate: 10,
             repeat: 0

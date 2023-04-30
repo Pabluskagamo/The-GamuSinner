@@ -1,25 +1,32 @@
 import { Directions } from "./utils/directions"
 
-export default class Bullet extends Phaser.Physics.Arcade.Sprite{
+export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
-    constructor(scene, x, y, speed, dmg){
+    constructor(scene, x, y, speed, dmg) {
         super(scene, x, y, 'bullet', 0)
         this.speed = speed
         this.dmg = dmg
-        //
-        this.bouncingCount = 0
-        this.icedmg = 0
-        this.reboundmg = 0
-        this.slow = false
-        //
-        this.justHit = false
-
+        
         this.setScale(1.5)
-
-
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);  
 
+        this.createAnimations()
+        this.init(x, y)
+    }
+
+    init(x, y) {
+        this.x = x
+        this.y = y
+        this.bouncingCount = 0
+        this.reboundmg = 0
+        this.icedmg = 0
+        this.slow = false
+        this.justHit = false
+        this.play('bullet_animation')
+    }
+
+    createAnimations() {
         this.scene.anims.create({
             key: 'bullet_animation',
             frames: this.scene.anims.generateFrameNumbers('bullet', { start: 106, end: 109 }),
@@ -40,19 +47,6 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite{
             frameRate: 9,
             repeat: -1
         })
-
-        this.play('bullet_animation')
-    }
-
-    init(x, y) {
-        this.x = x
-        this.y = y
-        this.bouncingCount = 0
-        this.reboundmg = 0
-        this.icedmg = 0
-        this.slow = false
-        this.justHit = false
-        this.play('bullet_animation')
     }
 
     preUpdate(t, dt){
@@ -94,13 +88,13 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite{
         this.setVelocityY(dir.y*this.speed)
     }
 
-    hit(enemie){
+    hit(enemy){
         if(!this.justHit){
             this.justHit = true
-            enemie.hitEnemy(this.dmg + this.icedmg + this.reboundmg);
+            enemy.hitEnemy(this.dmg + this.icedmg + this.reboundmg);
             //
-            //if (this.icedmg > 0) enemie.slow(20)
-            if (this.slow) enemie.slow(20)
+            //if (this.icedmg > 0) enemy.slow(20)
+            if (this.slow) enemy.slow(20)
             this.reboundOrRelease()
             //this.scene.bulletPool.release(this);
         }

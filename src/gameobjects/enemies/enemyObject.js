@@ -102,17 +102,9 @@ export default class EnemyObject extends MovableObject {
         }
     }
     
-    attack(){
-        if (this.anims.currentAnim.key === 'down_' + this.key) {
-            // ataque hacia abajo
-            this.play('down_attack_' + this.key, true);
-        } else if (this.anims.currentAnim.key === 'up_' + this.key) {
-            // ataque hacia arriba
-            this.play('up_attack_' + this.key, true);
-        } else {
-            this.flipX = this.body.velocity.x > 0;
-            this.play('side_attack_' + this.key);
-        }
+    attack() {
+        this.flipX = this.body.velocity.x > 0;
+        this.play('attack_' + this.key);
     }
 
     isDead(){

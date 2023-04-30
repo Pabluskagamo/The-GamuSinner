@@ -3,15 +3,18 @@ import EnemyObject from "../enemies/enemyObject";
 export default class DemonBoss extends EnemyObject {
 
     constructor(scene, x, y, speed, player, enemypool) {
-        super(scene, x, y, 'demonboss', speed, 20, enemypool, 1000, 20);
+        super(scene, x, y, 'demonboss', speed, 20, enemypool, 100, 20);
         this.scene.add.existing(this);
-        //this.key = 'demonboss'
+        this.key = 'slime'
         
-        this.setScale(1.5);
+        this.setScale(2);
 
         this.player = player;
         //this.attacking = false;
+        this.transformation = false
+        this.onTransformation = false
         this.following = true
+        //this.body.immovable = true;
 
         this.scene.physics.add.existing(this);
         this.setCollideWorldBounds();
@@ -26,6 +29,16 @@ export default class DemonBoss extends EnemyObject {
         this.body.height = this.bodyHeight;
         this.dmgAcum = 0;
 
+        this.hit = this.scene.load.spritesheet({
+            key: 'hit',
+            url: './assets/enemies/boss/boss_demon_slime/spritesheets/proyectiles.png',
+            frameConfig: {
+                frameWidth: 32,
+                frameHeight: 32,
+                startFrame: 13,
+                endFrame: 15
+            }
+        });
 
         this.scene.anims.create({
             key: 'down_demonboss',
@@ -44,7 +57,7 @@ export default class DemonBoss extends EnemyObject {
         this.scene.anims.create({
             key: 'side_demonboss',
             frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 160, end: 171 }),
-            frameRate: 12,
+            frameRate: 10,
             repeat: 0
         })
 
@@ -52,7 +65,7 @@ export default class DemonBoss extends EnemyObject {
             key: 'static_demonboss',
             frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 128, end: 133 }),
             frameRate: 8,
-            repeat: 0
+            repeat: -1
         })
 
         this.scene.anims.create({
@@ -64,29 +77,72 @@ export default class DemonBoss extends EnemyObject {
 
         this.scene.anims.create({
             key: 'rage_demonboss',
-            frames: this.scene.anims.generateFrameNumbers('demonboss', { frames: [88, 89, 90, 91, 92, 92, 92, 91, 90, 89] }),
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { frames: [352, 353, 354, 355, 356, 356, 356, 355, 354, 353, 192, 160] }),
+            frameRate: 7,
+            repeat: 0
+        })
+//32x12 13,14,15
+
+        this.scene.anims.create({
+            key: 'jumpSmash_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 224, end: 241 }),
             frameRate: 10,
             repeat: 0
         })
 
         this.scene.anims.create({
-            key: 'cast_demonboss',
+            key: 'fireBlast_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 256, end: 276 }),
+            frameRate: 10,
+            repeat: 0
+        })
+
+        this.scene.anims.create({
+            key: 'spell_demonboss',
             frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 288, end: 293 }),
             frameRate: 10,
-            repeat: -1
+            repeat: 0
+        })
+
+        this.scene.anims.create({
+            key: 'transformation_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 96, end: 127 }),
+            frameRate: 15,
+            repeat: 0
+        })
+
+        this.scene.anims.create({
+            key: 'side_slime',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 0, end: 5 }),
+            frameRate: 15,
+            repeat: 0
+        })
+
+        this.scene.anims.create({
+            key: 'attack_slime',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 32, end: 39 }),
+            frameRate: 15,
+            repeat: 0
+        })
+
+        this.scene.anims.create({
+            key: 'hit_slime',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 64, end: 69 }),
+            frameRate: 15,
+            repeat: 0
         })
 
         this.scene.anims.create({
             key: 'died_demonboss',
             frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 352, end: 373 }),
-            frameRate: 15,
+            frameRate: 5,
             repeat: 0
         })
 
         this.scene.anims.create({
-            key: 'side_attack_demonboss',
+            key: 'attack_demonboss',
             frames: this.scene.anims.generateFrameNumbers('demonboss', {start: 192, end: 206}),
-            frameRate: 15,
+            frameRate: 8,
             repeat: 0
         })
 
@@ -98,6 +154,10 @@ export default class DemonBoss extends EnemyObject {
 
             if (this.anims.currentAnim.key === 'hit_demonboss') {
                 this.isHitting = false
+            }
+            
+            if (this.anims.currentAnim.key === 'transformation_demonboss') {
+                this.onTransformation = false
             }
 
             if (/attack/.test(this.anims.currentAnim.key)){
@@ -115,8 +175,8 @@ export default class DemonBoss extends EnemyObject {
         this.flipX = true;
 
         if(this.isHitting && !this.attacking){
-            this.play('hit_demonboss', true);
-        }else if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
+            this.play('hit_' + this.key, true);
+        } else if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
             // Diagonal abajo-derecha
             this.play('side_' + this.key, true);
             //this.angle = -0.1;
@@ -134,16 +194,6 @@ export default class DemonBoss extends EnemyObject {
             this.play('side_' + this.key, true);
             this.flipX = false;
             //this.angle += -0.1;
-        } else if (this.body.velocity.y > 0 && this.body.velocity.x === 0) {
-            // Movimiento hacia abajo
-            this.play('down' + this.key, true);
-        } else if (this.body.velocity.y < 0 && this.body.velocity.x === 0) {
-            // Movimiento hacia arriba
-            this.play('up' + this.key, true);
-        }else if (this.body.velocity.x !== 0 && this.body.velocity.y < 5) {
-            // Movimiento hacia los lados
-            this.play('side_' + this.key, true);
-            this.flipX = this.body.velocity.x > 0;
         } else {
             // Reproducir la animación estática si no se está moviendo
             this.play('static' + this.key);
@@ -153,66 +203,58 @@ export default class DemonBoss extends EnemyObject {
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
 
-        if (this.hp > 0 && !this.attacking && !this.player.isDead() && !this.isCasting) {
+        if (this.hp > 0 && !this.attacking && !this.onTransformation && !this.player.isDead()) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
             this.follow();
-        }else{
+        } else {
             this.stopVertical();
             this.stopHorizontal();
         }
     }
 
     attack(enemie){
-        if(!this.attacking && !this.isDead() && !this.player.isDead()){
+        if (!this.attacking && !this.onTransformation && !this.isDead() && !this.player.isDead()) {
             this.attacking = true;
-            super.attack()
+            this.flipX = (this.body.velocity.x < 0 && this.key !== 'slime') || (this.body.velocity.x > 0 && this.key === 'slime');
+            this.play('attack_' + this.key);
             enemie.getHit(1)
         }
     }
 
     hitEnemy(dmg){
-        if(!this.isCasting){
-            if(!this.attacking){
-                this.play('hit_demonboss')
-            }
+        if (!this.onTransformation) {
+            this.tweenhit = this.scene.tweens.add({
+                targets: this.hit,
+                x: this.x,
+                y: this.y,
+                duration: 200,
+            });
+
             this.hp -= dmg;
-    
+
             console.log(this.key, this.hp, '/', this.initialHp)
-    
+
             if(this.hp <= 0){
                 this.dieMe();
             }
             
             this.isHitting = true
             this.scene.events.emit("bossHit" , dmg);
-            this.dmgAcum += dmg;
-    
-            if(this.dmgAcum >= 300){
-                this.isCasting = true;
-                this.play('cast_demonboss')
-                this.dmgAcum = 0;
-                //cast
-
-                this.bossCast()
-                this.castTimer = this.scene.time.addEvent({
-                    delay: 5000,
-                    callback: ()=>{this.isCasting = false;},
-                    callbackScope: this,
-                    loop: false
-                });
-            }
         }
     }
 
-    bossCast(){
-        console.log("CASTEANDO", this.x, this.y)
-        for(let i = 0; i< 10; i++) {
-            const randX = Phaser.Math.RND.between(-100, 100);
-            const randY = Phaser.Math.RND.between(-100, 100);
-
-            this.pool.spawnGob(this.x + randX, this.y + randY)
+    dieMe(){
+        if (!this.transformation) {
+            this.key = 'demonboss'
+            this.hp = 1000;
+            this.transformation = true;
+            this.onTransformation = true
+            this.play('transformation_demonboss', true);
+        } else {
+            this.hp = 0;
+            this.drop()
+            this.play('died_' + this.key, true);
         }
     }
-
 
 }

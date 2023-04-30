@@ -5,7 +5,7 @@ import PowerUpPool from "../../gameobjects/Pools/powerUpPool";
 import EnemyPool from "../../gameobjects/Pools/enemyPool";
 import CoinPool from "../../gameobjects/Pools/coinPool";
 import FoodPool from "../../gameobjects/Pools/foodPool";
-import DemonBoss from "../../gameobjects/boss/demonBoss";
+import DemonBoss from "../../gameobjects/enemies/boss/demonBoss";
 import JellyfishPet from "../../gameobjects/powerUps/jellyfishPet";
 
 export default class LevelSceneBoss extends LevelScene {

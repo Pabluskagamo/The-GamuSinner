@@ -23,21 +23,6 @@ export default class BlackWolf extends EnemyObject {
         this.body.width = this.bodyWidth;
         this.body.height = this.bodyHeight;
 
-
-        this.scene.anims.create({
-            key: 'down_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 180, end: 188 }),
-            frameRate: 5,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'up_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 144, end: 152 }),
-            frameRate: 5,
-            repeat: 0
-        })
-
         this.scene.anims.create({
             key: 'side_blackWolf',
             frames: this.scene.anims.generateFrameNumbers('blackWolf', { start: 198, end: 206 }),
@@ -60,22 +45,8 @@ export default class BlackWolf extends EnemyObject {
         })
 
         this.scene.anims.create({
-            key: 'up_attack_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', {frames: [397, 400, 403, 406, 409, 412]}),
-            frameRate: 15,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'side_attack_blackWolf',
+            key: 'attack_blackWolf',
             frames: this.scene.anims.generateFrameNumbers('blackWolf', {frames: [451, 454, 457, 460, 463, 466]}),
-            frameRate: 15,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
-            key: 'down_attack_blackWolf',
-            frames: this.scene.anims.generateFrameNumbers('blackWolf', {frames: [505, 508, 511, 514, 517, 520]}),
             frameRate: 15,
             repeat: 0
         })

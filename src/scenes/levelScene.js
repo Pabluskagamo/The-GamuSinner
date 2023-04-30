@@ -37,6 +37,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('goblin', './assets/enemies/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
 		this.load.spritesheet('spectre2', './assets/enemies/spectre.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('demonboss', './assets/enemies/boss/boss_demon_slime/spritesheets/demonboss.png', { frameWidth: 288, frameHeight: 160 })
+		this.load.spritesheet('projectilesboss', './assets/enemies/boss/boss_demon_slime/spritesheets/projectilesboss.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('jellyfishpet', './assets/pets/jellyfish.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('muerte', './assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', './assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
@@ -158,8 +159,8 @@ export default class LevelScene extends Phaser.Scene {
 			powerUps.push(new TripleShot(this, -125, -125));
 			powerUps.push(new EightDirShot(this, -125, -125));
 		}
-		
 		this.powerUpPool.addMultipleEntity(powerUps);
+
 		this.e = this.input.keyboard.addKey('E');
 		this.statsGame = this.scene.get('stats');
 
