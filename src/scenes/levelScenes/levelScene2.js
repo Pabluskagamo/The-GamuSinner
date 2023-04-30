@@ -60,6 +60,7 @@ export default class LevelScene2 extends LevelScene {
 		this.objetos.setDepth(1);
 		this.objetosColl.setDepth(2)
 		this.vegetacion.setDepth(1);
+		this.porton.setDepth(2);
 		
 		this.salidasSala = {
 			izq: {destino: 'sala3', coords: {x: this.sys.game.canvas.width - 80, y: this.sys.game.canvas.height/2}},
@@ -80,6 +81,8 @@ export default class LevelScene2 extends LevelScene {
 		this.physics.add.collider(this.bulletPool._group, this.puertasGroup, (obj1, obj2) => {
 			obj1.reboundOrRelease()
 		});
+
+		this.f = this.input.keyboard.addKey('F')
 
 	}
 
@@ -147,18 +150,84 @@ export default class LevelScene2 extends LevelScene {
 			this.events.emit('passLevel', {playerData: this.player.getPlayerStats(), level: 'level1'});
 			this.scene.start('level1', { player: this.player, gate: this.salidasSala.abajo.coords});
 		});
-
+		
 		this.physics.add.overlap(this.player, this.puertaSolidaIzq, () => {
 			this.sound.stopAll();
 			this.events.emit('passLevel', {playerData: this.player.getPlayerStats(), level: 'level3'});
 			this.scene.start('level3', { player: this.player, gate: this.salidasSala.izq.coords});
 		});
-
+		
 		this.physics.add.overlap(this.player, this.puertaSolidaDer, () => {
 			this.sound.stopAll();
-			this.events.emit('passLevel', {playerData: this.player.getPlayerStats(), level: 'level4', levelboss: true});
+			this.events.emit('passLevel', {playerData: this.player.getPlayerStats(), level: 'level4'});
 			this.scene.start('level4', { player: this.player, gate: this.salidasSala.der.coords});
 		});
+		
+		if(this.allLevelsComplete()){
+			this.puertaCerrada.setVisible(false);
+			this.puertaAbierta.setVisible(true);
+			this.puertaSolidaArriba = this.add.zone(575, 119, 35, 10);
+			this.physics.add.existing(this.puertaSolidaArriba);
+			this.physics.add.overlap(this.player, this.puertaSolidaArriba, () => {
+				this.sound.stopAll();
+				this.events.emit('passLevel', {playerData: this.player.getPlayerStats(), level: 'levelBoss', bossLevel: true});
+				this.scene.start('levelBoss', { player: this.player, gate: this.salidasSala.der.coords});
+			});
+		}
+
+
+		this.easteregg = this.add.zone(1040, 560, 20, 20);
+		this.physics.add.existing(this.easteregg);
+
+		this.eastereggActive = false
+
+		this.physics.add.overlap(this.player, this.easteregg, () => {
+			if(this.f.isDown && !this.eastereggActive){
+				this.eastereggActive = true
+				this.activateEaseterEgg();
+			}
+		});
 	}
+
+
+	activateEaseterEgg(){
+
+		const panasound = this.sound.add("panasong", {
+			volume: 0.1
+		});
+
+		const pana = this.add.sprite(1200, 560, 'pana').setScale(0.3);
+		pana.setDepth(2);
+		panasound.play();
+
+		this.tweens.add({
+            targets: pana,
+            x: {from:1200, to: 1100},
+            duration: 4000,
+            ease: 'Sine.easeInOut',
+            yoyo: false,
+        })
+
+		this.time.addEvent({
+			delay: 31500,
+			callback: ()=>{
+				this.eastereggActive = false;
+				this.tweens.add({
+					targets: pana,
+					x: {from:1100, to: 1200},
+					duration: 4000,
+					ease: 'Sine.easeInOut',
+					yoyo: false,
+					onComplete: ()=>{
+						panasound.stop();
+						this.explorationSong.play();
+					}
+				})
+			},
+			callbackScope: this,
+			loop: false
+		});
+	}
+
 
 }

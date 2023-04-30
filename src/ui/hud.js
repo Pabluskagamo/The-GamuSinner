@@ -89,8 +89,8 @@ export default class Hud extends Phaser.Scene {
         //Power Up Save Panel
         this.powerUpPanel = this.add.image(990, 123, 'pwpanel'),
 
-            //CONTADOR TIEMPO OLEADA
-            this.countdown = this.add.text(555, 75, '00:20', { fontFamily: 'MedievalSharp-Regular' });
+        //CONTADOR TIEMPO OLEADA
+        this.countdown = this.add.text(555, 75, '00:20', { fontFamily: 'MedievalSharp-Regular' });
         this.countdown.setFontSize(24);
 
         //  Grab a reference to the Game Scene
