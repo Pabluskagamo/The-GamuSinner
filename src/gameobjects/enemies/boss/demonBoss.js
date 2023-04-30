@@ -1,4 +1,4 @@
-import EnemyObject from "../enemies/enemyObject";
+import EnemyObject from "../enemyObject";
 
 export default class DemonBoss extends EnemyObject {
 
