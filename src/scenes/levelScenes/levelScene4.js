@@ -45,7 +45,7 @@ export default class LevelScene4 extends LevelScene {
         this.physics.add.collider(this.bulletPool._group, this.foregroundLayer2, (obj1, obj2) => {
             obj1.reboundOrRelease()
         });
-        
+
         this.physics.add.collider(this.bulletPool._group, this.topTree, (obj1, obj2) => {
             obj1.reboundOrRelease()
         });
@@ -74,20 +74,20 @@ export default class LevelScene4 extends LevelScene {
     }
 
     update(t) {
-		
-		if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
-			this.enemyPool.spawn(0, 0)
-		}
 
-		if(!LevelScene.progress[this.namescene]){
-			if (!this.wavesFinished && !this.debugMode) {
-				this.updateWaveCount()
-			}
-			else if (!this.levelFinished && this.enemyPool.fullPool() && !this.debugMode) {
-				this.levelFinished = true;
-				this.completeLevel();
-			}
-		}
+        if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
+            this.enemyPool.spawn(0, 0)
+        }
+
+        if (!LevelScene.progress[this.namescene]) {
+            if (!this.wavesFinished && !this.debugMode) {
+                this.updateWaveCount()
+            }
+            else if (!this.levelFinished && this.enemyPool.fullPool() && !this.debugMode) {
+                this.levelFinished = true;
+                this.completeLevel();
+            }
+        }
 
         if (this.faded) {
             if (this.fadeTime < 3500) {
@@ -102,7 +102,7 @@ export default class LevelScene4 extends LevelScene {
             }
         }
 
-	}
+    }
 
     completeLevel() {
         console.log("NIVEL COMPLETADO")
@@ -110,20 +110,23 @@ export default class LevelScene4 extends LevelScene {
 
         this.sound.removeByKey('fightSong');
 
-        const explorationSong = this.sound.add("explorationSong", {
-            volume: 0.1,
-            loop: true
-        });
+        if(!this.isMuted){
+            const explorationSong = this.sound.add("explorationSong", {
+                volume: 0.1,
+                loop: true
+            });
+    
+            const appearEffect = this.sound.add("appearEffect", {
+                volume: 0.1
+            });
+    
+            appearEffect.play();
+    
+            appearEffect.once('complete', () => {
+                explorationSong.play();
+            });
+        }
 
-        const appearEffect = this.sound.add("appearEffect", {
-            volume: 0.1
-        });
-
-        appearEffect.play();
-
-        appearEffect.once('complete', () => {
-            explorationSong.play();
-        });
 
         this.events.emit('levelComplete');
         this.abrirPuertas();
@@ -153,28 +156,29 @@ export default class LevelScene4 extends LevelScene {
         this.physics.add.existing(zonaInvisible);
 
         this.physics.add.overlap(this.player, zonaInvisible, () => {
-            this.sound.stopAll();
+            this.sound.removeByKey('explorationSong');
+            this.sound.removeByKey('appearEffect');
             this.events.emit('passLevel', { playerData: this.player.getPlayerStats(), level: 'level2' });
-            this.scene.start('level2', { player: this.player, gate: { x: this.sys.game.canvas.width - 80, y: this.player.y } });
+            this.scene.start('level2', { player: this.player, gate: { x: this.sys.game.canvas.width - 80, y: this.player.y }, mute: this.isMuted });
         });
 
         this.cofre = this.add.zone(1008, 338, 30, 25);
         this.physics.add.existing(this.cofre);
         this.nearCofre = false;
         this.physics.add.overlap(this.player, this.cofre, (obj1, obj2) => {
-			if(this.e.isDown && !this.nearCofre){
-				this.nearCofre = true
-				this.getMoney = this.add.text(480, 75, 'Has encontrado 150 monedas!!!', { fontFamily: 'MedievalSharp-Regular' });
+            if (this.e.isDown && !this.nearCofre) {
+                this.nearCofre = true
+                this.getMoney = this.add.text(480, 75, 'Has encontrado 150 monedas!!!', { fontFamily: 'MedievalSharp-Regular' });
                 this.getMoney.setFontSize(24);
                 obj1.setWallet(obj1.getWallet() + 150);
                 this.events.emit('earnCoin', obj1.getWallet());
                 this.e_key.destroy();
-			}
+            }
             if (!this.faded) {
                 this.fadeTime = 0;
                 this.faded = true;
             }
-		});
+        });
     }
 
 }

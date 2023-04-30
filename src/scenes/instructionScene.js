@@ -33,13 +33,17 @@ export default class instructionScene extends Phaser.Scene {
         this.load.spritesheet('skip_sprite', './assets/ui/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });
     }
 
-    create() {
+    create(data) {
+        this.isMuted = data.mute;
+        this.sound.removeByKey('chatTyping');
         this.sound.removeByKey('chat');
         this.sound.removeByKey('rise');
-        this.sound.add("musica", {
-			volume: 0.2,
-			loop: true
-		}).play();
+        if(!this.isMuted){
+            this.sound.add("musica", {
+                volume: 0.2,
+                loop: true
+            }).play();
+        }
 
         // FONDO
         this.add.image(0, 0, 'background_instructions').setOrigin(0, 0).setScale(0.91);
@@ -150,7 +154,7 @@ export default class instructionScene extends Phaser.Scene {
         skip.on('pointerup', () => {
             this.cameras.main.fadeOut(500);
             this.cameras.main.once("camerafadeoutcomplete", function () {
-                this.scene.start('selecScene');
+                this.scene.start('selecScene', { mute: this.isMuted });
             }, this);
         });
 
@@ -159,7 +163,7 @@ export default class instructionScene extends Phaser.Scene {
             if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
                 this.cameras.main.fadeOut(500);
                 this.cameras.main.once("camerafadeoutcomplete", function () {
-                    this.scene.start('selecScene');
+                    this.scene.start('selecScene', { mute: this.isMuted });
                 }, this);
             }
         });

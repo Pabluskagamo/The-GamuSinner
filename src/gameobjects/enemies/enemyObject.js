@@ -3,7 +3,7 @@ import MovableObject from "../movableObject";
 export default class EnemyObject extends MovableObject {
     
     
-    constructor(scene, x, y, key, speed, firstFrame, enemypool, hp, dmg) {
+    constructor(scene, x, y, key, speed, firstFrame, enemypool, hp, dmg, isMuted) {
         super(scene, x, y, key, speed, firstFrame)
         this.key = key
         this.initialHp = hp
@@ -60,10 +60,12 @@ export default class EnemyObject extends MovableObject {
     }
 
     dieMe(){
-        this.scene.sound.add(this.key +"_die", {
-            volume: 0.2,
-            loop: false
-        }).play();
+        if(!this.isMuted){
+            this.scene.sound.add(this.key +"_die", {
+                volume: 0.2,
+                loop: false
+            }).play();
+        }
         this.hp = 0;
         this.drop()
         this.play('died_' + this.key, true);

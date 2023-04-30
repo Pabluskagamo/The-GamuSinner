@@ -18,12 +18,13 @@ export default class MainScene extends Phaser.Scene {
 
 
 	create() {
-
-		let banda = this.sound.add("musica", {
-			volume: 0.2,
-			loop: true
-		});
-		banda.play();
+		if(!this.isMuted){
+			this.banda = this.sound.add("musica", {
+				volume: 0.2,
+				loop: true
+			});
+			this.banda.play();
+		}
 
 		this.anims.create({
 			key: 'hoverStart',
@@ -69,7 +70,8 @@ export default class MainScene extends Phaser.Scene {
 			this.cameras.main.fadeOut(500);
 			this.cameras.main.once("camerafadeoutcomplete", function () {
 				this.sound.removeByKey('musica');
-				this.scene.start('history');
+				this.scene.stop();
+				this.scene.start('history', {mute: this.isMuted});
 			}, this);
 		});
 
@@ -78,7 +80,8 @@ export default class MainScene extends Phaser.Scene {
 				this.cameras.main.fadeOut(500);
 				this.cameras.main.once("camerafadeoutcomplete", function () {
 					this.sound.removeByKey('musica');
-					this.scene.start('history');
+					this.scene.stop();
+					this.scene.start('history', {mute: this.isMuted});
 				}, this);
 			}
 		});
@@ -103,7 +106,7 @@ export default class MainScene extends Phaser.Scene {
 		muteButton.on('pointerup', () => {
 			if (this.isMuted) {
 				this.isMuted = false;
-				banda.play();
+				this.banda.play();
 			}
 			this.changeButtonTexture(muteButton);
 			muteButton.visible = false;

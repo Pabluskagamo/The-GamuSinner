@@ -15,6 +15,7 @@ export default class LevelSceneBoss extends LevelScene {
 	}
 
 	create(data){
+		this.isMuted = data.mute;
         super.create({...data, bossLevel: true});
         this.demon = new DemonBoss(this, 0, 0, 60, this.player, this.enemyPool)
 		
