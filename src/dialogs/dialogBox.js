@@ -10,9 +10,8 @@ export default class dialogBox extends Phaser.GameObjects.Text {
 		this.timePerLetter = 25; 		// Tiempo entre letras en milisegundos
 		this.isWritting = false; 		// Indica si actualmente esta escribiendo
 		this.letterPos = 0; 			// Indica la posicion actual de la letra que va a escribir
-
 		this.setWordWrapWidth(width); 	// Indica cuando hace el salto de linea
-		this.setLineSpacing(15); 		// Indica el espaciado entre lineas
+		this.setLineSpacing(10); 		// Indica el espaciado entre lineas
 
     	// Cambia la fuente del texto
 		this.setFontFamily('Silkscreen');
@@ -73,4 +72,16 @@ export default class dialogBox extends Phaser.GameObjects.Text {
 		this.timePerLetter = 25;
 		this.updateText();
 	}
+	typewriteText(text) {
+        const length = text.length
+        let i = 0
+        this.scene.time.addEvent({
+            callback: () => {
+                this.text += text[i]
+                ++i
+            },
+            repeat: length - 1,
+            delay: 50
+        })
+    }
 }

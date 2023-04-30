@@ -1,7 +1,11 @@
 import Phaser from 'phaser'
+import dialogBox from '../dialogs/dialogBox';
+
 export default class dialogScene extends Phaser.Scene {
     constructor() {
         super('dialog')
+        this.dialogDieguinio;
+        this.dialogAbuelo;
     }
 
     init() {
@@ -16,8 +20,33 @@ export default class dialogScene extends Phaser.Scene {
 
     create() {
         // FONDO
-        this.add.image(0, 0, 'room').setOrigin(0, 0).setScale(1);
-        this.add.image(0, 0, 'historia').setOrigin(0, 0).setScale(1);
+        this.add.image(0, 0, 'room').setOrigin(0, 0).setScale(1).setDepth(0);
+        this.add.image(0, 0, 'historia').setOrigin(0, 0).setScale(1).setDepth(1);
+
+        //DIALOG DIEGUINIO
+        this.dialogDieguinio = new dialogBox(this, 300, 40, 420);
+        this.dialogDieguinio.setDepth(2);
+        this.dialogDieguinio.setFontSize(22);
+        this.dialogDieguinio.setColor('FFFFFF');
+        this.dialogDieguinio.clearText();
+        this.textD ='Hola abuelo, estoy aburrido, ¿Qué puedo hacer para pasar el ratiño?';
+        this.dialogDieguinio.setTextToDisplay(this.textD);
+        this.dialogDieguinio.typewriteText(this.textD);
+        //DIALOG ABUELO
+        this.dialogAbuelo = new dialogBox(this, 440, 165, 440);
+        this.dialogAbuelo.setDepth(2);
+        this.dialogAbuelo.setFontSize(22);
+        this.dialogAbuelo.setColor('FFFFFF');
+        this.dialogAbuelo.clearText();
+        this.textA ='Pues vete a buscar gamusinos que estoy leyendo y me estás molestando';
+        this.dialogAbuelo.setTextToDisplay(this.textA);
+        if(!this.dialogDieguinio.isWritting){
+
+            this.dialogAbuelo.typewriteText(this.textA);
+        }
+
+
+
 
         // SKIP BUTTON
         this.anims.create({
@@ -56,4 +85,15 @@ export default class dialogScene extends Phaser.Scene {
             }
         });
     }
+
+/*update(t,dt) {
+		super.update(t,dt);
+		this.previousLetterTime += dt; // Contador del tiempo transcurrido desde la ultima letra
+
+		// Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
+		if(this.dialogDieguinio.isWritting && this.dialogDieguinio.timePerLetter <= this.previousLetterTime){
+			this.dialogDieguinio.write();
+			this.previousLetterTime = 0;
+		}
+	}*/
 }
