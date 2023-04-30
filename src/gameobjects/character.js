@@ -574,6 +574,6 @@ export default class Character extends MovableObject {
     }
 
     movePet(){
-        this.pet.follow(this.x+50, this.y)
+        this.pet.follow(this.x + 50, this.y)
     }
 }

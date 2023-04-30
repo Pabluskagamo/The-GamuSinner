@@ -21,21 +21,6 @@ export default class Goblin extends EnemyObject {
         this.body.height = this.bodyHeight;
 
         this.scene.anims.create({
-            key: 'down_goblin',
-            frames: this.scene.anims.generateFrameNumbers('goblin', { start: 0, end: 6 }),
-            frameRate: 5,
-            repeat: 0
-
-        })
-
-        this.scene.anims.create({
-            key: 'up_goblin',
-            frames: this.scene.anims.generateFrameNumbers('goblin', { start: 0, end: 6 }),
-            frameRate: 5,
-            repeat: 0
-        })
-
-        this.scene.anims.create({
             key: 'side_goblin',
             //frames: this.scene.anims.generateFrameNumbers('goblin', { start: 56, end: 63 }),
             frames: this.scene.anims.generateFrameNumbers('goblin', { start: 8, end: 15 }),
@@ -58,7 +43,7 @@ export default class Goblin extends EnemyObject {
         })
 
         this.scene.anims.create({
-            key: 'side_attack_goblin',
+            key: 'attack_goblin',
             frames: this.scene.anims.generateFrameNumbers('goblin', { start: 64, end: 69 }),
             frameRate: 10,
             repeat: 0
