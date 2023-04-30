@@ -16,12 +16,13 @@ export default class instructionScene extends Phaser.Scene {
         this.load.spritesheet('a_key', './assets/keyboards/A.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('b_key', './assets/keyboards/B.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('d_key', './assets/keyboards/D.png', { frameWidth: 19, frameHeight: 21 });
+        this.load.spritesheet('e_key', './assets/keyboards/E.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('down_key', './assets/keyboards/ARROWDOWN.png', { frameWidth: 19, frameHeight: 21 });
-        this.load.spritesheet('g_key', './assets/keyboards/G.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('left_key', './assets/keyboards/ARROWLEFT.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('right_key', './assets/keyboards/ARROWRIGHT.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('s_key', './assets/keyboards/S.png', { frameWidth: 19, frameHeight: 21 });
-        // this.load.spritesheet('spacebar_key', '/assets/keyboards/SPACEBAR.png', { frameWidth: 98, frameHeight: 21 });
+        this.load.spritesheet('v_key', './assets/keyboards/V.png', { frameWidth: 19, frameHeight: 21 });
+        this.load.image('pwpanel', './assets/ui/powerUpPanel.png');
         this.load.spritesheet('tab_key', './assets/keyboards/TAB.png', { frameWidth: 33, frameHeight: 21 });
         this.load.spritesheet('up_key', './assets/keyboards/ARROWUP.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('w_key', './assets/keyboards/W.png', { frameWidth: 19, frameHeight: 21 });
@@ -30,6 +31,7 @@ export default class instructionScene extends Phaser.Scene {
         this.load.spritesheet('character', './assets/character/character.png', { frameWidth: 64, frameHeight: 32 });
         this.load.image('skip_title', './assets/ui/skip_title.png');
         this.load.image('skip', './assets/ui/skip.png');
+        this.load.image('speech', './assets/ui/speech.png');
         this.load.spritesheet('skip_sprite', './assets/ui/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });
     }
 
@@ -56,12 +58,14 @@ export default class instructionScene extends Phaser.Scene {
         const tab_key = this.add.sprite(290, 550, 'tab_key').setScale(3.2);
 
         // GUARDAR MODIFICADOR
-        const g_key = this.add.sprite(800, 275, 'g_key').setScale(3.2);
+        const v_key = this.add.sprite(800, 275, 'v_key').setScale(3.2);
+        const pwpanel = this.add.sprite(920, 275, 'pwpanel').setScale(3.2);
         const powerUp = this.add.sprite(920, 275, 'powerup', 71).setScale(3.5);
 
-        // USO DE GRANADA
-        const b_key = this.add.sprite(800, 390, 'b_key').setScale(3.2);
-        const granade = this.add.sprite(920, 390, 'granade').setScale(0.7);
+        // INTERACTION
+        
+        const e_key = this.add.sprite(800, 420, 'e_key').setScale(3.2);
+        const speech = this.add.sprite(920, 420, 'speech').setScale(3.5);
 
         //MOVE CHARACTER
         const moveCharacter = new Character(this, 600, 220, "move").setScale(3.5);

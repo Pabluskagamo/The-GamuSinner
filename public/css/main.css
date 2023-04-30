@@ -76,7 +76,7 @@ body {
     margin-left: 10%;
 }
 
-#descripcion > h1 {
+#descripcion>h1 {
     font-size: 50px;
     font-weight: bold;
     background: -webkit-linear-gradient(#ffc800 59%, #856127);
@@ -84,11 +84,11 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
-#descripcion > h1 > span{
+#descripcion>h1>span {
     font-size: 90px;
 }
 
-#descripcion > p {
+#descripcion>p {
     font-size: 22px;
     color: white;
 }
@@ -98,7 +98,7 @@ body {
     margin-left: 10%;
 }
 
-#controls > h1 {
+#controls>h1 {
     font-size: 50px;
     font-weight: bold;
     background: -webkit-linear-gradient(#ffc800 59%, #856127);
@@ -106,31 +106,64 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
-#controls > h1 > span{
+#controls>h1>span {
     font-size: 90px;
 }
 
-#controls > p {
+#controls>p {
     font-size: 22px;
     color: white;
 }
 
-#orMovement > h1{
+#orMovement>h1 {
     color: white;
 }
 
-.titleMovement > h1{
+.titleMovement>h1 {
     color: white;
     font-size: 40px;
 }
 
-.g{
+.g {
     margin-left: 130px;
+}
+
+button.dropdown-toggle{
+    background-color: #7a5314;
+    border: none;
+}
+
+button.dropdown-toggle:hover{
+    background-color: #ffc800;
+    border: none;
+}
+
+button.dropdown-toggle.show{
+    background-color: #ffc800 !important;
+}
+
+button.dropdown-toggle>i {
+    font-size: 25px;
+}
+
+.dropdown-menu{
+    background-color: rgba(122, 83, 20, 0.75) !important;
+    border-color:white !important;
+}
+
+.dropdown-item{
+    color: white !important;
+}
+
+.dropdown-item:hover{
+    color: white !important;
+    font-weight: bold !important;
+    background-color: #ffc800 !important;
 }
 
 /* RESIZING */
 
-@media screen and (max-width: 1600px){
+@media screen and (max-width: 1600px) {
     #content {
         height: 85%;
     }
