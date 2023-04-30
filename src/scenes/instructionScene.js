@@ -34,6 +34,13 @@ export default class instructionScene extends Phaser.Scene {
     }
 
     create() {
+        this.sound.removeByKey('chat');
+        this.sound.removeByKey('rise');
+        this.sound.add("musica", {
+			volume: 0.2,
+			loop: true
+		}).play();
+
         // FONDO
         this.add.image(0, 0, 'background_instructions').setOrigin(0, 0).setScale(0.91);
 

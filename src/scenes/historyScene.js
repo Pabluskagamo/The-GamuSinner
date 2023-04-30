@@ -5,19 +5,32 @@ export default class historyScene extends Phaser.Scene {
         super({ key: 'history' });
     }
 
-    init() {
-
-    }
     preload() {
         this.load.spritesheet('skip_sprite', './assets/ui/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });
-
+        this.load.image('room', './img/room2.png')
+        this.load.image('historia', './img/sceneHistoria_final.png')
+        this.load.audio("chat", "./assets/audio/chat.mp3");
+        this.load.audio("rise", "./assets/audio/Rise of spirit.mp3");
     }
 
     create() {
-        this.label = this.add.text(100, 100, '', { fontSize: '25px', fontFamily: 'Arial', lineSpacing: 20 })
-        this.textList = "Un día Dieguiño estaba aburrido, no sabía que hacer en el verano.\nSe aburría tanto, que decidió preguntarle a su abuelo que podía hacer.\nEl abuelo cansado de oir a Dieguiño protestar y quejarse\ndecidió mandarle una misión imposible.\nIr a cazar un Gamusino\nDieguiño sin pensárselo dos veces,\ncogió su mochila y el arma de su abuelo a escondidas.\nY emprendió el viaje que cambiaría su vida por completo.\n¿Con qué aventuras se encontrará Dieguiño?";
+        this.sound.add("chat", {
+            volume: 0.2,
+        }).play();
 
-        this.typewriteText(this.textList);
+        this.textList = "Un día Dieguiño estaba aburrido, no sabía que hacer en el verano.\nSe aburría tanto, que decidió preguntarle a su abuelo que podía hacer.";
+        this.textD = [
+            'Hola avó, estoy aburrido, ¿Qué estás haciendo?',
+            'Perdón avó, es que como estoy aburrido no se me ocurre nada que hacer.',
+            'Es que no me apetece eso, me apetece algo más estimulante. Va avó dime algo que hacer.'
+        ]
+        this.textA = [
+            'AHHH!!! Que susto, eres tú, ¿tú te crees que estoy para estos sustos mientras duermo?',
+            'Y por eso vienes a molestar a tu abuelo. Si estás aburrido vete a jugar con la pelotiña o esas cosas.',
+            'Pues vete a cazar Gamusiños y déjame en paz, que solo sabes molestar.'
+        ]
+        this.textEnd = "Así Dieguiño en un instante y sin dudarlo salío corriendo.\nSe fue a la habitación, cogió una mochila y empezó a llenarla.\nTras llenarla se fue a hurtadillas al despacho de su abuelo.\nAbrió la vitrina con mucho cuidado y sacó una escopeta.\nAntes de salir del despacho, miró hacia el perchero\ny cogió el sombrero de arqueólogo de su padre.\nSin pensarselo dos veces, salió de la casa adentrándose en el bosque.\nSin saber todas las aventuras que le esperaban y los peligros que correría."
+        this.textPreparado = "¿Estás preparado para la aventura tú también?"
 
         // SKIP BUTTON
         this.anims.create({
@@ -29,19 +42,20 @@ export default class historyScene extends Phaser.Scene {
 
         // const skip_title = this.add.sprite(890, 600, 'skip_title').setScale(0.2);
         // skip_title.setInteractive({cursor: 'pointer'});
-        const skip = this.add.sprite(1000, 600, 'skip_sprite').setScale(0.5);
-        skip.setInteractive({ cursor: 'pointer' });
-        skip.on('pointerover', () => {
-            skip.play('hoverSkip');
+        this.skip = this.add.sprite(1000, 600, 'skip_sprite').setScale(0.5);
+        this.skip.setDepth(3);
+        this.skip.setInteractive({ cursor: 'pointer' });
+        this.skip.on('pointerover', () => {
+            this.skip.play('hoverSkip');
         });
 
-        skip.on('pointerout', () => {
-            skip.playReverse('hoverSkip');
+        this.skip.on('pointerout', () => {
+            this.skip.playReverse('hoverSkip');
         });
-        skip.on('pointerup', () => {
+        this.skip.on('pointerup', () => {
             this.cameras.main.fadeOut(500);
             this.cameras.main.once("camerafadeoutcomplete", function () {
-                this.scene.start('dialog');
+                this.scene.start('instructions');
             }, this);
         });
 
@@ -49,23 +63,132 @@ export default class historyScene extends Phaser.Scene {
             if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
                 this.cameras.main.fadeOut(500);
                 this.cameras.main.once("camerafadeoutcomplete", function () {
-                    this.scene.start('dialog');
+                    this.scene.start('instructions');
                 }, this);
             }
         });
+
+        this.rise = this.sound.add("rise", {
+            volume: 0.2,
+        });
+
+        this.final = false;
+        this.pregunta = false;
+        this.showTextList();
     }
 
-    typewriteText(text) {
-        const length = text.length
-        let i = 0
+    showTextList() {
+        this.label = this.add.text(100, 250, '', { fontSize: '32px', fontFamily: 'Arial', lineSpacing: 20 });
+
+        this.d = 0;
+        this.a = 0;
+        this.typewriteText(this.label, this.textList, () => {
+            this.room = this.add.image(0, 0, 'room').setOrigin(0, 0).setScale(1.12).setDepth(0);
+            this.chat = this.add.image(0, 0, 'historia').setOrigin(0, 0).setScale(1).setDepth(1);
+            this.showDialogDieguinio();
+        });
+    }
+
+
+    showDialogDieguinio() {
+        this.skip.setPosition(1000, 100);
+        if (this.d <= 2) {
+            this.dialogDieguinio = new dialogBox(this, 300, 40, 420);
+            this.dialogDieguinio.setDepth(2);
+            this.dialogDieguinio.setFontSize(22);
+            this.dialogDieguinio.setColor('FFFFFF');
+            this.dialogDieguinio.clearText();
+
+            this.typewriteText(this.dialogDieguinio, this.textD[this.d], () => {
+                this.showDialogAbuelo();
+                this.d++;
+            });
+        }
+        else {
+            this.sound.removeByKey('chat');
+            this.rise.play();
+            this.final = true;
+            this.tweens.add({
+                targets: [this.room.destroy(), this.chat.destroy()],
+                alpha: 0,
+                duration: 2000,
+                onComplete: () => {
+                    this.showFinalTextList();
+                }
+            });
+        }
+    }
+
+    showDialogAbuelo() {
+        this.dialogAbuelo = new dialogBox(this, 440, 165, 440);
+        this.dialogAbuelo.setDepth(2);
+        this.dialogAbuelo.setFontSize(22);
+        this.dialogAbuelo.setColor('FFFFFF');
+        this.dialogAbuelo.clearText();
+
+        this.typewriteText(this.dialogAbuelo, this.textA[this.a], () => {
+            this.showDialogDieguinio();
+            this.a++;
+        });
+    }
+
+    showFinalTextList() {
+        this.skip.setPosition(1000, 600);
+        this.Finallabel = this.add.text(100, 100, '', { fontSize: '32px', fontFamily: 'Arial', lineSpacing: 20 });
+        this.typewriteText(this.Finallabel, this.textEnd, () => {
+            this.tweens.add({
+                targets: this.Finallabel,
+                alpha: 0,
+                duration: 2000,
+                onComplete: () => {
+                    this.showTextPreparado();
+                }
+            });
+        });
+    }
+
+    showTextPreparado() {
+        this.preLabel = this.add.text(100, 300, '', { fontSize: '45px', fontFamily: 'Arial', lineSpacing: 20 });
+        this.pregunta = true;
+        this.typewriteText(this.preLabel, this.textPreparado, () => {
+            this.tweens.add({
+                targets: this.preLabel,
+                alpha: 0,
+                duration: 3000,
+                onComplete: () => {
+                    this.rise.once('complete', () => {
+                        this.scene.stop();
+                        this.scene.start('instructions');
+                    });
+                }
+            });
+        });
+    }
+
+    typewriteText(label, text, callback) {
+        const length = text.length;
+        let i = 0;
+        let delay = this.final ? 120 : 60;
+        let duration = this.pregunta ? 9000 : 1400;
         this.time.addEvent({
             callback: () => {
-                this.label.text += text[i]
-                ++i
+                label.text += text[i];
+                ++i;
+                if (i === length) {
+                    this.tweens.add({
+                        targets: label,
+                        alpha: 0,
+                        duration: duration,
+                        onComplete: () => {
+                            label.text = '';
+                            callback();
+                        }
+                    });
+                }
             },
             repeat: length - 1,
-            delay: 50
-        })
+            delay: delay
+        });
     }
 
 }

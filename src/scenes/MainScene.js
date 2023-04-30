@@ -68,6 +68,7 @@ export default class MainScene extends Phaser.Scene {
 		start.on('pointerup', () => {
 			this.cameras.main.fadeOut(500);
 			this.cameras.main.once("camerafadeoutcomplete", function () {
+				this.sound.removeByKey('musica');
 				this.scene.start('history');
 			}, this);
 		});
@@ -76,6 +77,7 @@ export default class MainScene extends Phaser.Scene {
 			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
 				this.cameras.main.fadeOut(500);
 				this.cameras.main.once("camerafadeoutcomplete", function () {
+					this.sound.removeByKey('musica');
 					this.scene.start('history');
 				}, this);
 			}
