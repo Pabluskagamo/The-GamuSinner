@@ -15,7 +15,7 @@ export default class LevelScene4 extends LevelScene {
         this.puerta2 = this.map.createLayer('Puerta2', tilesFaerie);
         this.foregroundLayer1 = this.map.createLayer('Bordes1', tilesFaerie);
         this.topTree = this.map.createLayer('copaArboles', tilesFaerie);
-        this.wall = this.map.createLayer('Muro', tilesFaerie);  
+        this.wall = this.map.createLayer('Muro', tilesFaerie);
         this.objetos2 = this.map.createLayer('Objetos2', tilesFaerie);
         this.objetos1 = this.map.createLayer('Objetos', tilesFaerie);
         this.treeborder1 = this.map.createLayer('bordeArboles1', tilesFaerie);
@@ -45,6 +45,10 @@ export default class LevelScene4 extends LevelScene {
         this.physics.add.collider(this.bulletPool._group, this.foregroundLayer2, (obj1, obj2) => {
             obj1.reboundOrRelease()
         });
+        
+        this.physics.add.collider(this.bulletPool._group, this.topTree, (obj1, obj2) => {
+            obj1.reboundOrRelease()
+        });
 
         this.physics.add.collider(this.bulletPool._group, this.wall, (obj1, obj2) => {
             obj1.reboundOrRelease()
@@ -59,65 +63,87 @@ export default class LevelScene4 extends LevelScene {
         this.enemyPool._group.setDepth(2);
         this.objetos1.setDepth(3);
         this.wall.setDepth(3);
+        this.treeborder1.setDepth(3);
+        this.treeborder2.setDepth(3);
         this.foregroundLayer1.setDepth(3);
         this.foregroundLayer2.setDepth(3);
+        this.puerta1.setDepth(3);
 
+        this.fadeTime = 0;
+        this.faded = false;
     }
 
-    completeLevel() {
-		console.log("NIVEL COMPLETADO")
-		LevelScene.progress[this.namescene] = true
-
-		this.sound.removeByKey('fightSong');
-
-		const explorationSong = this.sound.add("explorationSong", {
-			volume: 0.1,
-			loop: true
-		});
+    update(t) {
 		
-		const appearEffect = this.sound.add("appearEffect", {
-			volume: 0.1
-		});
-		
-		appearEffect.play();
-
-		appearEffect.once('complete', () => {
-			explorationSong.play();
-		});
-		
-		this.events.emit('levelComplete');
-		this.abrirPuertas();
-
-		for (let i = 0; i < 5; i++) {
-			setTimeout(() => {
-				this.cameras.main.flash(500);
-			}, i * 600);
+		if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
+			this.enemyPool.spawn(0, 0)
 		}
 
-		this.addMeiga();
-		this.spawnMeiga = true;
-		this.player.collectCoin(1000);
+		if(!LevelScene.progress[this.namescene]){
+			if (!this.wavesFinished && !this.debugMode) {
+				this.updateWaveCount()
+			}
+			else if (!this.levelFinished && this.enemyPool.fullPool() && !this.debugMode) {
+				this.levelFinished = true;
+				this.completeLevel();
+			}
+		}
+
+        if (this.faded) {
+            if (this.fadeTime < 3500) {
+                this.fadeTime = this.fadeTime + (t / 1000);
+            } else {
+                this.tweens.add({
+                    targets: this.getMoney,
+                    alpha: 0,
+                    duration: 2000,
+                    ease: 'Linear'
+                });
+            }
+        }
+
 	}
 
-    // addMeiga() {
+    completeLevel() {
+        console.log("NIVEL COMPLETADO")
+        LevelScene.progress[this.namescene] = true
 
-    //     const meiga = this.add.sprite(945, 360, 'meiga').setScale(1.6);
-    //     this.anims.create({
-    //         key: 'meigaState',
-    //         frames: this.anims.generateFrameNumbers('meiga', { start: 0, end: 3 }),
-    //         frameRate: 3,
-    //         repeat: -1
-    //     });
-    //     meiga.play('meigaState');
-    //     const e_key = this.add.sprite(945, 330, 'e_key');
-    //     this.anims.create({
-    //         key: 'E_Press',
-    //         frames: this.anims.generateFrameNumbers('e_key', { start: 0, end: 2 }),
-    //         frameRate: 2,
-    //         repeat: -1
-    //     });
-    //     e_key.play('E_Press');
-    // }
+        this.sound.removeByKey('fightSong');
+
+        const explorationSong = this.sound.add("explorationSong", {
+            volume: 0.1,
+            loop: true
+        });
+
+        const appearEffect = this.sound.add("appearEffect", {
+            volume: 0.1
+        });
+
+        appearEffect.play();
+
+        appearEffect.once('complete', () => {
+            explorationSong.play();
+        });
+
+        this.events.emit('levelComplete');
+        this.abrirPuertas();
+
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                this.cameras.main.flash(500);
+            }, i * 600);
+        }
+
+        this.e_key = this.add.sprite(1008, 310, 'e_key');
+        this.e_key.setDepth(4);
+        this.anims.create({
+            key: 'E_Press',
+            frames: this.anims.generateFrameNumbers('e_key', { start: 0, end: 2 }),
+            frameRate: 2,
+            repeat: -1
+        });
+        this.e_key.play('E_Press');
+    }
 
     abrirPuertas() {
         this.puerta1.setVisible(false);
@@ -128,9 +154,27 @@ export default class LevelScene4 extends LevelScene {
 
         this.physics.add.overlap(this.player, zonaInvisible, () => {
             this.sound.stopAll();
-            this.events.emit('passLevel', {playerData: this.player.getPlayerStats(), level: 'level2'});
+            this.events.emit('passLevel', { playerData: this.player.getPlayerStats(), level: 'level2' });
             this.scene.start('level2', { player: this.player, gate: { x: this.sys.game.canvas.width - 80, y: this.player.y } });
         });
+
+        this.cofre = this.add.zone(1008, 338, 30, 25);
+        this.physics.add.existing(this.cofre);
+        this.nearCofre = false;
+        this.physics.add.overlap(this.player, this.cofre, (obj1, obj2) => {
+			if(this.e.isDown && !this.nearCofre){
+				this.nearCofre = true
+				this.getMoney = this.add.text(480, 75, 'Has encontrado 150 monedas!!!', { fontFamily: 'MedievalSharp-Regular' });
+                this.getMoney.setFontSize(24);
+                obj1.setWallet(obj1.getWallet() + 150);
+                this.events.emit('earnCoin', obj1.getWallet());
+                this.e_key.destroy();
+			}
+            if (!this.faded) {
+                this.fadeTime = 0;
+                this.faded = true;
+            }
+		});
     }
 
 }

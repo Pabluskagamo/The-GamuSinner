@@ -27,9 +27,7 @@ export default class instructionScene extends Phaser.Scene {
         this.load.spritesheet('up_key', './assets/keyboards/ARROWUP.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('w_key', './assets/keyboards/W.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('powerup', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 });
-        this.load.image('granade', './assets/items/granade.png');
         this.load.spritesheet('character', './assets/character/character.png', { frameWidth: 64, frameHeight: 32 });
-        this.load.image('skip_title', './assets/ui/skip_title.png');
         this.load.image('skip', './assets/ui/skip.png');
         this.load.image('speech', './assets/ui/speech.png');
         this.load.spritesheet('skip_sprite', './assets/ui/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });

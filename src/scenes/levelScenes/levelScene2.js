@@ -64,7 +64,7 @@ export default class LevelScene2 extends LevelScene {
 		
 		this.salidasSala = {
 			izq: {destino: 'sala3', coords: {x: this.sys.game.canvas.width - 80, y: this.sys.game.canvas.height/2}},
-			der: {destino: 'sala4', coords: {x: 80, y: this.player.y}},
+			der: {destino: 'sala4', coords: {x: 80, y: this.sys.game.canvas.height/2}},
 			abajo: {destino: 'sala1', coords: {x: this.sys.game.canvas.width/2, y: 80}}
 		}
 		

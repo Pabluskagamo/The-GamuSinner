@@ -14,7 +14,7 @@ export default class LevelScene extends Phaser.Scene {
 		level1: true,
 		level2: true,
 		level3: true,
-		level4: true,
+		level4: false,
 		levelBoss: false
 	}
 
@@ -313,7 +313,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 20000;
+		this.freqChangeTime = 1;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -350,6 +350,9 @@ export default class LevelScene extends Phaser.Scene {
 	initLevelFreeMode(){
 		this.explorationSong.play();
 		this.abrirPuertas()
+		if(this.namescene === 'level4'){
+			this.cofre.destroy();
+		}
 	}
 
 	gameOver() {
