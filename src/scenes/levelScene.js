@@ -52,7 +52,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('multishot', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('freezingshot', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bouncingshot', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
-		this.load.spritesheet('petpower', './assets/powerups/pet.png', { frameWidth: 31, frameHeight: 31 })
+		this.load.spritesheet('petpower', './assets/powerups/pet.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.image('tilesCastleProps', './assets/tileset/sala2/tilesetCastle/TX Props.png')
 		this.load.image('tilesCastleStruct', './assets/tileset/sala2/tilesetCastle/TX Struct.png')
@@ -320,7 +320,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 1;
+		this.freqChangeTime = 10000;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;

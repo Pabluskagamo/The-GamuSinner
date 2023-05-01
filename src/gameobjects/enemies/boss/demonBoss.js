@@ -198,6 +198,10 @@ export default class DemonBoss extends EnemyObject {
                 this.addAttackTimer(5000)
             }
 
+            if (this.anims.currentAnim.key === 'fireBlast_demonboss') {
+                this.attacking = false;
+            }
+
             if (/attack/.test(this.anims.currentAnim.key)){
                 this.attacking = false;
             }
@@ -270,7 +274,7 @@ export default class DemonBoss extends EnemyObject {
             this.attacking = true;
             //this.bulletSpell(8,6,0.3)
             //this.play('spell_demonboss');
-            this.jumpSmash()
+            this.play('fireBlast_demonboss');
             //this.flipX = (this.body.velocity.x > 0 && this.key === 'demonboss') || (this.body.velocity.x > 0 && this.key === 'slime');
             /* this.flipX = this.body.velocity.x > 0
             this.play('attack_' + this.key);
@@ -320,7 +324,7 @@ export default class DemonBoss extends EnemyObject {
 
     runSpecialAttack(){
         this.attacking = true;
-        const nextAttack = Phaser.Math.Between(1, 1)
+        const nextAttack = Phaser.Math.Between(0, 1)
 
         if(nextAttack === 0){
             this.jumpSmash();
