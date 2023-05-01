@@ -184,6 +184,13 @@ export default class StatsScene extends Phaser.Scene {
         //     this.scene.stop()
         // }, this);
 
+        this.events.on('wake', (sys, data)=>{
+            // this.player = data.playerData;
+            // this.wallet = this.player.coins;
+            // this.dmg = data.dmg;
+            console.log("WAKE STATS")
+        }, this)
+
         this.previousLetterTime = 0;
 
     }
@@ -303,5 +310,5 @@ export default class StatsScene extends Phaser.Scene {
         this.listDialogs = [...dialogsMeiga.level1];
         this.dialogBox.setTextToDisplay(this.listDialogs.shift())
     }
-
+    
 }

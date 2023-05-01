@@ -11,7 +11,7 @@ import FreezingShot from "../gameobjects/powerUps/freezingShot"
 
 export default class LevelScene extends Phaser.Scene {
 	static progress = {
-		level1: true,
+		level1: false,
 		level2: true,
 		level3: true,
 		level4: false,
@@ -112,15 +112,10 @@ export default class LevelScene extends Phaser.Scene {
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3).setDepth(4);
 
 		console.log("LAUNCH Level", this.namescene)
-		if(this.namescene == 'level1'){		
-			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: this.namescene, dmg: this.bulletPool.getDmg()})
+		if(this.namescene == 'level1' && !LevelScene.progress.level1){		
+			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: 'level2', dmg: this.bulletPool.getDmg()})
 			this.scene.sleep('stats');
 			this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel});
-		}
-
-		if(this.namescene == 'level2'){		
-			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: this.namescene, dmg: this.bulletPool.getDmg()})
-			this.scene.sleep('stats');
 		}
 
 		settings.setInteractive({ cursor: 'pointer' });
@@ -330,7 +325,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 1;
+		this.freqChangeTime = 0;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -341,7 +336,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.debugMode = true;
 		} else {
 			this.enemySpawnTimer = this.time.addEvent({
-				delay: 4000,
+				delay: 400,
 				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true
@@ -487,9 +482,10 @@ export default class LevelScene extends Phaser.Scene {
 		this.player.stopVertical();
 		this.scene.pause();
 		this.scene.pause('UIScene');
+		this.player.wallet += 10;
 
 		this.statsGame.initDialog();
-		this.scene.wake('stats');
+		this.scene.wake('stats', {playerData: this.player.getPlayerStats(), dmg: this.bulletPool.getDmg()});
 		this.scene.resume('stats');
 	}
 
