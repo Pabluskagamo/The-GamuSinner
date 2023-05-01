@@ -91,20 +91,20 @@ export default class Slime extends EnemyObject {
     follow(){
         this.flipX = true;
 
-        if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
+        if (this.body.velocity.x >= 0 && this.body.velocity.y <= 0) {
             // Diagonal abajo-derecha
             this.play('side_' + this.key, true);
             //this.angle = -0.1;
-        } else if (this.body.velocity.x > 0 && this.body.velocity.y > 0) {
+        } else if (this.body.velocity.x >= 0 && this.body.velocity.y >= 0) {
             // Diagonal arriba-derecha
             this.play('side_' + this.key, true);
             //this.angle += 0.1;
-        } else if (this.body.velocity.x < 0 && this.body.velocity.y < 0) {
+        } else if (this.body.velocity.x <= 0 && this.body.velocity.y <= 0) {
             // Diagonal abajo-izquierda
             this.play('side_' + this.key, true);
             this.flipX = false;
             //this.angle += 0.1;
-        } else if (this.body.velocity.x < 0 && this.body.velocity.y > 0) {
+        } else if (this.body.velocity.x <= 0 && this.body.velocity.y >= 0) {
             // Diagonal arriba-izquierda
             this.play('side_' + this.key, true);
             this.flipX = false;

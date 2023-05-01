@@ -19,11 +19,10 @@ export default class LevelSceneBoss extends LevelScene {
 	create(data){
 		this.isMuted = data.mute;
         super.create({...data, bossLevel: true});
-		this.bossPool.fillPool(200, 30, 30, this.player)
-		this.graphics = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 }, fillStyle: { color: 0xff0000 }});
+		this.bossPool.fillPool(500, 30, 40, this.player)
         this.demon = new DemonBoss(this, 0, 0, 60, this.player, this.bossPool)
-		this.bossPool.spawnEnemy(0,0)
-		this.bossPool.spawnExplosion(this.player.x,this.player.y)
+		//this.bossPool.spawnEnemy(0,0)
+		//this.bossPool.spawnExplosion(this.player.x,this.player.y)
 		/* 
         this.jelly = new JellyfishPet(this, this.player.x,this.player.y)
 		this.player.setPet(this.jelly) */
@@ -45,7 +44,7 @@ export default class LevelSceneBoss extends LevelScene {
 		this.physics.add.collider(this.demon, this.player, (obj1, obj2) => {
 				obj1.attack(obj2);
 				this.events.emit('addScore', obj2.getHp());
-			}, (obj1, obj2) => !obj2.getDash()
+			}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash()
 		);
 
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
@@ -69,26 +68,31 @@ export default class LevelSceneBoss extends LevelScene {
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
 			obj1.attack(obj2);
 			this.events.emit('addScore', obj2.getHp());
-		}, (obj1, obj2) => !obj2.getDash()
+		}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash() && !obj2.isInvicible()
 		);
 
 		this.physics.add.collider(this.bossPool._bossEnemiesGroup, this.player, (obj1, obj2) => {
 			obj1.attack(obj2);
 			this.events.emit('addScore', obj2.getHp());
-		}, (obj1, obj2) => !obj2.getDash()
+		}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash() && !obj2.isInvicible()
 		);
 
 		this.physics.add.collider(this.bulletPool._group, this.bossPool._bossEnemiesGroup, (obj1, obj2) => {
             obj1.hit(obj2)
-        }, (obj1, obj2) => !obj2.isDead());
+        }, (obj1, obj2) => !obj2.isDead()
+		);
 
 		this.physics.add.collider(this.bossPool._bossBulletGroup, this.player, (obj1, obj2) => {
 			obj1.hit(obj2)
-		}, (obj1, obj2) => !obj2.isDead());
+			this.events.emit('addScore', obj2.getHp());
+		}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash() && !obj2.isInvicible()
+		);
 
 		this.physics.add.overlap(this.bossPool._bossExplosionGroup, this.player,(obj1, obj2) => {
             obj1.hit(obj2)
-        }, (obj1, obj2) => !obj2.isDead());
+			this.events.emit('addScore', obj2.getHp());
+        }, (obj1, obj2) => !obj2.isDead() && !obj2.getDash() && !obj2.isInvicible()
+		);
 
     }
 

@@ -17,6 +17,7 @@ export default class Character extends MovableObject {
             this.wallet = wallet;
             this.isAttacking = false;
             this.isDashing = false;
+            this.invicible = false;
             this.lastDash = 0;
             //this.nonePowerUp = new MultipleDirectionShot(this.scene)
             //this.nonePowerUp.collect()
@@ -434,6 +435,10 @@ export default class Character extends MovableObject {
 
     getDash() {
         return this.isDashing;
+    }
+
+    isInvicible() {
+        return this.invicible;
     }
 
     collectCoin(value) {
