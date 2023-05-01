@@ -522,8 +522,14 @@ export default class Character extends MovableObject {
     }
     
     checkPowerUpAlreadyActive(powerUp){
-        
-        if(powerUp.getKey() === this.currentPowerUp.getKey()){
+
+        console.log("YA HAY PET")
+
+        if(powerUp.isPet() && this.pet != null){
+            console.log("YA HAY PET")
+            this.petPowerUp.hidePet()
+            this.petPowerUp.disable(true);
+        }else if(powerUp.getKey() === this.currentPowerUp.getKey()){
             this.currentPowerUp.disable(true);
         }
         else{

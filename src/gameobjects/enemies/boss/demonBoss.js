@@ -17,7 +17,7 @@ export default class DemonBoss extends EnemyObject {
         this.following = true
         //this.body.immovable = true;
 
-        this.specialAttacks = [this.jumpWave()]
+        this.specialAttacks = [this.jumpSmash]
 
         this.scene.physics.add.existing(this);
         this.setCollideWorldBounds();
@@ -185,14 +185,17 @@ export default class DemonBoss extends EnemyObject {
             if (this.anims.currentAnim.key === 'jumpSmash_demonboss') {
                 this.spawnExplosions()
                 this.attacking = false;
+                this.addAttackTimer(3000)
             }
             
             if (this.anims.currentAnim.key === 'transformation_demonboss') {
                 this.hitBoxDemon();
                 this.onTransformation = false
+                this.addAttackTimer(3000)
             }
             if (this.anims.currentAnim.key === 'spell_demonboss') {
                 this.attacking = false;
+                this.addAttackTimer(5000)
             }
 
             if (/attack/.test(this.anims.currentAnim.key)){
@@ -315,6 +318,17 @@ export default class DemonBoss extends EnemyObject {
         this.play('transformation_demonboss', true);
     }
 
+    runSpecialAttack(){
+        this.attacking = true;
+        const nextAttack = Phaser.Math.Between(1, 1)
+
+        if(nextAttack === 0){
+            this.jumpSmash();
+        }else{
+            this.play("spell_demonboss")
+        }
+    }
+
     jumpWave () {
         this.scene.graphics.clear()
         const circle = new Phaser.Geom.Circle(this.player.x, this.player.y, 100);
@@ -381,5 +395,15 @@ export default class DemonBoss extends EnemyObject {
                 }
             }
         }
+    }
+
+
+    addAttackTimer(t){
+        this.scene.time.addEvent({
+            delay: t,
+            callback: this.runSpecialAttack,
+            callbackScope: this,
+            loop: false
+        });
     }
 }
