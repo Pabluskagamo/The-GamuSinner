@@ -63,7 +63,8 @@ export default class BulletPool {
     changeDmg(dmg) {
         this.dmg = dmg;
         this._group.children.iterate(child => {
-            child.setDmg(this.dmg);
+            console.log(child)
+            // child.setDmg(this.dmg);
         });
     }
 }

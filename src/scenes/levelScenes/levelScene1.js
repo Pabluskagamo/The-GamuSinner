@@ -40,7 +40,7 @@ export default class LevelScene1 extends LevelScene {
 			}, i * 600);
 		}
 
-		this.player.collectCoin(1000);
+		this.player.collectCoin(3000);
 	}
 
 	abrirPuertas() {

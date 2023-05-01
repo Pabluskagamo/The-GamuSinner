@@ -10,6 +10,7 @@ export default class Hud extends Phaser.Scene {
     init(data) {
         // this.maxHp = data.maxHp;
         // this.hp = data.hp;
+        console.log("INI SETTINGS HUD",data)
         this.playerData = data.playerData;
         this.level = data.level
         this.isBoss = data.bossLevel
@@ -181,24 +182,17 @@ export default class Hud extends Phaser.Scene {
         
         let statsGame = this.scene.get('stats');
 
-        statsGame.events.on('spentcoins', function (coins) {
-            this.numMonedas.setText('X ' + coins)
-        }, this);
+        statsGame.events.on('spentcoins', this.spendCoins, this);
 
-        statsGame.events.on('incrementLife', function (hp) {
-            this.uiLive.unshift(new HealthPoint(this, this.uiLive[0].x - 30, 90))
-            console.log("SUBIR HP", this.uiLive[0].x)
-            this.playerData.maxHp++;
-            this.playerData.hp = hp;
-            this.updateHealthUi(this.playerData.hp);
-        }, this);
-
+        statsGame.events.on('incrementLife', this.incrementHearths, this);
         
-        levelGame.events.on('passLevel', function (data) {
-            statsGame.events.removeAllListeners();
-            this.scene.restart(data);
-        }, this);
+        levelGame.events.on('passLevel', this.passLevel, this);
 
+        this.events.on('shutdown', ()=>{
+            statsGame.events.removeListener('spentcoins', this.spendCoins, this)
+            statsGame.events.removeListener('incrementLife', this.incrementHearths, this)
+            levelGame.events.removeListener('passLevel', this.passLevel, this);
+        }, this);
 
         this.updateHealthUi(this.playerData.hp);
     }
@@ -223,6 +217,23 @@ export default class Hud extends Phaser.Scene {
         //     this.dialogBox.write();
         //     this.previousLetterTime = 0;
         // }
+    }
+
+    passLevel(data){
+        this.scene.restart(data);
+    }
+
+    incrementHearths(hp){
+        this.uiLive.unshift(new HealthPoint(this, this.uiLive[0].x - 30, 90))
+        console.log("SUBIR HP", this.uiLive[0].x)
+        this.playerData.maxHp++;
+        this.playerData.hp = hp;
+        this.updateHealthUi(this.playerData.hp);
+    }
+
+
+    spendCoins(coins){
+        this.numMonedas.setText('X ' + coins)
     }
 
 

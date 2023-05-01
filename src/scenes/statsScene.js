@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import dialogBox from '../dialogs/dialogBox';
 import dialogsMeiga from '../dialogs/dialogsMeiga';
+import LevelScene from './levelScene';
 
 export default class StatsScene extends Phaser.Scene {
     constructor() {
@@ -9,7 +10,7 @@ export default class StatsScene extends Phaser.Scene {
 
     init(data) {
         this.cameras.main.fadeIn(500);
-        console.log("INI SETTINGs",data)
+        console.log("INI SETTINGS MEIGA",data)
         this.player = data.playerData;
         this.wallet = this.player.coins;
         this.dmg = data.dmg;
@@ -46,25 +47,26 @@ export default class StatsScene extends Phaser.Scene {
         });
 
         closeButton.on('pointerdown', () => {
-            console.log('CUANDO LE DOY AL BOTON CERRAR', this.level)
+            // console.log('CUANDO LE DOY AL BOTON CERRAR', this.level)
             this.scene.resume(this.level);
             this.scene.resume('UIScene');
-            this.scene.sleep('stats');
+            this.scene.sleep();
             this.dialogBox.clearText();
+            this.levelGame.abrirpuertasFirstTalk()
         });
 
         this.e = this.input.keyboard.addKey('E');
         this.q = this.input.keyboard.addKey('Q')
 
         // MEIGA
-        const meiga = this.add.sprite(330, 330, 'bigMeiga').setScale(0.4);
+        this.meiga = this.add.sprite(330, 330, 'bigMeiga').setScale(0.4);
         this.anims.create({
             key: 'meigaMovement',
             frames: this.anims.generateFrameNumbers('bigMeiga', { start: 0, end: 8 }),
             frameRate: 5,
             repeat: -1
         });
-        meiga.play('meigaMovement');
+        this.meiga.play('meigaMovement');
 
         const coins = this.add.sprite(980, 150, 'coin').setScale(1.6);
         this.actualcoins = this.add.text(995, 140, `X ${this.wallet}`, { fontFamily: 'MedievalSharp-Regular' }).setFontSize(24);
@@ -155,7 +157,8 @@ export default class StatsScene extends Phaser.Scene {
 
         this.speedButton.on('pointerdown', () => {
             this.aumentarBar(this.speedButton, 2, numMonedasSpeed, speedbar);
-            this.events.emit('incrementSpeed', this.player.getSpeed() + 15);
+            this.events.emit('incrementSpeed', this.player.speed + 15);
+            this.player.speed += 15;    
         });
 
         // CADENCEBAR
@@ -175,7 +178,8 @@ export default class StatsScene extends Phaser.Scene {
 
         this.cadenceButton.on('pointerdown', () => {
             this.aumentarBar(this.cadenceButton, 3, numMonedasCadence, cadencebar);
-            this.events.emit('incrementCadence', this.player.getCadence() - 50);
+            this.events.emit('incrementCadence', this.player.cadence - 50);
+            this.player.cadence -= 50;  
         });
 
         this.levelGame = this.scene.get(this.level);
@@ -185,10 +189,9 @@ export default class StatsScene extends Phaser.Scene {
         // }, this);
 
         this.events.on('wake', (sys, data)=>{
-            // this.player = data.playerData;
-            // this.wallet = this.player.coins;
-            // this.dmg = data.dmg;
-            console.log("WAKE STATS")
+            this.player = data.playerData;
+            this.wallet = this.player.coins;
+            this.dmg = data.dmg;
         }, this)
 
         this.previousLetterTime = 0;
@@ -227,6 +230,7 @@ export default class StatsScene extends Phaser.Scene {
         // }
         this.actualcoins.setText(`X ${this.wallet}`);
         let i = 0;
+
         for(let spent of this.barSpent){
             if(i === 0){
                 if(this.wallet < spent){
@@ -307,7 +311,11 @@ export default class StatsScene extends Phaser.Scene {
 
     initDialog(){
         this.skipkey.setVisible(false)
-        this.listDialogs = [...dialogsMeiga.level1];
+        if(!LevelScene.progress.level3 && !LevelScene.progress.level4){
+            this.listDialogs = [...dialogsMeiga.level1];
+        }else if(LevelScene.progress.level3 && LevelScene.progress.level4){
+            this.listDialogs = [...dialogsMeiga.boss];
+        }
         this.dialogBox.setTextToDisplay(this.listDialogs.shift())
     }
     
