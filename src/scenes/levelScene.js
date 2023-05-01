@@ -11,10 +11,10 @@ import FreezingShot from "../gameobjects/powerUps/freezingShot"
 
 export default class LevelScene extends Phaser.Scene {
 	static progress = {
-		level1: false,
+		level1: true,
 		level2: true,
 		level3: true,
-		level4: false,
+		level4: true,
 		levelBoss: false
 	}
 
@@ -111,10 +111,8 @@ export default class LevelScene extends Phaser.Scene {
 
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3).setDepth(4);
 
-		console.log("LAUNCH Level", this.namescene)
 		if(this.namescene == 'level1' && !LevelScene.progress.level1){		
-			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: 'level2', dmg: this.bulletPool.getDmg()})
-			this.scene.sleep('stats');
+			console.log("LAUNCH Level", this.namescene)
 			this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel});
 		}
 
@@ -169,34 +167,30 @@ export default class LevelScene extends Phaser.Scene {
 		this.e = this.input.keyboard.addKey('E');
 		this.statsGame = this.scene.get('stats');
 
-		this.statsGame.events.on('spentcoins', function (coins) {
-			this.player.setWallet(coins);
-		}, this);
+		this.statsGame.events.on('spentcoins', this.player.setWallet, this.player);
 
-		this.statsGame.events.on('incrementStrong', function (dmg) {
-			this.bulletPool.changeDmg(dmg);
-		}, this);
+		this.statsGame.events.on('incrementStrong', this.player.setBulletDmg, this.player);
 
-		this.statsGame.events.on('incrementSpeed', function (speed) {
-			this.player.setSpeed(speed);
-		}, this);
+		this.statsGame.events.on('incrementSpeed', this.player.setSpeed, this);
 
-		this.statsGame.events.on('incrementLife', function (hp) {
-			this.player.incrementHp();
-			this.player.setHp(hp);
-		}, this);
+		this.statsGame.events.on('incrementLife', this.incrementPlayerLife, this.player);
 
-		this.statsGame.events.on('incrementCadence', function (cadence) {
-			this.player.setCadence(cadence);
-		}, this);
+		this.statsGame.events.on('incrementCadence', this.player.setCadence, this.player);
 
 		this.settingsGame = this.scene.get('settings');
 
 		this.settingsGame.events.on('muteOption', function (mute) {
 			this.isMuted = mute;
 		}, this);
-	}
 
+		this.events.on('shutdown', ()=>{
+            this.statsGame.events.removeListener('spentcoins', this.player.setWallet, this);
+			this.statsGame.events.removeListener('incrementStrong', this.bulletPool.changeDmg, this);
+			this.statsGame.events.removeListener('incrementSpeed', this.player.setSpeed, this);
+			this.statsGame.events.removeListener('incrementLife', this.incrementPlayerLife, this);
+			this.statsGame.events.removeListener('incrementCadence', this.player.setCadence, this);
+        }, this);
+	}
 
 	update(t) {
 		
@@ -213,11 +207,6 @@ export default class LevelScene extends Phaser.Scene {
 				this.completeLevel();
 			}
 		}
-
-		if (this.spawnMeiga && this.e.isDown) {
-			this.openMeigaMenu()
-		}
-
 	}
 
 	initMap() {
@@ -258,13 +247,13 @@ export default class LevelScene extends Phaser.Scene {
 	initPlayerAndPools(data) {
 		
         if(data.hasOwnProperty('gate')){
-            this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(),  data.player.getCadence());
+            this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(),  data.player.getCadence(), data.player.getBulletDmg());
         }else{
-            this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, null, 150, 4, 4, 0, 400);
+            this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, null, 150, 4, 4, 0, 400, 20);
         }
 		this.player.body.onCollide = true;
 
-		this.bulletPool = new BulletPool(this, 150, 20)
+		this.bulletPool = new BulletPool(this, 150, this.player.getBulletDmg())
 		this.powerUpPool = new PowerUpPool(this, 6)
 		this.enemyPool = new EnemyPool(this, 15);
 		this.coinPool = new CoinPool(this, 20);
@@ -325,7 +314,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 20000;
+		this.freqChangeTime = 1;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -336,7 +325,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.debugMode = true;
 		} else {
 			this.enemySpawnTimer = this.time.addEvent({
-				delay: 4000,
+				delay: 400,
 				callback: this.spawnInBounds,
 				callbackScope: this,
 				loop: true
@@ -398,13 +387,12 @@ export default class LevelScene extends Phaser.Scene {
 		this.events.emit('levelComplete');
 		this.puerta.setVisible(false);
 		this.puertaSolida.destroy();
+	}
 
-		// for (let i = 0; i < 5; i++) {
-		// 	setTimeout(() => {
-		// 		this.cameras.main.flash(500);
-		// 	}, i * 600);
-		// }
-		this.player.collectCoin(1000);
+	incrementPlayerLife(hp){
+		console.log("LIFEEEEEE")
+		this.player.incrementHp();
+		this.player.setHp(hp);
 	}
 
 	changeFreqHandler() {
@@ -475,18 +463,6 @@ export default class LevelScene extends Phaser.Scene {
 			repeat: -1
 		});
 		e_key.play('E_Press');
-	}
-
-    openMeigaMenu() {
-		this.player.stopHorizontal();
-		this.player.stopVertical();
-		this.scene.pause();
-		this.scene.pause('UIScene');
-		this.player.wallet += 10;
-
-		this.statsGame.initDialog();
-		this.scene.wake('stats', {playerData: this.player.getPlayerStats(), dmg: this.bulletPool.getDmg()});
-		this.scene.resume('stats');
 	}
 
 	setPlayerPosition(x, y, level){

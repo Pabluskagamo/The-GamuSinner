@@ -7,7 +7,7 @@ import BouncingShot from "./powerUps/bouncingShot"
 
 export default class Character extends MovableObject {
 
-    constructor(scene, x, y, instruction, speed, hp, maxHp, wallet, cadence) {
+    constructor(scene, x, y, instruction, speed, hp, maxHp, wallet, cadence, bulletDmg) {
         super(scene, x, y, 'character', speed, 20);
         this.speed = speed;
         this.scene.add.existing(this);
@@ -36,6 +36,7 @@ export default class Character extends MovableObject {
             this.maxHp = maxHp;
             this.lastFired = 0;
             this.cadence = cadence;
+            this.bulletDmg = bulletDmg;
             this.dashTimer = null;
 
 
@@ -454,6 +455,15 @@ export default class Character extends MovableObject {
         this.speed = speed;
     }
 
+    getBulletDmg(){
+        return this.bulletDmg;
+    }
+
+    setBulletDmg(dmg){
+        console.log("BULLETDMG", this.bulletDmg, dmg)
+        this.bulletDmg = dmg;
+    }
+
     collectPowerUp(powerUp) {
         if(this.inventory == null){
             console.log("inventarioooooooooo")
@@ -542,7 +552,9 @@ export default class Character extends MovableObject {
         return {
             hp: this.hp,
             maxHp: this.maxHp,
-            coins: this.wallet
+            coins: this.wallet,
+            cadence: this.cadence,
+            speed: this.speed
         }
     }
 

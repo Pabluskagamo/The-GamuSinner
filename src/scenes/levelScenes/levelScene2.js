@@ -1,8 +1,19 @@
 import LevelScene from "../levelScene";
 
 export default class LevelScene2 extends LevelScene {
+	static firstTalkMeiga = false
+
 	constructor() {
 		super('level2')
+	}
+
+
+	create(data){
+		super.create(data);
+		if(!this.scene.isActive('stats') && !this.scene.isSleeping('stats')){
+			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: 'level2', dmg: this.bulletPool.getDmg()});
+			this.scene.sleep('stats');
+		}
 	}
 
 	initMap() {
@@ -89,7 +100,9 @@ export default class LevelScene2 extends LevelScene {
 
 	initLevelFreeMode() {
 		this.addMeiga();
-		this.abrirPuertas()
+		if(LevelScene2.firstTalkMeiga){
+			this.abrirPuertas()
+		}
 	}
 
 	completeLevel() {
@@ -198,6 +211,38 @@ export default class LevelScene2 extends LevelScene {
 				this.activateEaseterEgg();
 			}
 		});
+	}
+
+	update(t, dt){
+		if (this.spawnMeiga && this.e.isDown) {
+			this.openMeigaMenu()
+		}
+	}
+
+
+	openMeigaMenu() {
+		this.player.stopHorizontal();
+		this.player.stopVertical();
+		this.scene.pause();
+		this.scene.pause('UIScene');
+		
+		this.statsGame.initDialog();
+		this.scene.wake('stats', {playerData: this.player.getPlayerStats(), dmg: this.bulletPool.getDmg()});
+	}
+
+
+	abrirpuertasFirstTalk(){
+		LevelScene2.firstTalkMeiga = true;
+		this.tweens.add({
+			targets: [this.puerta, this.puertaSolidaIzq, this.puertaSolidaDer, this.puertaSolidaAbajo],
+			alpha: { from: 1, to: 0 },
+			duration: 3000,
+			ease: 'Sine.easeInOut',
+			yoyo: false,
+			onComplete: ()=>{
+				this.abrirPuertas();
+			}
+		})
 	}
 
 
