@@ -125,8 +125,8 @@ export default class Character extends MovableObject {
             });
 
             this.scene.anims.create({
-                key: 'TAB_Press',
-                frames: this.scene.anims.generateFrameNumbers('tab_key', { start: 0, end: 2 }),
+                key: 'SHIFT_Press',
+                frames: this.scene.anims.generateFrameNumbers('shift_key', { start: 0, end: 2 }),
                 frameRate: 5,
                 repeat: 0
             });

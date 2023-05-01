@@ -23,7 +23,7 @@ export default class instructionScene extends Phaser.Scene {
         this.load.spritesheet('s_key', './assets/keyboards/S.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('v_key', './assets/keyboards/V.png', { frameWidth: 19, frameHeight: 21 });
         this.load.image('pwpanel', './assets/ui/powerUpPanel.png');
-        this.load.spritesheet('tab_key', './assets/keyboards/TAB.png', { frameWidth: 33, frameHeight: 21 });
+        this.load.spritesheet('shift_key', './assets/keyboards/SHIFTALTERNATIVE.png', { frameWidth: 49, frameHeight: 21 });
         this.load.spritesheet('up_key', './assets/keyboards/ARROWUP.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('w_key', './assets/keyboards/W.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('powerup', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 });
@@ -64,7 +64,7 @@ export default class instructionScene extends Phaser.Scene {
         const right_key = this.add.sprite(365, 430, 'right_key').setScale(3.2);
 
         // DASH
-        const tab_key = this.add.sprite(290, 550, 'tab_key').setScale(3.2);
+        const shift_key = this.add.sprite(290, 550, 'shift_key').setScale(3.2);
 
         // GUARDAR MODIFICADOR
         const v_key = this.add.sprite(800, 275, 'v_key').setScale(3.2);
@@ -122,12 +122,12 @@ export default class instructionScene extends Phaser.Scene {
         // DASH CHARACTER
 
         const dashCharacter = new Character(this, 600, 540, "dash").setScale(3.5);
-        tab_key.play('TAB_Press');
+        shift_key.play('SHIFT_Press');
 
         dashCharacter.on('animationcomplete', (param1, param2, param3) => {
             if (dashCharacter.anims.currentAnim.key == 'mainChar_controls_dash') {
                 dashCharacter.play('mainChar_controls_dash');
-                tab_key.play('TAB_Press');
+                shift_key.play('SHIFT_Press');
             }
         });
 
