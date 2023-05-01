@@ -90,7 +90,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	create(data) {
-
+		this.isMuted = data.mute;
         this.banda = this.sound.add("fightSong", {
 			volume: 0.1,
 			loop: true
@@ -116,15 +116,10 @@ export default class LevelScene extends Phaser.Scene {
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3).setDepth(4);
 
 		console.log("LAUNCH Level", this.namescene)
-		if(this.namescene == 'level1'){		
-			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: this.namescene, dmg: this.bulletPool.getDmg()})
+		if(this.namescene == 'level1' && !LevelScene.progress.level1){		
+			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: 'level2', dmg: this.bulletPool.getDmg()})
 			this.scene.sleep('stats');
 			this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel});
-		}
-
-		if(this.namescene == 'level2'){		
-			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: this.namescene, dmg: this.bulletPool.getDmg()})
-			this.scene.sleep('stats');
 		}
 
 		settings.setInteractive({ cursor: 'pointer' });
@@ -142,7 +137,12 @@ export default class LevelScene extends Phaser.Scene {
 			this.player.stopVertical();
 			this.scene.pause();
 			this.scene.pause('UIScene');
-			this.scene.launch('settings', { level: this.namescene });
+			if(LevelScene.progress[this.namescene]){
+				this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.explorationSong});
+			}
+			else{
+				this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.banda});
+			}
 		});
 
 		this.input.keyboard.on('keydown', (event) => {
@@ -151,7 +151,12 @@ export default class LevelScene extends Phaser.Scene {
 				this.player.stopVertical();
 				this.scene.pause();
 				this.scene.pause('UIScene');
-				this.scene.launch('settings', { level: this.namescene });
+				if(LevelScene.progress[this.namescene]){
+					this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.explorationSong});
+				}
+				else{
+					this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.banda});
+				}
 			}
 		});
 
@@ -189,6 +194,12 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.statsGame.events.on('incrementCadence', function (cadence) {
 			this.player.setCadence(cadence);
+		}, this);
+
+		this.settingsGame = this.scene.get('settings');
+
+		this.settingsGame.events.on('muteOption', function (mute) {
+			this.isMuted = mute;
 		}, this);
 	}
 
@@ -320,7 +331,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 1;
+		this.freqChangeTime = 20000;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -349,13 +360,17 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initLevelFightMode(){
-		this.banda.play();
+		if(!this.isMuted){
+			this.banda.play();
+		}
 		this.spawnMeiga = false;
 		this.initTimers(false);
 	}
 
 	initLevelFreeMode(){
-		this.explorationSong.play();
+		if(!this.isMuted){
+			this.explorationSong.play();
+		}
 		this.abrirPuertas()
 		if(this.namescene === 'level4'){
 			this.cofre.destroy();
@@ -365,7 +380,7 @@ export default class LevelScene extends Phaser.Scene {
 	gameOver() {
 		this.cameras.main.fadeOut(500);
 		this.cameras.main.once("camerafadeoutcomplete", function () {
-			this.scene.start('game_over');
+			this.scene.start('game_over', { level: this.namescene, mute: this.isMuted });
 			this.scene.stop('UIScene')
 			this.banda.stop()
 		}, this);
@@ -473,9 +488,10 @@ export default class LevelScene extends Phaser.Scene {
 		this.player.stopVertical();
 		this.scene.pause();
 		this.scene.pause('UIScene');
+		this.player.wallet += 10;
 
 		this.statsGame.initDialog();
-		this.scene.wake('stats');
+		this.scene.wake('stats', {playerData: this.player.getPlayerStats(), dmg: this.bulletPool.getDmg()});
 		this.scene.resume('stats');
 	}
 

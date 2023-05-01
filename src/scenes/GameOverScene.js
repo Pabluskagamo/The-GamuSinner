@@ -14,9 +14,18 @@ export default class GameOverScene extends Phaser.Scene {
 		this.load.image('game_over', './img/game_over.png');
 		this.load.spritesheet('game_restart', './assets/ui/restart_sprite.png', { frameWidth: 480, frameHeight: 170 });
 		this.load.spritesheet('main_menu', './assets/ui/MainMenu_sprite.png', { frameWidth: 480, frameHeight: 170 });
+		this.load.audio("losse", "assets/audio/Effects/losse2.wav");
 	}
 
-	create() {
+	create(data) {
+		this.isMuted = data.mute;
+		this.level = data.level;
+		if (!this.isMuted) {
+            this.sound.add("losse", {
+                volume: 0.4,
+            }).play();
+        }
+
 		this.anims.create({
 			key: 'hoverRestart',
 			frames: this.anims.generateFrameNumbers('game_restart', { start: 0, end: 2 }),
@@ -45,6 +54,8 @@ export default class GameOverScene extends Phaser.Scene {
 		restart.on('pointerup', () => {
 			this.sound.removeByKey('explorationSong');
 			this.sound.removeByKey('fightSong');
+			this.scene.stop('UIScene');
+			this.scene.stop(this.level);
 			this.scene.start('level1');
 		});
 
@@ -52,6 +63,8 @@ export default class GameOverScene extends Phaser.Scene {
 			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
 				this.sound.removeByKey('explorationSong');
 				this.sound.removeByKey('fightSong');
+				this.scene.stop('UIScene');
+				this.scene.stop(this.level);
 				this.scene.start('level1');
 			}
 		});
@@ -69,6 +82,8 @@ export default class GameOverScene extends Phaser.Scene {
 		menu.on('pointerup', () => {
 			this.sound.removeByKey('explorationSong');
 			this.sound.removeByKey('fightSong');
+			this.scene.stop(this.level);
+			this.scene.stop('UIScene');
 			this.scene.start('mainScene');
 		});
 

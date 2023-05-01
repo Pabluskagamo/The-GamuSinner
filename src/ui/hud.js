@@ -82,7 +82,7 @@ export default class Hud extends Phaser.Scene {
             },
             multipleDirectionShot: {
                 multiple: true,
-                comboKeys: ["tripleShot", "eightDirShot"],
+                imgs: [this.add.image(-150, -150, 'tripleShotHud'), this.add.image(-150, -150, 'eightDirShotHud')],
                 text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
             },
             dash_char: {
@@ -265,11 +265,10 @@ export default class Hud extends Phaser.Scene {
                 pow.img.setVisible(true)
             } else {
                 let imgSepCombo = 0
-                pow.comboKeys.forEach(k => {
-                    const comboPow = this.powerUpsImgs[k];
-                    comboPow.img.x = currentX - imgSepCombo;
-                    comboPow.img.y = currentY + separationY;
-                    comboPow.img.setVisible(true)
+                pow.imgs.forEach(img => {
+                    img.x = currentX - imgSepCombo;
+                    img.y = currentY + separationY;
+                    img.setVisible(true)
                     imgSepCombo += (separationX + 10);
                 })
             }
@@ -296,9 +295,8 @@ export default class Hud extends Phaser.Scene {
         if (!pow.multiple) {
             pow.img.setVisible(false);
         } else {
-            pow.comboKeys.forEach(k => {
-                const comboPow = this.powerUpsImgs[k];
-                comboPow.img.setVisible(false);
+            pow.imgs.forEach(img => {
+                img.setVisible(false);
             })
         }
 

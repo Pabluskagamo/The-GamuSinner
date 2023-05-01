@@ -14,8 +14,8 @@ export default class selectionScene extends Phaser.Scene {
 	}
 
 
-	create() {
-
+	create(data) {
+		this.isMuted = data.mute;
 		this.add.image(0, 0, 'mapa').setOrigin(0, 0).setScale(1);
 		this.add.image(170, 60, 'game_title').setScale(0.22);
 		const botonGalicia = this.add.image(400, 140, 'botonAmarillo').setScale(0.15);
@@ -29,7 +29,7 @@ export default class selectionScene extends Phaser.Scene {
 		botonGalicia.on('pointerup', () => {
 			this.cameras.main.fadeOut(500);
 			this.cameras.main.once("camerafadeoutcomplete", function () {
-				this.scene.start('level1');
+				this.scene.start('level1', { mute: this.isMuted });
 				this.sound.removeByKey('musica');
 			}, this);
 		});

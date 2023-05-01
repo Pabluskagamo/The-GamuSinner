@@ -46,20 +46,22 @@ export default class LevelScene2 extends LevelScene {
 
 		this.sound.removeByKey('fightSong');
 
-		const explorationSong = this.sound.add("explorationSong", {
-			volume: 0.1,
-			loop: true
-		});
-		
-		const appearEffect = this.sound.add("appearEffect", {
-			volume: 0.1
-		});
-		
-		appearEffect.play();
-
-		appearEffect.once('complete', () => {
-			explorationSong.play();
-		});
+		if(!this.isMuted){
+			const explorationSong = this.sound.add("explorationSong", {
+				volume: 0.1,
+				loop: true
+			});
+			
+			const appearEffect = this.sound.add("appearEffect", {
+				volume: 0.1
+			});
+			
+			appearEffect.play();
+	
+			appearEffect.once('complete', () => {
+				explorationSong.play();
+			});
+		}
 		
 		this.events.emit('levelComplete');
 		this.abrirPuertas();
@@ -102,9 +104,10 @@ export default class LevelScene2 extends LevelScene {
 		this.physics.add.existing(zonaInvisible);
 
 		this.physics.add.overlap(this.player, zonaInvisible, () => {
-			this.sound.stopAll();
+			this.sound.removeByKey('explorationSong');
+			this.sound.removeByKey('appearEffect');
 			this.events.emit('passLevel', {playerData: this.player.getPlayerStats(), level: 'level2', levelboss: true});
-			this.scene.start('level2', { player: this.player, gate: {x: 80, y: this.player.y}});
+			this.scene.start('level2', { player: this.player, gate: {x: 80, y: this.player.y}, mute: this.isMuted });
 		});
 	}
 

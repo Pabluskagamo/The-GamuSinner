@@ -17,6 +17,7 @@ export default class LevelSceneBoss extends LevelScene {
 	}
 
 	create(data){
+		this.isMuted = data.mute;
         super.create({...data, bossLevel: true});
 		this.bossPool.fillPool(200, 30, 30, this.player)
 		this.graphics = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 }, fillStyle: { color: 0xff0000 }});

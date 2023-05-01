@@ -23,7 +23,7 @@ export default class instructionScene extends Phaser.Scene {
         this.load.spritesheet('s_key', './assets/keyboards/S.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('v_key', './assets/keyboards/V.png', { frameWidth: 19, frameHeight: 21 });
         this.load.image('pwpanel', './assets/ui/powerUpPanel.png');
-        this.load.spritesheet('tab_key', './assets/keyboards/TAB.png', { frameWidth: 33, frameHeight: 21 });
+        this.load.spritesheet('shift_key', './assets/keyboards/SHIFTALTERNATIVE.png', { frameWidth: 49, frameHeight: 21 });
         this.load.spritesheet('up_key', './assets/keyboards/ARROWUP.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('w_key', './assets/keyboards/W.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('powerup', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 });
@@ -33,13 +33,17 @@ export default class instructionScene extends Phaser.Scene {
         this.load.spritesheet('skip_sprite', './assets/ui/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });
     }
 
-    create() {
+    create(data) {
+        this.isMuted = data.mute;
+        this.sound.removeByKey('chatTyping');
         this.sound.removeByKey('chat');
         this.sound.removeByKey('rise');
-        this.sound.add("musica", {
-			volume: 0.2,
-			loop: true
-		}).play();
+        if(!this.isMuted){
+            this.sound.add("musica", {
+                volume: 0.2,
+                loop: true
+            }).play();
+        }
 
         // FONDO
         this.add.image(0, 0, 'background_instructions').setOrigin(0, 0).setScale(0.91);
@@ -60,7 +64,7 @@ export default class instructionScene extends Phaser.Scene {
         const right_key = this.add.sprite(365, 430, 'right_key').setScale(3.2);
 
         // DASH
-        const tab_key = this.add.sprite(290, 550, 'tab_key').setScale(3.2);
+        const shift_key = this.add.sprite(290, 550, 'shift_key').setScale(3.2);
 
         // GUARDAR MODIFICADOR
         const v_key = this.add.sprite(800, 275, 'v_key').setScale(3.2);
@@ -118,12 +122,12 @@ export default class instructionScene extends Phaser.Scene {
         // DASH CHARACTER
 
         const dashCharacter = new Character(this, 600, 540, "dash").setScale(3.5);
-        tab_key.play('TAB_Press');
+        shift_key.play('SHIFT_Press');
 
         dashCharacter.on('animationcomplete', (param1, param2, param3) => {
             if (dashCharacter.anims.currentAnim.key == 'mainChar_controls_dash') {
                 dashCharacter.play('mainChar_controls_dash');
-                tab_key.play('TAB_Press');
+                shift_key.play('SHIFT_Press');
             }
         });
 
@@ -150,7 +154,7 @@ export default class instructionScene extends Phaser.Scene {
         skip.on('pointerup', () => {
             this.cameras.main.fadeOut(500);
             this.cameras.main.once("camerafadeoutcomplete", function () {
-                this.scene.start('selecScene');
+                this.scene.start('selecScene', { mute: this.isMuted });
             }, this);
         });
 
@@ -159,7 +163,7 @@ export default class instructionScene extends Phaser.Scene {
             if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
                 this.cameras.main.fadeOut(500);
                 this.cameras.main.once("camerafadeoutcomplete", function () {
-                    this.scene.start('selecScene');
+                    this.scene.start('selecScene', { mute: this.isMuted });
                 }, this);
             }
         });
