@@ -54,6 +54,11 @@ export default class JellyfishPet extends Phaser.Physics.Arcade.Sprite {
         this.jelly.y=this.y
     }
 
+    hide(){
+        this.x = -150
+        this.y = -150
+    }
+
     attack(powerUp, passives, dir){
         powerUp.run(this.x, this.y, passives, dir)
     }

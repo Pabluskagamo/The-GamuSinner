@@ -26,14 +26,14 @@ export default class historyScene extends Phaser.Scene {
         this.textD = [
             'Hola avó, estoy aburrido, ¿Qué estás haciendo?',
             'Perdón avó, es que como estoy aburrido no se me ocurre nada que hacer.',
-            'Es que no me apetece eso, me apetece algo más estimulante. Va avó dime algo que hacer.'
+            'Es que no me apetece eso, me apetece algo más divertido. Va avó dime algo que hacer.'
         ]
         this.textA = [
             'AHHH!!! Que susto, eres tú, ¿tú te crees que estoy para estos sustos mientras duermo?',
             'Y por eso vienes a molestar a tu abuelo. Si estás aburrido vete a jugar con la pelotiña o esas cosas.',
             'Pues vete a cazar Gamusiños y déjame en paz, que solo sabes molestar.'
         ]
-        this.textEnd = "Así Dieguiño en un instante y sin dudarlo salío corriendo.\nSe fue a la habitación, cogió una mochila y empezó a llenarla.\nTras llenarla se fue a hurtadillas al despacho de su abuelo.\nAbrió la vitrina con mucho cuidado y sacó una escopeta.\nAntes de salir del despacho, miró hacia el perchero\ny cogió el sombrero de arqueólogo de su padre.\nSin pensárselo dos veces, salió de la casa adentrándose en el bosque.\nSin saber todas las aventuras que le esperaban y los peligros que correría."
+        this.textEnd = "Así Dieguiño en un instante y sin dudarlo salío corriendo.\nSe fue a su habitación, cogió una mochila y empezó a llenarla.\nTras llenarla se fue a hurtadillas al despacho de su abuelo.\nAbrió un cajón con mucho cuidado y sacó una pistola que guardaba su \nabuelo. Antes de salir del despacho, cogió del perchero el sombrero de \narqueólogo de su padre. Sin pensárselo dos veces, salió de la casa\n adentrándose en el bosque. Sin saber todas las aventuras que le \nesperaban y los peligros que correría."
         this.textPreparado = "¿Estás preparado para la aventura tú también?"
 
         // SKIP BUTTON
@@ -116,7 +116,9 @@ export default class historyScene extends Phaser.Scene {
         else {
             this.chatting = false;
             this.sound.removeByKey('chat');
-            this.rise.play();
+            if (!this.isMuted) {
+                this.rise.play();
+            }
             this.final = true;
             this.tweens.add({
                 targets: [this.room.destroy(), this.chat.destroy()],
@@ -166,10 +168,15 @@ export default class historyScene extends Phaser.Scene {
                 alpha: 0,
                 duration: 3000,
                 onComplete: () => {
-                    this.rise.once('complete', () => {
+                    if (!this.isMuted) {
+                        this.rise.once('complete', () => {
+                            this.scene.stop();
+                            this.scene.start('instructions', { mute: this.isMuted });
+                        });
+                    } else {
                         this.scene.stop();
                         this.scene.start('instructions', { mute: this.isMuted });
-                    });
+                    }
                 }
             });
         });
@@ -180,7 +187,7 @@ export default class historyScene extends Phaser.Scene {
         let i = 0;
         let delay = this.final ? 120 : 60;
         let duration = this.pregunta ? 9000 : 1400;
-        if(this.chatting){
+        if (this.chatting) {
             if (!this.isMuted) {
                 this.sound.add("chatTyping", {
                     volume: 0.4,

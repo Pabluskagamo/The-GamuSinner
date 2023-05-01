@@ -4,7 +4,7 @@ export default class EnemyBullet extends Bullet {
 
     constructor (scene, x, y, speed, dmg) {
         super(scene, x, y, speed, dmg)
-
+        this.setScale(2)
     }
 
     init (x, y) {
@@ -26,8 +26,12 @@ export default class EnemyBullet extends Bullet {
     hit (enemy) {
         if (!this.justHit) {
             this.justHit = true;
-            enemy.hitEnemy(this.dmg);
-            this.scene.bossPool.release(this);
+            enemy.getHit(this.dmg);
+            this.release()
         }
+    }
+
+    release(){
+        this.scene.bossPool.releaseBullet(this);
     }
 }

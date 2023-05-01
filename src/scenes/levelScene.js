@@ -8,6 +8,8 @@ import TripleShot from "../gameobjects/powerUps/tripleShot"
 import EightDirShot from "../gameobjects/powerUps/eightDirShot"
 import BouncingShot from "../gameobjects/powerUps/bouncingShot"
 import FreezingShot from "../gameobjects/powerUps/freezingShot"
+import PetBot from "../gameobjects/powerUps/petBot"
+import JellyfishPet from "../gameobjects/powerUps/jellyfishPet"
 
 export default class LevelScene extends Phaser.Scene {
 	static progress = {
@@ -38,6 +40,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('spectre2', './assets/enemies/spectre.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('demonboss', './assets/enemies/boss/boss_demon_slime/spritesheets/demonboss.png', { frameWidth: 288, frameHeight: 160 })
 		this.load.spritesheet('projectilesboss', './assets/enemies/boss/boss_demon_slime/spritesheets/projectilesboss.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('explosion', './assets/enemies/boss/attacks/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('jellyfishpet', './assets/pets/jellyfish.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('muerte', './assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bullet', './assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
@@ -49,6 +52,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('multishot', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('freezingshot', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bouncingshot', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('petpower', './assets/powerups/4DirShoot.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.image('tilesCastleProps', './assets/tileset/sala2/tilesetCastle/TX Props.png')
 		this.load.image('tilesCastleStruct', './assets/tileset/sala2/tilesetCastle/TX Struct.png')
@@ -154,13 +158,15 @@ export default class LevelScene extends Phaser.Scene {
 			}
 		});
 
+		//this.powerUpPool.fillPool()
 		let powerUps = []
 
-		for (let i = 0; i < 2; i++) {
-			powerUps.push(new FreezingShot(this, -125, -125));
+		for (let i = 0; i < 6; i++) {
+			/* powerUps.push(new FreezingShot(this, -125, -125));
 			powerUps.push(new BouncingShot(this, -125, -125));
 			powerUps.push(new TripleShot(this, -125, -125));
-			powerUps.push(new EightDirShot(this, -125, -125));
+			powerUps.push(new EightDirShot(this, -125, -125)); */
+			powerUps.push(new PetBot(this, -125, -125, new JellyfishPet(this, -125, -125)));
 		}
 		this.powerUpPool.addMultipleEntity(powerUps);
 
