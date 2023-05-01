@@ -49,6 +49,13 @@ export default class SettingScene extends Phaser.Scene {
 			this.scene.resume('UIScene');
 			this.scene.stop('settings');
 		});
+		this.input.keyboard.on('keydown', (event) => {
+			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.CTRL) {
+				this.scene.resume(this.level, { mute: this.isMuted });
+				this.scene.resume('UIScene');
+				this.scene.stop('settings');
+			}
+		});
 
 
 		// RESTART BUTTON
@@ -173,12 +180,12 @@ export default class SettingScene extends Phaser.Scene {
 		});
 	}
 
-	update(t){
-		if(!this.isMuted){
+	update(t) {
+		if (!this.isMuted) {
 			this.soundButton.visible = true;
 			this.muteButton.visible = false;
 		}
-		else{
+		else {
 			this.muteButton.visible = true;
 			this.soundButton.visible = false;
 		}
