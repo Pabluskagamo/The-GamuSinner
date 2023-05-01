@@ -162,10 +162,10 @@ export default class LevelScene extends Phaser.Scene {
 		let powerUps = []
 
 		for (let i = 0; i < 6; i++) {
-			/* powerUps.push(new FreezingShot(this, -125, -125));
+			powerUps.push(new FreezingShot(this, -125, -125));
 			powerUps.push(new BouncingShot(this, -125, -125));
 			powerUps.push(new TripleShot(this, -125, -125));
-			powerUps.push(new EightDirShot(this, -125, -125)); */
+			powerUps.push(new EightDirShot(this, -125, -125));
 			powerUps.push(new PetBot(this, -125, -125, new JellyfishPet(this, -125, -125)));
 		}
 		this.powerUpPool.addMultipleEntity(powerUps);
