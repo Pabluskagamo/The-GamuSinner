@@ -24,6 +24,7 @@ export default class Hud extends Phaser.Scene {
         this.load.spritesheet('eightDirShotHud', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('multipleDirfreezingShotectionShotHud', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('bouncingShotHud', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('petpowerHud', './assets/powerups/4DirShoot.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('multipleDirectionShotHud', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
     }
 
@@ -73,6 +74,10 @@ export default class Hud extends Phaser.Scene {
             },
             bouncingShot: {
                 img: this.add.image(-150, -150, 'bouncingShotHud'),
+                text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
+            },
+            petpower: {
+                img: this.add.image(-150, -150, 'petpowerHud'),
                 text: this.add.text(-150, -150, '', { fontFamily: 'MedievalSharp-Regular' })
             },
             multipleDirectionShot: {

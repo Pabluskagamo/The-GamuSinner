@@ -79,7 +79,7 @@ export default class PowerUp extends Item{
 
         if(!reloaded){
             this.scene.events.emit('endPowerUpTime', this.key);
-        }else{
+        } else {
             this.timer.remove();
         }
     }
@@ -107,5 +107,9 @@ export default class PowerUp extends Item{
 
     deSpawn(){
         this.scene.powerUpPool.release(this);
+    }
+
+    isPet() {
+        return false;
     }
 }

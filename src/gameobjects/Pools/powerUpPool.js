@@ -1,4 +1,7 @@
+import BouncingShot from "../powerUps/bouncingShot";
 import EightDirShot from "../powerUps/eightDirShot";
+import FreezingShot from "../powerUps/freezingShot";
+import PetBot from "../powerUps/petBot";
 import TripleShot from "../powerUps/tripleShot";
 
 export default class PowerUpPool {
@@ -55,10 +58,13 @@ export default class PowerUpPool {
     fillPool(){
         let powerUps = []
 
-        for (let i = 0; i < 20; i++){
-            powerUps.push(new TripleShot(this.scene, -125, -125));
-            powerUps.push(new EightDirShot(this.scene, -125, -125));
-        }
-        this.addMultipleEntity(powerUps)
+		for (let i = 0; i < 6; i++) {
+			powerUps.push(new FreezingShot(this, -125, -125));
+			powerUps.push(new BouncingShot(this, -125, -125));
+			powerUps.push(new TripleShot(this, -125, -125));
+			powerUps.push(new EightDirShot(this, -125, -125));
+			powerUps.push(new PetBot(this, -125, -125));
+		}
+		this.addMultipleEntity(powerUps);
     }
 }

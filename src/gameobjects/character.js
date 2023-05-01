@@ -24,6 +24,7 @@ export default class Character extends MovableObject {
             this.nonePowerUp = new NonePowerUp(this.scene)
             this.currentPowerUp = this.nonePowerUp
             this.inventory = null
+            this.petPowerUp = null
             this.pet = null
             this.passives = []
             //this.passives = [new BouncingShot(this.scene)]
@@ -466,10 +467,12 @@ export default class Character extends MovableObject {
             this.checkPowerUpAlreadyActive(powerUp)
             powerUp.collect()
             powerUp.initTimer()
-            if (!powerUp.isPassive()) {
+            if (powerUp.isPet()){
+                this.petPowerUp = powerUp;
+                this.petPowerUp.run()
+            } else if (!powerUp.isPassive()) {
                 this.activatePowerUp(powerUp)
-            }
-            else {
+            } else {
                 this.passives.push(powerUp)
             }
         }
@@ -488,8 +491,16 @@ export default class Character extends MovableObject {
     }
 
     checkPowerUps() {
-        if (this.currentPowerUp && !this.currentPowerUp.isEnabled()) { this.currentPowerUp = this.nonePowerUp }
-        console.log(this.passives)
+        if (this.currentPowerUp && !this.currentPowerUp.isEnabled()) { 
+            this.currentPowerUp = this.nonePowerUp 
+        }
+
+        if (this.petPowerUp && !this.petPowerUp.isEnabled()) {
+            console.log("ADIOS PET sadadaasdassssssssssssssssssssssssssssssssssssda")
+            this.petPowerUp.hidePet();
+            this.petPowerUp = null;
+            this.pet = null;
+        }
 
         if (this.passives) {
             this.passives.forEach(e => {

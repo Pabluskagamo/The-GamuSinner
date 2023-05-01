@@ -60,7 +60,7 @@ export default class EnemyObject extends MovableObject {
     }
 
     dieMe(){
-        this.scene.sound.add(this.key +"_die", {
+        this.scene.sound.add(this.key + "_die", {
             volume: 0.2,
             loop: false
         }).play();
