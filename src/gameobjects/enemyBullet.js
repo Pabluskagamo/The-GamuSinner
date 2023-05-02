@@ -5,6 +5,7 @@ export default class EnemyBullet extends Bullet {
     constructor (scene, x, y, speed, dmg) {
         super(scene, x, y, speed, dmg)
         this.setScale(2)
+        this.setSize(12, 12)
     }
 
     init (x, y) {

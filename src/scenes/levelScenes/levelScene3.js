@@ -71,10 +71,6 @@ export default class LevelScene2 extends LevelScene {
 				this.cameras.main.flash(500);
 			}, i * 600);
 		}
-
-		this.addMeiga();
-		this.spawnMeiga = true;
-		this.player.collectCoin(1000);
 	}
 
 	// addMeiga() {

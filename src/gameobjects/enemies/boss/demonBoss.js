@@ -27,7 +27,7 @@ export default class DemonBoss extends EnemyObject {
         this.hitBoxSlime()
         
         this.dmgAcum = 0;
-        this.startHp = 400
+        this.startHp = 1500
         this.nExplotions = 4
         this.numDirections = 4
         this.bulletMultiplier = 3
@@ -137,6 +137,14 @@ export default class DemonBoss extends EnemyObject {
         })
 
         this.scene.anims.create({
+            key: 'invokeEnemies_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 288, end: 293 }),
+            frameRate: 15,
+            // duration: 5000,
+            repeat: 15,
+        })
+
+        this.scene.anims.create({
             key: 'transformation_demonboss',
             frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 96, end: 127 }),
             frameRate: 15,
@@ -204,6 +212,11 @@ export default class DemonBoss extends EnemyObject {
                 this.addAttackTimer(3000)
             }
             if (this.anims.currentAnim.key === 'spell_demonboss') {
+                this.attacking = false;
+                this.addAttackTimer(5000)
+            }
+
+            if (this.anims.currentAnim.key === 'invokeEnemies_demonboss') {
                 this.attacking = false;
                 this.addAttackTimer(5000)
             }
@@ -285,7 +298,7 @@ export default class DemonBoss extends EnemyObject {
             this.attacking = true;
             //this.play('fireBlast_demonboss');
             //this.flipX = (this.body.velocity.x > 0 && this.key === 'demonboss') || (this.body.velocity.x > 0 && this.key === 'slime');
-            this.flipX = this.body.velocity.x > 0
+            // this.flipX = this.body.velocity.x > 0
             this.play('attack_' + this.key);
             enemie.getHit(1)
         }
@@ -293,13 +306,16 @@ export default class DemonBoss extends EnemyObject {
 
     hitEnemy(dmg) {
         if (!this.onTransformation) {
-            console.log(this.key, this.hp, '/', this.initialHp)
+            console.log(this.key, this.hp, '/', this.startHp)
 
             this.isHitting = true
+
+            //REVISAR
             if (!this.attacking) {
-                this.scene.events.emit("bossHit" , dmg);
             }
+
             this.hp -= dmg;
+            this.scene.events.emit("bossHit" , dmg);
 
             if(this.hp <= 0){
                 this.dieMe();
@@ -320,6 +336,7 @@ export default class DemonBoss extends EnemyObject {
     }
 
     transform(){
+        this.scene.events.emit("bossStart", this.startHp)
         this.key = 'demonboss'
         this.hp = this.startHp;
         this.transformation = true;
@@ -331,12 +348,14 @@ export default class DemonBoss extends EnemyObject {
 
     runSpecialAttack(){
         this.attacking = true;
-        const nextAttack = Phaser.Math.Between(0, 1)
+        const nextAttack = Phaser.Math.Between(2, 2)
 
         if(nextAttack === 0){
             this.jumpSmash();
-        }else{
+        }else if(nextAttack === 1){
             this.play("spell_demonboss")
+        }else{
+            this.invokeEnemies()
         }
     }
 
@@ -367,6 +386,17 @@ export default class DemonBoss extends EnemyObject {
                     tempBullet.setDireccion(bulletDir)
                 }
             }
+        }
+    }
+
+
+    invokeEnemies(){
+        this.play('invokeEnemies_demonboss')
+        for(let i = 0; i < 10; i++) {
+            const randX = Phaser.Math.RND.between(-100, 100);
+            const randY = Phaser.Math.RND.between(-100, 100);
+
+            this.pool.spawnEnemy(this.x + randX, this.y + randY)
         }
     }
 
