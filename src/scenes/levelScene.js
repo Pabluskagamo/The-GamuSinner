@@ -108,8 +108,10 @@ export default class LevelScene extends Phaser.Scene {
 
 	create(data) {
 		this.isMuted = data.mute;
-        
-		this.setMusic()
+		
+        if(!this.isMuted){
+			this.setMusic()
+		}
 
 		this.explorationSong = this.sound.add("explorationSong", {
 			volume: 0.1,

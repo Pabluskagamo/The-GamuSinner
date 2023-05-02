@@ -10,30 +10,30 @@ import BossPool from "../../gameobjects/Pools/bossPool";
 
 export default class LevelSceneBoss extends LevelScene {
 
-    constructor() {
+	constructor() {
 		super('levelBoss')
 	}
 
-	create(data){
+	create(data) {
 		this.isMuted = data.mute;
-        super.create({...data, bossLevel: true});
+		super.create({ ...data, bossLevel: true });
 		this.initTimers(true);
 
 		this.bossPool.fillPool(500, 30, 40, this.player)
 		this.enemyPool.fillPool(25, this.player, this.namescene);
-        this.demon = new DemonBoss(this, this.game.canvas.width/2.07, this.game.canvas.height/3.1, 60, this.player, this.bossPool, this.enemyPool)
+		this.demon = new DemonBoss(this, this.game.canvas.width / 2.07, this.game.canvas.height / 3.1, 60, this.player, this.bossPool, this.enemyPool)
 		this.demon.body.pushable = false;
 		this.player.body.pushable = false;
 		this.demon.setDepth(3);
 
 		this.physics.add.collider(this.bulletPool._group, this.demon, (obj1, obj2) => {
-            obj1.hit(obj2)
-        }, (obj1, obj2) => !obj2.isDead());
+			obj1.hit(obj2)
+		}, (obj1, obj2) => !obj2.isDead());
 
 		this.physics.add.overlap(this.demon, this.player, (obj1, obj2) => {
-				obj1.attack(obj2);
-				this.events.emit('addScore', obj2.getHp());
-			}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash()
+			obj1.attack(obj2);
+			this.events.emit('addScore', obj2.getHp());
+		}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash()
 		);
 
 		this.physics.add.overlap(this.demon, this.player, (obj1, obj2) => {
@@ -55,7 +55,7 @@ export default class LevelSceneBoss extends LevelScene {
 		this.physics.add.overlap(this.powerUpPool._group, this.player, (obj1, obj2) => {
 			obj2.collectPowerUp(obj1);
 		}, (obj1, obj2) => !obj1.isEnabled());
-		
+
 		this.physics.add.overlap(this.foodPool._group, this.player, (obj1, obj2) => {
 			obj1.collect(obj2);
 			this.events.emit('addScore', obj2.getHp());
@@ -74,8 +74,8 @@ export default class LevelSceneBoss extends LevelScene {
 		);
 
 		this.physics.add.collider(this.bulletPool._group, this.bossPool._bossEnemiesGroup, (obj1, obj2) => {
-            obj1.hit(obj2)
-        }, (obj1, obj2) => !obj2.isDead()
+			obj1.hit(obj2)
+		}, (obj1, obj2) => !obj2.isDead()
 		);
 
 		this.physics.add.collider(this.bossPool._bossBulletGroup, this.player, (obj1, obj2) => {
@@ -84,13 +84,13 @@ export default class LevelSceneBoss extends LevelScene {
 		}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash() && !obj2.isInvicible()
 		);
 
-		this.physics.add.overlap(this.bossPool._bossExplosionGroup, this.player,(obj1, obj2) => {
-            obj1.hit(obj2)
+		this.physics.add.overlap(this.bossPool._bossExplosionGroup, this.player, (obj1, obj2) => {
+			obj1.hit(obj2)
 			this.events.emit('addScore', obj2.getHp());
-        }, (obj1, obj2) => !obj2.isDead() && !obj2.getDash() && !obj2.isInvicible()
+		}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash() && !obj2.isInvicible()
 		);
 
-    }
+	}
 
 	initMap() {
 		const mapa = this.map = this.make.tilemap({
@@ -141,17 +141,17 @@ export default class LevelSceneBoss extends LevelScene {
 
 		this.player.setDepth(2)
 		this.bordeEstatuas.setDepth(2)
-	
+
 	}
 
-    initPlayerAndPools(data) {
+	initPlayerAndPools(data) {
 		console.log("LLEGO AQUI")
-		
-        if (data.hasOwnProperty('gate')) {
-            this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(),  data.player.getCadence());
-        } else {
-            this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, null, 150, 4, 4, 0, 400);
-        }
+
+		if (data.hasOwnProperty('gate')) {
+			this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(), data.player.getCadence());
+		} else {
+			this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, null, 150, 4, 4, 0, 400);
+		}
 		this.player.body.onCollide = true;
 
 		this.bossPool = new BossPool(this, 200, 30, 1)
@@ -176,10 +176,10 @@ export default class LevelSceneBoss extends LevelScene {
 	// }
 
 	update(t) {
-		
+
 		if (this.debugMode && !this.levelFinished && Phaser.Input.Keyboard.JustUp(this.k)) {
 			this.demon.hp = 100;
-			this.events.emit("bossHit" , this.demon.startHp - 100);
+			this.events.emit("bossHit", this.demon.startHp - 100);
 			console.log("LLEGAMOS A REVENTAR BOSS")
 			// this.completeLevel()
 		}
@@ -189,10 +189,10 @@ export default class LevelSceneBoss extends LevelScene {
 		if (debug) {
 			this.k = this.input.keyboard.addKey('K');
 			this.debugMode = true;
-		} 
+		}
 	}
 
-	setMusic(){
+	setMusic() {
 		this.banda = this.sound.add("bossSong", {
 			volume: 0.1,
 			loop: true
@@ -220,7 +220,7 @@ export default class LevelSceneBoss extends LevelScene {
 		this.meiga.play('meiga_magic');
 	}
 
-	completeLevel(){
+	completeLevel() {
 		console.log("NIVEL COMPLETADO")
 		this.levelFinished = true
 		this.input.keyboard.enabled = false;
@@ -230,57 +230,66 @@ export default class LevelSceneBoss extends LevelScene {
 		this.sound.removeByKey('bossSongSecondFase');
 
 		this.time.addEvent({
-            delay: 5000,
-            callback: ()=>{
+			delay: 5000,
+			callback: () => {
 				this.cameras.main.fadeOut(500);
 				this.cameras.main.once("camerafadeoutcomplete", function () {
 					this.scene.stop('UIScene')
 					this.scene.start('credits_scene', { level: this.namescene, mute: this.isMuted });
 				}, this);
 			},
-            callbackScope: this,
-            loop: false
-        })
+			callbackScope: this,
+			loop: false
+		})
 	}
 
-	initLevelFreeMode(){
+	initLevelFreeMode() {
 		this.addMeiga()
 		this.input.keyboard.enabled = false;
+		if (!this.isMuted) {
+			this.enterDungeonMusic = this.sound.add("dungeonEnterSong", {
+				volume: 0.4,
+				loop: true
+			});
+			this.enterDungeonMusic.play()
+		}
 
-		this.enterDungeonMusic = this.sound.add("dungeonEnterSong", {
-			volume: 0.4,
-			loop: true
-		});
-
-		this.enterDungeonMusic.play()
 
 		this.time.addEvent({
-            delay: 8000,
-            callback: ()=>{
-				this.setMusic();
-				this.banda.play();
+			delay: 8000,
+			callback: () => {
+				if (!this.isMuted) {
+					this.setMusic();
+					this.banda.play();
+				}
 				this.demon.transform();
 				this.meiga.setVisible(false)
 				this.spawnMeiga = false;
-				this.enterDungeonMusic.stop()
+				if (!this.isMuted) {
+					this.enterDungeonMusic.stop()
+				}
 				this.input.keyboard.enabled = true;
 			},
-            callbackScope: this,
-            loop: false
-        })
+			callbackScope: this,
+			loop: false
+		})
 	}
 
-	endFirstFase(){
-		this.banda.stop();
+	endFirstFase() {
+		if(!this.isMuted){
+			this.banda.stop();
+		}
 	}
 
-	setSecondFase(){
-		this.banda = this.sound.add("bossSongSecondFase", {
-			volume: 0.1,
-			loop: true
-		});
-
-		this.banda.play();
+	setSecondFase() {
+		if(!this.isMuted){
+			this.banda = this.sound.add("bossSongSecondFase", {
+				volume: 0.1,
+				loop: true
+			});
+	
+			this.banda.play();
+		}
 	}
 
 }
