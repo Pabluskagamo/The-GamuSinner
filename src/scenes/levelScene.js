@@ -87,6 +87,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.audio("panasong", "./assets/audio/panamiguel.mp3");
 		this.load.spritesheet('meiga', './assets/enemies/meiga.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('e_key', './assets/keyboards/E.png', { frameWidth: 19, frameHeight: 21 });
+		this.load.spritesheet('q_key', './assets/keyboards/Q.png', { frameWidth: 19, frameHeight: 21 });
 	}
 
 	create(data) {

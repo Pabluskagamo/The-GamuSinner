@@ -85,16 +85,16 @@ export default class StatsScene extends Phaser.Scene {
         const dialog = this.add.image(347, 570, 'dialog').setScale(1.05);
         dialog.setDepth(1);
 
-        this.skipkey = this.add.sprite(560, 600, 'e_key').setScale(1.3)
+        this.skipkey = this.add.sprite(560, 600, 'q_key').setScale(1.3)
 
         this.anims.create({
-			key: 'E_Press',
-			frames: this.anims.generateFrameNumbers('e_key', { start: 0, end: 2 }),
+			key: 'Q_Press',
+			frames: this.anims.generateFrameNumbers('q_key', { start: 0, end: 2 }),
 			frameRate: 2,
 			repeat: -1
 		});
 
-		this.skipkey.play('E_Press');
+		this.skipkey.play('Q_Press');
         this.skipkey.setVisible(false);
         this.skipkey.setDepth(2);
 
