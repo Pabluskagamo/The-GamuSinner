@@ -27,7 +27,6 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	init() {
-		console.log("Entre")
 		this.cameras.main.fadeIn(500);
 	}
 

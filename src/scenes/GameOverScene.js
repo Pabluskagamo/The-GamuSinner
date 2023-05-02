@@ -57,6 +57,7 @@ export default class GameOverScene extends Phaser.Scene {
 			this.sound.removeByKey('explorationSong');
 			this.sound.removeByKey('fightSong');
 			this.sound.removeByKey('fightSong2');
+			this.sound.removeByKey('fightSong3');
 			this.sound.removeByKey('losse');
 			this.scene.stop('UIScene');
 			this.scene.stop(this.level);
@@ -95,6 +96,9 @@ export default class GameOverScene extends Phaser.Scene {
 		menu.on('pointerup', () => {
 			this.sound.removeByKey('explorationSong');
 			this.sound.removeByKey('fightSong');
+			this.sound.removeByKey('fightSong2');
+			this.sound.removeByKey('fightSong3');
+
 			this.scene.stop(this.level);
 			this.scene.stop('UIScene');
 			this.scene.start('mainScene');

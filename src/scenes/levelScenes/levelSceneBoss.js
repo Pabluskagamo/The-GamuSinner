@@ -255,7 +255,7 @@ export default class LevelSceneBoss extends LevelScene {
 		this.enterDungeonMusic.play()
 
 		this.time.addEvent({
-            delay: 5000,
+            delay: 8000,
             callback: ()=>{
 				this.setMusic();
 				this.banda.play();

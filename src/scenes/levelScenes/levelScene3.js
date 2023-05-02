@@ -110,10 +110,12 @@ export default class LevelScene2 extends LevelScene {
 	}
 
 	setMusic(){
-		this.banda = this.sound.add("fightSong3", {
-			volume: 0.1,
-			loop: true
-		});
+		if(!this.sound.get("fightSong3")){
+			this.banda = this.sound.add("fightSong3", {
+				volume: 0.1,
+				loop: true
+			});
+		}
 	}
 
 }
