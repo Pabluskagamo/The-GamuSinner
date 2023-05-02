@@ -14,6 +14,71 @@ export default class MainScene extends Phaser.Scene {
 		this.load.spritesheet('mute_button', './assets/ui/MuteButton.png', { frameWidth: 192, frameHeight: 192 });
 		this.load.spritesheet('full_screen', './assets/ui/FullScreenSprite.png', { frameWidth: 192, frameHeight: 192 });
 		this.load.audio("musica", "assets/audio/awesomeness.mp3");
+		this.load.spritesheet('character', './assets/character/character.png', { frameWidth: 64, frameHeight: 32 })
+		this.load.spritesheet('character_shot', './assets/character/character_shooting.png', { frameWidth: 64, frameHeight: 32 })
+		this.load.spritesheet('blackWolf', './assets/enemies/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
+		this.load.spritesheet('cyclops', './assets/enemies/cyclops.png', { frameWidth: 64, frameHeight: 64.1 })
+		this.load.spritesheet('goblin', './assets/enemies/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
+		this.load.spritesheet('spectre2', './assets/enemies/spectre.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('demonboss', './assets/enemies/boss/boss_demon_slime/spritesheets/demonboss.png', { frameWidth: 288, frameHeight: 160 })
+		this.load.spritesheet('projectilesboss', './assets/enemies/boss/boss_demon_slime/spritesheets/projectilesboss.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('explosion', './assets/enemies/boss/attacks/explosion.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('jellyfishpet', './assets/pets/jellyfish.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('muerte', './assets/effects/explosion.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('bullet', './assets/bullets/bullets.png', { frameWidth: 16, frameHeight: 16 })
+		this.load.spritesheet('icebullet', './assets/bullets/icebullets.png', { frameWidth: 16, frameHeight: 16 })
+		this.load.spritesheet('bouncigbullet', './assets/bullets/bouncigbullets.png', { frameWidth: 16, frameHeight: 16 })
+		this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
+		this.load.spritesheet('food', './assets/items/food.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('tripleshot', './assets/powerups/Tripleshoot.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('multishot', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('freezingshot', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('bouncingshot', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('petpower', './assets/powerups/pet.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.image('tiles', './assets/tileset/forest_tiles.png')
+		this.load.image('tilesCastleProps', './assets/tileset/sala2/tilesetCastle/TX Props.png')
+		this.load.image('tilesCastleStruct', './assets/tileset/sala2/tilesetCastle/TX Struct.png')
+		this.load.image('tilesCastleWall', './assets/tileset/sala2/tilesetCastle/TX Tileset Wall.png')
+		this.load.image('tilesCastleGrass', './assets/tileset/sala2/tilesetCastle/TX Tileset Grass.png')
+		this.load.image('tilesCastlePlant', './assets/tileset/sala2/tilesetCastle/TX Plant.png')
+		this.load.image('tileFaerieForest', './assets/tileset/FaerieForest_PetricakeGamesPNG.png')
+		this.load.image('tilesBossSuelo', './assets/tileset/salaBoss/drain-blood.png')
+		this.load.image('tilesBossPared', './assets/tileset/salaBoss/evildungeon.png')
+		this.load.image('tilesBossPentagram', './assets/tileset/salaBoss/pentagramm.png')
+		this.load.image('tilesBossBricks', './assets/tileset/salaBoss/autotile purple brick.png')
+		this.load.image('tilesBossBloodFountain', './assets/tileset/salaBoss/blood-fountain.png')
+		this.load.tilemapTiledJSON('sala1', './assets/tilemap/sala1.json')
+		this.load.tilemapTiledJSON('sala2', './assets/tilemap/sala2.json')
+		this.load.tilemapTiledJSON('sala3', './assets/tilemap/sala3.json')
+		this.load.tilemapTiledJSON('sala4', './assets/tilemap/sala4.json')
+		this.load.tilemapTiledJSON('salaBoss', './assets/tilemap/salaBoss.json')
+		this.load.audio("appearEffect", "./assets/audio/Effects/AppearSoundEffect.mp3");
+		this.load.audio("explorationSong", "./assets/audio/Winds Of Stories.mp3");
+		this.load.audio("hit", "./assets/effects/hit.mp3");
+		this.load.audio("spectre_die", "./assets/effects/spectre_die.mp3");
+		this.load.audio("goblin_die", "./assets/effects/goblin_die.mp3");
+		this.load.audio("cyclops_die", "./assets/effects/cyclops_die.mp3");
+		this.load.audio("blackWolf_die", "./assets/effects/blackWolf_die.mp3");
+		this.load.audio("shoot_sound", "./assets/effects/shoot.wav");
+		this.load.audio("takecoin_audio", "./assets/effects/coin.wav");
+		this.load.audio("powerup_audio", "./assets/effects/powerup.wav");
+		this.load.audio("takefood_audio", "./assets/effects/heal.wav");
+		this.load.audio("fightSong", "./assets/audio/AdventureHO2.mp3");
+		this.load.audio("fightSong2", "./assets/audio/kim_lightyear_-_angel_eyes_chiptune_edit.mp3");
+		this.load.audio("fightSong3", "./assets/audio/level2song.wav");
+		this.load.audio("panasong", "./assets/audio/panamiguel.mp3");
+		this.load.audio("bossSong", "./assets/audio/Boss Battle.wav");
+		this.load.audio("bossAppear", "./assets/effects/bossapear.mp3");
+		this.load.audio("bossAttacksound", "./assets/effects/bossAttacksound.mp3");
+		this.load.audio("bossExplotion", "./assets/effects/explotionBoss.wav");
+		this.load.audio("bossShoot", "./assets/effects/bossShot.wav");
+		this.load.audio("bossRage", "./assets/effects/bossRage.mp3");
+		this.load.audio("bossDie", "./assets/effects/bossDie.mp3");
+		this.load.audio("bossSongSecondFase", "./assets/audio/secondfasebossmusic.wav");
+		this.load.audio("dungeonEnterSong", "./assets/audio/dungeonentermusic.mp3");
+		this.load.spritesheet('meiga', './assets/enemies/meiga.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('e_key', './assets/keyboards/E.png', { frameWidth: 19, frameHeight: 21 });
+		this.load.spritesheet('q_key', './assets/keyboards/Q.png', { frameWidth: 19, frameHeight: 21 });
 	}
 
 
