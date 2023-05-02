@@ -97,6 +97,8 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.audio("bossAttacksound", "./assets/effects/bossAttacksound.mp3");
 		this.load.audio("bossExplotion", "./assets/effects/explotionBoss.wav");
 		this.load.audio("bossShoot", "./assets/effects/bossShot.wav");
+		this.load.audio("bossRage", "./assets/effects/bossRage.mp3");
+		this.load.audio("bossDie", "./assets/effects/bossDie.mp3");
 		this.load.audio("bossSongSecondFase", "./assets/audio/secondfasebossmusic.wav");
 		this.load.audio("dungeonEnterSong", "./assets/audio/dungeonentermusic.mp3");
 		this.load.spritesheet('meiga', './assets/enemies/meiga.png', { frameWidth: 32, frameHeight: 32 });
@@ -212,15 +214,25 @@ export default class LevelScene extends Phaser.Scene {
 
 	update(t) {
 		
-		if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
-			this.enemyPool.spawn(0, 0)
+		if (this.debugMode && !this.levelFinished && Phaser.Input.Keyboard.JustUp(this.k)) {
+			if(this.enemySpawnTimer){
+				this.enemySpawnTimer.remove();
+			}
+			if(this.freqTimer){
+				this.freqTimer.remove();
+			}
+
+			this.levelFinished = true;
+			this.player.collectCoin(1000);
+			this.events.emit('earnCoin', this.player.getWallet());
+			this.completeLevel()
 		}
 
 		if(!LevelScene.progress[this.namescene]){
-			if (!this.wavesFinished && !this.debugMode) {
+			if (!this.wavesFinished) {
 				this.updateWaveCount()
 			}
-			else if (!this.levelFinished && this.enemyPool.fullPool() && !this.debugMode) {
+			else if (!this.levelFinished && this.enemyPool.fullPool()) {
 				this.levelFinished = true;
 				this.completeLevel();
 			}
@@ -332,32 +344,31 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 1000;
+		this.freqChangeTime = 20000;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
 		this.wavesFinished = false;
 
 		if (debug) {
-			this.v = this.input.keyboard.addKey('v');
+			this.k = this.input.keyboard.addKey('K');
 			this.debugMode = true;
-		} else {
-			this.enemySpawnTimer = this.time.addEvent({
-				delay: 400,
-				callback: this.spawnInBounds,
-				callbackScope: this,
-				loop: true
-			});
+		} 
+		
+		this.enemySpawnTimer = this.time.addEvent({
+			delay: 4000,
+			callback: this.spawnInBounds,
+			callbackScope: this,
+			loop: true
+		});
 
+		this.freqTimer = this.time.addEvent({
 
-			this.freqTimer = this.time.addEvent({
-
-				delay: this.freqChangeTime,
-				callback: this.changeFreqHandler,
-				callbackScope: this,
-				loop: true
-			});
-		}
+			delay: this.freqChangeTime,
+			callback: this.changeFreqHandler,
+			callbackScope: this,
+			loop: true
+		});
 	}
 
 	initLevelFightMode(){
@@ -365,7 +376,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.banda.play();
 		}
 		this.spawnMeiga = false;
-		this.initTimers(false);
+		this.initTimers(true);
 	}
 
 	initLevelFreeMode(){

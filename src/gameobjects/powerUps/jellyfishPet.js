@@ -5,16 +5,6 @@ export default class JellyfishPet extends Phaser.Physics.Arcade.Sprite {
 
         this.key = "jellyfish"
         this.speed = 20
-        this.path = new Phaser.Curves.Path();
-        this.path.add(new Phaser.Curves.Ellipse(this.x, this.y, 100));
-        this.jelly = this.scene.add.follower(this.path, 0, 0, 'jelly');
-
-        this.jelly.startFollow({
-            positionOnPath: true,
-            duration: 3000,
-            repeat: -1,
-            rotateToPath: true
-        });
 
         this.setScale(1.5)
         this.scene.add.existing(this);
@@ -46,12 +36,9 @@ export default class JellyfishPet extends Phaser.Physics.Arcade.Sprite {
 
     preUpdate(t, dt){
         super.preUpdate(t, dt)
-        //this.move()
     }
 
     move(){
-        this.jelly.x= this.x
-        this.jelly.y=this.y
     }
 
     hide(){
@@ -64,8 +51,6 @@ export default class JellyfishPet extends Phaser.Physics.Arcade.Sprite {
     }
 
     follow(x, y){
-        //this.path.moveTo(x, y);
-        //this.path.getPoint(this.t, this.follower.vec);
         this.x = x
         this.y = y
     }

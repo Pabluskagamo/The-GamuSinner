@@ -55,7 +55,9 @@ export default class Goblin extends EnemyObject {
             } 
 
             if (/attack/.test(this.anims.currentAnim.key)){
+                console.log(this.attacking)
                 this.attacking = false;
+                console.log(this.attacking)
             }
         })
 
@@ -64,7 +66,6 @@ export default class Goblin extends EnemyObject {
 
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
-        // console.log(this.hp, this.attacking, this.hp > 0 && !this.attacking)
 
         if (this.hp > 0 && !this.attacking && !this.player.isDead()) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
@@ -78,7 +79,8 @@ export default class Goblin extends EnemyObject {
     attack(enemie){
         if(!this.attacking && !this.isDead() && !this.player.isDead()){
             this.attacking = true;
-            this.play('side_attack_goblin');
+            this.flipX = this.body.velocity.x > 0;
+            this.play('attack_goblin');
             enemie.getHit(1)
         }
     }

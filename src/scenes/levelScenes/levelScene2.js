@@ -99,6 +99,9 @@ export default class LevelScene2 extends LevelScene {
 
 
 	initLevelFreeMode() {
+		if(!this.isMuted){
+			this.explorationSong.play();
+		}
 		this.addMeiga();
 		if(LevelScene2.firstTalkMeiga){
 			this.abrirPuertas()

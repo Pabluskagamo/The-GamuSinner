@@ -75,19 +75,7 @@ export default class LevelScene4 extends LevelScene {
 
     update(t) {
 
-        if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
-            this.enemyPool.spawn(0, 0)
-        }
-
-        if (!LevelScene.progress[this.namescene]) {
-            if (!this.wavesFinished && !this.debugMode) {
-                this.updateWaveCount()
-            }
-            else if (!this.levelFinished && this.enemyPool.fullPool() && !this.debugMode) {
-                this.levelFinished = true;
-                this.completeLevel();
-            }
-        }
+        super.update(t)
 
         if (this.faded) {
             if (this.fadeTime < 3500) {

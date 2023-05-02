@@ -2,9 +2,9 @@ import Phaser from 'phaser'
 import LevelScene from './levelScene';
 import LevelScene2 from './levelScenes/levelScene2';
 
-export default class GameOverScene extends Phaser.Scene {
+export default class CreditsScene extends Phaser.Scene {
 	constructor() {
-		super('game_over');
+		super('credits_scene');
 	}
 
 	init() {
@@ -17,70 +17,50 @@ export default class GameOverScene extends Phaser.Scene {
 		this.load.spritesheet('game_restart', './assets/ui/restart_sprite.png', { frameWidth: 480, frameHeight: 170 });
 		this.load.spritesheet('main_menu', './assets/ui/MainMenu_sprite.png', { frameWidth: 480, frameHeight: 170 });
 		this.load.audio("losse", "assets/audio/Effects/losse2.wav");
+		this.load.image('game_title', './img/titulo.png');
+		this.load.audio("creditsSong", "./assets/audio/credits.ogg");
 	}
 
 	create(data) {
 		this.isMuted = data.mute;
 		this.level = data.level;
-		if (!this.isMuted) {
-            this.sound.add("losse", {
-                volume: 0.4,
-            }).play();
-        }
 
-		this.anims.create({
-			key: 'hoverRestart',
-			frames: this.anims.generateFrameNumbers('game_restart', { start: 0, end: 2 }),
-			frameRate: 10,
-			repeat: 0
-		})
+		this.creditsSound = this.sound.add("creditsSong", {
+			volume: 0.3,
+			loop: true
+		});
+
+		this.creditsSound.play()
+		
+		this.add.image(0, 0, 'background2').setOrigin(0, 0).setScale(0.75);
+		// const title = this.add.image(this.sys.game.canvas.width / 2, 260, 'game_over').setScale(0.65);
+
+		this.input.keyboard.on('keydown', (event) => {
+			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
+				this.sound.removeByKey('explorationSong');
+				this.sound.removeByKey('fightSong');
+				this.sound.removeByKey('creditsSong');
+				this.scene.stop('UIScene');
+				this.scene.stop(this.level);
+				this.scene.start('level1');
+			}
+		});
+
 		this.anims.create({
 			key: 'hoverMenu',
 			frames: this.anims.generateFrameNumbers('main_menu', { start: 0, end: 2 }),
 			frameRate: 10,
 			repeat: 0
 		})
-		this.add.image(0, 0, 'background2').setOrigin(0, 0).setScale(0.75);
-		const title = this.add.image(this.sys.game.canvas.width / 2, 260, 'game_over').setScale(0.65);
 
-		const restart = this.add.sprite(this.sys.game.canvas.width / 2, 470, 'game_restart').setScale(0.35);
-		restart.setInteractive({ cursor: 'pointer' });
-		restart.on('pointerover', () => {
-			restart.play('hoverRestart');
-		});
+		const title = this.add.image(this.sys.game.canvas.width / 2, 125, 'game_title').setScale(0.5);
 
-		restart.on('pointerout', () => {
-			restart.playReverse('hoverRestart');
-		});
-
-		restart.on('pointerup', () => {
-			this.sound.removeByKey('explorationSong');
-			this.sound.removeByKey('fightSong');
-			this.sound.removeByKey('fightSong2');
-			this.sound.removeByKey('losse');
-			this.scene.stop('UIScene');
-			this.scene.stop(this.level);
-			this.scene.start('level1');
-			LevelScene.progress =  {
-				level1: false,
-				level2: true,
-				level3: false,
-				level4: false,
-				levelBoss: true
-			}
-			
-			LevelScene2.firstTalkMeiga = false
-		});
-
-		this.input.keyboard.on('keydown', (event) => {
-			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
-				this.sound.removeByKey('explorationSong');
-				this.sound.removeByKey('fightSong');
-				this.scene.stop('UIScene');
-				this.scene.stop(this.level);
-				this.scene.start('level1');
-			}
-		});
+		const thanksMsg = this.add.text(120, 200, '¡Muchas gracias por jugar a nuestro juego!').setFontSize(40).setColor("black").setFontStyle('bold')
+		const alex = this.add.text(300, 300, 'Alejandro Antuña Rodríguez').setFontSize(40).setColor("black").setFontStyle('bold')
+		const carlos = this.add.text(300, 350, 'Carlos Gómez López').setFontSize(40).setColor("black").setFontStyle('bold')
+		const javi = this.add.text(300, 400, 'Javier Gil Caballero').setFontSize(40).setColor("black").setFontStyle('bold')
+		const pablo = this.add.text(300, 450, 'Pablo Gamo González').setFontSize(40).setColor("black").setFontStyle('bold')
+		
 
 		const menu = this.add.sprite(this.sys.game.canvas.width / 2, 525, 'main_menu').setScale(0.35);
 		menu.setInteractive({ cursor: 'pointer' });

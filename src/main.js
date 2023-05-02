@@ -13,6 +13,7 @@ import SettingScene from './scenes/settingsScene'
 import StatsScene from './scenes/statsScene'
 import historyScene from './scenes/historyScene'
 import LevelSceneBoss from './scenes/levelScenes/levelSceneBoss'
+import CreditsScene from './scenes/CreditsScene'
 const config = {
 	type: Phaser.AUTO,
 	parent: 'app',
@@ -44,7 +45,7 @@ const config = {
 		},
 	},
 
-	scene: [/*MainScene, historyScene, InstructionScene, selecScene,*/LevelScene1, LevelScene2, LevelScene3, LevelScene4, LevelSceneBoss ,Hud, StatsScene, SettingScene, GameOverScene],
+	scene: [MainScene, historyScene, InstructionScene, selecScene, LevelScene1, LevelScene2, LevelScene3, LevelScene4, LevelSceneBoss ,Hud, StatsScene, SettingScene, GameOverScene, CreditsScene],
 	// scene: [/*MainScene, historyScene, InstructionScene, selecScene,*/LevelSceneBoss, LevelScene1, LevelScene2, LevelScene3, LevelScene4, Hud, StatsScene, SettingScene, GameOverScene],
 }
 

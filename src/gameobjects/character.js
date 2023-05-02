@@ -29,8 +29,6 @@ export default class Character extends MovableObject {
             this.pet = null
             this.passives = []
             //this.passives = [new BouncingShot(this.scene)]
-            this.hp = 4;
-            this.maxHp = 4;
             this.numDirections = 8;
             this.bulletMultiplier = 3;
             this.bulletSpread = 0.25;
