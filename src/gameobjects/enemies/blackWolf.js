@@ -2,8 +2,8 @@ import EnemyObject from "./enemyObject";
 
 export default class BlackWolf extends EnemyObject {
 
-    constructor(scene, x, y, speed, player, enemypool) {
-        super(scene, x, y, 'blackWolf', speed, 20, enemypool, 60, 20);
+    constructor(scene, x, y, speed, player, enemypool, hp) {
+        super(scene, x, y, 'blackWolf', speed, 20, enemypool, hp, 20);
         this.scene.add.existing(this);
         
         //this.setScale(1.5);

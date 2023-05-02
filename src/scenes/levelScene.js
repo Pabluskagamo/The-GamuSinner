@@ -271,7 +271,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.coinPool = new CoinPool(this, 20);
 		this.foodPool = new FoodPool(this, 20);
 
-		this.enemyPool.fillPool(25, this.player);
+		this.enemyPool.fillPool(25, this.player, this.namescene);
 
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
 			obj1.hit(obj2)

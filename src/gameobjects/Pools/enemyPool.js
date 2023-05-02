@@ -5,6 +5,9 @@ import Cyclops from "../enemies/cyclops"
 
 
 export default class EnemyPool {
+
+	
+
 	constructor (scene, max) {
 		this.scene = scene;
 		this._group = scene.add.group()	
@@ -15,6 +18,33 @@ export default class EnemyPool {
 		this.max = max
 		//this.scene = scene;
 		//this.reuse = reuse;
+
+		this.hpPerLevel ={
+			level1: {
+				goblin: 20,
+				blackWolf: 60,
+				cyclops: 100,
+				spectre: 70
+			},
+			level2: {
+				goblin: 20,
+				blackWolf: 60,
+				cyclops: 100,
+				spectre: 70
+			},
+			level3: {
+				goblin: 30,
+				blackWolf: 70,
+				cyclops: 110,
+				spectre: 80
+			},
+			level4: {
+				goblin: 40,
+				blackWolf: 80,
+				cyclops: 120,
+				spectre: 90
+			}
+		}
 	}
 	
 	/**
@@ -149,7 +179,7 @@ export default class EnemyPool {
         return this._group.countActive() === 0;
     }
 
-	fillPool(num, player){
+	fillPool(num, player, level){
         let enemies = []
 		let gobs = []
 		let wolfs = []
@@ -158,39 +188,26 @@ export default class EnemyPool {
 
 		let randNum = 0
 
-        // for (let i = 0; i < num; i++) {
-		// 	randNum = Phaser.Math.RND.between(1, 10);
-
-		// 	if(randNum < 8){
-		// 		enemies.push(new Goblin(this.scene, -50, -50, 80, player, this))
-		// 	}else if(randNum >= 7 && randNum < 10){
-		// 		enemies.push(new BlackWolf(this.scene, -50, -50, 60, player, this));
-		// 	}else{
-		// 		enemies.push(new Cyclops(this.scene, -50, -50, 45, player, this));
-		// 	}
-
-		// }
-
 		for (let i = 0; i < 50; i++) {
-			const gob = new Goblin(this.scene, -50, -50, 80, player, this)
+			const gob = new Goblin(this.scene, -50, -50, 80, player, this, this.hpPerLevel[level].goblin)
 			enemies.push(gob);
 			gobs.push(gob);
 		}
 
 		for (let i = 0; i < 25; i++) {
-			const wolf = new BlackWolf(this.scene, -50, -50, 60, player, this)
+			const wolf = new BlackWolf(this.scene, -50, -50, 60, player, this, this.hpPerLevel[level].blackWolf)
 			enemies.push(wolf)
 			wolfs.push(wolf)
 		}
 
 		for (let i = 0; i < 15; i++) {
-			const spectre = new Spectre(this.scene, -50, -50, 100, player, this)
+			const spectre = new Spectre(this.scene, -50, -50, 100, player, this, this.hpPerLevel[level].spectre)
 			enemies.push(spectre)
 			spectres.push(spectre)
 		}
 
 		for (let i = 0; i < 10; i++) {
-			const cycl = new Cyclops(this.scene, -50, -50, 45, player, this)
+			const cycl = new Cyclops(this.scene, -50, -50, 45, player, this, this.hpPerLevel[level].cyclops)
 			enemies.push(cycl)
 			cyclops.push(cycl)
 		}
