@@ -6,8 +6,6 @@ import EnemyPool from "../../gameobjects/Pools/enemyPool";
 import CoinPool from "../../gameobjects/Pools/coinPool";
 import FoodPool from "../../gameobjects/Pools/foodPool";
 import DemonBoss from "../../gameobjects/enemies/boss/demonBoss";
-import Slime from "../../gameobjects/enemies/slime";
-import JellyfishPet from "../../gameobjects/powerUps/jellyfishPet";
 import BossPool from "../../gameobjects/Pools/bossPool";
 
 export default class LevelSceneBoss extends LevelScene {
@@ -21,24 +19,11 @@ export default class LevelSceneBoss extends LevelScene {
         super.create({...data, bossLevel: true});
 
 		this.bossPool.fillPool(500, 30, 40, this.player)
+		this.enemyPool.fillPool(25, this.player, this.namescene);
         this.demon = new DemonBoss(this, this.game.canvas.width/2.07, this.game.canvas.height/3.1, 60, this.player, this.bossPool, this.enemyPool)
 		this.demon.body.pushable = false;
 		this.player.body.pushable = false;
 		this.demon.setDepth(3);
-		
-		/* 
-        this.jelly = new JellyfishPet(this, this.player.x,this.player.y)
-		this.player.setPet(this.jelly) */
-
-		// if(this.scene.isActive('UIScene')){
-		// 	this.scene.stop('UIScene');			
-		// }
-
-		// console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
-		// this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene});
-
-		/* this.physics.add.collider(this.demon, this.foregroundLayer);
-		this.physics.add.collider(this.demon, this.puertaSolida); */
 
 		this.physics.add.collider(this.bulletPool._group, this.demon, (obj1, obj2) => {
             obj1.hit(obj2)
@@ -49,6 +34,13 @@ export default class LevelSceneBoss extends LevelScene {
 				this.events.emit('addScore', obj2.getHp());
 			}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash()
 		);
+
+		this.physics.add.overlap(this.demon, this.player, (obj1, obj2) => {
+			obj2.getHit(1)
+			this.events.emit('addScore', obj2.getHp());
+		}, (obj1, obj2) => obj1.getonSpecialAbility()
+		);
+
 
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
 			obj1.hit(obj2)
@@ -137,6 +129,14 @@ export default class LevelSceneBoss extends LevelScene {
 			obj1.reboundOrRelease()
 		});
 
+		this.physics.add.collider(this.bossPool._bossBulletGroup, this.foregroundLayer, (obj1, obj2) => {
+			obj1.release()
+		});
+
+		this.physics.add.collider(this.bossPool._bossBulletGroup, this.estatuas, (obj1, obj2) => {
+			obj1.release()
+		});
+
 
 		this.player.setDepth(2)
 		this.bordeEstatuas.setDepth(2)
@@ -159,8 +159,6 @@ export default class LevelSceneBoss extends LevelScene {
 		this.enemyPool = new EnemyPool(this, 15);
 		this.coinPool = new CoinPool(this, 20);
 		this.foodPool = new FoodPool(this, 20);
-
-		this.enemyPool.fillPool(25, this.player, this.namescene);
 	}
 
 	// initMap() {
