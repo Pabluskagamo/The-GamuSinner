@@ -43,6 +43,12 @@ export default class EnemyPool {
 				blackWolf: 80,
 				cyclops: 120,
 				spectre: 90
+			},
+			levelBoss: {
+				goblin: 20,
+				blackWolf: 60,
+				cyclops: 100,
+				spectre: 70
 			}
 		}
 	}

@@ -160,7 +160,7 @@ export default class LevelSceneBoss extends LevelScene {
 		this.coinPool = new CoinPool(this, 20);
 		this.foodPool = new FoodPool(this, 20);
 
-		this.enemyPool.fillPool(25, this.player);
+		this.enemyPool.fillPool(25, this.player, this.namescene);
 	}
 
 	// initMap() {
