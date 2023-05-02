@@ -19,12 +19,13 @@ export default class LevelSceneBoss extends LevelScene {
 	create(data){
 		this.isMuted = data.mute;
         super.create({...data, bossLevel: true});
+
 		this.bossPool.fillPool(500, 30, 40, this.player)
         this.demon = new DemonBoss(this, 0, 0, 60, this.player, this.bossPool, this.enemyPool)
 		this.demon.body.pushable = false;
 		this.player.body.pushable = false;
-		//this.bossPool.spawnEnemy(0,0)
-		//this.bossPool.spawnExplosion(this.player.x,this.player.y)
+		this.demon.setDepth(3);
+		
 		/* 
         this.jelly = new JellyfishPet(this, this.player.x,this.player.y)
 		this.player.setPet(this.jelly) */
@@ -98,6 +99,50 @@ export default class LevelSceneBoss extends LevelScene {
 
     }
 
+	initMap() {
+		const mapa = this.map = this.make.tilemap({
+			key: 'salaBoss'
+		});
+
+		//Tile Images
+		const tilesSuelo = mapa.addTilesetImage('suelo', 'tilesBossSuelo');
+		const tilesCastleProps = mapa.addTilesetImage('Runas', 'tilesCastleProps')
+		const tilesParedes = mapa.addTilesetImage('paredes', 'tilesBossPared')
+		const tilesBricks = mapa.addTilesetImage('ladrillos', 'tilesBossBricks')
+		const tilesPentagram = mapa.addTilesetImage('pentagram', 'tilesBossPentagram')
+		const tilesBloodFoutain = mapa.addTilesetImage('bloodfountain', 'tilesBossBloodFountain')
+
+
+		this.groundLayer = this.map.createLayer('Suelo', [tilesSuelo, tilesParedes]);
+		this.foregroundLayer = this.map.createLayer('Bordes', [tilesParedes, tilesBricks]);
+		this.decoracion = this.map.createLayer('Decoracion', [tilesParedes, tilesBloodFoutain, tilesCastleProps]);
+		this.estatuas = this.map.createLayer('Estatuas', tilesParedes);
+		this.bordeEstatuas = this.map.createLayer('BordeEstatuas', tilesParedes);
+		this.pentagram = this.map.createLayer('Pentagrams', tilesPentagram);
+
+		//Colisiones
+		this.foregroundLayer.setCollisionBetween(0, 1200);
+		this.estatuas.setCollisionBetween(0, 1200);
+
+		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
+		this.physics.add.collider(this.player, this.foregroundLayer);
+
+		this.physics.add.collider(this.player, this.estatuas);
+
+		this.physics.add.collider(this.bulletPool._group, this.foregroundLayer, (obj1, obj2) => {
+			obj1.reboundOrRelease()
+		});
+
+		this.physics.add.collider(this.bulletPool._group, this.estatuas, (obj1, obj2) => {
+			obj1.reboundOrRelease()
+		});
+
+
+		this.player.setDepth(2)
+		this.bordeEstatuas.setDepth(2)
+	
+	}
+
     initPlayerAndPools(data) {
 		console.log("LLEGO AQUI")
 		
@@ -118,22 +163,29 @@ export default class LevelSceneBoss extends LevelScene {
 		this.enemyPool.fillPool(25, this.player);
 	}
 
-	initMap() {
-		super.initMap()
-		this.physics.add.collider(this.bossPool._bossEnemiesGroup, this.foregroundLayer);
-		this.physics.add.collider(this.bossPool._bossEnemiesGroup, this.puertaSolida);
-		this.physics.add.collider(this.bossPool._bossBulletGroup, this.foregroundLayer, (obj1, obj2) => {
-			obj1.release()
-		});
+	// initMap() {
+	// 	super.initMap()
+	// 	this.physics.add.collider(this.bossPool._bossEnemiesGroup, this.foregroundLayer);
+	// 	this.physics.add.collider(this.bossPool._bossEnemiesGroup, this.puertaSolida);
+	// 	this.physics.add.collider(this.bossPool._bossBulletGroup, this.foregroundLayer, (obj1, obj2) => {
+	// 		obj1.release()
+	// 	});
 
-		this.physics.add.collider(this.bossPool._bossBulletGroup, this.puertaSolida, (obj1, obj2) => {
-			obj1.release()
-		});
-	}
+	// 	this.physics.add.collider(this.bossPool._bossBulletGroup, this.puertaSolida, (obj1, obj2) => {
+	// 		obj1.release()
+	// 	});
+	// }
 
 	initTimers(debug) {
 		this.v = this.input.keyboard.addKey('v');
 		this.debugMode = true;
+	}
+
+	setMusic(){
+		this.banda = this.sound.add("bossSong", {
+			volume: 0.1,
+			loop: true
+		});
 	}
 
 }

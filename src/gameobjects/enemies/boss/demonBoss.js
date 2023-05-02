@@ -181,6 +181,14 @@ export default class DemonBoss extends EnemyObject {
         })
 
         this.scene.anims.create({
+            key: 'invokeEnemies_demonboss',
+            frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 288, end: 293 }),
+            frameRate: 15,
+            // duration: 5000,
+            repeat: 15,
+        })
+
+        this.scene.anims.create({
             key: 'transformation_demonboss',
             frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 96, end: 127 }),
             frameRate: 15,
@@ -248,6 +256,11 @@ export default class DemonBoss extends EnemyObject {
                 this.addAttackTimer(3000)
             }
             if (this.anims.currentAnim.key === 'spell_demonboss') {
+                this.attacking = false;
+                this.addAttackTimer(5000)
+            }
+
+            if (this.anims.currentAnim.key === 'invokeEnemies_demonboss') {
                 this.attacking = false;
                 this.addAttackTimer(5000)
             }
@@ -354,13 +367,16 @@ export default class DemonBoss extends EnemyObject {
 
     hitEnemy(dmg) {
         if (!this.onTransformation) {
-            console.log(this.key, this.hp, '/', this.initialHp)
+            console.log(this.key, this.hp, '/', this.startHp)
 
             this.isHitting = true
+
+            //REVISAR
             if (!this.attacking) {
-                this.scene.events.emit("bossHit" , dmg);
             }
+
             this.hp -= dmg;
+            this.scene.events.emit("bossHit" , dmg);
 
             this.hpForDrop += dmg
             if (this.hpForDrop >= (this.startHp*0.2) && this.transformation) {
@@ -387,6 +403,7 @@ export default class DemonBoss extends EnemyObject {
     }
 
     transform(){
+        this.scene.events.emit("bossStart", this.startHp)
         this.key = 'demonboss'
         this.hpForDrop = 0
         this.hp = this.startHp;
@@ -463,6 +480,17 @@ export default class DemonBoss extends EnemyObject {
                     tempBullet.setDireccion(bulletDir)
                 }
             }
+        }
+    }
+
+
+    invokeEnemies(){
+        this.play('invokeEnemies_demonboss')
+        for(let i = 0; i < 10; i++) {
+            const randX = Phaser.Math.RND.between(-100, 100);
+            const randY = Phaser.Math.RND.between(-100, 100);
+
+            this.pool.spawnEnemy(this.x + randX, this.y + randY)
         }
     }
 

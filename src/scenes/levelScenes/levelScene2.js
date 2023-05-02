@@ -140,7 +140,6 @@ export default class LevelScene2 extends LevelScene {
 
 		this.addMeiga();
 		this.spawnMeiga = true;
-		this.player.collectCoin(1000);
 	}
 
 	abrirPuertas() {

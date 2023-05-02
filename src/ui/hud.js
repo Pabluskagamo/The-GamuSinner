@@ -104,14 +104,21 @@ export default class Hud extends Phaser.Scene {
 
         if(this.isBoss){
             //Boss health bar.
-            this.healthBar = new HealthBar(this, 370, 110, 1000);
-            this.countdown.setText("Demonboss")
+            this.healthBar = null
+            this.countdown.setText("Demonboss").setVisible(false)
             this.countdown.x-=20;
-            // this.healthBar.decrease(300)
 
             levelGame.events.on('bossHit', function (hp) {
-                this.healthBar.decrease(hp)
+                if(this.healthBar != null){
+                    this.healthBar.decrease(hp)
+                }
             }, this);
+
+            levelGame.events.on('bossStart', function (hp) {
+                this.healthBar = new HealthBar(this, 370, 110, hp);
+                this.countdown.setVisible(true)
+            }, this);
+
         }
 
 
