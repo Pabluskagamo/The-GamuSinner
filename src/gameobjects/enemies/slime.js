@@ -11,11 +11,13 @@ export default class Slime extends EnemyObject {
 
         this.player = player;
         //this.attacking = false;
-        
-        this.bodyOffsetWidth = this.body.width;
-        this.bodyOffsetHeight = this.body.height;
-        this.bodyWidth = this.body.width;
-        this.bodyHeight = this.body.height;
+        /* this.originalWidth = this.body.width
+        this.originalHeight = this.body.height
+        this.body.setSize(this.originalWidth/2.8, this.originalHeight/2.8, true); */
+        this.bodyOffsetWidth = this.originalWidth /4.27;
+        this.bodyOffsetHeight = this.originalHeight / 2.35;
+        this.bodyWidth = this.originalWidth / 12;
+        this.bodyHeight = this.originalHeight / 6.5;
 
         this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
         this.body.width = this.bodyWidth;

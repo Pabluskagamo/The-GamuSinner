@@ -8,7 +8,6 @@ export default class ExplosionBoss extends Phaser.Physics.Arcade.Sprite {
         this.setScale(4)
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this)
-
         this.createAnimations()
     }
 
@@ -47,6 +46,7 @@ export default class ExplosionBoss extends Phaser.Physics.Arcade.Sprite {
         this.y = y
         this.body.enable = false
         this.overlap = false
+        
         //SONIDO DE SPWAN?
         this.play('spawn_explosion')
     }
