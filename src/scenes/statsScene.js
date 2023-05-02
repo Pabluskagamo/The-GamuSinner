@@ -23,7 +23,7 @@ export default class StatsScene extends Phaser.Scene {
         this.load.spritesheet('strongbar', './assets/statusbars/StrongBar.png', { frameWidth: 256, frameHeight: 64 });
         this.load.spritesheet('speedbar', './assets/statusbars/SpeedBar.png', { frameWidth: 256, frameHeight: 64 });
         this.load.spritesheet('cadencebar', './assets/statusbars/CadenceBar.png', { frameWidth: 256, frameHeight: 64 });
-        this.load.image('buttonStats', './assets/ui/Statsbutton.png');
+        this.load.image('buttonStats', './assets/ui/StatsButton.png');
         this.load.image('closeButton', './assets/ui/CloseButton.png');
         this.load.spritesheet('coin', './assets/items/coin.png', { frameWidth: 16, frameHeight: 16 })
         this.load.image('dialog2', './assets/ui/dialogBox 2.png');

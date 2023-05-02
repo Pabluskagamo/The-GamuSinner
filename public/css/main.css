@@ -4,12 +4,12 @@
 
 @font-face {
     font-family: MedievalSharp-Regular;
-    src: url('/assets/fonts/MedievalSharp-Regular.ttf') format('truetype');
+    src: url('./assets/fonts/MedievalSharp-Regular.ttf') format('truetype');
 }
 
 html,
 body {
-    background-image: url(/img/fondo_pixelart2.png);
+    background-image: url(./img/fondo_pixelart2.png);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
