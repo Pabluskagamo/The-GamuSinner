@@ -99,6 +99,7 @@ export default class EnemyObject extends MovableObject {
         this.speed -= slow;
         if (this.speed <= 0) {
             this.speed = 0
+            this.attacking = true
         }
     }
     
