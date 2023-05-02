@@ -222,12 +222,15 @@ export default class StatsScene extends Phaser.Scene {
     }
 
     update(t, dt) {
-        // if (this.e.isDown) {
-        //     console.log("ESTO ES LA ESCENA AL E", this.level)
-        //     this.scene.resume(this.level);
-        //     this.scene.resume('UIScene');
-        //     this.scene.sleep('stats');
-        // }
+
+        if (this.e.isDown) {
+            this.scene.resume(this.level);
+            this.scene.resume('UIScene');
+            this.scene.sleep();
+            this.dialogBox.clearText();
+            this.levelGame.abrirpuertasFirstTalk()
+        }
+
         this.actualcoins.setText(`X ${this.wallet}`);
         let i = 0;
 
