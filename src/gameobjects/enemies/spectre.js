@@ -2,8 +2,8 @@ import EnemyObject from "./enemyObject";
 
 export default class Spectre extends EnemyObject{
 
-    constructor(scene, x, y, speed, player, enemypool){
-        super(scene, x, y, 'spectre', speed, 20, enemypool, 70, 15)
+    constructor(scene, x, y, speed, player, enemypool, hp){
+        super(scene, x, y, 'spectre', speed, 20, enemypool, hp, 15)
         this.scene.add.existing(this)
         this.setScale(1.5)
         this.scene.physics.add.existing(this)

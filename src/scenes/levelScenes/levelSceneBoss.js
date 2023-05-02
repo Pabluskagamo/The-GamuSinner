@@ -115,14 +115,14 @@ export default class LevelSceneBoss extends LevelScene {
 
 		this.groundLayer = this.map.createLayer('Suelo', [tilesSuelo, tilesParedes]);
 		this.foregroundLayer = this.map.createLayer('Bordes', [tilesParedes, tilesBricks]);
-		this.decoracion = this.map.createLayer('Decoracion', [tilesParedes, tilesBloodFoutain, tilesCastleProps]);
+		this.decoracion = this.map.createLayer('Decoracion', [tilesParedes, tilesBloodFoutain, tilesCastleProps, tilesBricks]);
 		this.estatuas = this.map.createLayer('Estatuas', tilesParedes);
 		this.bordeEstatuas = this.map.createLayer('BordeEstatuas', tilesParedes);
 		this.pentagram = this.map.createLayer('Pentagrams', tilesPentagram);
 
 		//Colisiones
-		this.foregroundLayer.setCollisionBetween(0, 1200);
-		this.estatuas.setCollisionBetween(0, 1200);
+		this.foregroundLayer.setCollisionBetween(0, 999);
+		this.estatuas.setCollisionBetween(0, 999);
 
 		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
 		this.physics.add.collider(this.player, this.foregroundLayer);
@@ -160,7 +160,7 @@ export default class LevelSceneBoss extends LevelScene {
 		this.coinPool = new CoinPool(this, 20);
 		this.foodPool = new FoodPool(this, 20);
 
-		this.enemyPool.fillPool(25, this.player);
+		this.enemyPool.fillPool(25, this.player, this.namescene);
 	}
 
 	// initMap() {

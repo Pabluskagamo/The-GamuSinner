@@ -396,6 +396,7 @@ export default class DemonBoss extends EnemyObject {
         if (!this.transformation) {
             this.transform()
         } else {
+            this.attackTimer.remove()
             this.hp = 0;
             this.drop()
             this.play('died_' + this.key, true);
@@ -496,7 +497,7 @@ export default class DemonBoss extends EnemyObject {
 
 
     addAttackTimer(t){
-        this.scene.time.addEvent({
+        this.attackTimer = this.scene.time.addEvent({
             delay: t,
             callback: this.runSpecialAttack,
             callbackScope: this,
