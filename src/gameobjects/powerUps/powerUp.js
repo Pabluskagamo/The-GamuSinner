@@ -73,7 +73,6 @@ export default class PowerUp extends Item{
     }
 
     disable(reloaded){
-        console.log("POWERUP DISABLED")
         this.enabled = false
         this.scene.powerUpPool.release(this)
 

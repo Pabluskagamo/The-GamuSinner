@@ -7,7 +7,6 @@ export default class LevelScene1 extends LevelScene {
 	}
 
 	completeLevel() {
-		console.log("NIVEL COMPLETADO")
 
 		LevelScene.progress[this.namescene] = true
 

@@ -29,9 +29,9 @@ export default class PowerUpPool {
         //usa false para el active por defecto ver si hacemos esto o hacemos el shuffle cada x tiempo
         if(this.hasPowerUps()){
             let entity = this._group.getLast()
-            console.log("selecciono la 0 ")
+            
             for(let i = 0; i < Phaser.Math.Between(0,3); i++){
-                console.log("selecciono la " + (i+1))
+                
                 this.release(entity)
                 entity = this._group.getLast();
             }

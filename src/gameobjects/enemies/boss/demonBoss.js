@@ -283,7 +283,6 @@ export default class DemonBoss extends EnemyObject {
                 this.addAttackTimer(5000)
                 this.attacking = false;
                 this.invulnerable = false;
-                console.log("he dejado de atacar despues del rage"+this.attacking)
                 this.scene.setSecondFase();
             }
             

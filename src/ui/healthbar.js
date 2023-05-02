@@ -27,8 +27,6 @@ export default class HealthBar {
 
         this.draw();
 
-        console.log("[HUD] Vida al", this.p/this.value)
-
         return (this.value === 0);
     }
 

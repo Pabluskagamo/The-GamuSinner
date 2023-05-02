@@ -33,10 +33,8 @@ export default class ExplosionBoss extends Phaser.Physics.Arcade.Sprite {
 
         this.on('animationcomplete',() => {
             if (this.anims.currentAnim.key === 'spawn_explosion') {
-                console.log("va a explotaaaaaaaaaaaaaaaaaar")
                 this.explode()
             }else {
-                console.log("ha explotaaaoooooooooo", this.anims.currentAnim.key)
                 this.scene.bossPool.releaseExplosion(this)
             }
         })

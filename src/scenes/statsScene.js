@@ -10,7 +10,6 @@ export default class StatsScene extends Phaser.Scene {
 
     init(data) {
         this.cameras.main.fadeIn(500);
-        console.log("INI SETTINGS MEIGA",data)
         this.player = data.playerData;
         this.wallet = this.player.coins;
         this.dmg = data.dmg;
@@ -47,7 +46,6 @@ export default class StatsScene extends Phaser.Scene {
         });
 
         closeButton.on('pointerdown', () => {
-            // console.log('CUANDO LE DOY AL BOTON CERRAR', this.level)
             this.scene.resume(this.level);
             this.scene.resume('UIScene');
             this.scene.sleep();
@@ -116,7 +114,6 @@ export default class StatsScene extends Phaser.Scene {
         this.lifeButton.on('pointerdown', () => {
             this.aumentarBar(this.lifeButton, 0, numMonedasLife, lifebar);
             this.events.emit('incrementLife', this.player.hp + 1);
-            console.log('INCREMENTAR')
         });
 
         // STRONGBAR

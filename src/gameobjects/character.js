@@ -469,19 +469,16 @@ export default class Character extends MovableObject {
     }
 
     setBulletDmg(dmg){
-        console.log("BULLETDMG", this.bulletDmg, dmg)
         this.bulletDmg = dmg;
     }
 
     collectPowerUp(powerUp) {
         if(this.inventory == null){
-            console.log("inventarioooooooooo")
             this.inventory = powerUp
             this.scene.events.emit('savePowerUp', powerUp.getKey())
             powerUp.collect()
         }
         else if (!powerUp.getCollected()) {
-            console.log(" noo inventarioooooooooo")
             this.checkPowerUpAlreadyActive(powerUp)
             powerUp.collect()
             powerUp.initTimer()
@@ -514,7 +511,7 @@ export default class Character extends MovableObject {
         }
 
         if (this.petPowerUp && !this.petPowerUp.isEnabled()) {
-            console.log("ADIOS PET sadadaasdassssssssssssssssssssssssssssssssssssda")
+
             this.petPowerUp.hidePet();
             this.petPowerUp = null;
             this.pet = null;
@@ -531,10 +528,7 @@ export default class Character extends MovableObject {
     
     checkPowerUpAlreadyActive(powerUp){
 
-        console.log("YA HAY PET")
-
         if(powerUp.isPet() && this.pet != null){
-            console.log("YA HAY PET")
             this.petPowerUp.hidePet()
             this.petPowerUp.disable(true);
         }else if(powerUp.getKey() === this.currentPowerUp.getKey()){
@@ -594,7 +588,7 @@ export default class Character extends MovableObject {
             ease: 'Sine.easeInOut',
             yoyo: true,
             onComplete: ()=>{
-                console.log("Tween fin");
+                
             }
         })
 

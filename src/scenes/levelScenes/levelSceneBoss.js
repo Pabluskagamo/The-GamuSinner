@@ -145,7 +145,6 @@ export default class LevelSceneBoss extends LevelScene {
 	}
 
 	initPlayerAndPools(data) {
-		console.log("LLEGO AQUI")
 
 		if (data.hasOwnProperty('gate')) {
 			this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(), data.player.getCadence());

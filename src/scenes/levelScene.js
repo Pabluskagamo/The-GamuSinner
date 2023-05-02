@@ -321,7 +321,6 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	spawnInBounds() {
-		console.log('SPAWN ENEMY')
 
 		const xPos = [0, this.sys.game.canvas.width]
 		const yPos = [0, this.sys.game.canvas.height]
@@ -402,7 +401,6 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	completeLevel(){
-		console.log("NIVEL COMPLETADO")
 
 		this.sound.removeByKey('fightSong');
 		
@@ -422,7 +420,6 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	incrementPlayerLife(hp){
-		console.log("LIFEEEEEE")
 		this.player.incrementHp();
 		this.player.setHp(hp);
 	}

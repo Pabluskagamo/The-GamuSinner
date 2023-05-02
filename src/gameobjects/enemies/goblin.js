@@ -55,9 +55,7 @@ export default class Goblin extends EnemyObject {
             } 
 
             if (/attack/.test(this.anims.currentAnim.key)){
-                console.log(this.attacking)
                 this.attacking = false;
-                console.log(this.attacking)
             }
         })
 
