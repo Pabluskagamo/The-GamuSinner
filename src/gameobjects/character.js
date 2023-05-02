@@ -46,11 +46,13 @@ export default class Character extends MovableObject {
 
             this.scene.physics.add.existing(this);
             this.setCollideWorldBounds();
-
-            this.bodyOffsetWidth = this.body.width / 4.6;
-            this.bodyOffsetHeight = this.body.height / 5;
-            this.bodyWidth = this.body.width / 4;
-            this.bodyHeight = this.body.height / 1.5;
+            /* this.originalWidth = this.body.width
+            this.originalHeight = this.body.height
+            this.body.setSize(this.originalWidth/6.3, this.originalHeight/2.5, true); */
+            this.bodyOffsetWidth = this.body.width / 4.2;
+            this.bodyOffsetHeight = this.body.height / 4.8;
+            this.bodyWidth = this.body.width / 5.8;
+            this.bodyHeight = this.body.height / 1.45;
 
             this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
             this.body.width = this.bodyWidth;
@@ -105,6 +107,9 @@ export default class Character extends MovableObject {
                 if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)) {
                 }
 
+                if (this.anims.currentAnim.key === 'mainChar_lado') {
+                    this.play('mainChar_static', true)
+                }
                 if (this.anims.currentAnim.key === 'mainChar_die') {
                     this.scene.gameOver();
                 }

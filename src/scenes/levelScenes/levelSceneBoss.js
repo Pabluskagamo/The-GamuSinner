@@ -21,11 +21,11 @@ export default class LevelSceneBoss extends LevelScene {
         super.create({...data, bossLevel: true});
 
 		this.bossPool.fillPool(500, 30, 40, this.player)
-
-        this.demon = new DemonBoss(this, 0, 0, 60, this.player, this.bossPool)
+        this.demon = new DemonBoss(this, 0, 0, 60, this.player, this.bossPool, this.enemyPool)
+		this.demon.body.pushable = false;
+		this.player.body.pushable = false;
 		this.demon.setDepth(3);
-		// this.bossPool.spawnEnemy(0,0)
-		//this.bossPool.spawnExplosion(this.player.x,this.player.y)
+		
 		/* 
         this.jelly = new JellyfishPet(this, this.player.x,this.player.y)
 		this.player.setPet(this.jelly) */
@@ -44,7 +44,7 @@ export default class LevelSceneBoss extends LevelScene {
             obj1.hit(obj2)
         }, (obj1, obj2) => !obj2.isDead());
 
-		this.physics.add.collider(this.demon, this.player, (obj1, obj2) => {
+		this.physics.add.overlap(this.demon, this.player, (obj1, obj2) => {
 				obj1.attack(obj2);
 				this.events.emit('addScore', obj2.getHp());
 			}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash()

@@ -3,13 +3,13 @@ import EnemyObject from "../enemyObject";
 
 export default class DemonBoss extends EnemyObject {
 
-    constructor(scene, x, y, speed, player, bossPool) {
+    constructor(scene, x, y, speed, player, bossPool, enemyPool) {
         super(scene, x, y, 'demonboss', speed, 20, bossPool, 100, 20);
         this.scene.add.existing(this);
         this.key = 'slime'
         
         this.setScale(2);
-
+        this.enemyPool = enemyPool;
         this.player = player;
         this.attacking = false;
         this.transformation = false
@@ -17,6 +17,7 @@ export default class DemonBoss extends EnemyObject {
         this.rageMode = false
         this.following = true
         //this.body.immovable = true;
+        
 
         this.specialAttacks = [this.jumpSmash]
 
@@ -26,12 +27,14 @@ export default class DemonBoss extends EnemyObject {
         this.originalHeight = this.body.height
         this.hitBoxSlime()
         
+        this.hpForDrop = 0;
         this.dmgAcum = 0;
-        this.startHp = 1500
+        this.startHp = 2000
         this.nExplotions = 4
         this.numDirections = 4
         this.bulletMultiplier = 3
         this.bulletSpread = 0.6
+        this.nSpawnEnmies = 3
 
         this.createAnimations();
     }
@@ -51,6 +54,47 @@ export default class DemonBoss extends EnemyObject {
         this.bodyOffsetWidth = this.originalWidth /5;
         this.bodyOffsetHeight = this.originalHeight / 4;
         this.bodyWidth = this.originalWidth / 5.3;
+        this.bodyHeight = this.originalHeight / 2;
+
+        this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
+        this.body.width = this.bodyWidth;
+        this.body.height = this.bodyHeight;
+    }
+   /*  this.bodyOffsetWidth = this.originalWidth /4;
+    this.bodyOffsetHeight = this.originalHeight / 4;
+    this.bodyWidth = this.originalWidth / 4;
+    this.bodyHeight = this.originalHeight / 2;
+
+    this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
+    this.body.width = this.bodyWidth;
+    this.body.height = this.bodyHeight; */
+
+    hitBoxBlastLeft(){
+        this.bodyOffsetWidth = this.originalWidth /26;
+        this.bodyOffsetHeight = this.originalHeight / 12;
+        this.bodyWidth = this.originalWidth /1.9;
+        this.bodyHeight = this.originalHeight / 1.2;
+
+        this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
+        this.body.width = this.bodyWidth;
+        this.body.height = this.bodyHeight;
+    }
+
+    hitBoxBlastRight(){
+        this.bodyOffsetWidth = this.originalWidth /5;
+        this.bodyOffsetHeight = this.originalHeight / 14;
+        this.bodyWidth = this.originalWidth /1.9;
+        this.bodyHeight = this.originalHeight / 1.2;
+
+        this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
+        this.body.width = this.bodyWidth;
+        this.body.height = this.bodyHeight;
+    }
+
+    hitBoxJump(){
+        this.bodyOffsetWidth = this.originalWidth /14;
+        this.bodyOffsetHeight = this.originalHeight / 4;
+        this.bodyWidth = this.originalWidth / 1.4;
         this.bodyHeight = this.originalHeight / 2;
 
         this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
@@ -117,7 +161,7 @@ export default class DemonBoss extends EnemyObject {
             key: 'jumpSmash_demonboss',
             frames: this.scene.anims.generateFrameNumbers('demonboss', { start: 224, end: 241 }),
             frameRate: 10,
-            repeat: 0
+            repeat: 1
         })
 
         this.scene.anims.create({
@@ -201,7 +245,7 @@ export default class DemonBoss extends EnemyObject {
             }
 
             if (this.anims.currentAnim.key === 'jumpSmash_demonboss') {
-                this.spawnExplosions()
+                this.hitBoxDemon()
                 this.attacking = false;
                 this.addAttackTimer(3000)
             }
@@ -222,6 +266,8 @@ export default class DemonBoss extends EnemyObject {
             }
 
             if (this.anims.currentAnim.key === 'fireBlast_demonboss') {
+                this.hitBoxDemon()
+                this.addAttackTimer(4000)
                 this.attacking = false;
             }
 
@@ -240,6 +286,10 @@ export default class DemonBoss extends EnemyObject {
             if (this.anims.currentAnim.key === 'spell_demonboss') {
                 this.bulletSpell()
             }
+            if (this.anims.currentAnim.key === 'jumpSmash_demonboss') {
+                this.spawnExplosions()
+                this.hitBoxJump()
+            }
         })
 
         this.on('animationstart', () => {
@@ -257,24 +307,34 @@ export default class DemonBoss extends EnemyObject {
         if(this.isHitting && !this.attacking){
             this.play('hit_' + this.key, true);
             this.flipX = (this.body.velocity.x > 0 && this.key === 'demonboss') || (this.body.velocity.x > 0 && this.key === 'slime');
-        } else if (this.body.velocity.x >= 0 && this.body.velocity.y <= 0) {
+        } else if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
             // Diagonal abajo-derecha
             this.play('side_' + this.key, true);
             //this.angle = -0.1;
-        } else if (this.body.velocity.x >= 0 && this.body.velocity.y >= 0) {
+        } else if (this.body.velocity.x > 0 && this.body.velocity.y > 0) {
             // Diagonal arriba-derecha
             this.play('side_' + this.key, true);
             //this.angle += 0.1;
-        } else if (this.body.velocity.x <= 0 && this.body.velocity.y <= 0) {
+        } else if (this.body.velocity.x < 0 && this.body.velocity.y < 0) {
             // Diagonal abajo-izquierda
             this.play('side_' + this.key, true);
             this.flipX = false;
             //this.angle += 0.1;
-        } else if (this.body.velocity.x <= 0 && this.body.velocity.y >= 0) {
+        } else if (this.body.velocity.x < 0 && this.body.velocity.y > 0) {
             // Diagonal arriba-izquierda
             this.play('side_' + this.key, true);
             this.flipX = false;
             //this.angle += -0.1;
+        }else if (this.body.velocity.y > 0 && this.body.velocity.x === 0) {
+            // Movimiento hacia abajo
+            this.play('side_' + this.key, true);
+        } else if (this.body.velocity.y < 0 && this.body.velocity.x === 0) {
+            // Movimiento hacia arriba
+            this.play('side_' + this.key, true);
+        } else if (this.body.velocity.x !== 0 && this.body.velocity.y < 5) {
+            // Movimiento hacia los lados
+            this.play('side_' + this.key, true);
+            this.flipX = this.body.velocity.x > 0;
         } else {
             // Reproducir la animación estática si no se está moviendo
             this.play('static' + this.key);
@@ -298,9 +358,10 @@ export default class DemonBoss extends EnemyObject {
             this.attacking = true;
             //this.play('fireBlast_demonboss');
             //this.flipX = (this.body.velocity.x > 0 && this.key === 'demonboss') || (this.body.velocity.x > 0 && this.key === 'slime');
-            // this.flipX = this.body.velocity.x > 0
-            this.play('attack_' + this.key);
-            enemie.getHit(1)
+            this.flipX = this.body.velocity.x > 0
+            this.play('jumpSmash_demonboss');
+            /* this.play('attack_' + this.key);
+            enemie.getHit(1) */
         }
     }
 
@@ -316,6 +377,12 @@ export default class DemonBoss extends EnemyObject {
 
             this.hp -= dmg;
             this.scene.events.emit("bossHit" , dmg);
+
+            this.hpForDrop += dmg
+            if (this.hpForDrop >= (this.startHp*0.2) && this.transformation) {
+                this.drop()
+                this.hpForDrop = 0
+            }
 
             if(this.hp <= 0){
                 this.dieMe();
@@ -338,6 +405,7 @@ export default class DemonBoss extends EnemyObject {
     transform(){
         this.scene.events.emit("bossStart", this.startHp)
         this.key = 'demonboss'
+        this.hpForDrop = 0
         this.hp = this.startHp;
         this.transformation = true;
         this.onTransformation = true;
@@ -346,20 +414,46 @@ export default class DemonBoss extends EnemyObject {
         this.play('transformation_demonboss', true);
     }
 
+    drop(){
+        if(this.scene.foodPool.hasFood() && Phaser.Math.FloatBetween(0, 1) < 0.1){
+            this.scene.foodPool.spawn(this.x, this.y);
+        }
+        this.scene.powerUpPool.spawn(this.x, this.y);
+    }
+
     runSpecialAttack(){
         this.attacking = true;
-        const nextAttack = Phaser.Math.Between(2, 2)
-
-        if(nextAttack === 0){
-            this.jumpSmash();
-        }else if(nextAttack === 1){
-            this.play("spell_demonboss")
-        }else{
-            this.invokeEnemies()
+        
+        switch (Phaser.Math.Between(0, 2)) {
+            case 0: this.jumpSmash();
+                break;
+            case 1: this.play("spell_demonboss")
+                break;
+            case 2: this.fireBlast()
+                break;
+            default: this.play("spell_demonboss")
+                break;
         }
     }
 
+    fireBlast() {
+        this.hitBoxBlastRight()
+        this.spawnEnemies()
+        this.play("fireBlast_demonboss")
+    }
+
+    spawnEnemies() {
+        let offsetSign = [1,-1]
+        let enemy
+        for (let i = 0; i < this.nSpawnEnmies; i++) {
+            enemy = this.enemyPool.spawnGob(Phaser.Math.Between(this.x, this.x+(offsetSign[i%2]*80)), Phaser.Math.Between(this.y, this.y+(offsetSign[i%2]*80)))
+            enemy.slow(20)
+        }
+        //this.scene.spawnsBoss(this.nSpawnEnmies, this.x, this.y)
+    }
+
     jumpSmash() {
+        //this.hitBoxJump()
         this.play('jumpSmash_demonboss')
     }
 
@@ -419,6 +513,10 @@ export default class DemonBoss extends EnemyObject {
             this.numDirections = 8
             this.bulletMultiplier = 6
             this.bulletSpread = 0.3
+            this.nSpawnEnmies = 5
         }
+    }
+
+    slow(slow){
     }
 }
