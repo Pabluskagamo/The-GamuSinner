@@ -46,6 +46,7 @@ export default class LevelScene2 extends LevelScene {
 
 		this.sound.removeByKey('fightSong');
 		this.sound.removeByKey('fightSong2');
+		this.sound.removeByKey('fightSong3');
 
 		if(!this.isMuted){
 			const explorationSong = this.sound.add("explorationSong", {
@@ -105,6 +106,13 @@ export default class LevelScene2 extends LevelScene {
 			this.sound.removeByKey('appearEffect');
 			this.events.emit('passLevel', {playerData: this.player.getPlayerStats(), level: 'level2', levelboss: true});
 			this.scene.start('level2', { player: this.player, gate: {x: 80, y: this.player.y}, mute: this.isMuted });
+		});
+	}
+
+	setMusic(){
+		this.banda = this.sound.add("fightSong3", {
+			volume: 0.1,
+			loop: true
 		});
 	}
 

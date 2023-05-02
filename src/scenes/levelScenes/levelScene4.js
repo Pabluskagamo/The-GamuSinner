@@ -97,7 +97,8 @@ export default class LevelScene4 extends LevelScene {
         LevelScene.progress[this.namescene] = true
 
         this.sound.removeByKey('fightSong');
-        this.sound.removeByKey('fightSong2');
+		this.sound.removeByKey('fightSong2');
+		this.sound.removeByKey('fightSong3');
 
         if(!this.isMuted){
             const explorationSong = this.sound.add("explorationSong", {

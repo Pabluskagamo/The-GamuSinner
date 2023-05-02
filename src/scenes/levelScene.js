@@ -15,8 +15,8 @@ export default class LevelScene extends Phaser.Scene {
 	static progress = {
 		level1: false,
 		level2: true,
-		level3: true,
-		level4: true,
+		level3: false,
+		level4: false,
 		levelBoss: true
 	}
 
@@ -91,6 +91,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.audio("takefood_audio", "./assets/effects/heal.wav");
 		this.load.audio("fightSong", "./assets/audio/AdventureHO2.mp3");
 		this.load.audio("fightSong2", "./assets/audio/kim_lightyear_-_angel_eyes_chiptune_edit.mp3");
+		this.load.audio("fightSong3", "./assets/audio/level2song.wav");
 		this.load.audio("panasong", "./assets/audio/panamiguel.mp3");
 		this.load.audio("bossSong", "./assets/audio/Boss Battle.wav");
 		this.load.audio("bossAppear", "./assets/effects/bossapear.mp3");
@@ -344,7 +345,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 20000;
+		this.freqChangeTime = 10000;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
@@ -429,7 +430,7 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.freqFactor = currDelay > 1000 ? 500 : 200;
 
-		if (currDelay === 1500) {
+		if (currDelay === 1000) {
 			this.freqChangeTime = 30000;
 			this.lastSec = 30;
 			this.freqTimer.reset({
@@ -440,8 +441,19 @@ export default class LevelScene extends Phaser.Scene {
 			})
 		}
 
+		if (currDelay === 2000) {
+			this.freqChangeTime = 20000;
+			this.lastSec = 20;
+			this.freqTimer.reset({
+				delay: this.freqChangeTime,
+				callback: this.changeFreqHandler,
+				callbackScope: this,
+				loop: true
+			})
+		}
+
 		console.log('cambio de frecuencia de', currDelay, 'a', currDelay - this.freqFactor)
-		if (currDelay > 400) {
+		if (currDelay > 300) {
 			this.enemySpawnTimer.reset({
 				delay: currDelay - this.freqFactor,
 				callback: this.spawnInBounds,

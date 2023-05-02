@@ -12,7 +12,7 @@ export default class CreditsScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image('background2', './img/fondo_pixelart3.png');
+		this.load.image('background_settings', './img/pergamino.png');
 		this.load.image('game_over', './img/game_over.png');
 		this.load.spritesheet('game_restart', './assets/ui/restart_sprite.png', { frameWidth: 480, frameHeight: 170 });
 		this.load.spritesheet('main_menu', './assets/ui/MainMenu_sprite.png', { frameWidth: 480, frameHeight: 170 });
@@ -32,7 +32,7 @@ export default class CreditsScene extends Phaser.Scene {
 
 		this.creditsSound.play()
 		
-		this.add.image(0, 0, 'background2').setOrigin(0, 0).setScale(0.75);
+		this.add.image(0, 0, 'background_settings').setOrigin(0, 0)
 		// const title = this.add.image(this.sys.game.canvas.width / 2, 260, 'game_over').setScale(0.65);
 
 		this.input.keyboard.on('keydown', (event) => {
@@ -55,14 +55,15 @@ export default class CreditsScene extends Phaser.Scene {
 
 		const title = this.add.image(this.sys.game.canvas.width / 2, 125, 'game_title').setScale(0.5);
 
-		const thanksMsg = this.add.text(120, 200, '¡Muchas gracias por jugar a nuestro juego!').setFontSize(40).setColor("black").setFontStyle('bold')
-		const alex = this.add.text(300, 300, 'Alejandro Antuña Rodríguez').setFontSize(40).setColor("black").setFontStyle('bold')
-		const carlos = this.add.text(300, 350, 'Carlos Gómez López').setFontSize(40).setColor("black").setFontStyle('bold')
-		const javi = this.add.text(300, 400, 'Javier Gil Caballero').setFontSize(40).setColor("black").setFontStyle('bold')
-		const pablo = this.add.text(300, 450, 'Pablo Gamo González').setFontSize(40).setColor("black").setFontStyle('bold')
+		const thanksMsg = this.add.text(200, 200, '¡Muchas gracias por jugar a nuestro juego!', { fontFamily: 'MedievalSharp-Regular' }).setFontSize(40).setColor("#8C4B00").setFontStyle('bold')
+		const alex = this.add.text(360, 300, 'Alejandro Antuña Rodríguez', { fontFamily: 'MedievalSharp-Regular' }).setFontSize(40).setColor("#8C4B00").setFontStyle('bold')
+		const carlos = this.add.text(420, 350, 'Carlos Gómez López', { fontFamily: 'MedievalSharp-Regular' }).setFontSize(40).setColor("#8C4B00").setFontStyle('bold')
+		const javi = this.add.text(420, 400, 'Javier Gil Caballero', { fontFamily: 'MedievalSharp-Regular' }).setFontSize(40).setColor("#8C4B00").setFontStyle('bold')
+		const pablo = this.add.text(420, 450, 'Pablo Gamo González', { fontFamily: 'MedievalSharp-Regular' }).setFontSize(40).setColor("#8C4B00").setFontStyle('bold')
 		
 
-		const menu = this.add.sprite(this.sys.game.canvas.width / 2, 525, 'main_menu').setScale(0.35);
+		const menu = this.add.sprite(this.sys.game.canvas.width / 2, 570, 'main_menu').setScale(0.35);
+		
 		menu.setInteractive({ cursor: 'pointer' });
 		menu.on('pointerover', () => {
 			menu.play('hoverMenu');
@@ -75,6 +76,7 @@ export default class CreditsScene extends Phaser.Scene {
 		menu.on('pointerup', () => {
 			this.sound.removeByKey('explorationSong');
 			this.sound.removeByKey('fightSong');
+			this.sound.removeByKey('creditsSong');
 			this.scene.stop(this.level);
 			this.scene.stop('UIScene');
 			this.scene.start('mainScene');
