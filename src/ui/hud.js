@@ -18,8 +18,8 @@ export default class Hud extends Phaser.Scene {
 
     preload() {
         this.load.spritesheet('healthbar', './assets/ui/Hearts/PNG/animated/border/heart_animated_2.png', { frameWidth: 17, frameHeight: 17 })
-        this.load.image('coinhud', '/assets/items/coin.png');
-        this.load.image('dash_hud', '/assets/powerups/DashEffect.png');
+        this.load.image('coinhud', './assets/items/coin.png');
+        this.load.image('dash_hud', './assets/powerups/DashEffect.png');
         this.load.image('pwpanel', './assets/ui/powerUpPanel.png');
         this.load.spritesheet('tripleShotHud', './assets/powerups/Tripleshoot.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('eightDirShotHud', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
