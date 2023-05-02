@@ -1,4 +1,6 @@
 import Phaser from 'phaser'
+import LevelScene from './levelScene';
+import LevelScene2 from './levelScenes/levelScene2';
 
 export default class GameOverScene extends Phaser.Scene {
 	constructor() {
@@ -54,9 +56,20 @@ export default class GameOverScene extends Phaser.Scene {
 		restart.on('pointerup', () => {
 			this.sound.removeByKey('explorationSong');
 			this.sound.removeByKey('fightSong');
+			this.sound.removeByKey('fightSong2');
+			this.sound.removeByKey('losse');
 			this.scene.stop('UIScene');
 			this.scene.stop(this.level);
 			this.scene.start('level1');
+			LevelScene.progress =  {
+				level1: false,
+				level2: true,
+				level3: false,
+				level4: false,
+				levelBoss: true
+			}
+			
+			LevelScene2.firstTalkMeiga = false
 		});
 
 		this.input.keyboard.on('keydown', (event) => {

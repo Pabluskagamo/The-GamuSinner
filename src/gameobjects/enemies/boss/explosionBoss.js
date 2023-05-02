@@ -8,34 +8,35 @@ export default class ExplosionBoss extends Phaser.Physics.Arcade.Sprite {
         this.setScale(4)
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this)
-
         this.createAnimations()
+
+        this.explotionSound = this.scene.sound.add("bossExplotion", {
+            volume: 0.1,
+            loop: false
+        });
     }
 
     createAnimations(){
         this.scene.anims.create({
             key: 'hit_explosion',
-            frames: this.scene.anims.generateFrameNumbers('explosion', {start: 0, end: 3}),
-            //frameRate: 10,
-            duration: 5000,
-            repeat: 5
+            frames: this.scene.anims.generateFrameNumbers('explosion', {frames: [3,2,1,0]}),
+            duration: 500,
+            repeat: 2
         })
 
         this.scene.anims.create({
             key: 'spawn_explosion',
             frames: this.scene.anims.generateFrameNumbers('explosion', {frames: [3,2,1,0]}),
-            duration: 10000,
+            duration: 1000,
             repeat: 0
         })
 
         this.on('animationcomplete',() => {
             if (this.anims.currentAnim.key === 'spawn_explosion') {
                 console.log("va a explotaaaaaaaaaaaaaaaaaar")
-                this.play('hit_explosion')
                 this.explode()
-            }
-            if (this.anims.currentAnim.key === 'hit_explosion') {
-                console.log("ha explotaaaoooooooooo")
+            }else {
+                console.log("ha explotaaaoooooooooo", this.anims.currentAnim.key)
                 this.scene.bossPool.releaseExplosion(this)
             }
         })
@@ -48,14 +49,19 @@ export default class ExplosionBoss extends Phaser.Physics.Arcade.Sprite {
     spawn(x, y){
         this.x = x
         this.y = y
+        this.body.enable = false
         this.overlap = false
+        
         //SONIDO DE SPWAN?
         this.play('spawn_explosion')
     }
 
     explode(){
         //play de sonido de esplosion
-        this.overlap = false
+        this.overlap = true
+        this.body.enable = true
+        this.playReverse('hit_explosion')
+        this.explotionSound.play()
     }
 
     hide(){

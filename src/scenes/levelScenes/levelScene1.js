@@ -39,8 +39,6 @@ export default class LevelScene1 extends LevelScene {
 				this.cameras.main.flash(500);
 			}, i * 600);
 		}
-
-		this.player.collectCoin(3000);
 	}
 
 	abrirPuertas() {

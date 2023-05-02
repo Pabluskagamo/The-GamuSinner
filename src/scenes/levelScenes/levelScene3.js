@@ -45,6 +45,7 @@ export default class LevelScene2 extends LevelScene {
 		LevelScene.progress[this.namescene] = true
 
 		this.sound.removeByKey('fightSong');
+		this.sound.removeByKey('fightSong2');
 
 		if(!this.isMuted){
 			const explorationSong = this.sound.add("explorationSong", {
@@ -71,10 +72,6 @@ export default class LevelScene2 extends LevelScene {
 				this.cameras.main.flash(500);
 			}, i * 600);
 		}
-
-		this.addMeiga();
-		this.spawnMeiga = true;
-		this.player.collectCoin(1000);
 	}
 
 	// addMeiga() {

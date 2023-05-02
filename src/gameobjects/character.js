@@ -17,6 +17,7 @@ export default class Character extends MovableObject {
             this.wallet = wallet;
             this.isAttacking = false;
             this.isDashing = false;
+            this.invicible = false;
             this.lastDash = 0;
             //this.nonePowerUp = new MultipleDirectionShot(this.scene)
             //this.nonePowerUp.collect()
@@ -28,8 +29,6 @@ export default class Character extends MovableObject {
             this.pet = null
             this.passives = []
             //this.passives = [new BouncingShot(this.scene)]
-            this.hp = 4;
-            this.maxHp = 4;
             this.numDirections = 8;
             this.bulletMultiplier = 3;
             this.bulletSpread = 0.25;
@@ -45,11 +44,13 @@ export default class Character extends MovableObject {
 
             this.scene.physics.add.existing(this);
             this.setCollideWorldBounds();
-
-            this.bodyOffsetWidth = this.body.width / 4.6;
-            this.bodyOffsetHeight = this.body.height / 5;
-            this.bodyWidth = this.body.width / 4;
-            this.bodyHeight = this.body.height / 1.5;
+            /* this.originalWidth = this.body.width
+            this.originalHeight = this.body.height
+            this.body.setSize(this.originalWidth/6.3, this.originalHeight/2.5, true); */
+            this.bodyOffsetWidth = this.body.width / 4.2;
+            this.bodyOffsetHeight = this.body.height / 4.8;
+            this.bodyWidth = this.body.width / 5.8;
+            this.bodyHeight = this.body.height / 1.45;
 
             this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
             this.body.width = this.bodyWidth;
@@ -104,6 +105,9 @@ export default class Character extends MovableObject {
                 if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)) {
                 }
 
+                if (this.anims.currentAnim.key === 'mainChar_lado') {
+                    this.play('mainChar_static', true)
+                }
                 if (this.anims.currentAnim.key === 'mainChar_die') {
                     this.scene.gameOver();
                 }
@@ -436,6 +440,10 @@ export default class Character extends MovableObject {
         return this.isDashing;
     }
 
+    isInvicible() {
+        return this.invicible;
+    }
+
     collectCoin(value) {
         this.wallet += value;
     }
@@ -522,8 +530,14 @@ export default class Character extends MovableObject {
     }
     
     checkPowerUpAlreadyActive(powerUp){
-        
-        if(powerUp.getKey() === this.currentPowerUp.getKey()){
+
+        console.log("YA HAY PET")
+
+        if(powerUp.isPet() && this.pet != null){
+            console.log("YA HAY PET")
+            this.petPowerUp.hidePet()
+            this.petPowerUp.disable(true);
+        }else if(powerUp.getKey() === this.currentPowerUp.getKey()){
             this.currentPowerUp.disable(true);
         }
         else{

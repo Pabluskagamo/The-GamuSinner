@@ -72,7 +72,6 @@ export default class EnemyObject extends MovableObject {
     }
 
     drop(){
-        
         if (this.scene.coinPool.hasCoins() && Phaser.Math.FloatBetween(0, 1) < 0.7){
             this.scene.coinPool.spawn(this.x, this.y);
         }
@@ -84,7 +83,6 @@ export default class EnemyObject extends MovableObject {
         if(this.scene.powerUpPool.hasPowerUps() && Phaser.Math.FloatBetween(0, 1) < 0.25){
             this.scene.powerUpPool.spawn(this.x, this.y);
         }
-
     }
 
     hitEnemy(dmg){

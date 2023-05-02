@@ -315,6 +315,8 @@ export default class StatsScene extends Phaser.Scene {
             this.listDialogs = [...dialogsMeiga.level1];
         }else if(LevelScene.progress.level3 && LevelScene.progress.level4){
             this.listDialogs = [...dialogsMeiga.boss];
+        }else{
+            this.listDialogs = [...dialogsMeiga.others];
         }
         this.dialogBox.setTextToDisplay(this.listDialogs.shift())
     }

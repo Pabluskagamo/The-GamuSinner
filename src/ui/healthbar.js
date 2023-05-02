@@ -18,9 +18,16 @@ export default class HealthBar {
     decrease (amount)
     {
         const proporcion = amount / this.hp;
-        this.p -= (this.value * proporcion);
-       
+
+        if(this.p - (this.value * proporcion) > 0){
+            this.p -= (this.value * proporcion);
+        }else{
+            this.p = 0
+        }
+
         this.draw();
+
+        console.log("[HUD] Vida al", this.p/this.value)
 
         return (this.value === 0);
     }

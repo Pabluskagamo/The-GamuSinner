@@ -13,11 +13,11 @@ import JellyfishPet from "../gameobjects/powerUps/jellyfishPet"
 
 export default class LevelScene extends Phaser.Scene {
 	static progress = {
-		level1: true,
+		level1: false,
 		level2: true,
 		level3: true,
 		level4: true,
-		levelBoss: false
+		levelBoss: true
 	}
 
 
@@ -52,7 +52,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.spritesheet('multishot', './assets/powerups/Multishoot.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('freezingshot', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('bouncingshot', './assets/powerups/BouncingArrow.png', { frameWidth: 32, frameHeight: 32 })
-		this.load.spritesheet('petpower', './assets/powerups/4DirShoot.png', { frameWidth: 32, frameHeight: 32 })
+		this.load.spritesheet('petpower', './assets/powerups/pet.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.image('tiles', './assets/tileset/forest_tiles.png')
 		this.load.image('tilesCastleProps', './assets/tileset/sala2/tilesetCastle/TX Props.png')
 		this.load.image('tilesCastleStruct', './assets/tileset/sala2/tilesetCastle/TX Struct.png')
@@ -60,10 +60,16 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.image('tilesCastleGrass', './assets/tileset/sala2/tilesetCastle/TX Tileset Grass.png')
 		this.load.image('tilesCastlePlant', './assets/tileset/sala2/tilesetCastle/TX Plant.png')
 		this.load.image('tileFaerieForest', './assets/tileset/FaerieForest_PetricakeGamesPNG.png')
+		this.load.image('tilesBossSuelo', './assets/tileset/salaBoss/drain-blood.png')
+		this.load.image('tilesBossPared', './assets/tileset/salaBoss/evildungeon.png')
+		this.load.image('tilesBossPentagram', './assets/tileset/salaBoss/pentagramm.png')
+		this.load.image('tilesBossBricks', './assets/tileset/salaBoss/autotile purple brick.png')
+		this.load.image('tilesBossBloodFountain', './assets/tileset/salaBoss/blood-fountain.png')
 		this.load.tilemapTiledJSON('sala1', './assets/tilemap/sala1.json')
 		this.load.tilemapTiledJSON('sala2', './assets/tilemap/sala2.json')
 		this.load.tilemapTiledJSON('sala3', './assets/tilemap/sala3.json')
 		this.load.tilemapTiledJSON('sala4', './assets/tilemap/sala4.json')
+		this.load.tilemapTiledJSON('salaBoss', './assets/tilemap/salaBoss.json')
 		this.load.image('puertaSala1', './assets/tileset/puertas_32x32.png')
 		this.load.image('puertaSala3', './assets/tileset/puertas3_32x32.png')
 		this.load.image('puertaSala4', './assets/tileset/puerta4_32x32.PNG')
@@ -84,7 +90,17 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.audio("powerup_audio", "./assets/effects/powerup.wav");
 		this.load.audio("takefood_audio", "./assets/effects/heal.wav");
 		this.load.audio("fightSong", "./assets/audio/AdventureHO2.mp3");
+		this.load.audio("fightSong2", "./assets/audio/kim_lightyear_-_angel_eyes_chiptune_edit.mp3");
 		this.load.audio("panasong", "./assets/audio/panamiguel.mp3");
+		this.load.audio("bossSong", "./assets/audio/Boss Battle.wav");
+		this.load.audio("bossAppear", "./assets/effects/bossapear.mp3");
+		this.load.audio("bossAttacksound", "./assets/effects/bossAttacksound.mp3");
+		this.load.audio("bossExplotion", "./assets/effects/explotionBoss.wav");
+		this.load.audio("bossShoot", "./assets/effects/bossShot.wav");
+		this.load.audio("bossRage", "./assets/effects/bossRage.mp3");
+		this.load.audio("bossDie", "./assets/effects/bossDie.mp3");
+		this.load.audio("bossSongSecondFase", "./assets/audio/secondfasebossmusic.wav");
+		this.load.audio("dungeonEnterSong", "./assets/audio/dungeonentermusic.mp3");
 		this.load.spritesheet('meiga', './assets/enemies/meiga.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('e_key', './assets/keyboards/E.png', { frameWidth: 19, frameHeight: 21 });
 		this.load.spritesheet('q_key', './assets/keyboards/Q.png', { frameWidth: 19, frameHeight: 21 });
@@ -92,10 +108,8 @@ export default class LevelScene extends Phaser.Scene {
 
 	create(data) {
 		this.isMuted = data.mute;
-        this.banda = this.sound.add("fightSong", {
-			volume: 0.1,
-			loop: true
-		});
+        
+		this.setMusic()
 
 		this.explorationSong = this.sound.add("explorationSong", {
 			volume: 0.1,
@@ -180,7 +194,7 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.statsGame.events.on('incrementSpeed', this.player.setSpeed, this);
 
-		this.statsGame.events.on('incrementLife', this.incrementPlayerLife, this.player);
+		this.statsGame.events.on('incrementLife', this.incrementPlayerLife, this);
 
 		this.statsGame.events.on('incrementCadence', this.player.setCadence, this.player);
 
@@ -201,15 +215,25 @@ export default class LevelScene extends Phaser.Scene {
 
 	update(t) {
 		
-		if (this.debugMode && Phaser.Input.Keyboard.JustUp(this.v)) {
-			this.enemyPool.spawn(0, 0)
+		if (this.debugMode && !this.levelFinished && Phaser.Input.Keyboard.JustUp(this.k)) {
+			if(this.enemySpawnTimer){
+				this.enemySpawnTimer.remove();
+			}
+			if(this.freqTimer){
+				this.freqTimer.remove();
+			}
+
+			this.levelFinished = true;
+			this.player.collectCoin(1000);
+			this.events.emit('earnCoin', this.player.getWallet());
+			this.completeLevel()
 		}
 
 		if(!LevelScene.progress[this.namescene]){
-			if (!this.wavesFinished && !this.debugMode) {
+			if (!this.wavesFinished) {
 				this.updateWaveCount()
 			}
-			else if (!this.levelFinished && this.enemyPool.fullPool() && !this.debugMode) {
+			else if (!this.levelFinished && this.enemyPool.fullPool()) {
 				this.levelFinished = true;
 				this.completeLevel();
 			}
@@ -266,7 +290,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.coinPool = new CoinPool(this, 20);
 		this.foodPool = new FoodPool(this, 20);
 
-		this.enemyPool.fillPool(25, this.player);
+		this.enemyPool.fillPool(25, this.player, this.namescene);
 
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
 			obj1.hit(obj2)
@@ -321,32 +345,31 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 1;
+		this.freqChangeTime = 20000;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;
 		this.wavesFinished = false;
 
 		if (debug) {
-			this.v = this.input.keyboard.addKey('v');
+			this.k = this.input.keyboard.addKey('K');
 			this.debugMode = true;
-		} else {
-			this.enemySpawnTimer = this.time.addEvent({
-				delay: 400,
-				callback: this.spawnInBounds,
-				callbackScope: this,
-				loop: true
-			});
+		} 
+		
+		this.enemySpawnTimer = this.time.addEvent({
+			delay: 4000,
+			callback: this.spawnInBounds,
+			callbackScope: this,
+			loop: true
+		});
 
+		this.freqTimer = this.time.addEvent({
 
-			this.freqTimer = this.time.addEvent({
-
-				delay: this.freqChangeTime,
-				callback: this.changeFreqHandler,
-				callbackScope: this,
-				loop: true
-			});
-		}
+			delay: this.freqChangeTime,
+			callback: this.changeFreqHandler,
+			callbackScope: this,
+			loop: true
+		});
 	}
 
 	initLevelFightMode(){
@@ -354,7 +377,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.banda.play();
 		}
 		this.spawnMeiga = false;
-		this.initTimers(false);
+		this.initTimers(true);
 	}
 
 	initLevelFreeMode(){
@@ -486,6 +509,13 @@ export default class LevelScene extends Phaser.Scene {
 	allLevelsComplete(){
 		return LevelScene.progress.level1 && LevelScene.progress.level2 && LevelScene.progress.level3
 				&& LevelScene.progress.level4;
+	}
+
+	setMusic(){
+		this.banda = this.sound.add("fightSong", {
+			volume: 0.1,
+			loop: true
+		});
 	}
 
 }

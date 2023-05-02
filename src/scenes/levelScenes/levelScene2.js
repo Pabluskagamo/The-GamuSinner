@@ -99,6 +99,9 @@ export default class LevelScene2 extends LevelScene {
 
 
 	initLevelFreeMode() {
+		if(!this.isMuted){
+			this.explorationSong.play();
+		}
 		this.addMeiga();
 		if(LevelScene2.firstTalkMeiga){
 			this.abrirPuertas()
@@ -140,7 +143,6 @@ export default class LevelScene2 extends LevelScene {
 
 		this.addMeiga();
 		this.spawnMeiga = true;
-		this.player.collectCoin(1000);
 	}
 
 	abrirPuertas() {
@@ -195,7 +197,7 @@ export default class LevelScene2 extends LevelScene {
 				this.sound.removeByKey('explorationSong');
 				this.sound.removeByKey('appearEffect');
 				this.events.emit('passLevel', { playerData: this.player.getPlayerStats(), level: 'levelBoss', bossLevel: true });
-				this.scene.start('levelBoss', { player: this.player, gate: this.salidasSala.der.coords, mute: this.isMuted });
+				this.scene.start('levelBoss', { player: this.player, gate: { x: this.player.x, y: this.sys.game.canvas.height - 80 }, mute: this.isMuted });
 			});
 		}
 
