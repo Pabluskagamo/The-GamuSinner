@@ -185,7 +185,7 @@ export default class LevelScene extends Phaser.Scene {
 
 		this.statsGame.events.on('incrementSpeed', this.player.setSpeed, this);
 
-		this.statsGame.events.on('incrementLife', this.incrementPlayerLife, this.player);
+		this.statsGame.events.on('incrementLife', this.incrementPlayerLife, this);
 
 		this.statsGame.events.on('incrementCadence', this.player.setCadence, this.player);
 
