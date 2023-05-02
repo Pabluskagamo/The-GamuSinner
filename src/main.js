@@ -44,7 +44,7 @@ const config = {
 		},
 	},
 
-	scene: [/*MainScene, historyScene, InstructionScene, selecScene,*/LevelSceneBoss, LevelScene1, LevelScene2, LevelScene3, LevelScene4 ,Hud, StatsScene, SettingScene, GameOverScene],
+	scene: [/*MainScene, historyScene, InstructionScene, selecScene,*/LevelScene1, LevelScene2, LevelScene3, LevelScene4, LevelSceneBoss ,Hud, StatsScene, SettingScene, GameOverScene],
 	// scene: [/*MainScene, historyScene, InstructionScene, selecScene,*/LevelSceneBoss, LevelScene1, LevelScene2, LevelScene3, LevelScene4, Hud, StatsScene, SettingScene, GameOverScene],
 }
 

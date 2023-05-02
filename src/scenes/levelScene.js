@@ -17,7 +17,7 @@ export default class LevelScene extends Phaser.Scene {
 		level2: true,
 		level3: true,
 		level4: true,
-		levelBoss: false
+		levelBoss: true
 	}
 
 
@@ -93,6 +93,12 @@ export default class LevelScene extends Phaser.Scene {
 		this.load.audio("fightSong2", "./assets/audio/kim_lightyear_-_angel_eyes_chiptune_edit.mp3");
 		this.load.audio("panasong", "./assets/audio/panamiguel.mp3");
 		this.load.audio("bossSong", "./assets/audio/Boss Battle.wav");
+		this.load.audio("bossAppear", "./assets/effects/bossapear.mp3");
+		this.load.audio("bossAttacksound", "./assets/effects/bossAttacksound.mp3");
+		this.load.audio("bossExplotion", "./assets/effects/explotionBoss.wav");
+		this.load.audio("bossShoot", "./assets/effects/bossShot.wav");
+		this.load.audio("bossSongSecondFase", "./assets/audio/secondfasebossmusic.wav");
+		this.load.audio("dungeonEnterSong", "./assets/audio/dungeonentermusic.mp3");
 		this.load.spritesheet('meiga', './assets/enemies/meiga.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('e_key', './assets/keyboards/E.png', { frameWidth: 19, frameHeight: 21 });
 	}
@@ -326,7 +332,7 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	initTimers(debug) {
-		this.freqChangeTime = 5000;
+		this.freqChangeTime = 1000;
 		this.lastSec = 20;
 		this.freqFactor = 500;
 		this.levelFinished = false;

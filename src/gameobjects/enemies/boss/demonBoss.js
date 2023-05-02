@@ -37,6 +37,7 @@ export default class DemonBoss extends EnemyObject {
         this.nSpawnEnmies = 3
 
         this.createAnimations();
+        this.createSounds();
     }
 
     hitBoxSlime(){
@@ -299,6 +300,25 @@ export default class DemonBoss extends EnemyObject {
         })
 
         this.play('static_slime');
+
+
+    }
+    
+    createSounds(){
+        this.soundAppear = this.scene.sound.add("bossAppear", {
+            volume: 0.25,
+            loop: false
+        });
+
+        this.soundSingleAttack = this.scene.sound.add("bossAttacksound", {
+            volume: 0.25,
+            loop: false
+        });
+
+        this.bossShoot = this.scene.sound.add("bossShoot", {
+            volume: 0.25,
+            loop: false
+        });
     }
 
     follow(){
@@ -362,6 +382,8 @@ export default class DemonBoss extends EnemyObject {
             this.play('jumpSmash_demonboss');
             /* this.play('attack_' + this.key);
             enemie.getHit(1) */
+
+            this.soundSingleAttack.play()
         }
     }
 
@@ -413,6 +435,7 @@ export default class DemonBoss extends EnemyObject {
         this.isHitting = false
         this.attacking = false
         this.play('transformation_demonboss', true);
+        this.soundAppear.play()
     }
 
     drop(){
@@ -515,6 +538,7 @@ export default class DemonBoss extends EnemyObject {
             this.bulletMultiplier = 6
             this.bulletSpread = 0.3
             this.nSpawnEnmies = 5
+            this.scene.setSecondFase();
         }
     }
 

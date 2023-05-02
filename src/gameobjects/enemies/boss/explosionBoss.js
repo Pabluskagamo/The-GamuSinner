@@ -9,6 +9,11 @@ export default class ExplosionBoss extends Phaser.Physics.Arcade.Sprite {
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this)
         this.createAnimations()
+
+        this.explotionSound = this.scene.sound.add("bossExplotion", {
+            volume: 0.1,
+            loop: false
+        });
     }
 
     createAnimations(){
@@ -56,6 +61,7 @@ export default class ExplosionBoss extends Phaser.Physics.Arcade.Sprite {
         this.overlap = true
         this.body.enable = true
         this.playReverse('hit_explosion')
+        this.explotionSound.play()
     }
 
     hide(){

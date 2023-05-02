@@ -25,20 +25,6 @@ export default class LevelSceneBoss extends LevelScene {
 		this.demon.body.pushable = false;
 		this.player.body.pushable = false;
 		this.demon.setDepth(3);
-		
-		/* 
-        this.jelly = new JellyfishPet(this, this.player.x,this.player.y)
-		this.player.setPet(this.jelly) */
-
-		// if(this.scene.isActive('UIScene')){
-		// 	this.scene.stop('UIScene');			
-		// }
-
-		// console.log("LAUNCH HUD", this.player.getMaxHp(), this.player.getHp())
-		// this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene});
-
-		/* this.physics.add.collider(this.demon, this.foregroundLayer);
-		this.physics.add.collider(this.demon, this.puertaSolida); */
 
 		this.physics.add.collider(this.bulletPool._group, this.demon, (obj1, obj2) => {
             obj1.hit(obj2)
@@ -186,6 +172,65 @@ export default class LevelSceneBoss extends LevelScene {
 			volume: 0.1,
 			loop: true
 		});
+	}
+
+	addMeiga() {
+
+		this.spawnMeiga = true;
+		this.meiga = this.add.sprite(500, 350, 'meiga').setScale(1.6);
+		this.anims.create({
+			key: 'meigaState',
+			frames: this.anims.generateFrameNumbers('meiga', { start: 0, end: 3 }),
+			frameRate: 3,
+			repeat: -1,
+		});
+
+		this.anims.create({
+			key: 'meiga_magic',
+			frames: this.anims.generateFrameNumbers('meiga', { start: 20, end: 27 }),
+			frameRate: 10,
+			repeat: -1,
+		});
+
+		this.meiga.play('meiga_magic');
+	}
+
+	initLevelFreeMode(){
+		this.addMeiga()
+		this.input.keyboard.enabled = false;
+
+		this.enterDungeonMusic = this.sound.add("dungeonEnterSong", {
+			volume: 0.4,
+			loop: true
+		});
+
+		this.enterDungeonMusic.play()
+
+		this.time.addEvent({
+            delay: 5000,
+            callback: ()=>{
+				this.setMusic();
+				this.banda.play();
+				this.demon.transform();
+				this.meiga.setVisible(false)
+				this.spawnMeiga = false;
+				this.enterDungeonMusic.stop()
+				this.input.keyboard.enabled = true;
+			},
+            callbackScope: this,
+            loop: false
+        })
+	}
+
+	setSecondFase(){
+		this.banda.stop();
+
+		this.banda = this.sound.add("bossSongSecondFase", {
+			volume: 0.1,
+			loop: true
+		});
+
+		this.banda.play();
 	}
 
 }

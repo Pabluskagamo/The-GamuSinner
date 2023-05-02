@@ -194,7 +194,7 @@ export default class LevelScene2 extends LevelScene {
 				this.sound.removeByKey('explorationSong');
 				this.sound.removeByKey('appearEffect');
 				this.events.emit('passLevel', { playerData: this.player.getPlayerStats(), level: 'levelBoss', bossLevel: true });
-				this.scene.start('levelBoss', { player: this.player, gate: this.salidasSala.der.coords, mute: this.isMuted });
+				this.scene.start('levelBoss', { player: this.player, gate: { x: this.player.x, y: this.sys.game.canvas.height - 80 }, mute: this.isMuted });
 			});
 		}
 
