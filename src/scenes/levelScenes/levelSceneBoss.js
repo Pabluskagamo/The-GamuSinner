@@ -21,7 +21,7 @@ export default class LevelSceneBoss extends LevelScene {
         super.create({...data, bossLevel: true});
 
 		this.bossPool.fillPool(500, 30, 40, this.player)
-        this.demon = new DemonBoss(this, 0, 0, 60, this.player, this.bossPool, this.enemyPool)
+        this.demon = new DemonBoss(this, this.game.canvas.width/2.07, this.game.canvas.height/3.1, 60, this.player, this.bossPool, this.enemyPool)
 		this.demon.body.pushable = false;
 		this.player.body.pushable = false;
 		this.demon.setDepth(3);

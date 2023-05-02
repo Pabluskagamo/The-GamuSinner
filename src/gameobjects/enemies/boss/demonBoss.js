@@ -11,7 +11,7 @@ export default class DemonBoss extends EnemyObject {
         this.setScale(2);
         this.enemyPool = enemyPool;
         this.player = player;
-        this.attacking = false;
+        this.attacking = true;
         this.transformation = false
         this.onTransformation = false
         this.rageMode = false
@@ -298,7 +298,7 @@ export default class DemonBoss extends EnemyObject {
             }
         })
 
-        this.play('static_demonboss');
+        this.play('static_slime');
     }
 
     follow(){
@@ -344,7 +344,7 @@ export default class DemonBoss extends EnemyObject {
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
         
-        if (this.hp > 0 && !this.attacking && !this.onTransformation && !this.player.isDead()) {
+        if (this.hp > 0 && !this.attacking && !this.onTransformation && !this.player.isDead() && this.transformation) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
             this.follow();
         } else {
