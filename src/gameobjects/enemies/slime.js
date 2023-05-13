@@ -88,9 +88,6 @@ export default class Slime extends EnemyObject {
             this.stopHorizontal();
         }
 
-        if (this.toDestroy) {
-            this.destroy();
-        }
     }
 
     // FUNCION PARA PERSEGUIR AL PERSONAJE

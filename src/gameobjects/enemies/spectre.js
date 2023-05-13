@@ -76,9 +76,6 @@ export default class Spectre extends EnemyObject{
             this.stopHorizontal();
         }
 
-        if (this.toDestroy) {
-            this.destroy();
-        }
     }
 
     // FUNCION PARA ATACAR AL PERSONAJE

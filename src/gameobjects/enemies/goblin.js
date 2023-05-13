@@ -1,6 +1,6 @@
 import EnemyObject from "./enemyObject";
 
-CLASE DEL GOBLIN
+// CLASE DEL GOBLIN
 
 export default class Goblin extends EnemyObject {
 

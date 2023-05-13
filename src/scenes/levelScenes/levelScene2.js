@@ -110,50 +110,12 @@ export default class LevelScene2 extends LevelScene {
 		}
 	}
 
-	// FUNCION PARA CUANDO SE COMPLETE EL NIVEL SE AÑADA LA MUSICA Y DIBUJE LA MEIGA
-	completeLevel() {
-		console.log("NIVEL COMPLETADO")
-		LevelScene.progress[this.namescene] = true
-
-		this.sound.removeByKey('fightSong');
-		this.sound.removeByKey('fightSong2');
-		this.sound.removeByKey('fightSong3');
-
-		if (!this.isMuted) {
-			const explorationSong = this.sound.add("explorationSong", {
-				volume: 0.1,
-				loop: true
-			});
-
-			const appearEffect = this.sound.add("appearEffect", {
-				volume: 0.1
-			});
-
-			appearEffect.play();
-
-			appearEffect.once('complete', () => {
-				explorationSong.play();
-			});
-		}
-
-
-		this.events.emit('levelComplete');
-		this.abrirPuertas();
-
-		for (let i = 0; i < 5; i++) {
-			setTimeout(() => {
-				this.cameras.main.flash(500);
-			}, i * 600);
-		}
-
-		this.addMeiga();
-		this.spawnMeiga = true;
-	}
-
+	// FUNCION PARA ABRIR LAS PUERTAS QUE LE CORRESPONDEN (3 PUERTAS EN ESTE CASO)
 	abrirPuertas() {
 		this.puerta.setVisible(false);
 		this.puertasGroup.setVisible(false)
 
+		// ELIMINA LAS TRES PUERTAS Y GENERA 3 ZONAS INVISIBLES PARA ASI ACCEDER A SUS RESPECTIVAS SALAS SI COLISIONAS CON ÉSTAS
 		this.puertasGroup.remove(this.puertaSolidaAbajo, true, true)
 		this.puertasGroup.remove(this.puertaSolidaIzq, true, true)
 		this.puertasGroup.remove(this.puertaSolidaDer, true, true)

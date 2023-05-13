@@ -99,9 +99,6 @@ export default class Cyclops extends EnemyObject {
             this.stopHorizontal();
         }
 
-        if (this.toDestroy) {
-            this.destroy();
-        }
     }
 
     // FUNCION PARA ATACAR AL PERSONAJE
