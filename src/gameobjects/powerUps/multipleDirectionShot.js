@@ -1,6 +1,8 @@
 import PowerUp from "./powerUp"
 import { Directions } from "../utils/directions"
 
+// CLASE DEL POWER-UP DE DISPARO MULTIPLE
+
 export default class MultipleDirectionShot extends PowerUp{
 
     constructor(scene, x, y){
@@ -18,6 +20,7 @@ export default class MultipleDirectionShot extends PowerUp{
        /*  this.play('multipleDirectionShot_animation') */
     }
 
+    // FUNCION PARA GENERAR LAS DIRECCIONES EN LAS QUE DISPARAR
     run(charX, charY, passives) {
         if (this.scene.bulletPool.hasBullets()) {
             let offsetSign = [1,-1]
@@ -37,6 +40,7 @@ export default class MultipleDirectionShot extends PowerUp{
         }
     }
 
+    // FUNCION PARA SABER SI ES UN COMBO
     static isCombo(power1, power2) {
         let combo = ["tripleShot", "eightDirShot", "multipleDirectionShot"]
         return power1.getKey() !== power2.getKey() && combo.includes(power1.getKey()) && combo.includes(power2.getKey())

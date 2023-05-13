@@ -1,5 +1,6 @@
 import Character from "../gameobjects/character"
 
+// ESCENA DE LOS CONTROLES DEL JUEGO
 
 export default class instructionScene extends Phaser.Scene {
     constructor() {
@@ -28,12 +29,12 @@ export default class instructionScene extends Phaser.Scene {
         this.load.spritesheet('w_key', './assets/keyboards/W.png', { frameWidth: 19, frameHeight: 21 });
         this.load.spritesheet('powerup', './assets/powerups/FreezeArrow.png', { frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet('character', './assets/character/character.png', { frameWidth: 64, frameHeight: 32 });
-        this.load.image('skip', './assets/ui/skip.png');
         this.load.image('speech', './assets/ui/speech.png');
         this.load.spritesheet('skip_sprite', './assets/ui/skip_sprite.png', { frameWidth: 336, frameHeight: 166 });
     }
 
     create(data) {
+        // ELIMINA LA MUSICA ANTIGUA Y AÑADE LA NUEVA
         this.isMuted = data.mute;
         this.sound.removeByKey('chatTyping');
         this.sound.removeByKey('chat');
@@ -98,7 +99,6 @@ export default class instructionScene extends Phaser.Scene {
         })
 
         // SHOOT CHARACTER
-
         const shootCharacter = new Character(this, 600, 380, "shoot").setScale(3.5);
         down_key.play('DOWN_Press');
 
@@ -120,7 +120,6 @@ export default class instructionScene extends Phaser.Scene {
         })
 
         // DASH CHARACTER
-
         const dashCharacter = new Character(this, 600, 540, "dash").setScale(3.5);
         shift_key.play('SHIFT_Press');
 
@@ -139,8 +138,6 @@ export default class instructionScene extends Phaser.Scene {
             repeat: 0
         })
 
-        // const skip_title = this.add.sprite(890, 600, 'skip_title').setScale(0.2);
-        // skip_title.setInteractive({cursor: 'pointer'});
         const skip = this.add.sprite(1000, 600, 'skip_sprite').setScale(0.5);
         skip.setInteractive({ cursor: 'pointer' });
         skip.on('pointerover', () => {

@@ -1,3 +1,5 @@
+// CLASE DE LAS EXPLOSIONES DEL BOSS
+
 export default class ExplosionBoss extends Phaser.Physics.Arcade.Sprite {
 
     constructor(scene, x, y, dmg){
@@ -16,6 +18,7 @@ export default class ExplosionBoss extends Phaser.Physics.Arcade.Sprite {
         });
     }
 
+    // FUNCION PARA CREAR LAS ANIMACIONES
     createAnimations(){
         this.scene.anims.create({
             key: 'hit_explosion',
@@ -44,6 +47,7 @@ export default class ExplosionBoss extends Phaser.Physics.Arcade.Sprite {
         super.preUpdate(t, dt)
     }
 
+    // FUNCION PARA SPAWNEAR LAS EXPLOSIONES
     spawn(x, y){
         this.x = x
         this.y = y
@@ -54,6 +58,7 @@ export default class ExplosionBoss extends Phaser.Physics.Arcade.Sprite {
         this.play('spawn_explosion')
     }
 
+    // FUNCION PARA CUANDO EXPLOTA
     explode(){
         //play de sonido de esplosion
         this.overlap = true
@@ -62,11 +67,13 @@ export default class ExplosionBoss extends Phaser.Physics.Arcade.Sprite {
         this.explotionSound.play()
     }
 
+    // FUNCION PARA OCULTARLAS
     hide(){
         this.x = -150
         this.y = -150
     }
 
+    // FUNCION PARA QUITARLE VIDA AL PERSONAJE SI LE GOLPEA
     hit(enemy){
         enemy.getHit(this.dmg)
     }

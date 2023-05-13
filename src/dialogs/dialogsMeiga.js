@@ -1,3 +1,5 @@
+// DIALOGOS QUE REALIZA LA MEIGA
+
 export default{
     level1: [
         "Ohh parece que te has perdido en el bosque... ¿Cómo? ¿Que estás buscando gamusinos?",

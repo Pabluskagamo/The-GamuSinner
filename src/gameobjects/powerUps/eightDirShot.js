@@ -1,6 +1,8 @@
 import PowerUp from "./powerUp"
 import { Directions } from "../utils/directions"
 
+// CLASE DEL POWER-UP DE DISPARO EN 8 DIRECCIONES
+
 export default class EightDirShot extends PowerUp{
 
     constructor(scene, x, y) {
@@ -16,6 +18,7 @@ export default class EightDirShot extends PowerUp{
         this.play('eightDirShot_animation')
     }
 
+    // FUNCION PARA GENERAR LAS 8 DIRECCIONES EN LAS QUE DISPARAR
     run(charX, charY, passives) {
         if (this.scene.bulletPool.hasBullets()) {
             let arrayDirections = Object.values(Directions)

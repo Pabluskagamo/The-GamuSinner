@@ -2,6 +2,8 @@ import Phaser from 'phaser'
 import LevelScene from './levelScene';
 import LevelScene2 from './levelScenes/levelScene2';
 
+// ESCENA CUANDO PIERDES EN EL JUEGO
+
 export default class GameOverScene extends Phaser.Scene {
 	constructor() {
 		super('game_over');
@@ -20,6 +22,7 @@ export default class GameOverScene extends Phaser.Scene {
 	}
 
 	create(data) {
+		// AÑADE LA MUSICA
 		this.isMuted = data.mute;
 		this.level = data.level;
 		if (!this.isMuted) {
@@ -40,9 +43,14 @@ export default class GameOverScene extends Phaser.Scene {
 			frameRate: 10,
 			repeat: 0
 		})
+
+		// BACKGROUND
 		this.add.image(0, 0, 'background2').setOrigin(0, 0).setScale(0.75);
+
+		// TITLE
 		const title = this.add.image(this.sys.game.canvas.width / 2, 260, 'game_over').setScale(0.65);
 
+		// RESTART BUTTON
 		const restart = this.add.sprite(this.sys.game.canvas.width / 2, 470, 'game_restart').setScale(0.35);
 		restart.setInteractive({ cursor: 'pointer' });
 		restart.on('pointerover', () => {
@@ -83,6 +91,7 @@ export default class GameOverScene extends Phaser.Scene {
 			}
 		});
 
+		// MENU BUTTON
 		const menu = this.add.sprite(this.sys.game.canvas.width / 2, 525, 'main_menu').setScale(0.35);
 		menu.setInteractive({ cursor: 'pointer' });
 		menu.on('pointerover', () => {

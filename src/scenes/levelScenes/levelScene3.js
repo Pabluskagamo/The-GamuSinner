@@ -1,15 +1,22 @@
 import LevelScene from "../levelScene";
 
-export default class LevelScene2 extends LevelScene {
+// ESCENA QUE CORRESPONDE AL NIVEL 3 DE GALICIA
+
+export default class LevelScene3 extends LevelScene {
 	constructor() {
 		super('level3')
 	}
 
+	// FUNCION PARA INICIALIZAR EL TILEMAP DEL NIVEL 3
 	initMap() {
 		const mapa = this.map = this.make.tilemap({
 			key: 'sala3'
 		});
+
+		// TILE IMAGE
 		const tiles = mapa.addTilesetImage('Forest', 'tiles');
+
+		// TILE LAYERS
 		this.groundLayer = this.map.createLayer('Suelo', tiles);
 		this.foregroundLayer = this.map.createLayer('Bordes', tiles);
 		this.puertaSolida = this.physics.add.image(1168, 320, 'puertaSala3');
@@ -17,6 +24,7 @@ export default class LevelScene2 extends LevelScene {
 		this.objetos = this.map.createLayer('Objetos', tiles);
 		this.borderTrees = this.map.createLayer('bordeArboles', tiles);
 
+		// COLISIONES
 		this.foregroundLayer.setCollisionBetween(0, 999);
         this.puertaSolida.setImmovable(true);
 
@@ -33,6 +41,7 @@ export default class LevelScene2 extends LevelScene {
 			obj1.reboundOrRelease()
 		});
 
+		// PROFUNDIDAD
 		this.puertaSolida.setDepth(3);
 		this.player.setDepth(2);
 		this.enemyPool._group.setDepth(2);
@@ -40,6 +49,7 @@ export default class LevelScene2 extends LevelScene {
 		this.foregroundLayer.setDepth(3);
 	}
 
+	// FUNCION PARA CUANDO SE COMPLETE EL NIVEL SE AÑADA LA MUSICA Y SE ABRAN LAS PUERTAS
 	completeLevel() {
 		console.log("NIVEL COMPLETADO")
 		LevelScene.progress[this.namescene] = true
@@ -75,29 +85,12 @@ export default class LevelScene2 extends LevelScene {
 		}
 	}
 
-	// addMeiga() {
-		
-	// 	const meiga = this.add.sprite(480, 300, 'meiga').setScale(1.6);
-	// 	this.anims.create({
-	// 		key: 'meigaState',
-	// 		frames: this.anims.generateFrameNumbers('meiga', { start: 0, end: 3 }),
-	// 		frameRate: 3,
-	// 		repeat: -1
-	// 	});
-	// 	meiga.play('meigaState');
-	// 	const e_key = this.add.sprite(480, 270, 'e_key');
-	// 	this.anims.create({
-	// 		key: 'E_Press',
-	// 		frames: this.anims.generateFrameNumbers('e_key', { start: 0, end: 2 }),
-	// 		frameRate: 2,
-	// 		repeat: -1
-	// 	});
-	// 	e_key.play('E_Press');
-	// }
-
+	// FUNCION PARA ABRIR LAS PUERTAS QUE LE CORRESPONDEN
 	abrirPuertas(){
 		this.puerta.setVisible(false);
 		this.puertaSolida.destroy();
+		
+		// AÑADE UNA ZONA INVISIBLE PARA QUE CUANDO LA TOQUES PASES EN ESTE CASO AL NIVEL 2
 		const zonaInvisible = this.add.zone(this.sys.game.canvas.width, 320, 10, 128);
 		this.physics.add.existing(zonaInvisible);
 
@@ -109,6 +102,7 @@ export default class LevelScene2 extends LevelScene {
 		});
 	}
 
+	// ESTABLECE LA MUSICA
 	setMusic(){
 		if(!this.sound.get("fightSong3")){
 			this.banda = this.sound.add("fightSong3", {

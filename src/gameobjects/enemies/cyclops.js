@@ -1,5 +1,7 @@
 import EnemyObject from "./enemyObject";
 
+// CLASE DE OLLIPARO
+
 export default class Cyclops extends EnemyObject {
 
     constructor(scene, x, y, speed, player, enemypool, hp){
@@ -88,6 +90,7 @@ export default class Cyclops extends EnemyObject {
     preUpdate(t, dt){
         super.preUpdate(t, dt)
 
+        // COMPRUEBA QUE SIEMPRE QUE TENGA VIDA Y NO ESTE ATACANDO, O ESTÉ MUERTO EL PERSONAJE, PERSIGA AL PERSONAJE, SI NO PARA
         if (this.hp > 0 && !this.attacking && !this.player.isDead()) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
             this.follow();
@@ -101,6 +104,7 @@ export default class Cyclops extends EnemyObject {
         }
     }
 
+    // FUNCION PARA ATACAR AL PERSONAJE
     attack(enemie){
         if(!this.attacking && !this.isDead() && !this.player.isDead()){
             this.attacking = true;

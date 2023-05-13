@@ -1,5 +1,7 @@
 import Item from "./item";
 
+// CLASE DE LOS MUSLITOS
+
 export default class Food extends Item{
 
     constructor(scene, x, y, value){
@@ -24,6 +26,7 @@ export default class Food extends Item{
         super.preUpdate(t, dt)
     }
 
+    // FUNCION PARA CUANDO LO RECOLECTA EL PERSONAJE
     collect(character){
 
         if(!this.collected){
@@ -39,6 +42,7 @@ export default class Food extends Item{
         }
     }
 
+    // DESAPARECE EL MUSLITO
     deSpawn(){
         this.scene.foodPool.release(this);
     }

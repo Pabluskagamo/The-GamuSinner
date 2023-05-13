@@ -1,5 +1,7 @@
 import PowerUp from "./powerUp"
 
+// CLASE DEL POWER-UP DE DISPARO REBOTANTE
+
 export default class BouncingShot extends PowerUp{
 
     constructor(scene, x, y){
@@ -14,6 +16,7 @@ export default class BouncingShot extends PowerUp{
         this.play('bouncingShot_animation')
     }
 
+    // FUNCION PARA ACTIVAR EL REBOTE
     run (bullet) {
         bullet.activateBouncing()
     }

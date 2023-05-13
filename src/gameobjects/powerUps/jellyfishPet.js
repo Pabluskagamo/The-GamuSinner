@@ -1,3 +1,5 @@
+// CLASE DE LA MASCOTA
+
 export default class JellyfishPet extends Phaser.Physics.Arcade.Sprite {
 
     constructor(scene, x, y){
@@ -41,15 +43,18 @@ export default class JellyfishPet extends Phaser.Physics.Arcade.Sprite {
     move(){
     }
 
+    // FUNCION PARA OCULTARLA
     hide(){
         this.x = -150
         this.y = -150
     }
 
+    // FUNCION PARA ATACAR
     attack(powerUp, passives, dir){
         powerUp.run(this.x, this.y, passives, dir)
     }
 
+    // FUNCION PARA SEGUIR
     follow(x, y){
         this.x = x
         this.y = y

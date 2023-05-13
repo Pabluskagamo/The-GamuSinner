@@ -4,6 +4,8 @@ import FreezingShot from "../powerUps/freezingShot";
 import PetBot from "../powerUps/petBot";
 import TripleShot from "../powerUps/tripleShot";
 
+// POOL DE LOS POWER-UPS
+
 export default class PowerUpPool {
 
 
@@ -11,9 +13,9 @@ export default class PowerUpPool {
         this.scene = scene;
         this._group = scene.add.group();
         this.max = max;
-        //this.fillPull()
     }
 
+    // AÑADIR LOS POWER-UPS
     addMultipleEntity(entities) {
 		this._group.addMultiple(entities);
 		this._group.children.iterate(c => {
@@ -24,6 +26,7 @@ export default class PowerUpPool {
         this._group.shuffle()
 	}
 
+    // SPAWNEO DE LOS POWER-UPS
     spawn(x, y) {
         //cambiar politica y añadir que no s epueda spawnear si enable de powerUp es true
         //usa false para el active por defecto ver si hacemos esto o hacemos el shuffle cada x tiempo
@@ -44,17 +47,19 @@ export default class PowerUpPool {
         }
     }
 
-
+    // FUNCION PARA SABER SI TIENE POWER-UPS
     hasPowerUps(){
         return this._group.countActive() < this.max;
     }
     
+    // FUNCION PARA LIMPIAR POWER-UPS
     release(entity) {
         entity.body.overlap = false;
         entity.body.enable = false;
         this._group.killAndHide(entity)
     }
 
+    // FUNCION PARA LLENAR LAS POOL
     fillPool(){
         let powerUps = []
 

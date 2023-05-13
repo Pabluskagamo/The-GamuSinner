@@ -1,15 +1,22 @@
 import LevelScene from "../levelScene";
 
+// ESCENA QUE CORRESPONDE AL NIVEL 4 DE GALICIA
+
 export default class LevelScene4 extends LevelScene {
     constructor() {
         super('level4')
     }
 
+    // FUNCION PARA INICIALIZAR EL TILEMAP DEL NIVEL 4
     initMap() {
         const mapa = this.map = this.make.tilemap({
             key: 'sala4'
         });
+
+        // TILE IMAGE
         const tilesFaerie = mapa.addTilesetImage('FairyForest', 'tileFaerieForest');
+
+        // TILE LAYERS
         this.groundLayer = this.map.createLayer('Suelo', tilesFaerie);
         this.foregroundLayer2 = this.map.createLayer('Bordes2', tilesFaerie);
         this.puerta2 = this.map.createLayer('Puerta2', tilesFaerie);
@@ -23,6 +30,7 @@ export default class LevelScene4 extends LevelScene {
         this.puerta1 = this.map.createLayer('Puerta1', tilesFaerie);
         this.puertaSolida = this.physics.add.image(16, 256, 'puertaSala4');
 
+        // COLISIONES
         this.foregroundLayer1.setCollisionBetween(0, 999);
         this.foregroundLayer2.setCollisionBetween(0, 999);
         this.topTree.setCollisionBetween(0, 999);
@@ -58,6 +66,7 @@ export default class LevelScene4 extends LevelScene {
             obj1.reboundOrRelease()
         });
 
+        // PROFUNDIDAD
         this.puertaSolida.setDepth(3);
         this.player.setDepth(2);
         this.enemyPool._group.setDepth(2);
@@ -69,12 +78,13 @@ export default class LevelScene4 extends LevelScene {
         this.foregroundLayer2.setDepth(3);
         this.puerta1.setDepth(3);
 
+        // TIEMPO POR SI RECOGES EL DINERO DEL COFRE
         this.fadeTime = 0;
         this.faded = false;
     }
 
+    // ACTUALIZA EL TIEMPO DE DESVANECIMIENTO
     update(t) {
-
         super.update(t)
 
         if (this.faded) {
@@ -92,6 +102,7 @@ export default class LevelScene4 extends LevelScene {
 
     }
 
+    // FUNCION PARA CUANDO SE COMPLETE EL NIVEL SE AÑADA LA MUSICA, SE ABRAN LAS PUERTAS Y APAREZCA EL PODER RECOGER EL COFRE
     completeLevel() {
         console.log("NIVEL COMPLETADO")
         LevelScene.progress[this.namescene] = true
@@ -138,10 +149,13 @@ export default class LevelScene4 extends LevelScene {
         this.e_key.play('E_Press');
     }
 
+    // FUNCION PARA ABRIR LAS PUERTAS QUE LE CORRESPONDEN
     abrirPuertas() {
         this.puerta1.setVisible(false);
         this.puerta2.setVisible(false);
         this.puertaSolida.destroy();
+
+        // AÑADE UNA ZONA INVISIBLE PARA QUE CUANDO LA TOQUES PASES EN ESTE CASO AL NIVEL 2
         const zonaInvisible = this.add.zone(0, 288, 10, 128);
         this.physics.add.existing(zonaInvisible);
 
@@ -152,6 +166,7 @@ export default class LevelScene4 extends LevelScene {
             this.scene.start('level2', { player: this.player, gate: { x: this.sys.game.canvas.width - 80, y: this.player.y }, mute: this.isMuted });
         });
 
+        // AÑADE EL COFRE
         this.cofre = this.add.zone(1008, 338, 30, 25);
         this.physics.add.existing(this.cofre);
         this.nearCofre = false;
@@ -171,7 +186,7 @@ export default class LevelScene4 extends LevelScene {
         });
     }
 
-
+    // ESTABLECE LA MUSICA
     setMusic(){
 		this.banda = this.sound.add("fightSong2", {
 			volume: 0.1,

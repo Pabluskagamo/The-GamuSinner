@@ -3,10 +3,9 @@ import Goblin from "../enemies/goblin"
 import Spectre from "../enemies/spectre"
 import Cyclops from "../enemies/cyclops"
 
+// POOL DE LOS ENEMIGOS
 
 export default class EnemyPool {
-
-	
 
 	constructor (scene, max) {
 		this.scene = scene;
@@ -16,9 +15,8 @@ export default class EnemyPool {
 		this._spectresgroup = scene.add.group()
 		this._cyclopsgroup = scene.add.group()	
 		this.max = max
-		//this.scene = scene;
-		//this.reuse = reuse;
 
+		// INDICADOR DE LA VIDA DE LOS ENEMIGOS EN FUNCION DEL NIVEL
 		this.hpPerLevel ={
 			level1: {
 				goblin: 20,
@@ -75,6 +73,7 @@ export default class EnemyPool {
 		});
 	}
 	
+	// FUNCION PARA SPAWNEAR LOS ENEMIGOS
 	spawn (x, y) {
 
 		if(!this.emptyPool()){
@@ -95,6 +94,7 @@ export default class EnemyPool {
 		return null;
     }
 
+	// SPAWNEO DE GOBLIN
 	spawnGob(x,y){
 		if(!this.emptyPool()){
 			let entity = this._gobsgroup.getFirstDead();
@@ -112,6 +112,7 @@ export default class EnemyPool {
 		}
 	}
 
+	// SPAWNEO DE LOBISOME
 	spawnWolf(x,y){
 		if(!this.emptyPool()){
 			let entity = this._wolfsgroup.getFirstDead();
@@ -129,6 +130,7 @@ export default class EnemyPool {
 		}
 	}
 
+	// SPAWNEO DE CANOURO
 	spawnSpectre(x,y){
 		if(!this.emptyPool()){
 			let entity = this._spectresgroup.getFirstDead();
@@ -146,6 +148,7 @@ export default class EnemyPool {
 		}
 	}
 
+	// SPAWNEO DE OLLIPARO
 	spawnCyclops(x,y){
 		if(!this.emptyPool()){
 			let entity = this._cyclopsgroup.getFirstDead();

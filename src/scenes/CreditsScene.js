@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
-import LevelScene from './levelScene';
-import LevelScene2 from './levelScenes/levelScene2';
+
+// ESCENA DE LOS CREDITOS DEL JUEGO
 
 export default class CreditsScene extends Phaser.Scene {
 	constructor() {
@@ -22,6 +22,7 @@ export default class CreditsScene extends Phaser.Scene {
 	}
 
 	create(data) {
+		// AÑADE LA MUSICA
 		this.isMuted = data.mute;
 		this.level = data.level;
 
@@ -32,8 +33,8 @@ export default class CreditsScene extends Phaser.Scene {
 
 		this.creditsSound.play()
 		
+		// BAKGROUND
 		this.add.image(0, 0, 'background_settings').setOrigin(0, 0)
-		// const title = this.add.image(this.sys.game.canvas.width / 2, 260, 'game_over').setScale(0.65);
 
 		this.input.keyboard.on('keydown', (event) => {
 			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
@@ -53,15 +54,17 @@ export default class CreditsScene extends Phaser.Scene {
 			repeat: 0
 		})
 
+		// TITLE
 		const title = this.add.image(this.sys.game.canvas.width / 2, 125, 'game_title').setScale(0.5);
 
+		// MENSJAE DE AGRADECIMIENTO JUNTO A SUS CREADORES
 		const thanksMsg = this.add.text(200, 200, '¡Muchas gracias por jugar a nuestro juego!', { fontFamily: 'MedievalSharp-Regular' }).setFontSize(40).setColor("#8C4B00").setFontStyle('bold')
 		const alex = this.add.text(360, 300, 'Alejandro Antuña Rodríguez', { fontFamily: 'MedievalSharp-Regular' }).setFontSize(40).setColor("#8C4B00").setFontStyle('bold')
 		const carlos = this.add.text(420, 350, 'Carlos Gómez López', { fontFamily: 'MedievalSharp-Regular' }).setFontSize(40).setColor("#8C4B00").setFontStyle('bold')
 		const javi = this.add.text(420, 400, 'Javier Gil Caballero', { fontFamily: 'MedievalSharp-Regular' }).setFontSize(40).setColor("#8C4B00").setFontStyle('bold')
 		const pablo = this.add.text(420, 450, 'Pablo Gamo González', { fontFamily: 'MedievalSharp-Regular' }).setFontSize(40).setColor("#8C4B00").setFontStyle('bold')
 		
-
+		// MENU BUTTON
 		const menu = this.add.sprite(this.sys.game.canvas.width / 2, 570, 'main_menu').setScale(0.35);
 		
 		menu.setInteractive({ cursor: 'pointer' });

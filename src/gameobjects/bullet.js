@@ -1,5 +1,7 @@
 import { Directions } from "./utils/directions"
 
+// CLASE DE LAS BALAS
+
 export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     constructor(scene, x, y, speed, dmg) {
@@ -15,6 +17,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         this.init(x, y)
     }
 
+    // INCICIALIZACION DE SUS CARACTERISTICAS
     init(x, y) {
         this.x = x
         this.y = y
@@ -26,6 +29,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         this.play('bullet_animation')
     }
 
+    // FUNCION PARA CREAR LAS ANIMACIONES DE LA BALA
     createAnimations() {
         this.scene.anims.create({
             key: 'bullet_animation',
@@ -52,6 +56,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     preUpdate(t, dt){
         super.preUpdate(t, dt)
 
+        // COMPROBACION DEL MOVIMIENTO DE LA BALA
         this.setRotation(0);
         if (this.body.velocity.x > 0 && this.body.velocity.y > 0) {
             // Diagonal abajo-derecha
@@ -83,11 +88,13 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
+    // INDICAR UNA DIRECCION A LA BALA
     setDireccion(dir){
         this.setVelocityX(dir.x*this.speed)
         this.setVelocityY(dir.y*this.speed)
     }
 
+    // FUNCION AL IMPACTAR A UN ENEMIGO
     hit(enemy){
         if(!this.justHit){
             this.justHit = true
@@ -100,17 +107,20 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
+    // FUNCION PARA ACTIVAR EL POWER-UP DE COGELACION
     activateFreezing() {
         this.icedmg = 10
         this.slow = true
         this.play('iceBullet_animation')
     }
 
+    // FUNCION PARA ACTIVAR EL POWER-UP DE REBOTE
     activateBouncing() {
         this.bouncingCount = 2
         this.play('bouncigBullet_animation')
     }
 
+    // FUNCION PAA REUTILIZAR LA BALA O NO EN LA POOL (EN FUNCION DE SI ES REBOTANTE O NO)
     reboundOrRelease(){
         if (this.bouncingCount > 0) {
             let arrayDirections = Object.values(Directions)
@@ -124,6 +134,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
+    // FUNCION PARA INDICAR DAÑO QUE REALIZA LA BALA
     setDmg(dmg){
         this.dmg = dmg;
     }

@@ -1,3 +1,5 @@
+// CLASE QUE GENERA LOS CORAZONES PERTENECIENTES A LA VIDA DEL PERSONAJE
+
 export default class HealthPoint extends Phaser.GameObjects.Sprite{
     constructor(scene,x, y, key){
         super(scene, x, y, key);

@@ -1,11 +1,13 @@
 import LevelScene from "../levelScene";
 
+// ESCENA QUE CORRESPONDE AL NIVEL 1 DE GALICIA
 
 export default class LevelScene1 extends LevelScene {
 	constructor() {
 		super('level1')
 	}
 
+	// FUNCION PARA CUANDO SE COMPLETE EL NIVEL SE AÑADA LA MUSICA Y SE ABRAN LAS PUERTAS
 	completeLevel() {
 
 		LevelScene.progress[this.namescene] = true
@@ -42,9 +44,12 @@ export default class LevelScene1 extends LevelScene {
 		}
 	}
 
+	// FUNCION PARA ABRIR LAS PUERTAS QUE LE CORRESPONDEN
 	abrirPuertas() {
 		this.puerta.setVisible(false);
 		this.puertaSolida.destroy();
+		
+		// AÑADE UNA ZONA INVISIBLE PARA QUE CUANDO LA TOQUES PASES EN ESTE CASO AL NIVEL 2
 		const zonaInvisible = this.add.zone(576, 0, 128, 10);
 		this.physics.add.existing(zonaInvisible);
 

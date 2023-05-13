@@ -1,11 +1,14 @@
 import Phaser from 'phaser'
 
+// ESCENA DE LA PANTALLA DE INICIO
+
 export default class MainScene extends Phaser.Scene {
 	constructor() {
 		super('mainScene');
 		this.isMuted = false;
 	}
 
+	// CARGAMOS LA MAYORIA DE LOS DATOS PARA NO SATURAR EL RESTO DEL JUEGO
 	preload() {
 		this.load.image('background', './img/fondo_pixelart3.png');
 		this.load.image('game_title', './img/titulo.png');
@@ -83,6 +86,7 @@ export default class MainScene extends Phaser.Scene {
 
 
 	create() {
+		// AÑADE MUSICA SI PUEDE
 		if(!this.isMuted){
 			this.banda = this.sound.add("musica", {
 				volume: 0.2,
@@ -119,8 +123,11 @@ export default class MainScene extends Phaser.Scene {
 			repeat: 0
 		})
 
+		// BACKGROUND
 		this.add.image(0, 0, 'background').setOrigin(0, 0).setScale(0.75);
 		const title = this.add.image(this.sys.game.canvas.width / 2, 230, 'game_title').setScale(0.65);
+
+		// STARTBUTTON
 		const start = this.add.sprite(this.sys.game.canvas.width / 2, 365, 'game_start').setScale(0.35);
 		start.setInteractive({ cursor: 'pointer' });
 		start.on('pointerover', () => {
@@ -151,6 +158,7 @@ export default class MainScene extends Phaser.Scene {
 			}
 		});
 
+		// MUTE BUTTON
 		const muteButton = this.add.sprite(1060, 630, 'mute_button').setScale(0.35);
 		muteButton.visible = false;
 		muteButton.setInteractive({ cursor: 'pointer' });
@@ -178,6 +186,7 @@ export default class MainScene extends Phaser.Scene {
 			soundButton.visible = true;
 		});
 
+		// SOUND BUTTON
 		const soundButton = this.add.sprite(1060, 630, 'sound_button').setScale(0.35);
 		soundButton.setInteractive({ cursor: 'pointer' });
 		soundButton.on('pointerover', () => {
@@ -204,6 +213,7 @@ export default class MainScene extends Phaser.Scene {
 			soundButton.visible = false;
 		});
 
+		// FULLSCREEN BUTTON
 		const fullScreen = this.add.sprite(1120, 627, 'full_screen').setScale(0.25);
 
 		fullScreen.setInteractive({ cursor: 'pointer' });
@@ -223,6 +233,7 @@ export default class MainScene extends Phaser.Scene {
 		});
 	}
 
+	// FUNCION PARA CAMBIAR TEXTURA DE LOS BOTONES DE SONIDO
 	changeButtonTexture(button) {
 		if (this.isMuted) {
 			button.setTexture('sound_button');

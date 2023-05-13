@@ -2,8 +2,8 @@ import MovableObject from "./movableObject";
 import NonePowerUp from "./powerUps/nonePowerUp";
 import { PowerUpFactory } from "./powerUps/powerUpFactory";
 import { Directions } from "./utils/directions"
-import MultipleDirectionShot from "./powerUps/multipleDirectionShot";
-import BouncingShot from "./powerUps/bouncingShot"
+
+// CLASE DEL PERSONAJE
 
 export default class Character extends MovableObject {
 
@@ -13,22 +13,21 @@ export default class Character extends MovableObject {
         this.scene.add.existing(this);
         this.instruction = instruction;
 
+        // EN FUNCION DE SI ES UN PERSONAJE DE LA ESCENA DE CONTROLES TIENE UN CONSTRUCTOR U OTRO
         if (this.instruction === null) {
+
+            // INICIALIZAS LOS VALORES POR DEFECTO DEL PERSONAJE
             this.wallet = wallet;
             this.isAttacking = false;
             this.isDashing = false;
             this.invicible = false;
             this.lastDash = 0;
-            //this.nonePowerUp = new MultipleDirectionShot(this.scene)
-            //this.nonePowerUp.collect()
-            //this.nonePowerUp.initTimer()
             this.nonePowerUp = new NonePowerUp(this.scene)
             this.currentPowerUp = this.nonePowerUp
             this.inventory = null
             this.petPowerUp = null
             this.pet = null
             this.passives = []
-            //this.passives = [new BouncingShot(this.scene)]
             this.numDirections = 8;
             this.bulletMultiplier = 3;
             this.bulletSpread = 0.25;
@@ -42,11 +41,9 @@ export default class Character extends MovableObject {
 
             this.setScale(1.7);
 
+            // SE AJUSTA SU CAJA DE COLISIONES
             this.scene.physics.add.existing(this);
             this.setCollideWorldBounds();
-            /* this.originalWidth = this.body.width
-            this.originalHeight = this.body.height
-            this.body.setSize(this.originalWidth/6.3, this.originalHeight/2.5, true); */
             this.bodyOffsetWidth = this.body.width / 4.2;
             this.bodyOffsetHeight = this.body.height / 4.8;
             this.bodyWidth = this.body.width / 5.8;
@@ -56,6 +53,7 @@ export default class Character extends MovableObject {
             this.body.width = this.bodyWidth;
             this.body.height = this.bodyHeight;
 
+            // SE AÑADEN LAS ANIMACIONES
             this.scene.anims.create({
                 key: 'mainChar_static',
                 frames: this.scene.anims.generateFrameNumbers('character', { start: 0, end: 7 }),
@@ -98,9 +96,7 @@ export default class Character extends MovableObject {
                 repeat: 0
             })
 
-            
-
-
+            // SE COMPRUEBAN UNA ANIMACIONES EN CONCRETO PARA ESPERAR A QUE TERMINEN PARA PODER REALIZAR OTRA ACCION
             this.on('animationcomplete', end => {
                 if (/^mainChar_shoot\w+/.test(this.anims.currentAnim.key)) {
                 }
@@ -121,7 +117,7 @@ export default class Character extends MovableObject {
             this.scene.events.on('endPowerUpPlayer', function () {
                 this.checkPowerUps()
             }, this);
-        }
+        } // CONTROL DE DASHEO
         else if (this.instruction === "dash") {
             this.scene.anims.create({
                 key: 'mainChar_controls_dash',
@@ -138,7 +134,7 @@ export default class Character extends MovableObject {
             });
 
             this.play('mainChar_controls_dash');
-        }
+        } // CONTROL DE MOVIMIENTO
         else if (this.instruction === "move") {
             this.scene.anims.create({
                 key: 'mainChar_controls_lado',
@@ -176,7 +172,7 @@ export default class Character extends MovableObject {
             });
 
             this.play('mainChar_controls_lado');
-        }
+        } // CONTROL DE DISPARO
         else if (this.instruction === "shoot") {
             this.scene.anims.create({
                 key: 'mainChar_controls_shootlado',
@@ -229,7 +225,7 @@ export default class Character extends MovableObject {
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
 
-        
+        // COMPRUEBA LA DIRECCION DEL MOVIMIENTO DEL PERSONAJE SIEMPRE QUE NO ESTE MUERTO
         if (this.instruction === null) {
 
             this.flipX = false;
@@ -288,8 +284,8 @@ export default class Character extends MovableObject {
                     });
                 }
             }
-            
-            // activate inventory
+
+            // ACTIVA EL INVENTARIO
             if (this.inventoryKey.isDown && this.inventory != null) {
                 this.inventory.setCollected(false)
                 this.collectPowerUp(this.inventory)
@@ -297,20 +293,23 @@ export default class Character extends MovableObject {
                 this.inventory = null;
             }
 
+            // SI TIENE MASCOTA SE MOVERA CON EL PERSONAJE
             if(this.pet != null){
                 this.movePet()
             }
 
+            // CUANDO YA NO DASHEA PARARA LAS VELOCIDADES
             if(!this.isDashing){
                 if (Phaser.Input.Keyboard.JustUp(this.a) || Phaser.Input.Keyboard.JustUp(this.d)) {
                     this.stopHorizontal();
                 }
-    
+
                 if (Phaser.Input.Keyboard.JustUp(this.w) || Phaser.Input.Keyboard.JustUp(this.s)) {
                     this.stopVertical();
                 }
             }
 
+            // DISPARAR
             if ((this.cursors.up.isDown || this.cursors.down.isDown || this.cursors.left.isDown || this.cursors.right.isDown) && t > this.lastFired) {
                 this.flipX = true;
                 if (!this.isDead() && !this.isDashing) {
@@ -319,22 +318,20 @@ export default class Character extends MovableObject {
                 }
             }
 
-            // if(this.isStatic()){
-            //     this.play('mainChar_static', true);
-            // }
-
+            // TEMPORIZADOR DEL DASH PARA VOLVER A HACERLO
             if(this.dashTimer){
                 const remaining = (5000 - this.dashTimer.getElapsed()) / 1000;
-    
+
                 if (this.lastTime != remaining) {
                     this.scene.events.emit('updatePowerupCount', 'dash_char', remaining.toFixed(0));
                 }
-    
+
                 this.lastTime = remaining
             }
         }
     }
 
+    // FUNCION PARA REALIZAR EL DISPARO
     attack() {
 
         this.scene.sound.add("shoot_sound", {
@@ -385,14 +382,17 @@ export default class Character extends MovableObject {
         }
     }
 
+    // FUNCION QUE COMPRUEBA SI SE ESTA ATACANDO
     isAttackInProcess() {
         return this.isAttacking;
     }
 
+    // FUNCION PARA MATAR EL PERSONAJE
     dieMe() {
         this.play('mainChar_die');
     }
 
+    // SETTER Y GETTER DE LA VIDA
     getHp() {
         return this.hp;
     }
@@ -401,6 +401,7 @@ export default class Character extends MovableObject {
         this.hp = health;
     }
 
+    // FUNCION PARA CUANDO RECIBE DAÑO
     getHit(dmg) {
         if (!this.isDashing && !this.invicible) {
             this.hp -= dmg;
@@ -418,10 +419,12 @@ export default class Character extends MovableObject {
 
     }
 
+    // FUNCION PARA CUANDO ESTA MUERTO
     isDead() {
         return this.hp === 0;
     }
 
+    // FUNCION PARA REALIZAR EL DASH
     dash() {
         this.flipX = this.body.velocity.x < 0;
         let speed = this.speed;
@@ -436,18 +439,22 @@ export default class Character extends MovableObject {
         }
     }
 
+    // FUNCION PARA SABER SI ESTA DASHEANDO
     getDash() {
         return this.isDashing;
     }
 
+    // FUNCION PARA SABER SI ESTA EN MODO INVENCIBLE (AL DASHEAR)
     isInvicible() {
         return this.invicible;
     }
 
+    // FUNCION PARA AÑADIR MONEDAS
     collectCoin(value) {
         this.wallet += value;
     }
 
+    // SETTER Y GETTER DE LAS MONEDAS
     getWallet() {
         return this.wallet;
     }
@@ -456,6 +463,7 @@ export default class Character extends MovableObject {
         this.wallet = coins;
     }
 
+    // SETTER Y GETTER DE LA VELOCIDAD
     getSpeed(){
         return this.speed;
     }
@@ -464,6 +472,7 @@ export default class Character extends MovableObject {
         this.speed = speed;
     }
 
+    // SETTER Y GETTER DEL DAÑO REALIZADO CON LAS BALAS
     getBulletDmg(){
         return this.bulletDmg;
     }
@@ -471,7 +480,17 @@ export default class Character extends MovableObject {
     setBulletDmg(dmg){
         this.bulletDmg = dmg;
     }
+    
+    // SETTER Y GETTER DE LA CADENCIA DE DISPARO
+    getCadence(){
+        return this.cadence;
+    }
 
+    setCadence(c){
+        this.cadence = c;
+    }
+
+    // FUNCION PARA ALMACENAR UN POWER-UP
     collectPowerUp(powerUp) {
         if(this.inventory == null){
             this.inventory = powerUp
@@ -493,6 +512,7 @@ export default class Character extends MovableObject {
         }
     }
 
+    // FUNCION PARA ACTIVAR UN POWER-UP
     activatePowerUp(powerUp) {
         let combo = PowerUpFactory.getCombo(powerUp, this.currentPowerUp)
         if (combo === "none") {
@@ -505,9 +525,10 @@ export default class Character extends MovableObject {
         }
     }
 
+    // FUNCION PARA COMPROBAR LOS POWER-UPS
     checkPowerUps() {
-        if (this.currentPowerUp && !this.currentPowerUp.isEnabled()) { 
-            this.currentPowerUp = this.nonePowerUp 
+        if (this.currentPowerUp && !this.currentPowerUp.isEnabled()) {
+            this.currentPowerUp = this.nonePowerUp
         }
 
         if (this.petPowerUp && !this.petPowerUp.isEnabled()) {
@@ -525,7 +546,8 @@ export default class Character extends MovableObject {
             })
         }
     }
-    
+
+    // FUNCION PARA COMPRIBAR SI UN POWER-UP YA ESTA ACTIVO
     checkPowerUpAlreadyActive(powerUp){
 
         if(powerUp.isPet() && this.pet != null){
@@ -540,33 +562,29 @@ export default class Character extends MovableObject {
                 powerExist.disable(true);
             }
         }
-        
+
     }
-    
+
+    // FUNCION PARA INCREMENTAR LA VIDA POR LOS MUSLITOS
     collectFood(value) {
         if (this.hp < this.maxHp) {
             this.hp += value;
         }
     }
-    
+
+    // FUNCION PARA OBTENER LA VIDA MAXIMA ACTUAL
     getMaxHp(){
         return this.maxHp;
     }
 
+    // FUNCION PARA INCREMENTAR LA VIDA MAXIMA (MAXIMO 7)
     incrementHp(){
         if(this.maxHp < 7){
             this.maxHp++;
         }
     }
 
-    getCadence(){
-        return this.cadence;
-    }
-
-    setCadence(c){
-        this.cadence = c;
-    }
-
+    // FUNCION PARA OBTENER LAS ESTADISTICAS ACTUALES DEL PERSONAJE
     getPlayerStats(){
         return {
             hp: this.hp,
@@ -577,6 +595,7 @@ export default class Character extends MovableObject {
         }
     }
 
+    // FUNCION PARA GENERAR UNA ANIMACION DE INVENCIBILIDAD
     setInvincible2secs(){
         this.invicible = true;
 
@@ -588,7 +607,7 @@ export default class Character extends MovableObject {
             ease: 'Sine.easeInOut',
             yoyo: true,
             onComplete: ()=>{
-                
+
             }
         })
 
@@ -600,10 +619,12 @@ export default class Character extends MovableObject {
         });
     }
 
+    // FUNCION PARA AÑADIR UNA MASCOTA
     setPet(pet){
         this.pet = pet
     }
 
+    // FUNCION PARA LA MASCOTA SIGA AL PERSONAJE
     movePet(){
         this.pet.follow(this.x + 50, this.y)
     }

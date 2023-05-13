@@ -1,5 +1,3 @@
-//import EventDispatcher from '../combat/eventDispatcher.js'
-
 // Esta clase se encarga de escribir texto de forma progresiva o instantaneamente, teniendo encuenta además la fuente, el ancho
 // hasta el salto a la siguiente línea y la emisión de eventos
 export default class dialogBox extends Phaser.GameObjects.Text {

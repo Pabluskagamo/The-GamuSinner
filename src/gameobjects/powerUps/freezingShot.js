@@ -1,5 +1,7 @@
 import PowerUp from "./powerUp"
 
+// CLASE DEL POWER-UP DE DISPARO COGELANTE
+
 export default class FreezingShot extends PowerUp{
 
     constructor(scene, x, y){
@@ -14,6 +16,7 @@ export default class FreezingShot extends PowerUp{
         this.play('freezingShot_animation')
     }
 
+    // FUNCION PARA ACTIVAR LA CONGELACION
     run (bullet) {
         bullet.activateFreezing()
     }

@@ -11,7 +11,10 @@ import FreezingShot from "../gameobjects/powerUps/freezingShot"
 import PetBot from "../gameobjects/powerUps/petBot"
 import JellyfishPet from "../gameobjects/powerUps/jellyfishPet"
 
+// PADRE DE TODOS LOS NIVELES DE GALICIA
+
 export default class LevelScene extends Phaser.Scene {
+	// OBJECT QUE LLEVA EL PROGRESO DE CADA NIVEL (FALSE === PASARLO, TRUE === YA PASADO)
 	static progress = {
 		level1: false,
 		level2: true,
@@ -19,7 +22,6 @@ export default class LevelScene extends Phaser.Scene {
 		level4: false,
 		levelBoss: true
 	}
-
 
 	constructor(scene) {
 		super(scene)
@@ -42,6 +44,8 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	create(data) {
+
+		// AÑADE MUSICA
 		this.isMuted = data.mute;
 		
         if(!this.isMuted){
@@ -53,18 +57,21 @@ export default class LevelScene extends Phaser.Scene {
 			loop: true
 		});
 
+		// INICIALIZA EL PERSONAJE, LAS POOLS Y EL TILEMAP
 		this.initPlayerAndPools(data);
 		this.initMap();
 		this.coinPool.fillPull(20);
 		this.foodPool.fillPull(20);
 		this.bulletPool.fillPool(1000);
 		
+		// COMPRUEBA SI EL NIVEL YA HA SIDO PASADO O NO
 		if(LevelScene.progress[this.namescene]){
 			this.initLevelFreeMode()
 		}else{
 			this.initLevelFightMode();
 		}
 
+		// SETTINGS BUTTON
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3).setDepth(4);
 
 		if(this.namescene == 'level1' && !LevelScene.progress.level1){		
@@ -110,7 +117,7 @@ export default class LevelScene extends Phaser.Scene {
 			}
 		});
 
-		//this.powerUpPool.fillPool()
+		// AÑADIMOS LOS POWER-UPS DISPONIBLES Y LOS AÑADIMOS A SU POOL
 		let powerUps = []
 
 		for (let i = 0; i < 6; i++) {
@@ -123,24 +130,33 @@ export default class LevelScene extends Phaser.Scene {
 		this.powerUpPool.addMultipleEntity(powerUps);
 
 		this.e = this.input.keyboard.addKey('E');
+
+		// CAPTURA LA ESCENA DE ESTADISTICAS
 		this.statsGame = this.scene.get('stats');
 
+		// EVENTO PARA ACTUALIZAR LAS MONEDAS DEL PERSONAJE AL SER GASTADAS
 		this.statsGame.events.on('spentcoins', this.player.setWallet, this.player);
 
+		// EVENTO PARA INCREMENTAR LA FUERZA DEL PERSONAJE
 		this.statsGame.events.on('incrementStrong', this.player.setBulletDmg, this.player);
 
+		// EVENTO PARA INCREMENTAR LA VELOCIDAD EL PERSONAJE
 		this.statsGame.events.on('incrementSpeed', this.player.setSpeed, this);
 
+		// EVENTO PARA INCREMENTAR LA VIDA DEL PERSONAJE
 		this.statsGame.events.on('incrementLife', this.incrementPlayerLife, this);
 
+		// EVENTO PARA INCREMENTAR LA CADENCIA DEL DISAPARO DEL PERSONAJE
 		this.statsGame.events.on('incrementCadence', this.player.setCadence, this.player);
 
 		this.settingsGame = this.scene.get('settings');
 
+		// EVENTO PARA COMPROBAR SI ESTA MUTE O NO
 		this.settingsGame.events.on('muteOption', function (mute) {
 			this.isMuted = mute;
 		}, this);
 
+		// EVENTO PARA ELIMINAR LAS ESCUCHAS A LOS EVENTOS DE LA ESCENA DE ESTADISTICAS
 		this.events.on('shutdown', ()=>{
             this.statsGame.events.removeListener('spentcoins', this.player.setWallet, this);
 			this.statsGame.events.removeListener('incrementStrong', this.bulletPool.changeDmg, this);
@@ -152,6 +168,7 @@ export default class LevelScene extends Phaser.Scene {
 
 	update(t) {
 		
+		// COMPRUEBA SI ESTA EN DEBUGUEO O COMPLETADO EL NIVEL
 		if (this.debugMode && !this.levelFinished && Phaser.Input.Keyboard.JustUp(this.k)) {
 			if(this.enemySpawnTimer){
 				this.enemySpawnTimer.remove();
@@ -166,6 +183,7 @@ export default class LevelScene extends Phaser.Scene {
 			this.completeLevel()
 		}
 
+		// COMPRUEBA EL PROGRESO DEL NIVEL
 		if(!LevelScene.progress[this.namescene]){
 			if (!this.wavesFinished) {
 				this.updateWaveCount()
@@ -177,11 +195,16 @@ export default class LevelScene extends Phaser.Scene {
 		}
 	}
 
+	// FUNCION PARA INICIALIZAR EL TILEMAP QUE LE CORRESPONDA (POR DEFECTO SALA 1)
 	initMap() {
 		const mapa = this.map = this.make.tilemap({
 			key: 'sala1'
 		});
+
+		// TILE IMAGE
 		const tiles = mapa.addTilesetImage('Forest', 'tiles');
+
+		// TILE LAYERS
 		this.groundLayer = this.map.createLayer('Suelo', tiles);
 		this.foregroundLayer = this.map.createLayer('Bordes', tiles);
 		this.puertaSolida = this.physics.add.image(576, 16, 'puertaSala1');
@@ -189,6 +212,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.objetos = this.map.createLayer('Objetos', tiles);
 		this.borderTrees = this.map.createLayer('bordeArboles', tiles);
 
+		// SE LE AÑADEN COLISIONES A ALGUNOS LAYERS
 		this.foregroundLayer.setCollisionBetween(0, 999);
         this.puertaSolida.setImmovable(true);
 
@@ -205,6 +229,7 @@ export default class LevelScene extends Phaser.Scene {
 			obj1.reboundOrRelease()
 		});
 
+		// SE AÑADE PROFUNDIDAD A LAS DISTINTAS CAPAS
 		this.puertaSolida.setDepth(3);
 		this.player.setDepth(2);
 		this.enemyPool._group.setDepth(2);
@@ -212,8 +237,10 @@ export default class LevelScene extends Phaser.Scene {
 		this.foregroundLayer.setDepth(3);
 	}
 
+	// FUNCION PARA INICIAR LAS POOLS Y DIBUJAR AL PERSONAJE
 	initPlayerAndPools(data) {
 		
+		// EN FUNCION DE LA SALA EN LA QUE SE ENCUENTRE DIBUJA EN UN SITIO ESPECIFICO AL PERSONAJE Y CON UNAS DETERMINADAS ESTADISITICAS
         if(data.hasOwnProperty('gate')){
             this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(),  data.player.getCadence(), data.player.getBulletDmg());
         }else{
@@ -221,6 +248,7 @@ export default class LevelScene extends Phaser.Scene {
         }
 		this.player.body.onCollide = true;
 
+		// SE CREAN LAS POOLS Y SE LLENAN
 		this.bulletPool = new BulletPool(this, 150, this.player.getBulletDmg())
 		this.powerUpPool = new PowerUpPool(this, 6)
 		this.enemyPool = new EnemyPool(this, 15);
@@ -255,6 +283,7 @@ export default class LevelScene extends Phaser.Scene {
 
 	}
 
+	// FUNCION PARA SPAWNEAR LOS ENEMIGOS EN LAS ESQUINAS DE LA ESCENA
 	spawnInBounds() {
 
 		const xPos = [0, this.sys.game.canvas.width]
@@ -280,6 +309,7 @@ export default class LevelScene extends Phaser.Scene {
 		//this.enemyPool.spawn(xPos[randX], yPos[randY]);
 	}
 
+	// INICIALIZADOR DE LOS TEMPORIZADORES - OLEADAS
 	initTimers(debug) {
 		this.freqChangeTime = 10000;
 		this.lastSec = 20;
@@ -308,6 +338,7 @@ export default class LevelScene extends Phaser.Scene {
 		});
 	}
 
+	// FUNCION PARA INICIALIZAR MODO PELEA
 	initLevelFightMode(){
 		if(!this.isMuted){
 			this.banda.play();
@@ -316,6 +347,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.initTimers(true);
 	}
 
+	// FUNCION PARA INICIALIZAR MODO EXPLORACION
 	initLevelFreeMode(){
 		if(!this.isMuted){
 			this.explorationSong.play();
@@ -326,6 +358,7 @@ export default class LevelScene extends Phaser.Scene {
 		}
 	}
 
+	// FUNCION PARA MOSTRAR ESCENA DE PERDER EN EL JUEGO
 	gameOver() {
 		this.cameras.main.fadeOut(500);
 		this.cameras.main.once("camerafadeoutcomplete", function () {
@@ -335,6 +368,7 @@ export default class LevelScene extends Phaser.Scene {
 		}, this);
 	}
 
+	// FUNCION PARA CUANDO SE TERMINA EL NIVEL, SE CAMBIA LA MUSICA Y SE ABRE SU DETERMINADA PUERTA
 	completeLevel(){
 
 		this.sound.removeByKey('fightSong');
@@ -354,11 +388,13 @@ export default class LevelScene extends Phaser.Scene {
 		this.puertaSolida.destroy();
 	}
 
+	// FUNCION PARA AUMENTAR LA VIDA DEL PERSONAJE
 	incrementPlayerLife(hp){
 		this.player.incrementHp();
 		this.player.setHp(hp);
 	}
 
+	// FUNCION PARA CAMBIAR LA FRECUENCIA DE LAS OLEADAS
 	changeFreqHandler() {
 		const currDelay = this.enemySpawnTimer.delay;
 
@@ -401,14 +437,17 @@ export default class LevelScene extends Phaser.Scene {
 		}
 	}
 
+	// FUNCION PARA OBTENER LA ALTURA DEL JUEGO
 	getGameHeight() {
 		return this.game.config.height
 	}
 
+	// FUNCION PARA OBTENER LA ANCHURA DEL JUEGO
 	getGameWidth() {
 		return this.game.config.width
 	}
 
+	// FUNCION PARA ACTUALIZAR EL CONTADOR DE OLEADAS
 	updateWaveCount(){
 		const remaining = (this.freqChangeTime - this.freqTimer.getElapsed()) / 1000;
 
@@ -419,6 +458,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.lastSec = remaining
 	}
 
+	// FUNCION PARA AÑADIR LA MEIGA EN LA ESCENA
     addMeiga() {
 
 		this.spawnMeiga = true;
@@ -440,6 +480,7 @@ export default class LevelScene extends Phaser.Scene {
 		e_key.play('E_Press');
 	}
 
+	// FUNCION PARA INDICAR LA POSICION DEL PERSONAJE
 	setPlayerPosition(x, y, level){
 		this.scene.get(level).player.stopHorizontal();
 		this.scene.get(level).player.stopVertical();
@@ -451,11 +492,13 @@ export default class LevelScene extends Phaser.Scene {
 
 	}
 
+	// FUNCION QUE INDICA SI TODOS LOS NIVELES HAN SIDO ACABADOS
 	allLevelsComplete(){
 		return LevelScene.progress.level1 && LevelScene.progress.level2 && LevelScene.progress.level3
 				&& LevelScene.progress.level4;
 	}
 
+	// FUNCION PARA PONER LA MUSICA
 	setMusic(){
 		this.banda = this.sound.add("fightSong", {
 			volume: 0.1,

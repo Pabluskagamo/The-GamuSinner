@@ -1,4 +1,7 @@
 import dialogBox from "../dialogs/dialogBox";
+
+// ESCENA DE LA HISTORIA DEL JUEGO
+
 export default class historyScene extends Phaser.Scene {
 
     constructor() {
@@ -15,6 +18,7 @@ export default class historyScene extends Phaser.Scene {
     }
 
     create(data) {
+        // AÑADE SU MUSICA
         this.isMuted = data.mute;
         if (!this.isMuted) {
             this.sound.add("chat", {
@@ -22,6 +26,7 @@ export default class historyScene extends Phaser.Scene {
             }).play();
         }
 
+        // DIALOGOS QUE SE VAN A IR REPRODUCIENDO
         this.textList = "Un día Dieguiño estaba aburrido, no sabía que hacer en el verano.\nSe aburría tanto, que decidió preguntarle a su abuelo que podía hacer.";
         this.textD = [
             'Hola avó, estoy aburrido, ¿Qué estás haciendo?',
@@ -44,8 +49,6 @@ export default class historyScene extends Phaser.Scene {
             repeat: 0
         })
 
-        // const skip_title = this.add.sprite(890, 600, 'skip_title').setScale(0.2);
-        // skip_title.setInteractive({cursor: 'pointer'});
         this.skip = this.add.sprite(1000, 600, 'skip_sprite').setScale(0.5);
         this.skip.setDepth(3);
         this.skip.setInteractive({ cursor: 'pointer' });
@@ -73,18 +76,22 @@ export default class historyScene extends Phaser.Scene {
                 }, this);
             }
         });
+
+        // AÑADIMOS UNA NUEVA MUSICA
         if (!this.isMuted) {
             this.rise = this.sound.add("rise", {
                 volume: 0.2,
             });
         }
 
+        // BOOLEANOS PARA SABER PORQUE SECCION VAMOS
         this.chatting = false;
         this.final = false;
         this.pregunta = false;
         this.showTextList();
     }
 
+    // FUNCION PARA EL DIALOGO INICIAL
     showTextList() {
         this.label = this.add.text(100, 250, '', { fontSize: '32px', fontFamily: 'Arial', lineSpacing: 20 });
 
@@ -97,7 +104,7 @@ export default class historyScene extends Phaser.Scene {
         });
     }
 
-
+    // FUNCION PARA LOS DIALOGOS DE DIEGUIÑO
     showDialogDieguinio() {
         this.skip.setPosition(1000, 100);
         if (this.d <= 2) {
@@ -131,6 +138,7 @@ export default class historyScene extends Phaser.Scene {
         }
     }
 
+    // FUNCION PARA LOS DIALOGOS DEL ABUELO
     showDialogAbuelo() {
         this.dialogAbuelo = new dialogBox(this, 440, 165, 440);
         this.dialogAbuelo.setDepth(2);
@@ -144,6 +152,7 @@ export default class historyScene extends Phaser.Scene {
         });
     }
 
+    // FUNCION PARA LOS DIALOGOS DE MOTIVACION FINALES
     showFinalTextList() {
         this.skip.setPosition(1000, 600);
         this.Finallabel = this.add.text(100, 100, '', { fontSize: '32px', fontFamily: 'Arial', lineSpacing: 20 });
@@ -159,6 +168,7 @@ export default class historyScene extends Phaser.Scene {
         });
     }
 
+    // FUNCION QUE PREGUNTA SI ESTAS PREPARADO E INICIALIZA LA SIGUIENTE ESCENA (INTRUCCIONES)
     showTextPreparado() {
         this.preLabel = this.add.text(100, 300, '', { fontSize: '45px', fontFamily: 'Arial', lineSpacing: 20 });
         this.pregunta = true;
@@ -182,6 +192,7 @@ export default class historyScene extends Phaser.Scene {
         });
     }
 
+    // FUNCION PARA HACER EFECTO DE ESCRITURA LETRA POR LETRA (VARIANDO EN FUNCION DE QUE DIALOGO)
     typewriteText(label, text, callback) {
         const length = text.length;
         let i = 0;

@@ -2,6 +2,8 @@ import EnemyBullet from "../enemyBullet"
 import Slime from "../enemies/slime"
 import ExplosionBoss from "../enemies/boss/explosionBoss";
 
+// POOL DE LAS BALAS DEL BOSS
+
 export default class BossPool {
 
 
@@ -15,6 +17,7 @@ export default class BossPool {
         this.dmg = dmg;
     }
 
+    // AÑADIR LAS BALAS
     addMultipleEntityToGroup(entities, group) {
 		group.addMultiple(entities);
 		group.children.iterate(c => {
@@ -23,6 +26,7 @@ export default class BossPool {
 		});
 	}
 
+    // SPAWNEO DE LAS BALAS
     spawnBullet(x, y) {
         if(this._bossEnemiesGroup.countActive(false) > 0){
             let bullet = this._bossBulletGroup.getFirstDead()
@@ -37,6 +41,7 @@ export default class BossPool {
         }
     }
 
+    // SPAWNEO DE LOS ESBIRROS
     spawnEnemy(x, y) {
         let entity = this._bossEnemiesGroup.getFirstDead();
         
@@ -52,6 +57,7 @@ export default class BossPool {
 	    }
     }
 
+    // SPAWNEO DE LAS EXPLOSIONES
     spawnExplosion(x, y) {
         let entity = this._bossExplosionGroup.getFirstDead();
         if (entity) {
@@ -63,30 +69,36 @@ export default class BossPool {
         }
     }
 
+    // LIMPIEZA DE ENEMIGOS
     releaseEnemy(entity) {
         entity.body.checkCollision.none = true
         this._bossEnemiesGroup.killAndHide(entity)
     }
 
+    // LIMPIEZA DE EXPLOSIONES
     releaseExplosion(entity) {
         entity.hide()
         entity.body.checkCollision.none = true
         this._bossEnemiesGroup.killAndHide(entity)
     }
 
+    // LIMPIEZA DE BALAS
     releaseBullet(entity) {
         entity.body.checkCollision.none = true
         this._bossBulletGroup.killAndHide(entity)
     }
 
+    // COMPRUEBA SI TIENE BALAS
     hasBullets() {
         return this._bossBulletGroup.countActive() < this.maxBullets
     }
 
+    // COMPRUEBA SI TIENE ENEMIGOS
     hasEnemies() {
         return this._bossEnemiesGroup.countActive() < this.maxEnemies
     }
 
+    // FUNCION PARA LLENAR LA POOL
     fillPool(nBullet, nEnemies, nExplosion, player) {
         let bullets = []
         let enemies = []
@@ -109,6 +121,7 @@ export default class BossPool {
         this.addMultipleEntityToGroup(explosions, this._bossExplosionGroup);
     }
 
+    // SETTER Y GETTER DEL DAÑO
     getDmg() {
         return this.dmg;
     }

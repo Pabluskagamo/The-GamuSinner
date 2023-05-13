@@ -14,6 +14,9 @@ import StatsScene from './scenes/statsScene'
 import historyScene from './scenes/historyScene'
 import LevelSceneBoss from './scenes/levelScenes/levelSceneBoss'
 import CreditsScene from './scenes/CreditsScene'
+
+// CONFIGURACION PARA GENERAR EL ESPACIO DE PHASER
+
 const config = {
 	type: Phaser.AUTO,
 	parent: 'app',

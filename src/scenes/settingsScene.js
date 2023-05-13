@@ -1,5 +1,7 @@
 import Phaser from 'phaser'
 
+// ESCENA DE LA CONFIGURACION
+
 export default class SettingScene extends Phaser.Scene {
 	constructor() {
 		super('settings');
@@ -134,6 +136,7 @@ export default class SettingScene extends Phaser.Scene {
 			this.soundButton.visible = true;
 		});
 
+		// SOUNDBUTTON
 		this.soundButton = this.add.sprite(1060, 630, 'sound_button').setScale(0.35);
 		this.soundButton.setInteractive({ cursor: 'pointer' });
 		this.soundButton.on('pointerover', () => {
@@ -161,6 +164,7 @@ export default class SettingScene extends Phaser.Scene {
 			this.soundButton.visible = false;
 		});
 
+		// FULLSCREEN BUTTON
 		const fullScreen = this.add.sprite(1120, 627, 'full_screen').setScale(0.25);
 
 		fullScreen.setInteractive({ cursor: 'pointer' });
@@ -180,6 +184,7 @@ export default class SettingScene extends Phaser.Scene {
 		});
 	}
 
+	// COMPROBACIONES DE SI ESTA MUTEADO O NO
 	update(t) {
 		if (!this.isMuted) {
 			this.soundButton.visible = true;
@@ -191,6 +196,7 @@ export default class SettingScene extends Phaser.Scene {
 		}
 	}
 
+	// FUNCION PARA CAMBIAR LA TEXTURA DEL BOTON DE SONIDO
 	changeButtonTexture(button) {
 		if (this.isMuted) {
 			button.setTexture('sound_button');

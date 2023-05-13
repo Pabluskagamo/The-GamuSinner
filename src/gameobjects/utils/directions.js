@@ -1,3 +1,5 @@
+// OBJETO QUE INDICA LAS 8 DIRECCIONES
+
 export const Directions = Object.freeze( {
     UP: new Phaser.Math.Vector2(0, -1),
     DOWN: new Phaser.Math.Vector2(0, 1),
