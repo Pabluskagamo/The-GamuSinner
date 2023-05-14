@@ -6,7 +6,8 @@ export default class LevelScene2 extends LevelScene {
 	static firstTalkMeiga = false
 
 	constructor() {
-		super('level2')
+		super('level2');
+		this.isTransitioning = false;
 	}
 
 	create(data){
@@ -168,6 +169,10 @@ export default class LevelScene2 extends LevelScene {
 				yoyo: true,
 				repeat: -1
 			  });
+			if (this.isTransitioning) {
+				return;
+			}
+			this.isTransitioning = true;
 			this.puertaSolidaArriba = this.add.zone(575, 119, 35, 10);
 			this.physics.add.existing(this.puertaSolidaArriba);
 			this.physics.add.overlap(this.player, this.puertaSolidaArriba, () => {

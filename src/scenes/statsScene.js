@@ -119,6 +119,7 @@ export default class StatsScene extends Phaser.Scene {
         this.lifeButton.on('pointerdown', () => {
             this.aumentarBar(this.lifeButton, 0, numMonedasLife, lifebar);
             this.events.emit('incrementLife', this.player.hp + 1);
+            this.player.hp += 1;
         });
 
         // STRONGBAR
@@ -238,7 +239,7 @@ export default class StatsScene extends Phaser.Scene {
         // ACTUALIZACION DE LAS MONEDAS
         this.actualcoins.setText(`X ${this.wallet}`);
         let i = 0;
-
+        console.log(this.wallet)
         // ACTUALIZACION DE LAS BARRAS DE ESTADISTICAS Y SUS BOTONES
         for(let spent of this.barSpent){
             if(i === 0){

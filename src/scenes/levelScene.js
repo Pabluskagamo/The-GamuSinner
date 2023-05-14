@@ -18,8 +18,8 @@ export default class LevelScene extends Phaser.Scene {
 	static progress = {
 		level1: false,
 		level2: true,
-		level3: true,
-		level4: true,
+		level3: false,
+		level4: false,
 		levelBoss: true
 	}
 
