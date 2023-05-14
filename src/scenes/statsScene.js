@@ -8,6 +8,7 @@ import LevelScene from './levelScene';
 export default class StatsScene extends Phaser.Scene {
     constructor() {
         super('stats');
+        this.isTransitioning = false;
     }
 
     // INTRODUCES TODA LA INFORMACION NECESARIA DEL PERSONAJE
@@ -228,7 +229,10 @@ export default class StatsScene extends Phaser.Scene {
             this.scene.resume('UIScene');
             this.scene.sleep();
             this.dialogBox.clearText();
-            this.levelGame.abrirpuertasFirstTalk()
+            if (!this.isTransitioning) {
+                this.levelGame.abrirpuertasFirstTalk()
+			}
+            this.isTransitioning = true;
         }
 
         // ACTUALIZACION DE LAS MONEDAS

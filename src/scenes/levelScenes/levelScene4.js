@@ -70,7 +70,7 @@ export default class LevelScene4 extends LevelScene {
         this.puertaSolida.setDepth(3);
         this.player.setDepth(2);
         this.enemyPool._group.setDepth(2);
-        this.objetos1.setDepth(3);
+        this.topTree.setDepth(3);
         this.wall.setDepth(3);
         this.treeborder1.setDepth(3);
         this.treeborder2.setDepth(3);

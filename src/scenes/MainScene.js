@@ -6,6 +6,7 @@ export default class MainScene extends Phaser.Scene {
 	constructor() {
 		super('mainScene');
 		this.isMuted = false;
+		this.isTransitioning = false;
 	}
 
 	// CARGAMOS LA MAYORIA DE LOS DATOS PARA NO SATURAR EL RESTO DEL JUEGO
@@ -44,6 +45,7 @@ export default class MainScene extends Phaser.Scene {
 		this.load.image('tilesCastleWall', './assets/tileset/sala2/tilesetCastle/TX Tileset Wall.png')
 		this.load.image('tilesCastleGrass', './assets/tileset/sala2/tilesetCastle/TX Tileset Grass.png')
 		this.load.image('tilesCastlePlant', './assets/tileset/sala2/tilesetCastle/TX Plant.png')
+		this.load.image('smallRunes', './assets/tileset/sala2/tilesetCastle/SmallRunes.png')
 		this.load.image('tileFaerieForest', './assets/tileset/FaerieForest_PetricakeGamesPNG.png')
 		this.load.image('tilesBossSuelo', './assets/tileset/salaBoss/drain-blood.png')
 		this.load.image('tilesBossPared', './assets/tileset/salaBoss/evildungeon.png')
@@ -139,6 +141,10 @@ export default class MainScene extends Phaser.Scene {
 		});
 
 		start.on('pointerup', () => {
+			if (this.isTransitioning) {
+				return;
+			}
+			this.isTransitioning = true;
 			this.cameras.main.fadeOut(500);
 			this.cameras.main.once("camerafadeoutcomplete", function () {
 				this.sound.removeByKey('musica');
@@ -149,6 +155,10 @@ export default class MainScene extends Phaser.Scene {
 
 		this.input.keyboard.on('keydown', (event) => {
 			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
+				if (this.isTransitioning) {
+					return;
+				}
+				this.isTransitioning = true;
 				this.cameras.main.fadeOut(500);
 				this.cameras.main.once("camerafadeoutcomplete", function () {
 					this.sound.removeByKey('musica');

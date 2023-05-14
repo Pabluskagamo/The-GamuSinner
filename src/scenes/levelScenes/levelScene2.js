@@ -30,19 +30,22 @@ export default class LevelScene2 extends LevelScene {
 		const tilesCastleWall = mapa.addTilesetImage('CastleWalls', 'tilesCastleWall')
 		const tilesCastleGrass = mapa.addTilesetImage('FloorCastle', 'tilesCastleGrass')
 		const tilesCastlePlant = mapa.addTilesetImage('trees', 'tilesCastlePlant')
+		const smallRunes = mapa.addTilesetImage('Small Runes', 'smallRunes')
 
 		// TILE LAYERS
 		this.groundLayer = this.map.createLayer('Suelo', [tiles, tilesCastleGrass]);
-		this.foregroundLayer = this.map.createLayer('Bordes', [tiles, tilesCastleStruct, tilesCastleWall, tilesCastlePlant]);
-		this.puerta = this.map.createLayer('EntradasSala', tiles);
-		this.objetos = this.map.createLayer('Objetos', [tiles, tilesCastleProps]);
-		this.objetosColl = this.map.createLayer('ObjetosColl', [tiles, tilesCastleProps]);
-		this.borderTrees = this.map.createLayer('bordeArboles', [tiles, tilesCastlePlant]);
-		this.vegetacion = this.map.createLayer('Vegetacion', [tilesCastlePlant]);
-		this.porton = this.map.createLayer('Porton', [tilesCastleStruct]);
+		this.vegetacion = this.map.createLayer('Vegetacion', [tiles, tilesCastlePlant]);
 		this.fuente = this.map.createLayer('Fuente', [tilesCastleProps]);
+		this.runasfuente = this.map.createLayer('runasFuente', [smallRunes, tilesCastleProps]).setVisible(false);
 		this.puertaAbierta = this.map.createLayer('PuertaAbierta', [tilesCastleProps]).setVisible(false);
 		this.puertaCerrada = this.map.createLayer('PuertaCerrada', [tilesCastleProps]);
+		this.puerta = this.map.createLayer('EntradasSala', tiles);
+		this.porton = this.map.createLayer('Porton', [tilesCastleStruct]);
+		this.foregroundLayer = this.map.createLayer('Bordes', [tiles, tilesCastleStruct, tilesCastleWall, tilesCastlePlant]);
+		this.objetos = this.map.createLayer('Objetos', [tiles, tilesCastleProps]);
+		this.objetosColl = this.map.createLayer('ObjetosColl', [tiles, tilesCastleProps]);
+		this.runas = this.map.createLayer('runas', [tilesCastleProps]).setVisible(false);
+		this.borderTrees = this.map.createLayer('bordeArboles', [tiles, tilesCastlePlant]);
 		this.escaleras = this.map.createLayer('Escaleras', [tilesCastleStruct, tilesCastleProps]);
 
 		// COLISIONES
@@ -67,12 +70,10 @@ export default class LevelScene2 extends LevelScene {
 		// PROFUNDIDAD
 		this.player.setDepth(2);
 		this.enemyPool._group.setDepth(2);
-		this.borderTrees.setDepth(2);
-		this.foregroundLayer.setDepth(1);
-		this.objetos.setDepth(1);
-		this.objetosColl.setDepth(2)
-		this.vegetacion.setDepth(1);
-		this.porton.setDepth(2);
+		this.borderTrees.setDepth(3);
+		this.foregroundLayer.setDepth(3);
+		this.objetosColl.setDepth(4);
+		this.porton.setDepth(3);
 
 		// PUERTAS POSIBLES
 		this.salidasSala = {
@@ -157,6 +158,16 @@ export default class LevelScene2 extends LevelScene {
 		if (this.allLevelsComplete()) {
 			this.puertaCerrada.setVisible(false);
 			this.puertaAbierta.setVisible(true);
+			this.runasfuente.setVisible(true);
+			this.runas.setVisible(true);
+			this.tweens.add({
+				targets: [this.runas, this.runasfuente],
+				alpha: 0,
+				duration: 1700,
+				ease: 'Power2',
+				yoyo: true,
+				repeat: -1
+			  });
 			this.puertaSolidaArriba = this.add.zone(575, 119, 35, 10);
 			this.physics.add.existing(this.puertaSolidaArriba);
 			this.physics.add.overlap(this.player, this.puertaSolidaArriba, () => {

@@ -276,7 +276,7 @@ export default class LevelSceneBoss extends LevelScene {
 				this.meiga.setVisible(false)
 				this.spawnMeiga = false;
 				if (!this.isMuted) {
-					this.enterDungeonMusic.stop()
+					this.sound.removeByKey('dungeonEnterSong');
 				}
 				this.input.keyboard.enabled = true;
 			},

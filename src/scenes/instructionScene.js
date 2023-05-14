@@ -4,7 +4,8 @@ import Character from "../gameobjects/character"
 
 export default class instructionScene extends Phaser.Scene {
     constructor() {
-        super('instructions')
+        super('instructions');
+        this.isTransitioning = false;
     }
 
     init() {
@@ -149,6 +150,10 @@ export default class instructionScene extends Phaser.Scene {
         });
 
         skip.on('pointerup', () => {
+            if (this.isTransitioning) {
+				return;
+			}
+			this.isTransitioning = true;
             this.cameras.main.fadeOut(500);
             this.cameras.main.once("camerafadeoutcomplete", function () {
                 this.scene.start('selecScene', { mute: this.isMuted });
@@ -158,6 +163,10 @@ export default class instructionScene extends Phaser.Scene {
 
         this.input.keyboard.on('keydown', (event) => {
             if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
+                if (this.isTransitioning) {
+                    return;
+                }
+                this.isTransitioning = true;
                 this.cameras.main.fadeOut(500);
                 this.cameras.main.once("camerafadeoutcomplete", function () {
                     this.scene.start('selecScene', { mute: this.isMuted });

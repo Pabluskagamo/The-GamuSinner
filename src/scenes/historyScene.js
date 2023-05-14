@@ -6,6 +6,7 @@ export default class historyScene extends Phaser.Scene {
 
     constructor() {
         super({ key: 'history' });
+        this.isTransitioning = false;
     }
 
     preload() {
@@ -60,6 +61,10 @@ export default class historyScene extends Phaser.Scene {
             this.skip.playReverse('hoverSkip');
         });
         this.skip.on('pointerup', () => {
+            if (this.isTransitioning) {
+				return;
+			}
+			this.isTransitioning = true;
             this.cameras.main.fadeOut(500);
             this.cameras.main.once("camerafadeoutcomplete", function () {
                 this.scene.stop();
@@ -69,6 +74,10 @@ export default class historyScene extends Phaser.Scene {
 
         this.input.keyboard.on('keydown', (event) => {
             if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
+                if (this.isTransitioning) {
+                    return;
+                }
+                this.isTransitioning = true;
                 this.cameras.main.fadeOut(500);
                 this.cameras.main.once("camerafadeoutcomplete", function () {
                     this.scene.stop();

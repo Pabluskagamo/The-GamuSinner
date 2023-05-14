@@ -7,6 +7,7 @@ import LevelScene2 from './levelScenes/levelScene2';
 export default class GameOverScene extends Phaser.Scene {
 	constructor() {
 		super('game_over');
+		this.isTransitioning = false;
 	}
 
 	init() {
@@ -62,6 +63,10 @@ export default class GameOverScene extends Phaser.Scene {
 		});
 
 		restart.on('pointerup', () => {
+			if (this.isTransitioning) {
+				return;
+			}
+			this.isTransitioning = true;
 			this.sound.removeByKey('explorationSong');
 			this.sound.removeByKey('fightSong');
 			this.sound.removeByKey('fightSong2');
@@ -83,11 +88,27 @@ export default class GameOverScene extends Phaser.Scene {
 
 		this.input.keyboard.on('keydown', (event) => {
 			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
+				if (this.isTransitioning) {
+					return;
+				}
+				this.isTransitioning = true;
 				this.sound.removeByKey('explorationSong');
 				this.sound.removeByKey('fightSong');
+				this.sound.removeByKey('fightSong2');
+				this.sound.removeByKey('fightSong3');
+				this.sound.removeByKey('losse');
 				this.scene.stop('UIScene');
 				this.scene.stop(this.level);
 				this.scene.start('level1');
+				LevelScene.progress =  {
+					level1: false,
+					level2: true,
+					level3: false,
+					level4: false,
+					levelBoss: true
+				}
+				
+				LevelScene2.firstTalkMeiga = false
 			}
 		});
 
@@ -107,10 +128,20 @@ export default class GameOverScene extends Phaser.Scene {
 			this.sound.removeByKey('fightSong');
 			this.sound.removeByKey('fightSong2');
 			this.sound.removeByKey('fightSong3');
+			this.sound.removeByKey('losse');
 
 			this.scene.stop(this.level);
 			this.scene.stop('UIScene');
 			this.scene.start('mainScene');
+			LevelScene.progress =  {
+				level1: false,
+				level2: true,
+				level3: false,
+				level4: false,
+				levelBoss: true
+			}
+			
+			LevelScene2.firstTalkMeiga = false
 		});
 
 	}

@@ -5,6 +5,7 @@ import Phaser from 'phaser'
 export default class selectionScene extends Phaser.Scene {
 	constructor() {
 		super('selecScene');
+		this.isTransitioning = false;
 	}
 
 	preload() {
@@ -28,6 +29,10 @@ export default class selectionScene extends Phaser.Scene {
 		botonGalicia.setInteractive({ cursor: 'pointer' });
 
 		botonGalicia.on('pointerup', () => {
+			if (this.isTransitioning) {
+				return;
+			}
+			this.isTransitioning = true;
 			this.cameras.main.fadeOut(500);
 			this.cameras.main.once("camerafadeoutcomplete", function () {
 				this.scene.start('level1', { mute: this.isMuted });
