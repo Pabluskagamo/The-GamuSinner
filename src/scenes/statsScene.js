@@ -239,14 +239,13 @@ export default class StatsScene extends Phaser.Scene {
         // ACTUALIZACION DE LAS MONEDAS
         this.actualcoins.setText(`X ${this.wallet}`);
         let i = 0;
-        console.log(this.wallet)
         // ACTUALIZACION DE LAS BARRAS DE ESTADISTICAS Y SUS BOTONES
         for(let spent of this.barSpent){
             if(i === 0){
                 if(this.wallet < spent){
                     this.lifeButton.disableInteractive().setAlpha(0.5);
                 }else{
-                    this.lifeButton.setInteractive({ cursor: 'pointer' });
+                    this.lifeButton.setInteractive({ cursor: 'pointer' }).setAlpha(1);
                     this.lifeButton.on('pointerover', function (pointer) {
                         this.setTint(0x856127);
                     });
@@ -258,7 +257,7 @@ export default class StatsScene extends Phaser.Scene {
                 if(this.wallet < spent){
                     this.strongButton.disableInteractive().setAlpha(0.5);
                 }else{
-                    this.strongButton.setInteractive({ cursor: 'pointer' });
+                    this.strongButton.setInteractive({ cursor: 'pointer' }).setAlpha(1);;
                     this.strongButton.on('pointerover', function (pointer) {
                         this.setTint(0x856127);
                     });
@@ -270,7 +269,7 @@ export default class StatsScene extends Phaser.Scene {
                 if(this.wallet < spent){
                     this.speedButton.disableInteractive().setAlpha(0.5);
                 }else{
-                    this.speedButton.setInteractive({ cursor: 'pointer' });
+                    this.speedButton.setInteractive({ cursor: 'pointer' }).setAlpha(1);;
                     this.speedButton.on('pointerover', function (pointer) {
                         this.setTint(0x856127);
                     });
@@ -282,7 +281,7 @@ export default class StatsScene extends Phaser.Scene {
                 if(this.wallet < spent){
                     this.cadenceButton.disableInteractive().setAlpha(0.5);
                 }else{
-                    this.cadenceButton.setInteractive({ cursor: 'pointer' });
+                    this.cadenceButton.setInteractive({ cursor: 'pointer' }).setAlpha(1);;
                     this.cadenceButton.on('pointerover', function (pointer) {
                         this.setTint(0x856127);
                     });
