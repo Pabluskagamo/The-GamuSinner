@@ -7,6 +7,12 @@ import CoinPool from "../../gameobjects/Pools/coinPool";
 import FoodPool from "../../gameobjects/Pools/foodPool";
 import DemonBoss from "../../gameobjects/enemies/boss/demonBoss";
 import BossPool from "../../gameobjects/Pools/bossPool";
+import TripleShot from "../../gameobjects/powerUps/tripleShot"
+import EightDirShot from "../../gameobjects/powerUps/eightDirShot"
+import BouncingShot from "../../gameobjects/powerUps/bouncingShot"
+import FreezingShot from "../../gameobjects/powerUps/freezingShot"
+import PetBot from "../../gameobjects/powerUps/petBot"
+import JellyfishPet from "../../gameobjects/powerUps/jellyfishPet"
 
 // ESCENA DEL BOSS FINAL DE GALICIA
 
@@ -166,7 +172,21 @@ export default class LevelSceneBoss extends LevelScene {
 	initPlayerAndPools(data) {
 
 		if (data.hasOwnProperty('gate')) {
-			this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(), data.player.getCadence());
+			let powerUp = null;
+			if(data.player.inventory !== null){
+				if(data.player.inventory.getKey() === "bouncingShot"){
+					powerUp = new BouncingShot(this, -125, -125);
+				}else if(data.player.inventory.getKey() === "eightDirShot"){
+					powerUp = new EightDirShot(this, -125, -125);
+				}else if(data.player.inventory.getKey() === "petpower"){
+					powerUp = new PetBot(this, -125, -125, new JellyfishPet(this, -125, -125));
+				}else if(data.player.inventory.getKey() === "multipleDirfreezingShotectionShot"){
+					powerUp = new FreezingShot(this, -125, -125);
+				}else if(data.player.inventory.getKey() === "tripleShot"){
+					powerUp = new TripleShot(this, -125, -125);
+				}
+			}
+			this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(), data.player.getCadence(), data.player.getBulletDmg(), powerUp);
 		} else {
 			this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, null, 150, 4, 4, 0, 400);
 		}

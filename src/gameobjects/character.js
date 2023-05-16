@@ -7,7 +7,7 @@ import { Directions } from "./utils/directions"
 
 export default class Character extends MovableObject {
 
-    constructor(scene, x, y, instruction, speed, hp, maxHp, wallet, cadence, bulletDmg) {
+    constructor(scene, x, y, instruction, speed, hp, maxHp, wallet, cadence, bulletDmg, inventory) {
         super(scene, x, y, 'character', speed, 20);
         this.speed = speed;
         this.scene.add.existing(this);
@@ -24,7 +24,10 @@ export default class Character extends MovableObject {
             this.lastDash = 0;
             this.nonePowerUp = new NonePowerUp(this.scene)
             this.currentPowerUp = this.nonePowerUp
-            this.inventory = null
+            this.inventory = inventory
+            if(this.inventory !== null){
+                this.scene.events.emit('savePowerUp', this.inventory.getKey())
+            }
             this.petPowerUp = null
             this.pet = null
             this.passives = []
@@ -289,6 +292,7 @@ export default class Character extends MovableObject {
             if (this.inventoryKey.isDown && this.inventory != null) {
                 this.inventory.setCollected(false)
                 this.collectPowerUp(this.inventory)
+                console.log("entro")
                 this.scene.events.emit("usePowerUpInventory")
                 this.inventory = null;
             }
@@ -488,6 +492,11 @@ export default class Character extends MovableObject {
 
     setCadence(c){
         this.cadence = c;
+    }
+
+    // GETTER DEL INVENTARIO
+    getInventory(){
+        return this.inventory;
     }
 
     // FUNCION PARA ALMACENAR UN POWER-UP

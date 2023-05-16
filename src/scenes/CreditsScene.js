@@ -30,8 +30,9 @@ export default class CreditsScene extends Phaser.Scene {
 			volume: 0.3,
 			loop: true
 		});
-
-		this.creditsSound.play()
+		if(!this.isMuted){
+			this.creditsSound.play()
+		}
 		
 		// BAKGROUND
 		this.add.image(0, 0, 'background_settings').setOrigin(0, 0)

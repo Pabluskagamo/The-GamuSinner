@@ -78,7 +78,7 @@ export default class Hud extends Phaser.Scene {
         }
 
         // POWER-UP SAVE PANEL
-        this.powerUpPanel = this.add.image(990, 123, 'pwpanel'),
+        this.powerUpPanel = this.add.image(990, 123, 'pwpanel');
 
         // CONTADOR TIEMPO OLEADA
         this.countdown = this.add.text(555, 75, '00:20', { fontFamily: 'MedievalSharp-Regular' });
@@ -338,6 +338,10 @@ export default class Hud extends Phaser.Scene {
         if (this.savedPowerUp) {
             this.savedPowerUp.destroy();
         }
+    }
+
+    getPowerUps(){
+        return this.powerUpsList;
     }
 
 

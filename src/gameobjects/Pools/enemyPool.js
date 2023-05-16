@@ -18,25 +18,25 @@ export default class EnemyPool {
 
 		// INDICADOR DE LA VIDA DE LOS ENEMIGOS EN FUNCION DEL NIVEL
 		this.hpPerLevel ={
-			level1: {
+			0: {
 				goblin: 20,
 				blackWolf: 60,
 				cyclops: 100,
 				spectre: 70
 			},
-			level2: {
-				goblin: 20,
-				blackWolf: 60,
-				cyclops: 100,
-				spectre: 70
-			},
-			level3: {
+			1: {
 				goblin: 30,
 				blackWolf: 70,
 				cyclops: 110,
 				spectre: 80
 			},
-			level4: {
+			2: {
+				goblin: 40,
+				blackWolf: 80,
+				cyclops: 120,
+				spectre: 90
+			},
+			3: {
 				goblin: 40,
 				blackWolf: 80,
 				cyclops: 120,
