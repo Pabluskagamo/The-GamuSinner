@@ -127,7 +127,9 @@ export default class Hud extends Phaser.Scene {
 
         // SE ACABA EL NIVEL
         levelGame.events.on('levelComplete', function () {
-            this.countdown.x -= 150
+            if(this.countdown.x === 555){
+                this.countdown.x -= 150
+            }
             this.countdown.setText('!Has completado todas las oleadas!');
             if (!this.faded) {
                 this.fadeTime = 0;
