@@ -48,10 +48,8 @@ export default class LevelScene extends Phaser.Scene {
 		// AÑADE MUSICA
 		this.isMuted = data.mute;
 
-		if (!this.isMuted) {
-			this.setMusic()
-		}
-
+		this.setMusic()
+		
 		this.explorationSong = this.sound.add("explorationSong", {
 			volume: 0.1,
 			loop: true
@@ -94,11 +92,16 @@ export default class LevelScene extends Phaser.Scene {
 			this.player.stopVertical();
 			this.scene.pause();
 			this.scene.pause('UIScene');
-			if (LevelScene.progress[this.namescene]) {
-				this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.explorationSong });
-			}
-			else {
+			if(this.namescene === 'levelBoss'){
 				this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.banda });
+			}
+			else{
+				if (LevelScene.progress[this.namescene]) {
+					this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.explorationSong });
+				}
+				else {
+					this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.banda });
+				}
 			}
 		});
 
@@ -108,11 +111,16 @@ export default class LevelScene extends Phaser.Scene {
 				this.player.stopVertical();
 				this.scene.pause();
 				this.scene.pause('UIScene');
-				if (LevelScene.progress[this.namescene]) {
-					this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.explorationSong });
-				}
-				else {
+				if(this.namescene === 'levelBoss'){
 					this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.banda });
+				}
+				else{
+					if (LevelScene.progress[this.namescene]) {
+						this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.explorationSong });
+					}
+					else {
+						this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.banda });
+					}
 				}
 			}
 		});

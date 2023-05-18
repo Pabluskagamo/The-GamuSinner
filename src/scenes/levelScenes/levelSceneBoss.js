@@ -288,8 +288,8 @@ export default class LevelSceneBoss extends LevelScene {
 		this.time.addEvent({
 			delay: 8000,
 			callback: () => {
+				this.setMusic();
 				if (!this.isMuted) {
-					this.setMusic();
 					this.banda.play();
 				}
 				this.demon.transform();
@@ -308,7 +308,7 @@ export default class LevelSceneBoss extends LevelScene {
 	// FUNCION PARA ACTUALIZAR LA MUSICA CUANDO SE ACABA LA PRIMERA FASE
 	endFirstFase() {
 		if(!this.isMuted){
-			this.banda.stop();
+			this.sound.removeByKey('bossSong');
 		}
 	}
 
