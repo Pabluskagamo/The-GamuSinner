@@ -1,4 +1,6 @@
 import Phaser from 'phaser'
+import LevelScene from './levelScene';
+import LevelScene2 from './levelScenes/levelScene2';
 
 // ESCENA DE LOS CREDITOS DEL JUEGO
 
@@ -44,7 +46,17 @@ export default class CreditsScene extends Phaser.Scene {
 				this.sound.removeByKey('creditsSong');
 				this.scene.stop('UIScene');
 				this.scene.stop(this.level);
-				this.scene.start('level1');
+				this.scene.stop('stats');
+				this.scene.start('mainScene');
+				LevelScene.progress =  {
+					level1: false,
+					level2: true,
+					level3: false,
+					level4: false,
+					levelBoss: true
+				}
+				
+				LevelScene2.firstTalkMeiga = false
 			}
 		});
 
@@ -81,9 +93,19 @@ export default class CreditsScene extends Phaser.Scene {
 			this.sound.removeByKey('explorationSong');
 			this.sound.removeByKey('fightSong');
 			this.sound.removeByKey('creditsSong');
-			this.scene.stop(this.level);
 			this.scene.stop('UIScene');
+			this.scene.stop(this.level);
+			this.scene.stop('stats');
 			this.scene.start('mainScene');
+			LevelScene.progress =  {
+				level1: false,
+				level2: true,
+				level3: false,
+				level4: false,
+				levelBoss: true
+			}
+			
+			LevelScene2.firstTalkMeiga = false
 		});
 
 	}

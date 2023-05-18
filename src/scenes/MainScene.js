@@ -89,11 +89,11 @@ export default class MainScene extends Phaser.Scene {
 
 	create() {
 		// AÑADE MUSICA SI PUEDE
+		this.banda = this.sound.add("musica", {
+			volume: 0.2,
+			loop: true
+		});
 		if(!this.isMuted){
-			this.banda = this.sound.add("musica", {
-				volume: 0.2,
-				loop: true
-			});
 			this.banda.play();
 		}
 

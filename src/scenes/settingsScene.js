@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import LevelScene from './levelScene';
+import LevelScene2 from './levelScenes/levelScene2';
 
 // ESCENA DE LA CONFIGURACION
 
@@ -84,6 +85,7 @@ export default class SettingScene extends Phaser.Scene {
 			this.sound.removeByKey('losse');
 			this.scene.stop('settings');
 			this.scene.stop('UIScene');
+			this.scene.stop('stats');
 			this.scene.stop(this.level);
 			this.scene.start('level1', { mute: this.isMuted });
 			LevelScene.progress =  {
@@ -117,8 +119,18 @@ export default class SettingScene extends Phaser.Scene {
 			this.sound.removeByKey('fightSong');
 			this.scene.stop('settings');
 			this.scene.stop('UIScene');
+			this.scene.stop('stats');
 			this.scene.stop(this.level);
 			this.scene.start('mainScene');
+			LevelScene.progress =  {
+				level1: false,
+				level2: true,
+				level3: false,
+				level4: false,
+				levelBoss: true
+			}
+			
+			LevelScene2.firstTalkMeiga = false
 		});
 
 		this.muteButton = this.add.sprite(1060, 630, 'mute_button').setScale(0.35);

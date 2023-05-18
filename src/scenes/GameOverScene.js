@@ -74,6 +74,7 @@ export default class GameOverScene extends Phaser.Scene {
 			this.sound.removeByKey('losse');
 			this.scene.stop('UIScene');
 			this.scene.stop(this.level);
+			this.scene.stop('stats');
 			this.scene.start('level1');
 			LevelScene.progress =  {
 				level1: false,
@@ -99,6 +100,7 @@ export default class GameOverScene extends Phaser.Scene {
 				this.sound.removeByKey('losse');
 				this.scene.stop('UIScene');
 				this.scene.stop(this.level);
+				this.scene.stop('stats');
 				this.scene.start('level1');
 				LevelScene.progress =  {
 					level1: false,
@@ -132,6 +134,7 @@ export default class GameOverScene extends Phaser.Scene {
 
 			this.scene.stop(this.level);
 			this.scene.stop('UIScene');
+			this.scene.stop('stats');
 			this.scene.start('mainScene');
 			LevelScene.progress =  {
 				level1: false,
