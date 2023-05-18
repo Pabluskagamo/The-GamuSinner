@@ -163,11 +163,12 @@ export default class LevelScene2 extends LevelScene {
 			this.runas.setVisible(true);
 			this.tweens.add({
 				targets: [this.runas, this.runasfuente],
-				alpha: 0,
+				alpha: { from: 1, to: 0 },
 				duration: 1700,
 				ease: 'Power2',
 				yoyo: true,
-				repeat: -1
+				repeatDelay: 2000,
+				repeat: -1,
 			  });
 			if (this.isTransitioning) {
 				return;
