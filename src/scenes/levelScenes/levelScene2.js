@@ -219,16 +219,19 @@ export default class LevelScene2 extends LevelScene {
 	// FUNCION PARA ABRIR LAS PUERTAS TRAS HABLAR POR PRIMERA VEZ CON LA MEIGA
 	abrirpuertasFirstTalk(){
 		LevelScene2.firstTalkMeiga = true;
-		this.tweens.add({
-			targets: [this.puerta, this.puertaSolidaIzq, this.puertaSolidaDer, this.puertaSolidaAbajo],
-			alpha: { from: 1, to: 0 },
-			duration: 3000,
-			ease: 'Sine.easeInOut',
-			yoyo: false,
-			onComplete: ()=>{
-				this.abrirPuertas();
-			}
-		})
+		
+		if(LevelScene2.firstTalkMeiga){
+			this.tweens.add({
+				targets: [this.puerta, this.puertaSolidaIzq, this.puertaSolidaDer, this.puertaSolidaAbajo],
+				alpha: { from: 1, to: 0 },
+				duration: 3000,
+				ease: 'Sine.easeInOut',
+				yoyo: false,
+				onComplete: ()=>{
+					this.abrirPuertas();
+				}
+			})
+		}
 	}
 
 	// FUNCION PARA ACTIVAR UN EASTEREGG QUE HAY EN EL JUEGO
