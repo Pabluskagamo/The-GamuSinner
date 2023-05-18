@@ -54,7 +54,10 @@ export default class StatsScene extends Phaser.Scene {
             this.scene.resume('UIScene');
             this.scene.sleep();
             this.dialogBox.clearText();
-            this.levelGame.abrirpuertasFirstTalk()
+            if (!this.isTransitioning) {
+                this.levelGame.abrirpuertasFirstTalk()
+			}
+            this.isTransitioning = true;
         });
 
         this.e = this.input.keyboard.addKey('E');
