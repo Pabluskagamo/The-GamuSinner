@@ -2,6 +2,7 @@ import BlackWolf from "../enemies/blackWolf"
 import Goblin from "../enemies/goblin"
 import Spectre from "../enemies/spectre"
 import Cyclops from "../enemies/cyclops"
+import Rock from "../enemies/rock";
 
 // POOL DE LOS ENEMIGOS
 
@@ -14,6 +15,7 @@ export default class EnemyPool {
 		this._wolfsgroup = scene.add.group()
 		this._spectresgroup = scene.add.group()
 		this._cyclopsgroup = scene.add.group()	
+		this._cyclopsBulletgroup = scene.add.group()	
 		this.max = max
 
 		// INDICADOR DE LA VIDA DE LOS ENEMIGOS EN FUNCION DEL NIVEL
@@ -165,6 +167,25 @@ export default class EnemyPool {
 			return entity;
 		}
 	}
+
+	// SPAWNEO DE BALA DE CYCLOPE
+	spawnCyBullet(x, y, dir){
+		if(!this.emptyPool()){
+			let entity = this._cyclopsBulletgroup.getFirstDead();
+			
+			if (entity) {
+				entity.x = x;
+				entity.y = y;
+				entity.justHit = false
+				entity.setActive(true);
+				entity.setVisible(true);
+				entity.body.checkCollision.none = false;
+				entity.setDirection(dir)
+				entity.restoreEnemy()
+			}
+			return entity;
+		}
+	}
 	
 	/**
 	 * Método para liberar una entidad
@@ -194,6 +215,7 @@ export default class EnemyPool {
 		let wolfs = []
 		let spectres = []
 		let cyclops = []
+		let cyBullets = []
 
 		let randNum = 0
 
@@ -219,6 +241,12 @@ export default class EnemyPool {
 			const cycl = new Cyclops(this.scene, -50, -50, 45, player, this, this.hpPerLevel[level].cyclops)
 			enemies.push(cycl)
 			cyclops.push(cycl)
+
+			for(let j = 0; j < 5; j++){
+				const cyclBull = new Rock(this.scene, -50, -50, 150, this)
+				enemies.push(cyclBull)
+				cyBullets.push(cyclBull)
+			}
 		}
 
         this.addMultipleEntity(enemies)
@@ -226,6 +254,7 @@ export default class EnemyPool {
 		this.addMultipleEntityToGroup(wolfs, this._wolfsgroup)
 		this.addMultipleEntityToGroup(spectres, this._spectresgroup)
 		this.addMultipleEntityToGroup(cyclops, this._cyclopsgroup)
+		this.addMultipleEntityToGroup(cyBullets, this._cyclopsBulletgroup)
 		this.max = 100
     }
 }

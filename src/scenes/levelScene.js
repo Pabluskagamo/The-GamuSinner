@@ -10,6 +10,7 @@ import BouncingShot from "../gameobjects/powerUps/bouncingShot"
 import FreezingShot from "../gameobjects/powerUps/freezingShot"
 import PetBot from "../gameobjects/powerUps/petBot"
 import JellyfishPet from "../gameobjects/powerUps/jellyfishPet"
+import Rock from "../gameobjects/enemies/rock"
 
 // PADRE DE TODOS LOS NIVELES DE GALICIA
 
@@ -224,7 +225,12 @@ export default class LevelScene extends Phaser.Scene {
 		this.foregroundLayer.setCollisionBetween(0, 999);
 		this.puertaSolida.setImmovable(true);
 
-		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
+		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer, (obj1, obj2) => {
+			if(obj1.key === 'rock' && !obj1.justHit){
+				obj1.hit();
+			}
+		});
+
 		this.physics.add.collider(this.player, this.foregroundLayer);
 		this.physics.add.collider(this.enemyPool._group, this.puertaSolida);
 		this.physics.add.collider(this.player, this.puertaSolida);
