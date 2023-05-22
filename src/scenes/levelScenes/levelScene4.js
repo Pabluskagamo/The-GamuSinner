@@ -39,11 +39,28 @@ export default class LevelScene4 extends LevelScene {
 
         this.physics.add.collider(this.player, this.foregroundLayer1);
         this.physics.add.collider(this.player, this.foregroundLayer2);
-        this.physics.add.collider(this.enemyPool._group, this.topTree);
+    
+        this.physics.add.collider(this.enemyPool._group, this.topTree, (obj1, obj2) => {
+			if(obj1.key === 'rock' && !obj1.justHit){
+				obj1.hit();
+			}
+		});
+
+
         this.physics.add.collider(this.player, this.topTree);
-        this.physics.add.collider(this.enemyPool._group, this.wall);
+        this.physics.add.collider(this.enemyPool._group, this.wall, (obj1, obj2) => {
+			if(obj1.key === 'rock' && !obj1.justHit){
+				obj1.hit();
+			}
+		});
+
         this.physics.add.collider(this.player, this.wall);
-        this.physics.add.collider(this.enemyPool._group, this.puertaSolida);
+        this.physics.add.collider(this.enemyPool._group, this.puertaSolida, (obj1, obj2) => {
+			if(obj1.key === 'rock' && !obj1.justHit){
+				obj1.hit();
+			}
+		});
+
         this.physics.add.collider(this.player, this.puertaSolida);
 
         this.physics.add.collider(this.bulletPool._group, this.foregroundLayer1, (obj1, obj2) => {

@@ -28,7 +28,12 @@ export default class LevelScene3 extends LevelScene {
 		this.foregroundLayer.setCollisionBetween(0, 999);
         this.puertaSolida.setImmovable(true);
 
-		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
+		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer, (obj1, obj2) => {
+			if(obj1.key === 'rock' && !obj1.justHit){
+				obj1.hit();
+			}
+		});
+
 		this.physics.add.collider(this.player, this.foregroundLayer);
 		this.physics.add.collider(this.enemyPool._group, this.puertaSolida);
 		this.physics.add.collider(this.player, this.puertaSolida);

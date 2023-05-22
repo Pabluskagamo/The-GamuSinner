@@ -31,6 +31,7 @@ export default class PowerUpPool {
         //cambiar politica y añadir que no s epueda spawnear si enable de powerUp es true
         //usa false para el active por defecto ver si hacemos esto o hacemos el shuffle cada x tiempo
         if(this.hasPowerUps()){
+            this._group.shuffle()
             let entity = this._group.getLast()
             
             for(let i = 0; i < Phaser.Math.Between(0,3); i++){
