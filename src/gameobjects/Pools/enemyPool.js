@@ -243,7 +243,7 @@ export default class EnemyPool {
 			cyclops.push(cycl)
 
 			for(let j = 0; j < 5; j++){
-				const cyclBull = new Rock(this.scene, -50, -50, 150, this)
+				const cyclBull = new Rock(this.scene, -50, -50, 200, this)
 				enemies.push(cyclBull)
 				cyBullets.push(cyclBull)
 			}

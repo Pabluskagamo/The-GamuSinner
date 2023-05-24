@@ -23,7 +23,6 @@ export default class Cyclops extends EnemyObject {
         this.body.width = this.bodyWidth;
         this.body.height = this.bodyHeight;
 
-        this.lastDir = new Phaser.Math.Vector2(0,0);
         this.lastThrow = 0;
 
         this.scene.anims.create({
@@ -132,8 +131,6 @@ export default class Cyclops extends EnemyObject {
 
     throwRock(){
         if(!this.attacking && !this.isDead()){
-            const auxDir = this.body.velocity.normalize()
-            this.lastDir = new Phaser.Math.Vector2(auxDir.x, auxDir.y);
             this.attacking = true;
             this.flipX = this.body.velocity.x > 0;
             this.play('throw_cyclops')
@@ -141,7 +138,8 @@ export default class Cyclops extends EnemyObject {
     }
 
     spawnRock(){
-        this.pool.spawnCyBullet(this.x, this.y, this.lastDir)
+        let dir = new Phaser.Math.Vector2(this.player.x - this.x, this.player.y - this.y).normalize();
+        this.pool.spawnCyBullet(this.x, this.y, dir)
     }
 
 }
