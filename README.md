@@ -1,3 +1,8 @@
+<h1 align="center">
+  <br>
+  <img src="./public/img/titulo.png" alt="Markdownify" height="200">
+</h1>
+
 # The GamuSinner
 Proyecto de la asignatura DVI UCM.
 
@@ -7,4 +12,10 @@ los distintos niveles, entabla amistad con criaturas fantásticas y sobrevive a 
 oleadas de monstruos viviendo una experiencia intensa y frenética.
 
 
-link al juego: https://pabluskagamo.github.io/The-GamuSinner/
+Link al juego: https://pabluskagamo.github.io/The-GamuSinner/
+
+## Integrantes
+* **Alejandro** Antuña Rodríguez
+* Pablo Gamo González
+* Javier Gil Caballero
+* Carlos Gómez López
