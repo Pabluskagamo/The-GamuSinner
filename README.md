@@ -12,7 +12,7 @@ los distintos niveles, entabla amistad con criaturas fantásticas y sobrevive a 
 oleadas de monstruos viviendo una experiencia intensa y frenética.
 
 
-<h2>**Link al juego:** https://pabluskagamo.github.io/The-GamuSinner/</h2>
+<h2 align="center">Link al juego: https://pabluskagamo.github.io/The-GamuSinner/</h2>
 
 ## Integrantes
 * **Alejandro** Antuña Rodríguez
