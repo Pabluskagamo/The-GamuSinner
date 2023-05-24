@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img src="./public/img/titulo.png" alt="Markdownify" height="200">
+  <img src="./public/img/titulo.png" height="200">
 </h1>
 
 # The GamuSinner
