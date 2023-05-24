@@ -16,6 +16,6 @@ oleadas de monstruos viviendo una experiencia intensa y frenética.
 
 ## Integrantes
 * **Alejandro** Antuña Rodríguez
-* Pablo Gamo González
-* Javier Gil Caballero
-* Carlos Gómez López
+* **Pablo** Gamo González
+* **Javier** Gil Caballero
+* **Carlos** Gómez López
