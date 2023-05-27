@@ -81,7 +81,7 @@ export default class EnemyObject extends MovableObject {
             this.scene.coinPool.spawn(this.x, this.y);
         }
         
-        if(this.scene.foodPool.hasFood() && Phaser.Math.FloatBetween(0, 1) < 0.1){
+        if(this.scene.foodPool.hasFood() && Phaser.Math.FloatBetween(0, 1) < 0.05){
             this.scene.foodPool.spawn(this.x, this.y);
         }
 

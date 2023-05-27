@@ -58,6 +58,7 @@ export default class MainScene extends Phaser.Scene {
 		this.load.tilemapTiledJSON('sala3', './assets/tilemap/sala3.json')
 		this.load.tilemapTiledJSON('sala4', './assets/tilemap/sala4.json')
 		this.load.tilemapTiledJSON('salaBoss', './assets/tilemap/salaBoss.json')
+		this.load.tilemapTiledJSON('salaSandBox', './assets/tilemap/sandbox.json')
 		this.load.audio("appearEffect", "./assets/audio/Effects/AppearSoundEffect.mp3");
 		this.load.audio("explorationSong", "./assets/audio/Winds Of Stories.mp3");
 		this.load.audio("hit", "./assets/effects/hit.mp3");
@@ -168,6 +169,25 @@ export default class MainScene extends Phaser.Scene {
 				}, this);
 			}
 		});
+
+
+		// SANDBOXBUTTON
+		const sandBox = this.add.sprite(this.sys.game.canvas.width / 2, 500, 'game_start').setScale(0.35);
+		sandBox.setInteractive({ cursor: 'pointer' });
+
+		sandBox.on('pointerup', () => {
+			if (this.isTransitioning) {
+				return;
+			}
+			this.isTransitioning = true;
+			this.cameras.main.fadeOut(500);
+			this.cameras.main.once("camerafadeoutcomplete", function () {
+				this.sound.removeByKey('musica');
+				this.scene.stop();
+				this.scene.start('sandboxlevel', {mute: this.isMuted});
+			}, this);
+		});
+
 
 		// MUTE BUTTON
 		const muteButton = this.add.sprite(1060, 630, 'mute_button').setScale(0.35);
