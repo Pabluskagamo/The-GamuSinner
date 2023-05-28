@@ -120,6 +120,16 @@ export default class Hud extends Phaser.Scene {
             this.countdown.setText('00:' + (newTime < 10 ? '0' : '') + newTime)
         }, this);
 
+        // CAMBIA EL TEMPORIZADOR
+        levelGame.events.on('changeCountMins', function (newTime) {
+            const mins = Math.trunc(newTime / 60)
+            const secs = newTime % 60;
+
+            console.log(newTime, mins, secs)
+
+            this.countdown.setText((mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs)
+        }, this);
+
         // TEMPORIZADORES PARA CUANDO COMPLETAS UN NIVEL
         this.fadeTime = 0;
 

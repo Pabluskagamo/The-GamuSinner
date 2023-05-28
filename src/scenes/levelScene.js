@@ -21,7 +21,8 @@ export default class LevelScene extends Phaser.Scene {
 		level2: true,
 		level3: false,
 		level4: false,
-		levelBoss: true
+		levelBoss: true,
+		sandBox: false
 	}
 
 	constructor(scene) {
@@ -73,7 +74,7 @@ export default class LevelScene extends Phaser.Scene {
 		// SETTINGS BUTTON
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3).setDepth(4);
 
-		if (this.namescene == 'level1' && !LevelScene.progress.level1) {
+		if ((this.namescene == 'level1' || this.namescene === 'sandboxlevel') && !LevelScene.progress.level1) {
 			console.log("LAUNCH Level", this.namescene)
 			this.scene.launch('UIScene', { playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel });
 		}

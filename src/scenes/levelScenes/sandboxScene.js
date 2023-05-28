@@ -9,11 +9,14 @@ export default class SandBoxScene extends LevelScene{
 
     }
 
-    // initMap(){
-
-    // }
+    
+	update(t, dt){
+		this.updateTimeHud(this.roundTime.getElapsed());
+	}
 
     initMap() {
+		LevelScene.progress.sandBox = true
+
 		const mapa = this.map = this.make.tilemap({
 			key: 'salaSandBox'
 		});
@@ -80,6 +83,10 @@ export default class SandBoxScene extends LevelScene{
 			callbackScope: this,
 			loop: true
 		});
+
+		this.roundTime = this.time.addEvent({
+			loop: true
+		});
 	}
 
 
@@ -89,7 +96,9 @@ export default class SandBoxScene extends LevelScene{
 		this.freqFactor = currDelay > 1000 ? 500 : 200;
 
 		if (currDelay === 1000) {
-			this.freqChangeTime = 30000;
+			LevelScene.progress.level3 = true;
+			
+			this.freqChangeTime = 45000;
 			this.lastSec = 30;
 			this.freqTimer.reset({
 				delay: this.freqChangeTime,
@@ -97,10 +106,9 @@ export default class SandBoxScene extends LevelScene{
 				callbackScope: this,
 				loop: true
 			})
-		}
-
-		if (currDelay === 2000) {
-			this.freqChangeTime = 20000;
+		}else if (currDelay === 2000) {
+			LevelScene.progress.level4 = true;
+			this.freqChangeTime = 30000;
 			this.lastSec = 20;
 			this.freqTimer.reset({
 				delay: this.freqChangeTime,
@@ -108,14 +116,14 @@ export default class SandBoxScene extends LevelScene{
 				callbackScope: this,
 				loop: true
 			})
+		}else if(currDelay <= 300){
+			this.freqFactor = 50;
 		}
 
 		console.log('cambio de frecuencia de', currDelay, 'a', currDelay - this.freqFactor)
         let spawnDelay = currDelay;
 
-		if (currDelay > 300) {
-            spawnDelay -= this.freqFactor;
-        } 
+		spawnDelay -= this.freqFactor;
 
         this.enemySpawnTimer.reset({
             delay: spawnDelay,
@@ -123,6 +131,16 @@ export default class SandBoxScene extends LevelScene{
             callbackScope: this,
             loop: true
         })
+	}
+
+	updateTimeHud(t){
+		const time = (t / 1000);
+
+		if (this.lastSec != time) {
+			this.events.emit('changeCountMins', time.toFixed(0));
+		}
+
+		this.lastSec = time	
 	}
 
 }

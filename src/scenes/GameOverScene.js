@@ -75,13 +75,18 @@ export default class GameOverScene extends Phaser.Scene {
 			this.scene.stop('UIScene');
 			this.scene.stop(this.level);
 			this.scene.stop('stats');
-			this.scene.start('level1');
+			if(!LevelScene.progress.sandBox){
+				this.scene.start('level1');
+			}else{
+				this.scene.start('sandboxlevel');
+			}
 			LevelScene.progress =  {
 				level1: false,
 				level2: true,
 				level3: false,
 				level4: false,
-				levelBoss: true
+				levelBoss: true,
+				sandBox: false
 			}
 			
 			LevelScene2.firstTalkMeiga = false
