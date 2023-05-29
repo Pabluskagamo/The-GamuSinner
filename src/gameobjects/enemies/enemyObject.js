@@ -1,7 +1,8 @@
 import MovableObject from "../movableObject";
 
+// PADRE DE TODOS LOS ENEMIGOS
+
 export default class EnemyObject extends MovableObject {
-    
     
     constructor(scene, x, y, key, speed, firstFrame, enemypool, hp, dmg, isMuted) {
         super(scene, x, y, key, speed, firstFrame)
@@ -15,14 +16,16 @@ export default class EnemyObject extends MovableObject {
         this.attacking = false
     }
 
+    // RESTAURAR VALORES POR DEFECTO DEL ENEMIGO
     restoreEnemy(){
        this.hp = this.initialHp
        this.speed = this.initialSpeed
        this.attacking = false
     }
 
-    // Por como funciona el flip con los side walk hay que cargar siempre sprites andando hacia la derecha
+    // FUNCION PARA QUE EL ENEMIGO PERSIGA AL PERSONAJE
     follow(){
+        // Por como funciona el flip con los side walk hay que cargar siempre sprites andando hacia la derecha
         this.flipX = false;
         
         if (this.body.velocity.x > 0 && this.body.velocity.y < 0) {
@@ -59,6 +62,7 @@ export default class EnemyObject extends MovableObject {
         }
     }
 
+    // FUNCION PARA MORIRSE EL ENEMIGO
     dieMe(){
         if(!this.isMuted){
             this.scene.sound.add(this.key +"_die", {
@@ -71,20 +75,22 @@ export default class EnemyObject extends MovableObject {
         this.play('died_' + this.key, true);
     }
 
+    // FUNCION PARA DROPEAR UN ITEM
     drop(){
         if (this.scene.coinPool.hasCoins() && Phaser.Math.FloatBetween(0, 1) < 0.7){
             this.scene.coinPool.spawn(this.x, this.y);
         }
         
-        if(this.scene.foodPool.hasFood() && Phaser.Math.FloatBetween(0, 1) < 0.1){
+        if(this.scene.foodPool.hasFood() && Phaser.Math.FloatBetween(0, 1) < 0.05){
             this.scene.foodPool.spawn(this.x, this.y);
         }
 
-        if(this.scene.powerUpPool.hasPowerUps() && Phaser.Math.FloatBetween(0, 1) < 0.25){
+        if(this.scene.powerUpPool.hasPowerUps() && Phaser.Math.FloatBetween(0, 1) < 0.1){
             this.scene.powerUpPool.spawn(this.x, this.y);
         }
     }
 
+    // FUNCION PARA CUANDO RECIBE DAÑO
     hitEnemy(dmg){
         this.hp -= dmg;
 
@@ -95,6 +101,7 @@ export default class EnemyObject extends MovableObject {
         }
     }
 
+    // FUNCION PARA RALENTIZAR AL ENEMIGO
     slow(slow){
         this.speed -= slow;
         if (this.speed <= 0) {
@@ -103,16 +110,14 @@ export default class EnemyObject extends MovableObject {
         }
     }
     
+    // FUNCION PARA ATACAR AL PERSONAJE
     attack() {
         this.flipX = this.body.velocity.x > 0;
         this.play('attack_' + this.key);
     }
 
+    // FUNCION PARA SABER SI EL ENEMIGO ESTA MUERTO
     isDead(){
         return this.hp === 0;
     }
 }
-/*this.play('freezed_' + this.key, true).clearTint();
-if (this.freezed && this.speed === 0) {
-    this.play('freezed_' + this.key, true).setTint(0x4fb3ec)
-}else*/

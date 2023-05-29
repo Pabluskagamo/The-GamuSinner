@@ -1,6 +1,8 @@
 import { Directions } from "../../utils/directions";
 import EnemyObject from "../enemyObject";
 
+// CLASE DEL BOSS FINAL: DEMONIO
+
 export default class DemonBoss extends EnemyObject {
 
     constructor(scene, x, y, speed, player, bossPool, enemyPool) {
@@ -42,6 +44,7 @@ export default class DemonBoss extends EnemyObject {
         this.createSounds();
     }
 
+    // FUNCION PARA CREAR LA HITBOX DEL SLIME
     hitBoxSlime(){
         this.bodyOffsetWidth = this.originalWidth /4.27;
         this.bodyOffsetHeight = this.originalHeight / 2.35;
@@ -53,6 +56,7 @@ export default class DemonBoss extends EnemyObject {
         this.body.height = this.bodyHeight;
     }
 
+    // FUNCION PARA CREAR LA HITBOX DEL DEMONIO
     hitBoxDemon(){
         this.bodyOffsetWidth = this.originalWidth /5;
         this.bodyOffsetHeight = this.originalHeight / 4;
@@ -63,15 +67,8 @@ export default class DemonBoss extends EnemyObject {
         this.body.width = this.bodyWidth;
         this.body.height = this.bodyHeight;
     }
-   /*  this.bodyOffsetWidth = this.originalWidth /4;
-    this.bodyOffsetHeight = this.originalHeight / 4;
-    this.bodyWidth = this.originalWidth / 4;
-    this.bodyHeight = this.originalHeight / 2;
 
-    this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
-    this.body.width = this.bodyWidth;
-    this.body.height = this.bodyHeight; */
-
+    // FUNCION PARA CREAR LA HITBOX DE LA EXPLOSION IZQUIERDA
     hitBoxBlastLeft(){
         this.bodyOffsetWidth = this.originalWidth /26;
         this.bodyOffsetHeight = this.originalHeight / 12;
@@ -83,6 +80,7 @@ export default class DemonBoss extends EnemyObject {
         this.body.height = this.bodyHeight;
     }
 
+    // FUNCION PARA CREAR LA HITBOX DE LA EXPLOSION DERECHA
     hitBoxBlastRight(){
         this.bodyOffsetWidth = this.originalWidth /5;
         this.bodyOffsetHeight = this.originalHeight / 14;
@@ -94,6 +92,7 @@ export default class DemonBoss extends EnemyObject {
         this.body.height = this.bodyHeight;
     }
 
+    // FUNCION PARA CREAR LA HITBOX DEL SALTO
     hitBoxJump(){
         this.bodyOffsetWidth = this.originalWidth /14;
         this.bodyOffsetHeight = this.originalHeight / 4;
@@ -105,6 +104,7 @@ export default class DemonBoss extends EnemyObject {
         this.body.height = this.bodyHeight;
     }
 
+    // FUNCION PARA CREAR LAS ANIMACIONES
     createAnimations(){
         this.hit = this.scene.load.spritesheet({
             key: 'hit',
@@ -233,6 +233,7 @@ export default class DemonBoss extends EnemyObject {
             repeat: 0
         })
 
+        // GENERA UNA SECUENCIA DE ATAQUES CUANDO SE ACABAN CIERTAS ANIMACIONES
         this.on('animationcomplete', () => {
             if (this.anims.currentAnim.key === 'died_demonboss') {
                 this.setVisible(false)
@@ -291,6 +292,7 @@ export default class DemonBoss extends EnemyObject {
             }
         })
 
+        // REPITE CIERTAS ANIMACIONES
         this.on('animationrepeat', () => {
             if (this.anims.currentAnim.key === 'spell_demonboss') {
                 this.bulletSpawn()
@@ -306,6 +308,7 @@ export default class DemonBoss extends EnemyObject {
             }
         })
 
+        // REALIZA CIERTAS ACCIONES CUANDO LA ANIMACION COMIENZA
         this.on('animationstart', () => {
             if (this.anims.currentAnim.key === 'spell_demonboss') {
                 this.bulletSpawn()
@@ -324,6 +327,7 @@ export default class DemonBoss extends EnemyObject {
 
     }
     
+    // FUNCION PARA CREAR TODOS LOS SONIDOS PERTENECIENTES AL BOSS
     createSounds(){
         this.soundAppear = this.scene.sound.add("bossAppear", {
             volume: 0.25,
@@ -351,6 +355,7 @@ export default class DemonBoss extends EnemyObject {
         });
     }
 
+    // FUNCION PARA PERSEGUIR AL PERSONAJE
     follow(){
         this.flipX = true;
 
@@ -394,6 +399,7 @@ export default class DemonBoss extends EnemyObject {
     preUpdate(t, dt) {
         super.preUpdate(t, dt)
         
+        // COMPRUEBA QUE SIEMPRE QUE TENGA VIDA Y NO ESTE ATACANDO, O ESTÉ MUERTO EL PERSONAJE, PERSIGA AL PERSONAJE, SI NO PARA
         if (this.hp > 0 && !this.attacking && !this.onTransformation && !this.player.isDead() && this.transformation) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
             this.follow();
@@ -403,6 +409,7 @@ export default class DemonBoss extends EnemyObject {
         }
     }
 
+    // FUNCION PARA ATACAR AL PERSONAJE
     attack(enemie) {
         if (!this.attacking && !this.onTransformation && !this.isDead() && !this.onSpecialAbility && !this.player.isDead()) {
             this.attacking = true;
@@ -413,6 +420,7 @@ export default class DemonBoss extends EnemyObject {
         }
     }
 
+    // FUNCION PARA CUANDO RECIBE DAÑO
     hitEnemy(dmg) {
         if (!this.onTransformation && !this.invulnerable) {
             console.log(this.key, this.hp, '/', this.startHp)
@@ -434,6 +442,7 @@ export default class DemonBoss extends EnemyObject {
         }
     }
 
+    // FUNCION PARA MORIRSE EL BOSS
     dieMe() {
         if (!this.transformation) {
             this.transform()
@@ -448,6 +457,7 @@ export default class DemonBoss extends EnemyObject {
         }
     }
 
+    // FUNCION PARA TRANSFORMARSE DE SLIME A DEMONIO
     transform(){
         this.scene.events.emit("bossStart", this.startHp)
         this.key = 'demonboss'
@@ -461,6 +471,7 @@ export default class DemonBoss extends EnemyObject {
         this.soundAppear.play()
     }
 
+    // FUNCION PARA DROPEAR ITEMS
     drop(){
         if(this.scene.foodPool.hasFood() && Phaser.Math.FloatBetween(0, 1) < 0.1){
             this.scene.foodPool.spawn(this.x, this.y);
@@ -468,6 +479,7 @@ export default class DemonBoss extends EnemyObject {
         this.scene.powerUpPool.spawn(this.x, this.y);
     }
 
+    // FUNCION PARA REALIZAR ATAQUES ESPECIALES CADA 5 SEGUNDOS DE FORMA ALEATORIA
     runSpecialAttack(){
         if(!this.attacking){
             this.attacking = true;
@@ -487,10 +499,12 @@ export default class DemonBoss extends EnemyObject {
         }
     }
 
+    // REALIZA LA ANIMACION DE FIREBLAST
     fireBlast() {
         this.play("fireBlast_demonboss")
     }
 
+    // FUNCION PARA SPAWNEAR LOS ESBIRROS
     spawnEnemies() {
         let offsetSign = [1,-1]
         let enemy
@@ -500,20 +514,24 @@ export default class DemonBoss extends EnemyObject {
         }
     }
 
+    // REALIZA LA ANIMACION DEL SALTO
     jumpSmash() {
         this.play('jumpSmash_demonboss')
     }
 
+    // FUNCION PARA SPAWNEAR LAS EXPLOSIONES
     spawnExplosions(){
         for(let i = 0; i < this.nExplotions; i++){
             this.pool.spawnExplosion(Phaser.Math.Between(80, this.scene.game.canvas.width-80), Phaser.Math.Between(60, this.scene.game.canvas.height-60))
         }
     }
 
+    // REALIZA LA ANIMACION DEL CONJURO
     bulletSpell(){
         this.play("spell_demonboss")
     }
 
+    // FUNCION PARA SPAWNEAR BALAS
     bulletSpawn() {
         if (this.pool.hasBullets()) {
             this.bossShoot.play();
@@ -534,7 +552,7 @@ export default class DemonBoss extends EnemyObject {
         }
     }
 
-
+    // FUNCION PARA INVOCAR ENEMIGOS
     invokeEnemies(){
         this.play('invokeEnemies_demonboss')
         for(let i = 0; i < 10; i++) {

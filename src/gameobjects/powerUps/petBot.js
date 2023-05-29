@@ -1,5 +1,7 @@
 import PowerUp from "./powerUp"
 
+// POWER-UP DE LA MASCOTA
+
 export default class PetBot extends PowerUp{
 
     constructor(scene, x, y, petType){
@@ -16,28 +18,18 @@ export default class PetBot extends PowerUp{
         this.play('petbot_animation')
     }
 
+    // FUNCION PARA SABER SI ES LA MASCOTA
     isPet() {
         return true;
     }
 
+    // FUNCION PARA QUE SIGA AL PERSONAJE
     run () {
         this.scene.player.setPet(this.pet)
     }
 
+    // FUNCION PARA OCULTAR LA MASCOTA
     hidePet() {
         this.pet.hide()
     }
-/* 
-    disable(reloaded){
-        console.log("POWERUP DISABLED")
-        this.hidePet()
-        this.enabled = false
-        this.scene.powerUpPool.release(this)
-
-        if(!reloaded){
-            this.scene.events.emit('endPowerUpTime', this.key);
-        } else {
-            this.timer.remove();
-        }
-    } */
 }

@@ -3,11 +3,14 @@ import dialogBox from '../dialogs/dialogBox';
 import dialogsMeiga from '../dialogs/dialogsMeiga';
 import LevelScene from './levelScene';
 
+// ESCENA DE LAS ESTADISTICAS DE LA MEIGA
+
 export default class StatsScene extends Phaser.Scene {
     constructor() {
         super('stats');
     }
 
+    // INTRODUCES TODA LA INFORMACION NECESARIA DEL PERSONAJE
     init(data) {
         this.cameras.main.fadeIn(500);
         this.player = data.playerData;
@@ -31,6 +34,8 @@ export default class StatsScene extends Phaser.Scene {
     }
 
     create() {
+        this.isTransitioning = false;
+
         // BACKGROUND
         this.add.image(40, 0, 'background_stats').setOrigin(0, 0).setScale(0.86);
 
@@ -50,7 +55,11 @@ export default class StatsScene extends Phaser.Scene {
             this.scene.resume('UIScene');
             this.scene.sleep();
             this.dialogBox.clearText();
-            this.levelGame.abrirpuertasFirstTalk()
+            
+            if (!this.isTransitioning) {
+                this.levelGame.abrirpuertasFirstTalk()
+			}
+            this.isTransitioning = true;
         });
 
         this.e = this.input.keyboard.addKey('E');
@@ -66,18 +75,15 @@ export default class StatsScene extends Phaser.Scene {
         });
         this.meiga.play('meigaMovement');
 
+        // MONEDAS QUE TIENES
         const coins = this.add.sprite(980, 150, 'coin').setScale(1.6);
         this.actualcoins = this.add.text(995, 140, `X ${this.wallet}`, { fontFamily: 'MedievalSharp-Regular' }).setFontSize(24);
         this.actualcoins.setColor('#856127');
 
-        this.barIndex = [0, 0, 0, 0];
-        this.barSpent = [20, 20, 20, 20];
-
-        //DIALOGS
+        //DIALOGOS DE LA MEIGA
         this.dialogBox = new dialogBox(this, 120, 525, 460);
         this.dialogBox.setFontSize(18);
         this.dialogBox.clearText();
-        // this.dialogBox.setTextToDisplay('Hola viajero, ¿que deseas comprar? dasdasjkldja lsjdkasjkldjak lsjkldjakljdkla jsjdasjlkdj aklsjdkl ajsldjas');
         this.dialogBox.setDepth(2);
 
         const dialog = this.add.image(347, 570, 'dialog').setScale(1.05);
@@ -95,6 +101,10 @@ export default class StatsScene extends Phaser.Scene {
 		this.skipkey.play('Q_Press');
         this.skipkey.setVisible(false);
         this.skipkey.setDepth(2);
+
+        // INICIALIZACION DE LAS BARRAS DE ESTADISTICAS
+        this.barIndex = [0, 0, 0, 0];
+        this.barSpent = [20, 20, 20, 20];
 
         // LIFEBAR
         const lifebar = this.add.sprite(840, 220, 'lifebar').setScale(1.4);
@@ -114,6 +124,7 @@ export default class StatsScene extends Phaser.Scene {
         this.lifeButton.on('pointerdown', () => {
             this.aumentarBar(this.lifeButton, 0, numMonedasLife, lifebar);
             this.events.emit('incrementLife', this.player.hp + 1);
+            this.player.hp += 1;
         });
 
         // STRONGBAR
@@ -181,10 +192,7 @@ export default class StatsScene extends Phaser.Scene {
 
         this.levelGame = this.scene.get(this.level);
 
-        // this.levelGame.events.on('passLevel', function (data) {
-        //     this.scene.stop()
-        // }, this);
-
+        // EVENTO PARA QUE CUANDO SE DESPIERTE SE ACTUALICE LA INFORMACION
         this.events.on('wake', (sys, data)=>{
             this.player = data.playerData;
             this.wallet = this.player.coins;
@@ -195,6 +203,7 @@ export default class StatsScene extends Phaser.Scene {
 
     }
 
+    // FUNCION PARA AUMENTAR LA BARRA DE ESTADISTICA ESPECIFICADA
     aumentarBar(button, index, numMonedas, bar) {
         if(this.barIndex[index] !== 3){
             this.barIndex[index] = this.barIndex[index] + 1;
@@ -220,23 +229,28 @@ export default class StatsScene extends Phaser.Scene {
 
     update(t, dt) {
 
+        // CUANDO SALGAS DE LA MEIGA SE REINCIE EL NIVEL EN EL QUE TE ENCONTRABAS Y EN EL CASO DE QUE SEA LA PRIMERA VEZ ABRA LAS PUERTAS
         if (this.e.isDown) {
             this.scene.resume(this.level);
             this.scene.resume('UIScene');
             this.scene.sleep();
             this.dialogBox.clearText();
-            this.levelGame.abrirpuertasFirstTalk()
+            if (!this.isTransitioning) {
+                this.levelGame.abrirpuertasFirstTalk()
+			}
+            this.isTransitioning = true;
         }
 
+        // ACTUALIZACION DE LAS MONEDAS
         this.actualcoins.setText(`X ${this.wallet}`);
         let i = 0;
-
+        // ACTUALIZACION DE LAS BARRAS DE ESTADISTICAS Y SUS BOTONES
         for(let spent of this.barSpent){
             if(i === 0){
                 if(this.wallet < spent){
                     this.lifeButton.disableInteractive().setAlpha(0.5);
                 }else{
-                    this.lifeButton.setInteractive({ cursor: 'pointer' });
+                    this.lifeButton.setInteractive({ cursor: 'pointer' }).setAlpha(1);
                     this.lifeButton.on('pointerover', function (pointer) {
                         this.setTint(0x856127);
                     });
@@ -248,7 +262,7 @@ export default class StatsScene extends Phaser.Scene {
                 if(this.wallet < spent){
                     this.strongButton.disableInteractive().setAlpha(0.5);
                 }else{
-                    this.strongButton.setInteractive({ cursor: 'pointer' });
+                    this.strongButton.setInteractive({ cursor: 'pointer' }).setAlpha(1);;
                     this.strongButton.on('pointerover', function (pointer) {
                         this.setTint(0x856127);
                     });
@@ -260,7 +274,7 @@ export default class StatsScene extends Phaser.Scene {
                 if(this.wallet < spent){
                     this.speedButton.disableInteractive().setAlpha(0.5);
                 }else{
-                    this.speedButton.setInteractive({ cursor: 'pointer' });
+                    this.speedButton.setInteractive({ cursor: 'pointer' }).setAlpha(1);;
                     this.speedButton.on('pointerover', function (pointer) {
                         this.setTint(0x856127);
                     });
@@ -272,7 +286,7 @@ export default class StatsScene extends Phaser.Scene {
                 if(this.wallet < spent){
                     this.cadenceButton.disableInteractive().setAlpha(0.5);
                 }else{
-                    this.cadenceButton.setInteractive({ cursor: 'pointer' });
+                    this.cadenceButton.setInteractive({ cursor: 'pointer' }).setAlpha(1);;
                     this.cadenceButton.on('pointerover', function (pointer) {
                         this.setTint(0x856127);
                     });
@@ -284,9 +298,10 @@ export default class StatsScene extends Phaser.Scene {
             i++;
         }
 
-        this.previousLetterTime += dt; // Contador del tiempo transcurrido desde la ultima letra
+        // CONTADOR CON EL TIEMPO TRANSCURRIDO DESDE LA ULTIMA LETRA
+        this.previousLetterTime += dt;
 
-		// Si ha pasado el tiempo necesario y no ha terminado de escribir escribe la siguiente letra
+		// SI HA PASADO EL TIEMPO NECESARIO Y NO HA TERMINADO DE ESCRIBIR ESCRIBE LA SIGUIENTE LETRA
 		if(this.dialogBox.isWritting && this.dialogBox.timePerLetter <= this.previousLetterTime){
 			this.dialogBox.write();
 			this.previousLetterTime = 0;
@@ -301,6 +316,7 @@ export default class StatsScene extends Phaser.Scene {
         }
     }
 
+    // FUNCION PARA CUANDO SE CAMBIA DE NIVEL GUARDAR DICHO NIVEL
     changeLevel(level){ 
         this.level = level;
 
@@ -309,6 +325,7 @@ export default class StatsScene extends Phaser.Scene {
         this.levelGame = this.scene.get(this.level);
     }
 
+    // INICIALIZACION DE DIALOGOS DE LA MEIGA EN FUNCION DE LA SALA
     initDialog(){
         this.skipkey.setVisible(false)
         if(!LevelScene.progress.level3 && !LevelScene.progress.level4){

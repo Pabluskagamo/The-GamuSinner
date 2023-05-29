@@ -1,14 +1,17 @@
 import LevelScene from "../levelScene";
 
+// ESCENA QUE CORRESPONDE AL NIVEL 2 DE GALICIA
+
 export default class LevelScene2 extends LevelScene {
 	static firstTalkMeiga = false
 
 	constructor() {
-		super('level2')
+		super('level2');
 	}
 
-
 	create(data){
+		this.isTransitioning = false;
+		
 		super.create(data);
 		if(!this.scene.isActive('stats') && !this.scene.isSleeping('stats')){
 			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: 'level2', dmg: this.bulletPool.getDmg()});
@@ -16,34 +19,39 @@ export default class LevelScene2 extends LevelScene {
 		}
 	}
 
+	// FUNCION PARA INICIALIZAR EL TILEMAP DEL NIVEL 2
 	initMap() {
+		
 		const mapa = this.map = this.make.tilemap({
 			key: 'sala2'
 		});
 
-		//Tile Images
+		// TILE IMAGES
 		const tiles = mapa.addTilesetImage('Forest', 'tiles');
 		const tilesCastleProps = mapa.addTilesetImage('CastleProps', 'tilesCastleProps')
 		const tilesCastleStruct = mapa.addTilesetImage('CastleStruct', 'tilesCastleStruct')
 		const tilesCastleWall = mapa.addTilesetImage('CastleWalls', 'tilesCastleWall')
 		const tilesCastleGrass = mapa.addTilesetImage('FloorCastle', 'tilesCastleGrass')
 		const tilesCastlePlant = mapa.addTilesetImage('trees', 'tilesCastlePlant')
+		const smallRunes = mapa.addTilesetImage('Small Runes', 'smallRunes')
 
-
+		// TILE LAYERS
 		this.groundLayer = this.map.createLayer('Suelo', [tiles, tilesCastleGrass]);
-		this.foregroundLayer = this.map.createLayer('Bordes', [tiles, tilesCastleStruct, tilesCastleWall, tilesCastlePlant]);
-		this.puerta = this.map.createLayer('EntradasSala', tiles);
-		this.objetos = this.map.createLayer('Objetos', [tiles, tilesCastleProps]);
-		this.objetosColl = this.map.createLayer('ObjetosColl', [tiles, tilesCastleProps]);
-		this.borderTrees = this.map.createLayer('bordeArboles', [tiles, tilesCastlePlant]);
-		this.vegetacion = this.map.createLayer('Vegetacion', [tilesCastlePlant]);
-		this.porton = this.map.createLayer('Porton', [tilesCastleStruct]);
+		this.vegetacion = this.map.createLayer('Vegetacion', [tiles, tilesCastlePlant]);
 		this.fuente = this.map.createLayer('Fuente', [tilesCastleProps]);
+		this.runasfuente = this.map.createLayer('runasFuente', [smallRunes, tilesCastleProps]).setVisible(false);
 		this.puertaAbierta = this.map.createLayer('PuertaAbierta', [tilesCastleProps]).setVisible(false);
 		this.puertaCerrada = this.map.createLayer('PuertaCerrada', [tilesCastleProps]);
+		this.puerta = this.map.createLayer('EntradasSala', tiles);
+		this.porton = this.map.createLayer('Porton', [tilesCastleStruct]);
+		this.foregroundLayer = this.map.createLayer('Bordes', [tiles, tilesCastleStruct, tilesCastleWall, tilesCastlePlant]);
+		this.objetos = this.map.createLayer('Objetos', [tiles, tilesCastleProps]);
+		this.objetosColl = this.map.createLayer('ObjetosColl', [tiles, tilesCastleProps]);
+		this.runas = this.map.createLayer('runas', [tilesCastleProps]).setVisible(false);
+		this.borderTrees = this.map.createLayer('bordeArboles', [tiles, tilesCastlePlant]);
 		this.escaleras = this.map.createLayer('Escaleras', [tilesCastleStruct, tilesCastleProps]);
 
-
+		// COLISIONES
 		this.foregroundLayer.setCollisionBetween(0, 1200);
 		this.objetosColl.setCollisionBetween(0, 999);
 		this.porton.setCollisionBetween(0, 999);
@@ -62,17 +70,15 @@ export default class LevelScene2 extends LevelScene {
 			obj1.reboundOrRelease()
 		});
 
-
-		// this.puertaSolida.setDepth(3);
+		// PROFUNDIDAD
 		this.player.setDepth(2);
 		this.enemyPool._group.setDepth(2);
-		this.borderTrees.setDepth(2);
-		this.foregroundLayer.setDepth(1);
-		this.objetos.setDepth(1);
-		this.objetosColl.setDepth(2)
-		this.vegetacion.setDepth(1);
-		this.porton.setDepth(2);
+		this.borderTrees.setDepth(3);
+		this.foregroundLayer.setDepth(3);
+		this.objetosColl.setDepth(4);
+		this.porton.setDepth(3);
 
+		// PUERTAS POSIBLES
 		this.salidasSala = {
 			izq: { destino: 'sala3', coords: { x: this.sys.game.canvas.width - 80, y: this.sys.game.canvas.height / 2 } },
 			der: { destino: 'sala4', coords: { x: 80, y: this.sys.game.canvas.height / 2 } },
@@ -97,7 +103,7 @@ export default class LevelScene2 extends LevelScene {
 
 	}
 
-
+	// FUNCION PARA INICIALIZAR EL NIVEL MODO EXPLORACION Y AÑADE LA MEIGA, EN CASO DE QUEYA HAYA HABLADO CON ELLA ABRE LAS PUERTAS
 	initLevelFreeMode() {
 		if(!this.isMuted){
 			this.explorationSong.play();
@@ -108,49 +114,12 @@ export default class LevelScene2 extends LevelScene {
 		}
 	}
 
-	completeLevel() {
-		console.log("NIVEL COMPLETADO")
-		LevelScene.progress[this.namescene] = true
-
-		this.sound.removeByKey('fightSong');
-		this.sound.removeByKey('fightSong2');
-		this.sound.removeByKey('fightSong3');
-
-		if (!this.isMuted) {
-			const explorationSong = this.sound.add("explorationSong", {
-				volume: 0.1,
-				loop: true
-			});
-
-			const appearEffect = this.sound.add("appearEffect", {
-				volume: 0.1
-			});
-
-			appearEffect.play();
-
-			appearEffect.once('complete', () => {
-				explorationSong.play();
-			});
-		}
-
-
-		this.events.emit('levelComplete');
-		this.abrirPuertas();
-
-		for (let i = 0; i < 5; i++) {
-			setTimeout(() => {
-				this.cameras.main.flash(500);
-			}, i * 600);
-		}
-
-		this.addMeiga();
-		this.spawnMeiga = true;
-	}
-
+	// FUNCION PARA ABRIR LAS PUERTAS QUE LE CORRESPONDEN (3 PUERTAS EN ESTE CASO)
 	abrirPuertas() {
 		this.puerta.setVisible(false);
 		this.puertasGroup.setVisible(false)
 
+		// ELIMINA LAS TRES PUERTAS Y GENERA 3 ZONAS INVISIBLES PARA ASI ACCEDER A SUS RESPECTIVAS SALAS SI COLISIONAS CON ÉSTAS
 		this.puertasGroup.remove(this.puertaSolidaAbajo, true, true)
 		this.puertasGroup.remove(this.puertaSolidaIzq, true, true)
 		this.puertasGroup.remove(this.puertaSolidaDer, true, true)
@@ -192,6 +161,21 @@ export default class LevelScene2 extends LevelScene {
 		if (this.allLevelsComplete()) {
 			this.puertaCerrada.setVisible(false);
 			this.puertaAbierta.setVisible(true);
+			this.runasfuente.setVisible(true);
+			this.runas.setVisible(true);
+			this.tweens.add({
+				targets: [this.runas, this.runasfuente],
+				alpha: { from: 1, to: 0 },
+				duration: 1700,
+				ease: 'Power2',
+				yoyo: true,
+				repeatDelay: 2000,
+				repeat: -1,
+			  });
+			if (this.isTransitioning) {
+				return;
+			}
+			this.isTransitioning = true;
 			this.puertaSolidaArriba = this.add.zone(575, 119, 35, 10);
 			this.physics.add.existing(this.puertaSolidaArriba);
 			this.physics.add.overlap(this.player, this.puertaSolidaArriba, () => {
@@ -217,13 +201,14 @@ export default class LevelScene2 extends LevelScene {
 		});
 	}
 
+	// SI ESTA LA MEIGA Y SE PRESIONA LA TECLA E PUEDES INTERACTUAR CON ELLA ABIENDOSE EL MENU DE ESTADISTICAS
 	update(t, dt){
 		if (this.spawnMeiga && this.e.isDown) {
 			this.openMeigaMenu()
 		}
 	}
 
-
+	// FUNCION PARA DESPERTAR LA ESCENA DE ESTADISTICAS
 	openMeigaMenu() {
 		this.player.stopHorizontal();
 		this.player.stopVertical();
@@ -234,22 +219,25 @@ export default class LevelScene2 extends LevelScene {
 		this.scene.wake('stats', {playerData: this.player.getPlayerStats(), dmg: this.bulletPool.getDmg()});
 	}
 
-
+	// FUNCION PARA ABRIR LAS PUERTAS TRAS HABLAR POR PRIMERA VEZ CON LA MEIGA
 	abrirpuertasFirstTalk(){
 		LevelScene2.firstTalkMeiga = true;
-		this.tweens.add({
-			targets: [this.puerta, this.puertaSolidaIzq, this.puertaSolidaDer, this.puertaSolidaAbajo],
-			alpha: { from: 1, to: 0 },
-			duration: 3000,
-			ease: 'Sine.easeInOut',
-			yoyo: false,
-			onComplete: ()=>{
-				this.abrirPuertas();
-			}
-		})
+		
+		if(LevelScene2.firstTalkMeiga){
+			this.tweens.add({
+				targets: [this.puerta, this.puertaSolidaIzq, this.puertaSolidaDer, this.puertaSolidaAbajo],
+				alpha: { from: 1, to: 0 },
+				duration: 3000,
+				ease: 'Sine.easeInOut',
+				yoyo: false,
+				onComplete: ()=>{
+					this.abrirPuertas();
+				}
+			})
+		}
 	}
 
-
+	// FUNCION PARA ACTIVAR UN EASTEREGG QUE HAY EN EL JUEGO
 	activateEaseterEgg() {
 		if (!this.isMuted) {
 			const panasound = this.sound.add("panasong", {

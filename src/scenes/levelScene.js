@@ -10,20 +10,24 @@ import BouncingShot from "../gameobjects/powerUps/bouncingShot"
 import FreezingShot from "../gameobjects/powerUps/freezingShot"
 import PetBot from "../gameobjects/powerUps/petBot"
 import JellyfishPet from "../gameobjects/powerUps/jellyfishPet"
+import Rock from "../gameobjects/enemies/rock"
+
+// PADRE DE TODOS LOS NIVELES DE GALICIA
 
 export default class LevelScene extends Phaser.Scene {
+	// OBJECT QUE LLEVA EL PROGRESO DE CADA NIVEL (FALSE === PASARLO, TRUE === YA PASADO)
 	static progress = {
 		level1: false,
 		level2: true,
 		level3: false,
 		level4: false,
-		levelBoss: true
+		levelBoss: true,
+		sandBox: false
 	}
-
 
 	constructor(scene) {
 		super(scene)
-        this.namescene = scene;
+		this.namescene = scene;
 	}
 
 	init() {
@@ -42,34 +46,37 @@ export default class LevelScene extends Phaser.Scene {
 	}
 
 	create(data) {
-		this.isMuted = data.mute;
-		
-        if(!this.isMuted){
-			this.setMusic()
-		}
 
+		// AÑADE MUSICA
+		this.isMuted = data.mute;
+
+		this.setMusic()
+		
 		this.explorationSong = this.sound.add("explorationSong", {
 			volume: 0.1,
 			loop: true
 		});
 
+		// INICIALIZA EL PERSONAJE, LAS POOLS Y EL TILEMAP
 		this.initPlayerAndPools(data);
 		this.initMap();
 		this.coinPool.fillPull(20);
 		this.foodPool.fillPull(20);
 		this.bulletPool.fillPool(1000);
-		
-		if(LevelScene.progress[this.namescene]){
+
+		// COMPRUEBA SI EL NIVEL YA HA SIDO PASADO O NO
+		if (LevelScene.progress[this.namescene]) {
 			this.initLevelFreeMode()
-		}else{
+		} else {
 			this.initLevelFightMode();
 		}
 
+		// SETTINGS BUTTON
 		const settings = this.add.image(90, 90, 'game_settings').setScale(0.3).setDepth(4);
 
-		if(this.namescene == 'level1' && !LevelScene.progress.level1){		
+		if ((this.namescene == 'level1' || this.namescene === 'sandboxlevel') && !LevelScene.progress.level1) {
 			console.log("LAUNCH Level", this.namescene)
-			this.scene.launch('UIScene', {playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel});
+			this.scene.launch('UIScene', { playerData: this.player.getPlayerStats(), level: this.namescene, bossLevel: data.bossLevel });
 		}
 
 		settings.setInteractive({ cursor: 'pointer' });
@@ -87,11 +94,16 @@ export default class LevelScene extends Phaser.Scene {
 			this.player.stopVertical();
 			this.scene.pause();
 			this.scene.pause('UIScene');
-			if(LevelScene.progress[this.namescene]){
-				this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.explorationSong});
+			if(this.namescene === 'levelBoss'){
+				this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.banda });
 			}
 			else{
-				this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.banda});
+				if (LevelScene.progress[this.namescene]) {
+					this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.explorationSong });
+				}
+				else {
+					this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.banda });
+				}
 			}
 		});
 
@@ -101,16 +113,21 @@ export default class LevelScene extends Phaser.Scene {
 				this.player.stopVertical();
 				this.scene.pause();
 				this.scene.pause('UIScene');
-				if(LevelScene.progress[this.namescene]){
-					this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.explorationSong});
+				if(this.namescene === 'levelBoss'){
+					this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.banda });
 				}
 				else{
-					this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.banda});
+					if (LevelScene.progress[this.namescene]) {
+						this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.explorationSong });
+					}
+					else {
+						this.scene.launch('settings', { level: this.namescene, mute: this.isMuted, music: this.banda });
+					}
 				}
 			}
 		});
 
-		//this.powerUpPool.fillPool()
+		// AÑADIMOS LOS POWER-UPS DISPONIBLES Y LOS AÑADIMOS A SU POOL
 		let powerUps = []
 
 		for (let i = 0; i < 6; i++) {
@@ -123,40 +140,50 @@ export default class LevelScene extends Phaser.Scene {
 		this.powerUpPool.addMultipleEntity(powerUps);
 
 		this.e = this.input.keyboard.addKey('E');
+
+		// CAPTURA LA ESCENA DE ESTADISTICAS
 		this.statsGame = this.scene.get('stats');
 
+		// EVENTO PARA ACTUALIZAR LAS MONEDAS DEL PERSONAJE AL SER GASTADAS
 		this.statsGame.events.on('spentcoins', this.player.setWallet, this.player);
 
+		// EVENTO PARA INCREMENTAR LA FUERZA DEL PERSONAJE
 		this.statsGame.events.on('incrementStrong', this.player.setBulletDmg, this.player);
 
+		// EVENTO PARA INCREMENTAR LA VELOCIDAD EL PERSONAJE
 		this.statsGame.events.on('incrementSpeed', this.player.setSpeed, this);
 
+		// EVENTO PARA INCREMENTAR LA VIDA DEL PERSONAJE
 		this.statsGame.events.on('incrementLife', this.incrementPlayerLife, this);
 
+		// EVENTO PARA INCREMENTAR LA CADENCIA DEL DISAPARO DEL PERSONAJE
 		this.statsGame.events.on('incrementCadence', this.player.setCadence, this.player);
 
 		this.settingsGame = this.scene.get('settings');
 
+		// EVENTO PARA COMPROBAR SI ESTA MUTE O NO
 		this.settingsGame.events.on('muteOption', function (mute) {
 			this.isMuted = mute;
 		}, this);
 
-		this.events.on('shutdown', ()=>{
-            this.statsGame.events.removeListener('spentcoins', this.player.setWallet, this);
+		// EVENTO PARA ELIMINAR LAS ESCUCHAS A LOS EVENTOS DE LA ESCENA DE ESTADISTICAS
+		this.events.on('shutdown', () => {
+			this.statsGame.events.removeListener('spentcoins', this.player.setWallet, this);
 			this.statsGame.events.removeListener('incrementStrong', this.bulletPool.changeDmg, this);
 			this.statsGame.events.removeListener('incrementSpeed', this.player.setSpeed, this);
 			this.statsGame.events.removeListener('incrementLife', this.incrementPlayerLife, this);
 			this.statsGame.events.removeListener('incrementCadence', this.player.setCadence, this);
-        }, this);
+		}, this);
 	}
 
 	update(t) {
-		
+
+		// COMPRUEBA SI ESTA EN DEBUGUEO O COMPLETADO EL NIVEL
 		if (this.debugMode && !this.levelFinished && Phaser.Input.Keyboard.JustUp(this.k)) {
-			if(this.enemySpawnTimer){
+			if (this.enemySpawnTimer) {
 				this.enemySpawnTimer.remove();
 			}
-			if(this.freqTimer){
+			if (this.freqTimer) {
 				this.freqTimer.remove();
 			}
 
@@ -166,7 +193,8 @@ export default class LevelScene extends Phaser.Scene {
 			this.completeLevel()
 		}
 
-		if(!LevelScene.progress[this.namescene]){
+		// COMPRUEBA EL PROGRESO DEL NIVEL
+		if (!LevelScene.progress[this.namescene]) {
 			if (!this.wavesFinished) {
 				this.updateWaveCount()
 			}
@@ -175,13 +203,19 @@ export default class LevelScene extends Phaser.Scene {
 				this.completeLevel();
 			}
 		}
+
 	}
 
+	// FUNCION PARA INICIALIZAR EL TILEMAP QUE LE CORRESPONDA (POR DEFECTO SALA 1)
 	initMap() {
 		const mapa = this.map = this.make.tilemap({
 			key: 'sala1'
 		});
+
+		// TILE IMAGE
 		const tiles = mapa.addTilesetImage('Forest', 'tiles');
+
+		// TILE LAYERS
 		this.groundLayer = this.map.createLayer('Suelo', tiles);
 		this.foregroundLayer = this.map.createLayer('Bordes', tiles);
 		this.puertaSolida = this.physics.add.image(576, 16, 'puertaSala1');
@@ -189,10 +223,16 @@ export default class LevelScene extends Phaser.Scene {
 		this.objetos = this.map.createLayer('Objetos', tiles);
 		this.borderTrees = this.map.createLayer('bordeArboles', tiles);
 
+		// SE LE AÑADEN COLISIONES A ALGUNOS LAYERS
 		this.foregroundLayer.setCollisionBetween(0, 999);
-        this.puertaSolida.setImmovable(true);
+		this.puertaSolida.setImmovable(true);
 
-		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer);
+		this.physics.add.collider(this.enemyPool._group, this.foregroundLayer, (obj1, obj2) => {
+			if(obj1.key === 'rock' && !obj1.justHit){
+				obj1.hit();
+			}
+		});
+
 		this.physics.add.collider(this.player, this.foregroundLayer);
 		this.physics.add.collider(this.enemyPool._group, this.puertaSolida);
 		this.physics.add.collider(this.player, this.puertaSolida);
@@ -205,6 +245,7 @@ export default class LevelScene extends Phaser.Scene {
 			obj1.reboundOrRelease()
 		});
 
+		// SE AÑADE PROFUNDIDAD A LAS DISTINTAS CAPAS
 		this.puertaSolida.setDepth(3);
 		this.player.setDepth(2);
 		this.enemyPool._group.setDepth(2);
@@ -212,22 +253,39 @@ export default class LevelScene extends Phaser.Scene {
 		this.foregroundLayer.setDepth(3);
 	}
 
+	// FUNCION PARA INICIAR LAS POOLS Y DIBUJAR AL PERSONAJE
 	initPlayerAndPools(data) {
-		
-        if(data.hasOwnProperty('gate')){
-            this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(),  data.player.getCadence(), data.player.getBulletDmg());
-        }else{
-            this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, null, 150, 4, 4, 0, 400, 20);
-        }
+
+		// EN FUNCION DE LA SALA EN LA QUE SE ENCUENTRE DIBUJA EN UN SITIO ESPECIFICO AL PERSONAJE Y CON UNAS DETERMINADAS ESTADISITICAS
+		if (data.hasOwnProperty('gate')) {
+			let powerUp = null;
+			if(data.player.inventory !== null){
+				if(data.player.inventory.getKey() === "bouncingShot"){
+					powerUp = new BouncingShot(this, -125, -125);
+				}else if(data.player.inventory.getKey() === "eightDirShot"){
+					powerUp = new EightDirShot(this, -125, -125);
+				}else if(data.player.inventory.getKey() === "petpower"){
+					powerUp = new PetBot(this, -125, -125, new JellyfishPet(this, -125, -125));
+				}else if(data.player.inventory.getKey() === "multipleDirfreezingShotectionShot"){
+					powerUp = new FreezingShot(this, -125, -125);
+				}else if(data.player.inventory.getKey() === "tripleShot"){
+					powerUp = new TripleShot(this, -125, -125);
+				}
+			}
+			this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(), data.player.getCadence(), data.player.getBulletDmg(), powerUp);
+		} else {
+			this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, null, 150, 4, 4, 0, 400, 20, null);
+		}
 		this.player.body.onCollide = true;
 
+		// SE CREAN LAS POOLS Y SE LLENAN
 		this.bulletPool = new BulletPool(this, 150, this.player.getBulletDmg())
 		this.powerUpPool = new PowerUpPool(this, 6)
 		this.enemyPool = new EnemyPool(this, 15);
 		this.coinPool = new CoinPool(this, 20);
 		this.foodPool = new FoodPool(this, 20);
 
-		this.enemyPool.fillPool(25, this.player, this.namescene);
+		this.enemyPool.fillPool(25, this.player, this.howMuchLevelsComplete());
 
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
 			obj1.hit(obj2)
@@ -241,7 +299,7 @@ export default class LevelScene extends Phaser.Scene {
 		this.physics.add.overlap(this.powerUpPool._group, this.player, (obj1, obj2) => {
 			obj2.collectPowerUp(obj1);
 		}, (obj1, obj2) => !obj1.isEnabled());
-		
+
 		this.physics.add.overlap(this.foodPool._group, this.player, (obj1, obj2) => {
 			obj1.collect(obj2);
 			this.events.emit('addScore', obj2.getHp());
@@ -255,6 +313,7 @@ export default class LevelScene extends Phaser.Scene {
 
 	}
 
+	// FUNCION PARA SPAWNEAR LOS ENEMIGOS EN LAS ESQUINAS DE LA ESCENA
 	spawnInBounds() {
 
 		const xPos = [0, this.sys.game.canvas.width]
@@ -267,19 +326,22 @@ export default class LevelScene extends Phaser.Scene {
 
 		// console.log('SPAWN ENEMY RAND NUM:', randNum)
 
-		if (randNum < 7) {
-			this.enemyPool.spawnGob(xPos[randX], yPos[randY])
+		let n = this.howMuchLevelsComplete();
+
+		if (randNum > 13 && n > 0) {
+			this.enemyPool.spawnCyclops(xPos[randX], yPos[randY])
 		} else if (randNum > 7 && randNum < 11) {
 			this.enemyPool.spawnWolf(xPos[randX], yPos[randY])
-		} else if (randNum > 11 && randNum < 14) {
+		} else if (randNum > 11 && randNum < 14 && n === 2) {
 			this.enemyPool.spawnSpectre(xPos[randX], yPos[randY])
 		} else {
-			this.enemyPool.spawnCyclops(xPos[randX], yPos[randY])
+			this.enemyPool.spawnGob(xPos[randX], yPos[randY])
 		}
 
 		//this.enemyPool.spawn(xPos[randX], yPos[randY]);
 	}
 
+	// INICIALIZADOR DE LOS TEMPORIZADORES - OLEADAS
 	initTimers(debug) {
 		this.freqChangeTime = 10000;
 		this.lastSec = 20;
@@ -290,10 +352,10 @@ export default class LevelScene extends Phaser.Scene {
 		if (debug) {
 			this.k = this.input.keyboard.addKey('K');
 			this.debugMode = true;
-		} 
-		
+		}
+
 		this.enemySpawnTimer = this.time.addEvent({
-			delay: 4000,
+			delay: 400,
 			callback: this.spawnInBounds,
 			callbackScope: this,
 			loop: true
@@ -308,24 +370,27 @@ export default class LevelScene extends Phaser.Scene {
 		});
 	}
 
-	initLevelFightMode(){
-		if(!this.isMuted){
+	// FUNCION PARA INICIALIZAR MODO PELEA
+	initLevelFightMode() {
+		if (!this.isMuted) {
 			this.banda.play();
 		}
 		this.spawnMeiga = false;
 		this.initTimers(true);
 	}
 
-	initLevelFreeMode(){
-		if(!this.isMuted){
+	// FUNCION PARA INICIALIZAR MODO EXPLORACION
+	initLevelFreeMode() {
+		if (!this.isMuted) {
 			this.explorationSong.play();
 		}
 		this.abrirPuertas()
-		if(this.namescene === 'level4'){
+		if (this.namescene === 'level4') {
 			this.cofre.destroy();
 		}
 	}
 
+	// FUNCION PARA MOSTRAR ESCENA DE PERDER EN EL JUEGO
 	gameOver() {
 		this.cameras.main.fadeOut(500);
 		this.cameras.main.once("camerafadeoutcomplete", function () {
@@ -335,14 +400,15 @@ export default class LevelScene extends Phaser.Scene {
 		}, this);
 	}
 
-	completeLevel(){
+	// FUNCION PARA CUANDO SE TERMINA EL NIVEL, SE CAMBIA LA MUSICA Y SE ABRE SU DETERMINADA PUERTA
+	completeLevel() {
 
 		this.sound.removeByKey('fightSong');
-		
+
 		const appearEffect = this.sound.add("appearEffect", {
 			volume: 0.1
 		});
-		
+
 		appearEffect.play();
 
 		appearEffect.once('complete', () => {
@@ -354,11 +420,13 @@ export default class LevelScene extends Phaser.Scene {
 		this.puertaSolida.destroy();
 	}
 
-	incrementPlayerLife(hp){
+	// FUNCION PARA AUMENTAR LA VIDA DEL PERSONAJE
+	incrementPlayerLife(hp) {
 		this.player.incrementHp();
 		this.player.setHp(hp);
 	}
 
+	// FUNCION PARA CAMBIAR LA FRECUENCIA DE LAS OLEADAS
 	changeFreqHandler() {
 		const currDelay = this.enemySpawnTimer.delay;
 
@@ -398,18 +466,34 @@ export default class LevelScene extends Phaser.Scene {
 			this.enemySpawnTimer.remove();
 			this.freqTimer.remove();
 			this.wavesFinished = true;
+
+			this.endWithNoEnemies = this.time.addEvent({
+
+				delay: 30000,
+				callback: ()=>{
+					if(!this.levelFinished){
+						this.levelFinished = true
+						this.completeLevel()
+					}
+				},
+				callbackScope: this,
+				loop: false
+			});
 		}
 	}
 
+	// FUNCION PARA OBTENER LA ALTURA DEL JUEGO
 	getGameHeight() {
 		return this.game.config.height
 	}
 
+	// FUNCION PARA OBTENER LA ANCHURA DEL JUEGO
 	getGameWidth() {
 		return this.game.config.width
 	}
 
-	updateWaveCount(){
+	// FUNCION PARA ACTUALIZAR EL CONTADOR DE OLEADAS
+	updateWaveCount() {
 		const remaining = (this.freqChangeTime - this.freqTimer.getElapsed()) / 1000;
 
 		if (this.lastSec != remaining) {
@@ -419,7 +503,8 @@ export default class LevelScene extends Phaser.Scene {
 		this.lastSec = remaining
 	}
 
-    addMeiga() {
+	// FUNCION PARA AÑADIR LA MEIGA EN LA ESCENA
+	addMeiga() {
 
 		this.spawnMeiga = true;
 		const meiga = this.add.sprite(960, 250, 'meiga').setScale(1.6);
@@ -440,23 +525,35 @@ export default class LevelScene extends Phaser.Scene {
 		e_key.play('E_Press');
 	}
 
-	setPlayerPosition(x, y, level){
+	// FUNCION PARA INDICAR LA POSICION DEL PERSONAJE
+	setPlayerPosition(x, y, level) {
 		this.scene.get(level).player.stopHorizontal();
 		this.scene.get(level).player.stopVertical();
 		this.scene.get(level).player.x = x;
 		this.scene.get(level).player.y = y;
 	}
 
-	abrirPuertas(){
+	abrirPuertas() {
 
 	}
 
-	allLevelsComplete(){
+	// FUNCION QUE INDICA SI TODOS LOS NIVELES HAN SIDO ACABADOS
+	allLevelsComplete() {
 		return LevelScene.progress.level1 && LevelScene.progress.level2 && LevelScene.progress.level3
-				&& LevelScene.progress.level4;
+			&& LevelScene.progress.level4;
 	}
 
-	setMusic(){
+	// CONTADOR DE NIVELES COMPLETOS
+	howMuchLevelsComplete() {
+		let n = 0;
+		if (LevelScene.progress.level1) n += 1;
+		if (LevelScene.progress.level3) n += 1;
+		if (LevelScene.progress.level4) n += 1;
+		return n;
+	}
+
+	// FUNCION PARA PONER LA MUSICA
+	setMusic() {
 		this.banda = this.sound.add("fightSong", {
 			volume: 0.1,
 			loop: true

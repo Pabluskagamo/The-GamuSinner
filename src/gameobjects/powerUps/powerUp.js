@@ -1,5 +1,7 @@
 import Item from "../items/item"
 
+// PADRE DE LOS POWER-UPS
+
 export default class PowerUp extends Item{
 
     constructor(scene, x, y, key, passive){
@@ -15,6 +17,7 @@ export default class PowerUp extends Item{
         this.scene.physics.add.existing(this)  
     }
 
+    // INICIALIZACION DE SUS CARACTERISTICAS
     init(x, y) {
         this.x = x
         this.y = y
@@ -27,6 +30,7 @@ export default class PowerUp extends Item{
     preUpdate(t, dt){
         super.preUpdate(t, dt)
         
+        // COMPROBAR EL TIEMPO DEL EFECTO
         if(this.timer){
             const remaining = (this.lifespan - this.timer.getElapsed()) / 1000;
 
@@ -38,10 +42,8 @@ export default class PowerUp extends Item{
         }
     }
 
+    // FUNCION PARA CUANDO SE RECOLECTA EL POWER-UP
     collect(){
-        //this.initTimer();
-        //this.x = -150;
-        //this.y = -150;
 
         this.visible = false
         this.overlap = true
@@ -56,6 +58,7 @@ export default class PowerUp extends Item{
         }
     }
     
+    // SETTER Y GETTER PARA SU RECOLECCION
     getCollected(){
         return this.collected
     }
@@ -64,14 +67,17 @@ export default class PowerUp extends Item{
         this.collected = value
     }
     
+    // OBTENER LA KEY DEL POWER-UP PARA SABER CUAL ES
     getKey(){
         return this.key
     }
 
+    // FUNCION PARA SABER SI ES PASIVO
     isPassive(){
         return this.passive
     }
 
+    // FUNCION PARA DESHABILITAR EL POWER-UP
     disable(reloaded){
         this.enabled = false
         this.scene.powerUpPool.release(this)
@@ -83,10 +89,12 @@ export default class PowerUp extends Item{
         }
     }
 
+    // FUNCION PARA SABER SI ESTA ACTIVA
     isEnabled(){
         return this.enabled
     }
 
+    // FUNCION PARA INICIAR EL TEMPORIZADOR
     initTimer(){
         this.scene.events.emit('collectPowerUp', this.key);
         this.timer = this.scene.time.addEvent({
@@ -97,17 +105,19 @@ export default class PowerUp extends Item{
 		});
     }
 
+    // FUNCION PARA CUANDO SE TERMINA EL POWER-UP
     finishPowerUp(){
 		this.disable()
 		this.scene.events.emit('UpdatePowerUpTimer', -1);
 		this.scene.events.emit('endPowerUpPlayer');
 	}
 
-
+    // FUNCION PARA VOLVER A METERLO EN SU POOL
     deSpawn(){
         this.scene.powerUpPool.release(this);
     }
 
+    // FUNCION PARA SABER SI ES EL POWER-UP DE LA MASCOTA
     isPet() {
         return false;
     }

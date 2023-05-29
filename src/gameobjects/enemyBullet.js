@@ -1,5 +1,7 @@
 import Bullet from "./bullet";
 
+// CLASS DE LA BALA DEL BOSS, QUE EXTIENDE DE LA BALA DEL PERSONAJE
+
 export default class EnemyBullet extends Bullet {
 
     constructor (scene, x, y, speed, dmg) {
@@ -17,6 +19,7 @@ export default class EnemyBullet extends Bullet {
         this.play('bossBullet_animation')
     }
 
+    // FUNCION PARA CREAR LAS ANIMACIONES DE LA BALA
     createAnimations () {
         this.scene.anims.create ({
             key: 'bossBullet_animation',
@@ -26,6 +29,7 @@ export default class EnemyBullet extends Bullet {
         })
     }
 
+    // FUNCION PARA CUANDO RECIBE DAÑO
     hit (enemy) {
         if (!this.justHit) {
             this.justHit = true;
@@ -34,6 +38,7 @@ export default class EnemyBullet extends Bullet {
         }
     }
 
+    // FUNCION PARA LIBERAR LA BALA DE LA POOL
     release(){
         this.scene.bossPool.releaseBullet(this);
     }

@@ -1,5 +1,7 @@
 import PowerUp from "./powerUp"
 
+// CLASE DEL POWER-UP DE DISPARO TRIPLE
+
 export default class TripleShot extends PowerUp{
 
     constructor(scene, x, y){
@@ -14,6 +16,7 @@ export default class TripleShot extends PowerUp{
         this.play('tripleShot_animation')
     }
 
+    // FUNCION PARA GENERAR LAS 3 DIRECCIONES EN LAS QUE DISPARAR
     run (charX, charY, passives, dir){
         if (this.scene.bulletPool.hasBullets()) {
             let bullet = this.scene.bulletPool.spawn(charX, charY, passives);

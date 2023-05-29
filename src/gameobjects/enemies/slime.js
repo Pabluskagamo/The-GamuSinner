@@ -1,5 +1,7 @@
 import EnemyObject from "./enemyObject";
 
+// CLASE DEL SLIME BOSS
+
 export default class Slime extends EnemyObject {
 
     constructor(scene, x, y, speed, player, bossPool){
@@ -77,6 +79,7 @@ export default class Slime extends EnemyObject {
     preUpdate(t, dt){
         super.preUpdate(t, dt)
 
+        // COMPRUEBA QUE SIEMPRE QUE TENGA VIDA Y NO ESTE ATACANDO, O ESTÉ MUERTO EL PERSONAJE, PERSIGA AL PERSONAJE, SI NO PARA
         if (this.hp > 0 && !this.attacking && !this.player.isDead()) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
             this.follow();
@@ -85,11 +88,9 @@ export default class Slime extends EnemyObject {
             this.stopHorizontal();
         }
 
-        if (this.toDestroy) {
-            this.destroy();
-        }
     }
 
+    // FUNCION PARA PERSEGUIR AL PERSONAJE
     follow(){
         this.flipX = true;
 
@@ -117,6 +118,7 @@ export default class Slime extends EnemyObject {
         }
     }
 
+    // FUNCION PARA ATACAR AL PERSONAJE
     attack(enemie){
         if(!this.attacking && !this.isDead() && !this.player.isDead()){
             this.attacking = true;
@@ -125,6 +127,7 @@ export default class Slime extends EnemyObject {
         }
     }
 
+    // FUNCION PARA MATAR AL SLIME
     dieMe(){
         this.hp = 0;
         this.drop()

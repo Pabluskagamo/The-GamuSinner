@@ -1,5 +1,7 @@
 import Bullet from "../bullet";
 
+// POOL DE LAS BALAS
+
 export default class BulletPool {
 
 
@@ -10,6 +12,7 @@ export default class BulletPool {
         this.dmg = dmg;
     }
 
+    // AÑADIR LAS BALAS
     addMultipleEntity(entities) {
         this._group.addMultiple(entities);
         this._group.children.iterate(c => {
@@ -18,6 +21,7 @@ export default class BulletPool {
         });
     }
 
+    // SPAWNEO DE LAS BALAS CON SU PASIVAS
     spawn(x, y, passives) {
         let bullet = this._group.getFirstDead()
 
@@ -37,15 +41,18 @@ export default class BulletPool {
         return bullet;
     }
 
+    // FUNCION PARA HACER LIMPIEZA
     release(bullet) {
         bullet.body.checkCollision.none = true
         this._group.killAndHide(bullet)
     }
 
+    // FUNCION PARA SABER SI HAY BALAS
     hasBullets() {
         return this._group.countActive() < this.max
     }
 
+    // FUNCION PARA RELLENAR LA POOL
     fillPool(num) {
         let bullets = []
 
@@ -56,6 +63,7 @@ export default class BulletPool {
         this.addMultipleEntity(bullets);
     }
 
+    // SETTER Y GETTER DEL DAÑO DE LA BALA
     getDmg() {
         return this.dmg;
     }

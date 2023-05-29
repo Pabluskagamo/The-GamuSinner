@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 
+// ESCENA PARA ELEGIR EL NIVEL DEL MAPA
 
 export default class selectionScene extends Phaser.Scene {
 	constructor() {
@@ -13,8 +14,10 @@ export default class selectionScene extends Phaser.Scene {
 		this.load.image('game_title', './img/titulo.png');
 	}
 
-
+	// ACTUALMENTE SOLO ESTA EL NIVEL DE GALICIA, SERIA IGUAL PARA EL RESTO PERO DIRIGIENDOSE A SU NIVEL CORRESPONDIENTE
 	create(data) {
+		this.isTransitioning = false;
+
 		this.isMuted = data.mute;
 		this.add.image(0, 0, 'mapa').setOrigin(0, 0).setScale(1);
 		this.add.image(170, 60, 'game_title').setScale(0.22);
@@ -27,6 +30,10 @@ export default class selectionScene extends Phaser.Scene {
 		botonGalicia.setInteractive({ cursor: 'pointer' });
 
 		botonGalicia.on('pointerup', () => {
+			if (this.isTransitioning) {
+				return;
+			}
+			this.isTransitioning = true;
 			this.cameras.main.fadeOut(500);
 			this.cameras.main.once("camerafadeoutcomplete", function () {
 				this.scene.start('level1', { mute: this.isMuted });

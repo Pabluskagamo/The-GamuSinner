@@ -1,4 +1,8 @@
 import Phaser from 'phaser'
+import LevelScene from './levelScene';
+import LevelScene2 from './levelScenes/levelScene2';
+
+// ESCENA DE LA CONFIGURACION
 
 export default class SettingScene extends Phaser.Scene {
 	constructor() {
@@ -76,10 +80,24 @@ export default class SettingScene extends Phaser.Scene {
 		restart.on('pointerup', () => {
 			this.sound.removeByKey('explorationSong');
 			this.sound.removeByKey('fightSong');
+			this.sound.removeByKey('fightSong2');
+			this.sound.removeByKey('fightSong3');
+			this.sound.removeByKey('losse');
+			this.sound.removeByKey('appearEffect');
 			this.scene.stop('settings');
 			this.scene.stop('UIScene');
+			this.scene.stop('stats');
 			this.scene.stop(this.level);
 			this.scene.start('level1', { mute: this.isMuted });
+			LevelScene.progress =  {
+				level1: false,
+				level2: true,
+				level3: false,
+				level4: false,
+				levelBoss: true
+			}
+			
+			LevelScene2.firstTalkMeiga = false
 		});
 
 		// MENU BUTTON
@@ -102,8 +120,18 @@ export default class SettingScene extends Phaser.Scene {
 			this.sound.removeByKey('fightSong');
 			this.scene.stop('settings');
 			this.scene.stop('UIScene');
+			this.scene.stop('stats');
 			this.scene.stop(this.level);
 			this.scene.start('mainScene');
+			LevelScene.progress =  {
+				level1: false,
+				level2: true,
+				level3: false,
+				level4: false,
+				levelBoss: true
+			}
+			
+			LevelScene2.firstTalkMeiga = false
 		});
 
 		this.muteButton = this.add.sprite(1060, 630, 'mute_button').setScale(0.35);
@@ -134,6 +162,7 @@ export default class SettingScene extends Phaser.Scene {
 			this.soundButton.visible = true;
 		});
 
+		// SOUNDBUTTON
 		this.soundButton = this.add.sprite(1060, 630, 'sound_button').setScale(0.35);
 		this.soundButton.setInteractive({ cursor: 'pointer' });
 		this.soundButton.on('pointerover', () => {
@@ -161,6 +190,7 @@ export default class SettingScene extends Phaser.Scene {
 			this.soundButton.visible = false;
 		});
 
+		// FULLSCREEN BUTTON
 		const fullScreen = this.add.sprite(1120, 627, 'full_screen').setScale(0.25);
 
 		fullScreen.setInteractive({ cursor: 'pointer' });
@@ -180,6 +210,7 @@ export default class SettingScene extends Phaser.Scene {
 		});
 	}
 
+	// COMPROBACIONES DE SI ESTA MUTEADO O NO
 	update(t) {
 		if (!this.isMuted) {
 			this.soundButton.visible = true;
@@ -191,6 +222,7 @@ export default class SettingScene extends Phaser.Scene {
 		}
 	}
 
+	// FUNCION PARA CAMBIAR LA TEXTURA DEL BOTON DE SONIDO
 	changeButtonTexture(button) {
 		if (this.isMuted) {
 			button.setTexture('sound_button');

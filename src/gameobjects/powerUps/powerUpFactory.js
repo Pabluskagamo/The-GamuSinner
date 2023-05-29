@@ -1,6 +1,8 @@
 import MultipleDirectionShot from "./multipleDirectionShot"
 import NonePowerUp from "./nonePowerUp";
 
+// FACTORIA DE LOS POWER-UPS
+
 export class PowerUpFactory {
     static create(power, scene) {
         let powerUp

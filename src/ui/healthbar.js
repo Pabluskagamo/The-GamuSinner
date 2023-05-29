@@ -1,3 +1,5 @@
+// CLASE PERTENECIENTE A LA BARRA DE VIDA DEL BOSS
+
 export default class HealthBar {
 
     constructor (scene, x, y, hp)

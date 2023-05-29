@@ -7,6 +7,14 @@ import CoinPool from "../../gameobjects/Pools/coinPool";
 import FoodPool from "../../gameobjects/Pools/foodPool";
 import DemonBoss from "../../gameobjects/enemies/boss/demonBoss";
 import BossPool from "../../gameobjects/Pools/bossPool";
+import TripleShot from "../../gameobjects/powerUps/tripleShot"
+import EightDirShot from "../../gameobjects/powerUps/eightDirShot"
+import BouncingShot from "../../gameobjects/powerUps/bouncingShot"
+import FreezingShot from "../../gameobjects/powerUps/freezingShot"
+import PetBot from "../../gameobjects/powerUps/petBot"
+import JellyfishPet from "../../gameobjects/powerUps/jellyfishPet"
+
+// ESCENA DEL BOSS FINAL DE GALICIA
 
 export default class LevelSceneBoss extends LevelScene {
 
@@ -15,75 +23,90 @@ export default class LevelSceneBoss extends LevelScene {
 	}
 
 	create(data) {
+		// AÑADE LA MUSICA DEL BOSS
 		this.isMuted = data.mute;
 		super.create({ ...data, bossLevel: true });
 		this.initTimers(true);
 
+		// INICIALIZA LAS POOLS DEL BOSS
 		this.bossPool.fillPool(500, 30, 40, this.player)
 		this.enemyPool.fillPool(25, this.player, this.namescene);
+
+		// DIBUJA AL BOSS FINAL
 		this.demon = new DemonBoss(this, this.game.canvas.width / 2.07, this.game.canvas.height / 3.1, 60, this.player, this.bossPool, this.enemyPool)
 		this.demon.body.pushable = false;
 		this.player.body.pushable = false;
 		this.demon.setDepth(3);
 
+		// AÑADE COLISIONES
 		this.physics.add.collider(this.bulletPool._group, this.demon, (obj1, obj2) => {
 			obj1.hit(obj2)
 		}, (obj1, obj2) => !obj2.isDead());
 
+		// AÑADE EL RECIBIMIENTO DE DAÑO POR PARTE DE BOSS
 		this.physics.add.overlap(this.demon, this.player, (obj1, obj2) => {
 			obj1.attack(obj2);
 			this.events.emit('addScore', obj2.getHp());
 		}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash()
 		);
 
+		// GOLPEA EL BOSS AL PERSONAJE
 		this.physics.add.overlap(this.demon, this.player, (obj1, obj2) => {
 			obj2.getHit(1)
 			this.events.emit('addScore', obj2.getHp());
 		}, (obj1, obj2) => obj1.getonSpecialAbility()
 		);
 
-
+		// GOLPEA LA BALA AL BOSS
 		this.physics.add.collider(this.bulletPool._group, this.enemyPool._group, (obj1, obj2) => {
 			obj1.hit(obj2)
 		}, (obj1, obj2) => !obj2.isDead());
 
+		// RECOGE LAS MONEDAS
 		this.physics.add.overlap(this.coinPool._group, this.player, (obj1, obj2) => {
 			obj1.collect(obj2);
 			this.events.emit('earnCoin', obj2.getWallet());
 		});
 
+		// RECOGE EL POWER-UP
 		this.physics.add.overlap(this.powerUpPool._group, this.player, (obj1, obj2) => {
 			obj2.collectPowerUp(obj1);
 		}, (obj1, obj2) => !obj1.isEnabled());
 
+		// RECOGE LOS MUSLITOS PARA RECUPERAR VIDA
 		this.physics.add.overlap(this.foodPool._group, this.player, (obj1, obj2) => {
 			obj1.collect(obj2);
 			this.events.emit('addScore', obj2.getHp());
 		});
 
+		// LOS ESBIRROS ATACAN AL PERSONAJE
 		this.physics.add.collider(this.enemyPool._group, this.player, (obj1, obj2) => {
 			obj1.attack(obj2);
 			this.events.emit('addScore', obj2.getHp());
 		}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash() && !obj2.isInvicible()
 		);
 
+		// LOS ESBIRROS DEL BOSS ATACAN AL PERSONAJE
 		this.physics.add.collider(this.bossPool._bossEnemiesGroup, this.player, (obj1, obj2) => {
 			obj1.attack(obj2);
 			this.events.emit('addScore', obj2.getHp());
 		}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash() && !obj2.isInvicible()
 		);
 
+		// LOS ESBIRROS DEL BOSS RECIBEN DAÑO
 		this.physics.add.collider(this.bulletPool._group, this.bossPool._bossEnemiesGroup, (obj1, obj2) => {
 			obj1.hit(obj2)
 		}, (obj1, obj2) => !obj2.isDead()
 		);
 
+		// LAS BALAS DEL BOSS IMPACTAN EN EL PERSONAJE
 		this.physics.add.collider(this.bossPool._bossBulletGroup, this.player, (obj1, obj2) => {
 			obj1.hit(obj2)
 			this.events.emit('addScore', obj2.getHp());
 		}, (obj1, obj2) => !obj2.isDead() && !obj2.getDash() && !obj2.isInvicible()
 		);
 
+		// LAS EXPLOSIONES DEL BOSS IMPACTAN EN EL PERSONAJE
 		this.physics.add.overlap(this.bossPool._bossExplosionGroup, this.player, (obj1, obj2) => {
 			obj1.hit(obj2)
 			this.events.emit('addScore', obj2.getHp());
@@ -92,12 +115,13 @@ export default class LevelSceneBoss extends LevelScene {
 
 	}
 
+	// INICIALIZA EL TILEMAP CORRESPONDIENTE AL BOSS FINAL
 	initMap() {
 		const mapa = this.map = this.make.tilemap({
 			key: 'salaBoss'
 		});
 
-		//Tile Images
+		// TILE IMAGES
 		const tilesSuelo = mapa.addTilesetImage('suelo', 'tilesBossSuelo');
 		const tilesCastleProps = mapa.addTilesetImage('Runas', 'tilesCastleProps')
 		const tilesParedes = mapa.addTilesetImage('paredes', 'tilesBossPared')
@@ -105,7 +129,7 @@ export default class LevelSceneBoss extends LevelScene {
 		const tilesPentagram = mapa.addTilesetImage('pentagram', 'tilesBossPentagram')
 		const tilesBloodFoutain = mapa.addTilesetImage('bloodfountain', 'tilesBossBloodFountain')
 
-
+		// TILE LAYERS
 		this.groundLayer = this.map.createLayer('Suelo', [tilesSuelo, tilesParedes]);
 		this.foregroundLayer = this.map.createLayer('Bordes', [tilesParedes, tilesBricks]);
 		this.decoracion = this.map.createLayer('Decoracion', [tilesParedes, tilesBloodFoutain, tilesCastleProps, tilesBricks]);
@@ -113,7 +137,7 @@ export default class LevelSceneBoss extends LevelScene {
 		this.bordeEstatuas = this.map.createLayer('BordeEstatuas', tilesParedes);
 		this.pentagram = this.map.createLayer('Pentagrams', tilesPentagram);
 
-		//Colisiones
+		// COLISIONES
 		this.foregroundLayer.setCollisionBetween(0, 999);
 		this.estatuas.setCollisionBetween(0, 999);
 
@@ -138,16 +162,31 @@ export default class LevelSceneBoss extends LevelScene {
 			obj1.release()
 		});
 
-
+		// PROFUNDIDAD
 		this.player.setDepth(2)
 		this.bordeEstatuas.setDepth(2)
 
 	}
 
+	// INICIALIZACION DE LAS POOLS ESPECIFICAS PARA EL BOSS
 	initPlayerAndPools(data) {
 
 		if (data.hasOwnProperty('gate')) {
-			this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(), data.player.getCadence());
+			let powerUp = null;
+			if(data.player.inventory !== null){
+				if(data.player.inventory.getKey() === "bouncingShot"){
+					powerUp = new BouncingShot(this, -125, -125);
+				}else if(data.player.inventory.getKey() === "eightDirShot"){
+					powerUp = new EightDirShot(this, -125, -125);
+				}else if(data.player.inventory.getKey() === "petpower"){
+					powerUp = new PetBot(this, -125, -125, new JellyfishPet(this, -125, -125));
+				}else if(data.player.inventory.getKey() === "multipleDirfreezingShotectionShot"){
+					powerUp = new FreezingShot(this, -125, -125);
+				}else if(data.player.inventory.getKey() === "tripleShot"){
+					powerUp = new TripleShot(this, -125, -125);
+				}
+			}
+			this.player = new Character(this, data.gate.x, data.gate.y, null, data.player.getSpeed(), data.player.getHp(), data.player.getMaxHp(), data.player.getWallet(), data.player.getCadence(), data.player.getBulletDmg(), powerUp);
 		} else {
 			this.player = new Character(this, this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, null, 150, 4, 4, 0, 400);
 		}
@@ -161,21 +200,8 @@ export default class LevelSceneBoss extends LevelScene {
 		this.foodPool = new FoodPool(this, 20);
 	}
 
-	// initMap() {
-	// 	super.initMap()
-	// 	this.physics.add.collider(this.bossPool._bossEnemiesGroup, this.foregroundLayer);
-	// 	this.physics.add.collider(this.bossPool._bossEnemiesGroup, this.puertaSolida);
-	// 	this.physics.add.collider(this.bossPool._bossBulletGroup, this.foregroundLayer, (obj1, obj2) => {
-	// 		obj1.release()
-	// 	});
-
-	// 	this.physics.add.collider(this.bossPool._bossBulletGroup, this.puertaSolida, (obj1, obj2) => {
-	// 		obj1.release()
-	// 	});
-	// }
-
 	update(t) {
-
+		// COMPRUEBA QUE SE VAYA REALIZANDO DAÑO AL BOSS
 		if (this.debugMode && !this.levelFinished && Phaser.Input.Keyboard.JustUp(this.k)) {
 			this.demon.hp = 100;
 			this.events.emit("bossHit", this.demon.startHp - 100);
@@ -184,6 +210,7 @@ export default class LevelSceneBoss extends LevelScene {
 		}
 	}
 
+	// SALTA LA BATALLA FINAL CON LA TECLA K
 	initTimers(debug) {
 		if (debug) {
 			this.k = this.input.keyboard.addKey('K');
@@ -191,6 +218,7 @@ export default class LevelSceneBoss extends LevelScene {
 		}
 	}
 
+	// ESTABLECE LA MUSICA
 	setMusic() {
 		this.banda = this.sound.add("bossSong", {
 			volume: 0.1,
@@ -198,6 +226,7 @@ export default class LevelSceneBoss extends LevelScene {
 		});
 	}
 
+	// AÑADE LA MEIGA DE LA ANIMACION
 	addMeiga() {
 
 		this.spawnMeiga = true;
@@ -219,6 +248,7 @@ export default class LevelSceneBoss extends LevelScene {
 		this.meiga.play('meiga_magic');
 	}
 
+	// FUNCION PARA CUANDO SE ACABA EL NIVEL Y LLEVAR A LOS CREDITOS
 	completeLevel() {
 		console.log("NIVEL COMPLETADO")
 		this.levelFinished = true
@@ -242,6 +272,7 @@ export default class LevelSceneBoss extends LevelScene {
 		})
 	}
 
+	// FUNCION PARA CUANDO ESTA EN MODO EXPLORACION EN LA SALA DEL BOSS (CUANDO ESTA LA ANIMACION)
 	initLevelFreeMode() {
 		this.addMeiga()
 		this.input.keyboard.enabled = false;
@@ -257,15 +288,15 @@ export default class LevelSceneBoss extends LevelScene {
 		this.time.addEvent({
 			delay: 8000,
 			callback: () => {
+				this.setMusic();
 				if (!this.isMuted) {
-					this.setMusic();
 					this.banda.play();
 				}
 				this.demon.transform();
 				this.meiga.setVisible(false)
 				this.spawnMeiga = false;
 				if (!this.isMuted) {
-					this.enterDungeonMusic.stop()
+					this.sound.removeByKey('dungeonEnterSong');
 				}
 				this.input.keyboard.enabled = true;
 			},
@@ -274,12 +305,14 @@ export default class LevelSceneBoss extends LevelScene {
 		})
 	}
 
+	// FUNCION PARA ACTUALIZAR LA MUSICA CUANDO SE ACABA LA PRIMERA FASE
 	endFirstFase() {
 		if(!this.isMuted){
-			this.banda.stop();
+			this.sound.removeByKey('bossSong');
 		}
 	}
 
+	// FUNCION PARA ACTUALIZAR LA MUSICACUANDO EMPIEZA LA SEGUNDA FASE
 	setSecondFase() {
 		if(!this.isMuted){
 			this.banda = this.sound.add("bossSongSecondFase", {

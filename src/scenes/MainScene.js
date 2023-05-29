@@ -1,15 +1,19 @@
 import Phaser from 'phaser'
 
+// ESCENA DE LA PANTALLA DE INICIO
+
 export default class MainScene extends Phaser.Scene {
 	constructor() {
 		super('mainScene');
 		this.isMuted = false;
 	}
 
+	// CARGAMOS LA MAYORIA DE LOS DATOS PARA NO SATURAR EL RESTO DEL JUEGO
 	preload() {
 		this.load.image('background', './img/fondo_pixelart3.png');
 		this.load.image('game_title', './img/titulo.png');
 		this.load.spritesheet('game_start', './assets/ui/start_sprite.png', { frameWidth: 750, frameHeight: 355 });
+		this.load.spritesheet('sandbox', './assets/ui/SandBox_sprite.png', { frameWidth: 154, frameHeight: 64 });
 		this.load.spritesheet('sound_button', './assets/ui/SoundButton.png', { frameWidth: 192, frameHeight: 192 });
 		this.load.spritesheet('mute_button', './assets/ui/MuteButton.png', { frameWidth: 192, frameHeight: 192 });
 		this.load.spritesheet('full_screen', './assets/ui/FullScreenSprite.png', { frameWidth: 192, frameHeight: 192 });
@@ -18,6 +22,7 @@ export default class MainScene extends Phaser.Scene {
 		this.load.spritesheet('character_shot', './assets/character/character_shooting.png', { frameWidth: 64, frameHeight: 32 })
 		this.load.spritesheet('blackWolf', './assets/enemies/blackWolf.png', { frameWidth: 64, frameHeight: 64 })
 		this.load.spritesheet('cyclops', './assets/enemies/cyclops.png', { frameWidth: 64, frameHeight: 64.1 })
+		this.load.spritesheet('cyclops_rock', './assets/enemies/cyclops_Rock.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('goblin', './assets/enemies/redGoblin.png', { frameWidth: 32, frameHeight: 32.1 })
 		this.load.spritesheet('spectre2', './assets/enemies/spectre.png', { frameWidth: 32, frameHeight: 32 })
 		this.load.spritesheet('demonboss', './assets/enemies/boss/boss_demon_slime/spritesheets/demonboss.png', { frameWidth: 288, frameHeight: 160 })
@@ -41,6 +46,7 @@ export default class MainScene extends Phaser.Scene {
 		this.load.image('tilesCastleWall', './assets/tileset/sala2/tilesetCastle/TX Tileset Wall.png')
 		this.load.image('tilesCastleGrass', './assets/tileset/sala2/tilesetCastle/TX Tileset Grass.png')
 		this.load.image('tilesCastlePlant', './assets/tileset/sala2/tilesetCastle/TX Plant.png')
+		this.load.image('smallRunes', './assets/tileset/sala2/tilesetCastle/SmallRunes.png')
 		this.load.image('tileFaerieForest', './assets/tileset/FaerieForest_PetricakeGamesPNG.png')
 		this.load.image('tilesBossSuelo', './assets/tileset/salaBoss/drain-blood.png')
 		this.load.image('tilesBossPared', './assets/tileset/salaBoss/evildungeon.png')
@@ -52,6 +58,7 @@ export default class MainScene extends Phaser.Scene {
 		this.load.tilemapTiledJSON('sala3', './assets/tilemap/sala3.json')
 		this.load.tilemapTiledJSON('sala4', './assets/tilemap/sala4.json')
 		this.load.tilemapTiledJSON('salaBoss', './assets/tilemap/salaBoss.json')
+		this.load.tilemapTiledJSON('salaSandBox', './assets/tilemap/sandbox.json')
 		this.load.audio("appearEffect", "./assets/audio/Effects/AppearSoundEffect.mp3");
 		this.load.audio("explorationSong", "./assets/audio/Winds Of Stories.mp3");
 		this.load.audio("hit", "./assets/effects/hit.mp3");
@@ -83,17 +90,27 @@ export default class MainScene extends Phaser.Scene {
 
 
 	create() {
+		this.isTransitioning = false;
+
+		// AÑADE MUSICA SI PUEDE
+		this.banda = this.sound.add("musica", {
+			volume: 0.2,
+			loop: true
+		});
 		if(!this.isMuted){
-			this.banda = this.sound.add("musica", {
-				volume: 0.2,
-				loop: true
-			});
 			this.banda.play();
 		}
 
 		this.anims.create({
 			key: 'hoverStart',
 			frames: this.anims.generateFrameNumbers('game_start', { start: 0, end: 2 }),
+			frameRate: 10,
+			repeat: 0
+		})
+
+		this.anims.create({
+			key: 'hoverSandbox',
+			frames: this.anims.generateFrameNumbers('sandbox', { start: 0, end: 2 }),
 			frameRate: 10,
 			repeat: 0
 		})
@@ -119,8 +136,11 @@ export default class MainScene extends Phaser.Scene {
 			repeat: 0
 		})
 
+		// BACKGROUND
 		this.add.image(0, 0, 'background').setOrigin(0, 0).setScale(0.75);
 		const title = this.add.image(this.sys.game.canvas.width / 2, 230, 'game_title').setScale(0.65);
+
+		// STARTBUTTON
 		const start = this.add.sprite(this.sys.game.canvas.width / 2, 365, 'game_start').setScale(0.35);
 		start.setInteractive({ cursor: 'pointer' });
 		start.on('pointerover', () => {
@@ -130,18 +150,27 @@ export default class MainScene extends Phaser.Scene {
 		start.on('pointerout', () => {
 			start.playReverse('hoverStart');
 		});
-
+		
 		start.on('pointerup', () => {
+			if (this.isTransitioning) {
+				return;
+			}
+			this.isTransitioning = true;
 			this.cameras.main.fadeOut(500);
 			this.cameras.main.once("camerafadeoutcomplete", function () {
 				this.sound.removeByKey('musica');
 				this.scene.stop();
 				this.scene.start('history', {mute: this.isMuted});
 			}, this);
+			this.isTransitioning = false;
 		});
-
+		
 		this.input.keyboard.on('keydown', (event) => {
 			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
+				if (this.isTransitioning) {
+					return;
+				}
+				this.isTransitioning = true;
 				this.cameras.main.fadeOut(500);
 				this.cameras.main.once("camerafadeoutcomplete", function () {
 					this.sound.removeByKey('musica');
@@ -150,7 +179,34 @@ export default class MainScene extends Phaser.Scene {
 				}, this);
 			}
 		});
+		
+		
+		// SANDBOXBUTTON
+		const sandBox = this.add.sprite(120, 620, 'sandbox').setScale(1.4);
+		sandBox.setInteractive({ cursor: 'pointer' });
+		sandBox.on('pointerover', () => {
+			sandBox.play('hoverSandbox');
+		});
 
+		sandBox.on('pointerout', () => {
+			sandBox.playReverse('hoverSandbox');
+		});
+		
+		sandBox.on('pointerup', () => {
+			if (this.isTransitioning) {
+				return;
+			}
+			this.isTransitioning = true;
+			this.cameras.main.fadeOut(500);
+			this.cameras.main.once("camerafadeoutcomplete", function () {
+				this.sound.removeByKey('musica');
+				this.scene.stop();
+				this.scene.start('sandboxlevel', {mute: this.isMuted});
+			}, this);
+		});
+
+
+		// MUTE BUTTON
 		const muteButton = this.add.sprite(1060, 630, 'mute_button').setScale(0.35);
 		muteButton.visible = false;
 		muteButton.setInteractive({ cursor: 'pointer' });
@@ -178,6 +234,7 @@ export default class MainScene extends Phaser.Scene {
 			soundButton.visible = true;
 		});
 
+		// SOUND BUTTON
 		const soundButton = this.add.sprite(1060, 630, 'sound_button').setScale(0.35);
 		soundButton.setInteractive({ cursor: 'pointer' });
 		soundButton.on('pointerover', () => {
@@ -204,6 +261,7 @@ export default class MainScene extends Phaser.Scene {
 			soundButton.visible = false;
 		});
 
+		// FULLSCREEN BUTTON
 		const fullScreen = this.add.sprite(1120, 627, 'full_screen').setScale(0.25);
 
 		fullScreen.setInteractive({ cursor: 'pointer' });
@@ -223,6 +281,7 @@ export default class MainScene extends Phaser.Scene {
 		});
 	}
 
+	// FUNCION PARA CAMBIAR TEXTURA DE LOS BOTONES DE SONIDO
 	changeButtonTexture(button) {
 		if (this.isMuted) {
 			button.setTexture('sound_button');

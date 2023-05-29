@@ -1,3 +1,5 @@
+// PADRE DE TODOS LOS ITEMS
+
 export default class Item extends Phaser.Physics.Arcade.Sprite{
 
     constructor(scene, x, y, key){
@@ -20,7 +22,6 @@ export default class Item extends Phaser.Physics.Arcade.Sprite{
             }
         }
 
-        // this.tweenBlink = this.scene.tweens.add(this.tweenConfig)
         this.tweenActivated = false
 
     }
@@ -28,6 +29,7 @@ export default class Item extends Phaser.Physics.Arcade.Sprite{
     preUpdate(t, dt){
         super.preUpdate(t, dt)
 
+        // COMPRUEBA PARA REALIZAR EL PARPADEO Y DESAPARICION
         if(!this.tweenActivated && this.despawnTimer){
             const remainingToDespawn = (10000 - this.despawnTimer.getElapsed()) / 1000
             
@@ -38,17 +40,18 @@ export default class Item extends Phaser.Physics.Arcade.Sprite{
         }
     }
 
+    // RECOLECTA EL ITEM
     collect(){
         if(this.despawnTimer){
             this.despawnTimer.remove();
         }
     }
 
-
     deSpawn(){
         //Method to overwrite
     }
 
+    // INICIALIZA EL ITEM
     initItem(){
         this.despawnTimer = this.scene.time.addEvent({
 			delay: 10000,

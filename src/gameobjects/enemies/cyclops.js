@@ -1,5 +1,7 @@
 import EnemyObject from "./enemyObject";
 
+// CLASE DE OLLIPARO
+
 export default class Cyclops extends EnemyObject {
 
     constructor(scene, x, y, speed, player, enemypool, hp){
@@ -20,6 +22,8 @@ export default class Cyclops extends EnemyObject {
         this.body.setOffset(this.bodyOffsetWidth, this.bodyOffsetHeight);
         this.body.width = this.bodyWidth;
         this.body.height = this.bodyHeight;
+
+        this.lastThrow = 0;
 
         this.scene.anims.create({
             key: 'up_cyclops',
@@ -70,11 +74,23 @@ export default class Cyclops extends EnemyObject {
             frameRate: 15,
             repeat: 0
         })
+
+        this.scene.anims.create({
+            key: 'throw_cyclops',
+            frames: this.scene.anims.generateFrameNumbers('cyclops', {start: 195, end: 207}),
+            frameRate: 15,
+            repeat: 0
+        })
         
 
         this.on('animationcomplete',() => {
             if (this.anims.currentAnim.key === 'died_cyclops') {
                 this.pool.release(this);
+            } 
+
+            if (this.anims.currentAnim.key === 'throw_cyclops') {
+                this.attacking = false;
+                this.spawnRock()
             } 
 
             if (/attack/.test(this.anims.currentAnim.key)){
@@ -88,6 +104,7 @@ export default class Cyclops extends EnemyObject {
     preUpdate(t, dt){
         super.preUpdate(t, dt)
 
+        // COMPRUEBA QUE SIEMPRE QUE TENGA VIDA Y NO ESTE ATACANDO, O ESTÉ MUERTO EL PERSONAJE, PERSIGA AL PERSONAJE, SI NO PARA
         if (this.hp > 0 && !this.attacking && !this.player.isDead()) {
             this.scene.physics.moveToObject(this, this.player, this.speed);
             this.follow();
@@ -96,17 +113,33 @@ export default class Cyclops extends EnemyObject {
             this.stopHorizontal();
         }
 
-        if (this.toDestroy) {
-            this.destroy();
+        if(t > this.lastThrow && Phaser.Math.Distance.Between(this.x, this.y, this.player.x, this.player.y) <= 200){
+            this.throwRock()
+            this.lastThrow = t + 3000;
         }
+
     }
 
+    // FUNCION PARA ATACAR AL PERSONAJE
     attack(enemie){
         if(!this.attacking && !this.isDead() && !this.player.isDead()){
             this.attacking = true;
             super.attack()
             enemie.getHit(1)
         }
+    }
+
+    throwRock(){
+        if(!this.attacking && !this.isDead()){
+            this.attacking = true;
+            this.flipX = this.body.velocity.x > 0;
+            this.play('throw_cyclops')
+        }
+    }
+
+    spawnRock(){
+        let dir = new Phaser.Math.Vector2(this.player.x - this.x, this.player.y - this.y).normalize();
+        this.pool.spawnCyBullet(this.x, this.y, dir)
     }
 
 }

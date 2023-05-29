@@ -2,11 +2,11 @@ import BlackWolf from "../enemies/blackWolf"
 import Goblin from "../enemies/goblin"
 import Spectre from "../enemies/spectre"
 import Cyclops from "../enemies/cyclops"
+import Rock from "../enemies/rock";
 
+// POOL DE LOS ENEMIGOS
 
 export default class EnemyPool {
-
-	
 
 	constructor (scene, max) {
 		this.scene = scene;
@@ -15,30 +15,30 @@ export default class EnemyPool {
 		this._wolfsgroup = scene.add.group()
 		this._spectresgroup = scene.add.group()
 		this._cyclopsgroup = scene.add.group()	
+		this._cyclopsBulletgroup = scene.add.group()	
 		this.max = max
-		//this.scene = scene;
-		//this.reuse = reuse;
 
+		// INDICADOR DE LA VIDA DE LOS ENEMIGOS EN FUNCION DEL NIVEL
 		this.hpPerLevel ={
-			level1: {
+			0: {
 				goblin: 20,
 				blackWolf: 60,
 				cyclops: 100,
 				spectre: 70
 			},
-			level2: {
-				goblin: 20,
-				blackWolf: 60,
-				cyclops: 100,
-				spectre: 70
-			},
-			level3: {
+			1: {
 				goblin: 30,
 				blackWolf: 70,
 				cyclops: 110,
 				spectre: 80
 			},
-			level4: {
+			2: {
+				goblin: 40,
+				blackWolf: 80,
+				cyclops: 120,
+				spectre: 90
+			},
+			3: {
 				goblin: 40,
 				blackWolf: 80,
 				cyclops: 120,
@@ -75,6 +75,7 @@ export default class EnemyPool {
 		});
 	}
 	
+	// FUNCION PARA SPAWNEAR LOS ENEMIGOS
 	spawn (x, y) {
 
 		if(!this.emptyPool()){
@@ -95,6 +96,7 @@ export default class EnemyPool {
 		return null;
     }
 
+	// SPAWNEO DE GOBLIN
 	spawnGob(x,y){
 		if(!this.emptyPool()){
 			let entity = this._gobsgroup.getFirstDead();
@@ -112,6 +114,7 @@ export default class EnemyPool {
 		}
 	}
 
+	// SPAWNEO DE LOBISOME
 	spawnWolf(x,y){
 		if(!this.emptyPool()){
 			let entity = this._wolfsgroup.getFirstDead();
@@ -129,6 +132,7 @@ export default class EnemyPool {
 		}
 	}
 
+	// SPAWNEO DE CANOURO
 	spawnSpectre(x,y){
 		if(!this.emptyPool()){
 			let entity = this._spectresgroup.getFirstDead();
@@ -146,6 +150,7 @@ export default class EnemyPool {
 		}
 	}
 
+	// SPAWNEO DE OLLIPARO
 	spawnCyclops(x,y){
 		if(!this.emptyPool()){
 			let entity = this._cyclopsgroup.getFirstDead();
@@ -157,6 +162,25 @@ export default class EnemyPool {
 				entity.setActive(true);
 				entity.setVisible(true);
 				entity.body.checkCollision.none = false;
+				entity.restoreEnemy()
+			}
+			return entity;
+		}
+	}
+
+	// SPAWNEO DE BALA DE CYCLOPE
+	spawnCyBullet(x, y, dir){
+		if(!this.emptyPool()){
+			let entity = this._cyclopsBulletgroup.getFirstDead();
+			
+			if (entity) {
+				entity.x = x;
+				entity.y = y;
+				entity.justHit = false
+				entity.setActive(true);
+				entity.setVisible(true);
+				entity.body.checkCollision.none = false;
+				entity.setDirection(dir)
 				entity.restoreEnemy()
 			}
 			return entity;
@@ -191,6 +215,7 @@ export default class EnemyPool {
 		let wolfs = []
 		let spectres = []
 		let cyclops = []
+		let cyBullets = []
 
 		let randNum = 0
 
@@ -216,6 +241,12 @@ export default class EnemyPool {
 			const cycl = new Cyclops(this.scene, -50, -50, 45, player, this, this.hpPerLevel[level].cyclops)
 			enemies.push(cycl)
 			cyclops.push(cycl)
+
+			for(let j = 0; j < 5; j++){
+				const cyclBull = new Rock(this.scene, -50, -50, 200, this)
+				enemies.push(cyclBull)
+				cyBullets.push(cyclBull)
+			}
 		}
 
         this.addMultipleEntity(enemies)
@@ -223,6 +254,7 @@ export default class EnemyPool {
 		this.addMultipleEntityToGroup(wolfs, this._wolfsgroup)
 		this.addMultipleEntityToGroup(spectres, this._spectresgroup)
 		this.addMultipleEntityToGroup(cyclops, this._cyclopsgroup)
+		this.addMultipleEntityToGroup(cyBullets, this._cyclopsBulletgroup)
 		this.max = 100
     }
 }

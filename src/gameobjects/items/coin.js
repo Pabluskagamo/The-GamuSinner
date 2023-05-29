@@ -23,6 +23,7 @@ export default class Coin extends Item{
         super.preUpdate(t, dt)
     }
 
+    // FUNCION PARA CUANDO LO RECOLECTA EL PERSONAJE
     collect(character){
         if(!this.collected){
             this.scene.sound.add("takecoin_audio", {
@@ -37,6 +38,7 @@ export default class Coin extends Item{
         }
     }
 
+    // DESAPARECE LA MONEDA
     deSpawn(){
         this.scene.coinPool.release(this);
     }

@@ -1,5 +1,7 @@
 import PowerUp from "./powerUp"
 
+// CLASE PARA CUANDO NO TIENE NINGUN POWER-UP
+
 export default class nonePowerUp extends PowerUp{
 
     constructor(scene, x, y){
