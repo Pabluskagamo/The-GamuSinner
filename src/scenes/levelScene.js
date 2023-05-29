@@ -203,6 +203,7 @@ export default class LevelScene extends Phaser.Scene {
 				this.completeLevel();
 			}
 		}
+
 	}
 
 	// FUNCION PARA INICIALIZAR EL TILEMAP QUE LE CORRESPONDA (POR DEFECTO SALA 1)
@@ -354,7 +355,7 @@ export default class LevelScene extends Phaser.Scene {
 		}
 
 		this.enemySpawnTimer = this.time.addEvent({
-			delay: 4000,
+			delay: 400,
 			callback: this.spawnInBounds,
 			callbackScope: this,
 			loop: true
@@ -465,6 +466,19 @@ export default class LevelScene extends Phaser.Scene {
 			this.enemySpawnTimer.remove();
 			this.freqTimer.remove();
 			this.wavesFinished = true;
+
+			this.endWithNoEnemies = this.time.addEvent({
+
+				delay: 30000,
+				callback: ()=>{
+					if(!this.levelFinished){
+						this.levelFinished = true
+						this.completeLevel()
+					}
+				},
+				callbackScope: this,
+				loop: false
+			});
 		}
 	}
 

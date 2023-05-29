@@ -9,6 +9,7 @@ export default class LevelScene4 extends LevelScene {
 
     // FUNCION PARA INICIALIZAR EL TILEMAP DEL NIVEL 4
     initMap() {
+        
         const mapa = this.map = this.make.tilemap({
             key: 'sala4'
         });
@@ -118,6 +119,33 @@ export default class LevelScene4 extends LevelScene {
         }
 
     }
+
+    spawnInBounds() {
+
+		const xPos = [25, this.sys.game.canvas.width-25]
+		const yPos = [25, this.sys.game.canvas.height-25]
+
+		const randX = Phaser.Math.RND.between(0, 1);
+		const randY = Phaser.Math.RND.between(0, 1);
+
+		const randNum = Phaser.Math.RND.between(1, 15);
+
+		// console.log('SPAWN ENEMY RAND NUM:', randNum)
+
+		let n = this.howMuchLevelsComplete();
+
+		if (randNum > 13 && n > 0) {
+			this.enemyPool.spawnCyclops(xPos[randX], yPos[randY])
+		} else if (randNum > 7 && randNum < 11) {
+			this.enemyPool.spawnWolf(xPos[randX], yPos[randY])
+		} else if (randNum > 11 && randNum < 14 && n === 2) {
+			this.enemyPool.spawnSpectre(xPos[randX], yPos[randY])
+		} else {
+			this.enemyPool.spawnGob(xPos[randX], yPos[randY])
+		}
+
+		//this.enemyPool.spawn(xPos[randX], yPos[randY]);
+	}
 
     // FUNCION PARA CUANDO SE COMPLETE EL NIVEL SE AÑADA LA MUSICA, SE ABRAN LAS PUERTAS Y APAREZCA EL PODER RECOGER EL COFRE
     completeLevel() {
