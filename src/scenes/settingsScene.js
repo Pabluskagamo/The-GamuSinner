@@ -83,6 +83,7 @@ export default class SettingScene extends Phaser.Scene {
 			this.sound.removeByKey('fightSong2');
 			this.sound.removeByKey('fightSong3');
 			this.sound.removeByKey('losse');
+			this.sound.removeByKey('appearEffect');
 			this.scene.stop('settings');
 			this.scene.stop('UIScene');
 			this.scene.stop('stats');

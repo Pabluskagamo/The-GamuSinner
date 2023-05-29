@@ -5,7 +5,6 @@ import Character from "../gameobjects/character"
 export default class instructionScene extends Phaser.Scene {
     constructor() {
         super('instructions');
-        this.isTransitioning = false;
     }
 
     init() {
@@ -35,6 +34,8 @@ export default class instructionScene extends Phaser.Scene {
     }
 
     create(data) {
+        this.isTransitioning = false;
+
         // ELIMINA LA MUSICA ANTIGUA Y AÑADE LA NUEVA
         this.isMuted = data.mute;
         this.sound.removeByKey('chatTyping');

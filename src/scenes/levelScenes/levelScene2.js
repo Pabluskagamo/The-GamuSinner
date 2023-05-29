@@ -7,10 +7,11 @@ export default class LevelScene2 extends LevelScene {
 
 	constructor() {
 		super('level2');
-		this.isTransitioning = false;
 	}
 
 	create(data){
+		this.isTransitioning = false;
+		
 		super.create(data);
 		if(!this.scene.isActive('stats') && !this.scene.isSleeping('stats')){
 			this.scene.launch('stats', {playerData: this.player.getPlayerStats(), level: 'level2', dmg: this.bulletPool.getDmg()});
@@ -20,6 +21,7 @@ export default class LevelScene2 extends LevelScene {
 
 	// FUNCION PARA INICIALIZAR EL TILEMAP DEL NIVEL 2
 	initMap() {
+		
 		const mapa = this.map = this.make.tilemap({
 			key: 'sala2'
 		});

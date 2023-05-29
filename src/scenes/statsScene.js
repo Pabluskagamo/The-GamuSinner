@@ -8,7 +8,6 @@ import LevelScene from './levelScene';
 export default class StatsScene extends Phaser.Scene {
     constructor() {
         super('stats');
-        this.isTransitioning = false;
     }
 
     // INTRODUCES TODA LA INFORMACION NECESARIA DEL PERSONAJE
@@ -35,6 +34,8 @@ export default class StatsScene extends Phaser.Scene {
     }
 
     create() {
+        this.isTransitioning = false;
+
         // BACKGROUND
         this.add.image(40, 0, 'background_stats').setOrigin(0, 0).setScale(0.86);
 

@@ -5,7 +5,6 @@ import Phaser from 'phaser'
 export default class selectionScene extends Phaser.Scene {
 	constructor() {
 		super('selecScene');
-		this.isTransitioning = false;
 	}
 
 	preload() {
@@ -17,6 +16,8 @@ export default class selectionScene extends Phaser.Scene {
 
 	// ACTUALMENTE SOLO ESTA EL NIVEL DE GALICIA, SERIA IGUAL PARA EL RESTO PERO DIRIGIENDOSE A SU NIVEL CORRESPONDIENTE
 	create(data) {
+		this.isTransitioning = false;
+
 		this.isMuted = data.mute;
 		this.add.image(0, 0, 'mapa').setOrigin(0, 0).setScale(1);
 		this.add.image(170, 60, 'game_title').setScale(0.22);
