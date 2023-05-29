@@ -14,6 +14,7 @@ export default class MainScene extends Phaser.Scene {
 		this.load.image('background', './img/fondo_pixelart3.png');
 		this.load.image('game_title', './img/titulo.png');
 		this.load.spritesheet('game_start', './assets/ui/start_sprite.png', { frameWidth: 750, frameHeight: 355 });
+		this.load.spritesheet('sandbox', './assets/ui/SandBox_sprite.png', { frameWidth: 154, frameHeight: 64 });
 		this.load.spritesheet('sound_button', './assets/ui/SoundButton.png', { frameWidth: 192, frameHeight: 192 });
 		this.load.spritesheet('mute_button', './assets/ui/MuteButton.png', { frameWidth: 192, frameHeight: 192 });
 		this.load.spritesheet('full_screen', './assets/ui/FullScreenSprite.png', { frameWidth: 192, frameHeight: 192 });
@@ -107,6 +108,13 @@ export default class MainScene extends Phaser.Scene {
 		})
 
 		this.anims.create({
+			key: 'hoverSandbox',
+			frames: this.anims.generateFrameNumbers('sandbox', { start: 0, end: 2 }),
+			frameRate: 10,
+			repeat: 0
+		})
+
+		this.anims.create({
 			key: 'hoverSound',
 			frames: this.anims.generateFrameNumbers('sound_button', { start: 0, end: 2 }),
 			frameRate: 10,
@@ -141,7 +149,7 @@ export default class MainScene extends Phaser.Scene {
 		start.on('pointerout', () => {
 			start.playReverse('hoverStart');
 		});
-
+		
 		start.on('pointerup', () => {
 			if (this.isTransitioning) {
 				return;
@@ -154,7 +162,7 @@ export default class MainScene extends Phaser.Scene {
 				this.scene.start('history', {mute: this.isMuted});
 			}, this);
 		});
-
+		
 		this.input.keyboard.on('keydown', (event) => {
 			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
 				if (this.isTransitioning) {
@@ -169,12 +177,19 @@ export default class MainScene extends Phaser.Scene {
 				}, this);
 			}
 		});
-
-
+		
+		
 		// SANDBOXBUTTON
-		const sandBox = this.add.sprite(this.sys.game.canvas.width / 2, 500, 'game_start').setScale(0.35);
+		const sandBox = this.add.sprite(120, 620, 'sandbox').setScale(1.4);
 		sandBox.setInteractive({ cursor: 'pointer' });
+		sandBox.on('pointerover', () => {
+			sandBox.play('hoverSandbox');
+		});
 
+		sandBox.on('pointerout', () => {
+			sandBox.playReverse('hoverSandbox');
+		});
+		
 		sandBox.on('pointerup', () => {
 			if (this.isTransitioning) {
 				return;
