@@ -6,7 +6,6 @@ export default class historyScene extends Phaser.Scene {
 
     constructor() {
         super({ key: 'history' });
-        this.isTransitioning = false;
     }
 
     preload() {
@@ -19,6 +18,8 @@ export default class historyScene extends Phaser.Scene {
     }
 
     create(data) {
+        this.isTransitioning = false;
+
         // AÑADE SU MUSICA
         this.isMuted = data.mute;
         if (!this.isMuted) {

@@ -63,6 +63,7 @@ export default class GameOverScene extends Phaser.Scene {
 		});
 
 		restart.on('pointerup', () => {
+			console.log("REINICIAR NIVEL!!", this.isTransitioning)
 			if (this.isTransitioning) {
 				return;
 			}
@@ -80,6 +81,7 @@ export default class GameOverScene extends Phaser.Scene {
 			}else{
 				this.scene.start('sandboxlevel');
 			}
+			this.isTransitioning = false;
 			LevelScene.progress =  {
 				level1: false,
 				level2: true,

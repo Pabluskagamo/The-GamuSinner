@@ -6,7 +6,6 @@ export default class MainScene extends Phaser.Scene {
 	constructor() {
 		super('mainScene');
 		this.isMuted = false;
-		this.isTransitioning = false;
 	}
 
 	// CARGAMOS LA MAYORIA DE LOS DATOS PARA NO SATURAR EL RESTO DEL JUEGO
@@ -90,6 +89,8 @@ export default class MainScene extends Phaser.Scene {
 
 
 	create() {
+		this.isTransitioning = false;
+
 		// AÑADE MUSICA SI PUEDE
 		this.banda = this.sound.add("musica", {
 			volume: 0.2,
@@ -153,6 +154,7 @@ export default class MainScene extends Phaser.Scene {
 				this.scene.stop();
 				this.scene.start('history', {mute: this.isMuted});
 			}, this);
+			this.isTransitioning = false;
 		});
 
 		this.input.keyboard.on('keydown', (event) => {
