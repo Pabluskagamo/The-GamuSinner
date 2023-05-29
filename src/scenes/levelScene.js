@@ -355,7 +355,7 @@ export default class LevelScene extends Phaser.Scene {
 		}
 
 		this.enemySpawnTimer = this.time.addEvent({
-			delay: 400,
+			delay: 4000,
 			callback: this.spawnInBounds,
 			callbackScope: this,
 			loop: true
